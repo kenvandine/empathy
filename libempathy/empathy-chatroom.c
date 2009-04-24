@@ -111,17 +111,14 @@ empathy_chatroom_class_init (EmpathyChatroomClass *klass)
 							       FALSE,
 							       G_PARAM_READWRITE));
 
-  g_object_class_install_property (object_class,
-      PROP_FAVORITE,
-      g_param_spec_boolean ("favorite",
-        "Favorite",
-        "TRUE if the chatroom is in user's favorite list",
-        FALSE,
-        G_PARAM_READWRITE |
-        G_PARAM_CONSTRUCT |
-        G_PARAM_STATIC_NAME |
-        G_PARAM_STATIC_NICK |
-        G_PARAM_STATIC_BLURB));
+	g_object_class_install_property (object_class,
+					 PROP_FAVORITE,
+					 g_param_spec_boolean ("favorite",
+							       "Favorite",
+							       "TRUE if the chatroom is in user's favorite list",
+							       FALSE,
+							       G_PARAM_READWRITE |
+							       G_PARAM_CONSTRUCT));
 
 	g_object_class_install_property (object_class,
 					 PROP_TP_CHAT,
@@ -284,30 +281,14 @@ chatroom_set_property (GObject      *object,
 		empathy_chatroom_set_auto_connect (EMPATHY_CHATROOM (object),
 						  g_value_get_boolean (value));
 		break;
-  case PROP_FAVORITE:
-    priv->favorite = g_value_get_boolean (value);
-    if (!priv->favorite)
-      {
-        empathy_chatroom_set_auto_connect (EMPATHY_CHATROOM (object),
-            FALSE);
-      }
-    break;
-	case PROP_TP_CHAT: {
-		GObject *chat = g_value_dup_object (value);
-
-		if (chat == (GObject *) priv->tp_chat)
-			break;
-
-		g_assert (chat == NULL || priv->tp_chat == NULL);
-
-		if (priv->tp_chat != NULL) {
-			g_object_unref (priv->tp_chat);
-			priv->tp_chat = NULL;
-		} else {
-			priv->tp_chat = EMPATHY_TP_CHAT (chat);
-		}
+	case PROP_FAVORITE:
+		empathy_chatroom_set_favorite (EMPATHY_CHATROOM (object),
+					       g_value_get_boolean (value));
 		break;
-	}
+	case PROP_TP_CHAT:
+		empathy_chatroom_set_tp_chat (EMPATHY_CHATROOM (object),
+					      g_value_get_object (value));
+		break;
   case PROP_SUBJECT:
     empathy_chatroom_set_subject (EMPATHY_CHATROOM (object),
         g_value_get_string (value));
@@ -476,12 +457,11 @@ empathy_chatroom_set_auto_connect (EmpathyChatroom *chatroom,
 
 	priv->auto_connect = auto_connect;
 
-  if (priv->auto_connect)
-    {
-      /* auto_connect implies favorite */
-      priv->favorite = TRUE;
-      g_object_notify (G_OBJECT (chatroom), "favorite");
-    }
+	if (priv->auto_connect) {
+		/* auto_connect implies favorite */
+		priv->favorite = TRUE;
+		g_object_notify (G_OBJECT (chatroom), "favorite");
+	}
 
 	g_object_notify (G_OBJECT (chatroom), "auto-connect");
 }
@@ -504,12 +484,13 @@ empathy_chatroom_equal (gconstpointer v1,
 	room_a = empathy_chatroom_get_room (EMPATHY_CHATROOM (v1));
 	room_b = empathy_chatroom_get_room (EMPATHY_CHATROOM (v2));
 
-	return empathy_account_equal (account_a, account_b) && !tp_strdiff (room_a,
-      room_b);
+	return empathy_account_equal (account_a, account_b) &&
+	       !tp_strdiff (room_a, room_b);
 }
 
 EmpathyTpChat *
-empathy_chatroom_get_tp_chat (EmpathyChatroom *chatroom) {
+empathy_chatroom_get_tp_chat (EmpathyChatroom *chatroom)
+{
 	EmpathyChatroomPriv *priv;
 
 	g_return_val_if_fail (EMPATHY_IS_CHATROOM (chatroom), NULL);
@@ -629,5 +610,61 @@ empathy_chatroom_set_invite_only (EmpathyChatroom *chatroom,
   priv->invite_only = invite_only;
 
   g_object_notify (G_OBJECT (chatroom), "invite-only");
+}
+
+void
+empathy_chatroom_set_tp_chat (EmpathyChatroom *chatroom,
+			      EmpathyTpChat   *tp_chat)
+{
+	EmpathyChatroomPriv *priv;
+
+	g_return_if_fail (EMPATHY_IS_CHATROOM (chatroom));
+	g_return_if_fail (tp_chat == NULL || EMPATHY_IS_TP_CHAT (tp_chat));
+
+	priv = GET_PRIV (chatroom);
+
+	if (priv->tp_chat == tp_chat) {
+		return;
+	}
+
+	if (priv->tp_chat != NULL) {
+		g_object_unref (priv->tp_chat);
+	}
+
+	priv->tp_chat = tp_chat ? g_object_ref (tp_chat) : NULL;
+	g_object_notify (G_OBJECT (chatroom), "tp-chat");
+}
+
+gboolean
+empathy_chatroom_is_favorite (EmpathyChatroom *chatroom)
+{
+	EmpathyChatroomPriv *priv;
+
+	g_return_val_if_fail (EMPATHY_IS_CHATROOM (chatroom), FALSE);
+
+	priv = GET_PRIV (chatroom);
+
+	return priv->favorite;
+}
+
+void
+empathy_chatroom_set_favorite (EmpathyChatroom *chatroom,
+			       gboolean         favorite)
+{
+	EmpathyChatroomPriv *priv;
+
+	g_return_if_fail (EMPATHY_IS_CHATROOM (chatroom));
+
+	priv = GET_PRIV (chatroom);
+
+	if (priv->favorite == favorite) {
+		return;
+	}
+
+	priv->favorite = favorite;
+	if (!priv->favorite) {
+		empathy_chatroom_set_auto_connect (chatroom, FALSE);
+	}
+	g_object_notify (G_OBJECT (chatroom), "favorite");
 }
 

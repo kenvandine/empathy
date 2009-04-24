@@ -26,19 +26,24 @@
 #include "empathy-marshal.h"
 #include "empathy-utils.h"
 
+#define DEBUG_FLAG EMPATHY_DEBUG_ACCOUNT
+#include <libempathy/empathy-debug.h>
+
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyAccountManager)
 
 typedef struct {
   McAccountMonitor *monitor;
   MissionControl   *mc;
 
-  GHashTable       *accounts;
+  GHashTable       *accounts; /* McAccount -> AccountData */
+  GHashTable       *connections; /* TpConnection -> McAccount */
   int               connected;
   int               connecting;
   gboolean          dispose_run;
 } EmpathyAccountManagerPriv;
 
 typedef struct {
+  TpConnection *connection;
   McPresence presence;
   TpConnectionStatus status;
   gboolean is_enabled;
@@ -54,6 +59,7 @@ enum {
   ACCOUNT_CHANGED,
   ACCOUNT_CONNECTION_CHANGED,
   ACCOUNT_PRESENCE_CHANGED,
+  NEW_CONNECTION,
   LAST_SIGNAL
 };
 
@@ -112,8 +118,72 @@ account_data_free (AccountData *data)
       g_source_remove (data->source_id);
       data->source_id = 0;
     }
+  if (data->connection != NULL)
+    {
+      g_object_unref (data->connection);
+      data->connection = NULL;
+    }
 
   g_slice_free (AccountData, data);
+}
+
+static void
+connection_invalidated_cb (TpProxy *connection,
+                           guint    domain,
+                           gint     code,
+                           gchar   *message,
+                           EmpathyAccountManager *manager)
+{
+  EmpathyAccountManagerPriv *priv = GET_PRIV (manager);
+  McAccount *account;
+  AccountData *data;
+
+  DEBUG ("Message: %s", message);
+
+  account = g_hash_table_lookup (priv->connections, connection);
+  g_assert (account != NULL);
+
+  data = g_hash_table_lookup (priv->accounts, account);
+  g_assert (data != NULL);
+
+  g_object_unref (data->connection);
+  data->connection = NULL;
+
+  g_hash_table_remove (priv->connections, connection);
+}
+
+static void
+connection_ready_cb (TpConnection *connection,
+                     const GError *error,
+                     gpointer manager)
+{
+  /* Errors will be handled in invalidated callback */
+  if (error != NULL)
+    return;
+
+  g_signal_emit (manager, signals[NEW_CONNECTION], 0, connection);
+}
+
+static void
+account_manager_update_connection (EmpathyAccountManager *manager,
+                                   AccountData *data,
+                                   McAccount *account)
+{
+  EmpathyAccountManagerPriv *priv = GET_PRIV (manager);
+
+  if (data->connection)
+    return;
+
+  data->connection = mission_control_get_tpconnection (priv->mc, account, NULL);
+  if (data->connection != NULL)
+    {
+      g_signal_connect (data->connection, "invalidated",
+          G_CALLBACK (connection_invalidated_cb), manager);
+      g_hash_table_insert (priv->connections, g_object_ref (data->connection),
+          g_object_ref (account));
+      tp_connection_call_when_ready (data->connection, connection_ready_cb,
+          manager);
+    }
 }
 
 static void
@@ -132,6 +202,7 @@ account_created_cb (McAccountMonitor *mon,
       AccountData *data;
 
       data = account_data_new_default (priv->mc, account);
+      g_hash_table_insert (priv->accounts, g_object_ref (account), data);
 
       initial_status = mission_control_get_connection_status (priv->mc,
 							      account, NULL);
@@ -141,12 +212,10 @@ account_created_cb (McAccountMonitor *mon,
       else if (initial_status == TP_CONNECTION_STATUS_CONNECTING)
 	priv->connecting++;
 
-      /* the reference returned by mc_account_lookup is owned by the
-       * hash table.
-       */
-      g_hash_table_insert (priv->accounts, account, data);
+      account_manager_update_connection (manager, data, account);
 
       g_signal_emit (manager, signals[ACCOUNT_CREATED], 0, account);
+      g_object_unref (account);
     }
 }
 
@@ -313,10 +382,11 @@ account_status_changed_idle_cb (ChangedSignalData *signal_data)
 
           if (status == TP_CONNECTION_STATUS_CONNECTED)
             {
-                if (data->source_id > 0) {
-                  g_source_remove (data->source_id);
-                  data->source_id = 0;
-                }
+                if (data->source_id > 0)
+                  {
+                    g_source_remove (data->source_id);
+                    data->source_id = 0;
+                  }
 
                 data->source_id = g_timeout_add_seconds (10,
                                                          remove_data_timeout,
@@ -324,6 +394,8 @@ account_status_changed_idle_cb (ChangedSignalData *signal_data)
             }
           emit_connection = TRUE;
         }
+
+      account_manager_update_connection (manager, data, account);
 
       if (emit_presence)
         g_signal_emit (manager, signals[ACCOUNT_PRESENCE_CHANGED], 0,
@@ -381,6 +453,8 @@ empathy_account_manager_init (EmpathyAccountManager *manager)
                                           empathy_account_equal,
                                           g_object_unref, 
                                           (GDestroyNotify) account_data_free);
+  priv->connections = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+                                             g_object_unref, g_object_unref);
 
   mc_accounts = mc_accounts_list ();
 
@@ -412,6 +486,7 @@ do_finalize (GObject *obj)
   EmpathyAccountManagerPriv *priv = GET_PRIV (manager);
 
   g_hash_table_unref (priv->accounts);
+  g_hash_table_unref (priv->connections);
 
   G_OBJECT_CLASS (empathy_account_manager_parent_class)->finalize (obj);
 }
@@ -562,6 +637,16 @@ empathy_account_manager_class_init (EmpathyAccountManagerClass *klass)
                   3, MC_TYPE_ACCOUNT,
                   G_TYPE_INT,  /* actual presence */
                   G_TYPE_INT); /* previous presence */
+
+  signals[NEW_CONNECTION] =
+    g_signal_new ("new-connection",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1, TP_TYPE_CONNECTION);
   
   g_type_class_add_private (oclass, sizeof (EmpathyAccountManagerPriv));
 }
@@ -634,3 +719,91 @@ empathy_account_manager_get_count (EmpathyAccountManager *manager)
 
   return g_hash_table_size (priv->accounts);
 }
+
+McAccount *
+empathy_account_manager_get_account (EmpathyAccountManager *manager,
+                                     TpConnection          *connection)
+{
+  EmpathyAccountManagerPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_ACCOUNT_MANAGER (manager), 0);
+
+  priv = GET_PRIV (manager);
+
+  return g_hash_table_lookup (priv->connections, connection);
+}
+
+GList *
+empathy_account_manager_dup_accounts (EmpathyAccountManager *manager)
+{
+  EmpathyAccountManagerPriv *priv;
+  GList *ret;
+
+  g_return_val_if_fail (EMPATHY_IS_ACCOUNT_MANAGER (manager), NULL);
+
+  priv = GET_PRIV (manager);
+
+  ret = g_hash_table_get_keys (priv->accounts);
+  g_list_foreach (ret, (GFunc) g_object_ref, NULL);
+
+  return ret;
+}
+
+/**
+ * empathy_account_manager_get_connection:
+ * @manager: a #EmpathyAccountManager
+ * @account: a #McAccount
+ *
+ * Get the connection of the accounts, or NULL if account is offline or the
+ * connection is not yet ready. This function does not return a new ref.
+ *
+ * Returns: the connection of the accounts.
+ **/
+TpConnection *
+empathy_account_manager_get_connection (EmpathyAccountManager *manager,
+                                        McAccount *account)
+{
+  EmpathyAccountManagerPriv *priv;
+  AccountData *data;
+
+  g_return_val_if_fail (EMPATHY_IS_ACCOUNT_MANAGER (manager), NULL);
+  g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
+
+  priv = GET_PRIV (manager);
+
+  data = g_hash_table_lookup (priv->accounts, account);
+  if (data && data->connection && tp_connection_is_ready (data->connection))
+    return data->connection;
+
+  return NULL;
+}
+
+/**
+ * empathy_account_manager_dup_connections:
+ * @manager: a #EmpathyAccountManager
+ *
+ * Get a #GList of all ready #TpConnection. The list must be freed with
+ * g_list_free, and its elements must be unreffed.
+ *
+ * Returns: the list of connections
+ **/
+GList *
+empathy_account_manager_dup_connections (EmpathyAccountManager *manager)
+{
+  EmpathyAccountManagerPriv *priv;
+  GHashTableIter iter;
+  gpointer connection;
+  GList *ret = NULL;
+
+  g_return_val_if_fail (EMPATHY_IS_ACCOUNT_MANAGER (manager), NULL);
+
+  priv = GET_PRIV (manager);
+
+  g_hash_table_iter_init (&iter, priv->connections);
+  while (g_hash_table_iter_next (&iter, &connection, NULL)) 
+    if (connection != NULL && tp_connection_is_ready (connection))
+      ret = g_list_prepend (ret, g_object_ref (connection));
+
+  return ret;
+}
+

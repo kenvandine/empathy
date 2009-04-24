@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
- * Copyright (C) 2004-2007 Imendio AB
+ * Copyright (C) 2009 Collabora Ltd.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -17,23 +17,33 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  *
- * Authors: Martyn Russell <martyn@imendio.com>
- *          Richard Hult <richard@imendio.com>
+ * Authors: Davyd Madeley <davyd.madeley@collabora.co.uk>
  */
 
-#ifndef __EMPATHY_SPELL_DIALOG_H__
-#define __EMPATHY_SPELL_DIALOG_H__
+#include <config.h>
 
-#include <gtk/gtktextiter.h>
-#include "empathy-chat.h"
+#include <gtk/gtk.h>
 
-G_BEGIN_DECLS
+#include <libempathy/empathy-status-presets.h>
 
-void empathy_spell_dialog_show (EmpathyChat  *chat,
-			       GtkTextIter *start,
-			       GtkTextIter *end,
-			       const gchar *word);
+#include <libempathy-gtk/empathy-ui-utils.h>
+#include <libempathy-gtk/empathy-status-preset-dialog.h>
 
-G_END_DECLS
+int
+main (int argc, char **argv)
+{
+	GtkWidget *dialog;
 
-#endif /* __EMPATHY_SPELL_DIALOG_H__ */
+	gtk_init (&argc, &argv);
+	empathy_gtk_init ();
+
+	empathy_status_presets_get_all ();
+
+	dialog = empathy_status_preset_dialog_new (NULL);
+
+	gtk_widget_show (dialog);
+
+	gtk_main ();
+
+	return 0;
+}

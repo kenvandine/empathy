@@ -62,15 +62,11 @@ typedef void (EmpathyDispatcherRequestCb) (
 GType empathy_dispatcher_get_type (void) G_GNUC_CONST;
 
 void empathy_dispatcher_create_channel (EmpathyDispatcher *dispatcher,
-  McAccount *account, GHashTable *request,
-  EmpathyDispatcherRequestCb *callback, gpointer user_data);
-
-/* Requesting 1 to 1 stream media channels */
-void empathy_dispatcher_call_with_contact (EmpathyContact *contact,
+  TpConnection *connection, GHashTable *request,
   EmpathyDispatcherRequestCb *callback, gpointer user_data);
 
 /* Requesting 1 to 1 text channels */
-void empathy_dispatcher_chat_with_contact_id (McAccount *account,
+void empathy_dispatcher_chat_with_contact_id (TpConnection *connection,
   const gchar *contact_id, EmpathyDispatcherRequestCb *callback,
   gpointer user_data);
 void  empathy_dispatcher_chat_with_contact (EmpathyContact *contact,
@@ -83,12 +79,12 @@ void empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
   gpointer user_data);
 
 /* Request a muc channel */
-void empathy_dispatcher_join_muc (McAccount *account,
+void empathy_dispatcher_join_muc (TpConnection *connection,
   const gchar *roomname, EmpathyDispatcherRequestCb *callback,
   gpointer user_data);
 
 GStrv empathy_dispatcher_find_channel_class (EmpathyDispatcher *dispatcher,
-  McAccount *account, const gchar *channel_type, guint handle_type);
+  TpConnection *connection, const gchar *channel_type, guint handle_type);
 
 /* Get the dispatcher singleton */
 EmpathyDispatcher *    empathy_dispatcher_dup_singleton (void);

@@ -33,6 +33,22 @@
 #include "empathy-avatar-image.h"
 #include "empathy-ui-utils.h"
 
+/**
+ * SECTION:empathy-avatar-image
+ * @title: EmpathyAvatarImage
+ * @short_description: A widget to display an avatar
+ * @include: libempathy-gtk/empathy-avatar-image.h
+ *
+ * #EmpathyAvatarImage is a widget which displays an avatar.
+ */
+
+/**
+ * EmpathyAvatarImage:
+ * @parent: parent object
+ *
+ * Widget which displays an avatar.
+ */
+
 #define MAX_SMALL 64
 #define MAX_LARGE 400
 
@@ -251,6 +267,13 @@ avatar_image_button_release_event (GtkWidget *widget, GdkEventButton *event)
 	return TRUE;
 }
 
+/**
+ * empathy_avatar_image_new:
+ *
+ * Creates a new #EmpathyAvatarImage.
+ *
+ * Return value: a new #EmpathyAvatarImage
+ */
 GtkWidget *
 empathy_avatar_image_new (void)
 {
@@ -261,6 +284,13 @@ empathy_avatar_image_new (void)
 	return GTK_WIDGET (avatar_image);
 }
 
+/**
+ * empathy_avatar_image_set:
+ * @avatar_image: an #EmpathyAvatarImage
+ * @avatar: the #EmpathyAvatar to set @avatar_image to
+ *
+ * Sets @avatar_image to display the avatar indicated by @avatar.
+ */
 void
 empathy_avatar_image_set (EmpathyAvatarImage *avatar_image,
 			  EmpathyAvatar      *avatar)

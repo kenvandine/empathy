@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
- * Copyright (C) 2007-2008 Collabora Ltd.
+ * Copyright (C) 2007-2009 Collabora Ltd.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,7 +30,7 @@
 #include <libmissioncontrol/mc-account.h>
 #include <telepathy-glib/util.h>
 
-#include <libempathy/empathy-contact-factory.h>
+#include <libempathy/empathy-tp-contact-factory.h>
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-utils.h>
@@ -44,12 +44,31 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_CONTACT
 #include <libempathy/empathy-debug.h>
 
+/**
+ * SECTION:empathy-contact-widget
+ * @title:EmpathyContactWidget
+ * @short_description: A widget used to display and edit details about a contact
+ * @include: libempathy-empathy-contact-widget.h
+ *
+ * #EmpathyContactWidget is a widget which displays appropriate widgets
+ * with details about a contact, also allowing changing these details,
+ * if desired.
+ */
+
+/**
+ * EmpathyContactWidget:
+ * @parent: parent object
+ *
+ * Widget which displays appropriate widgets with details about a contact,
+ * also allowing changing these details, if desired.
+ */
+
 /* Delay before updating the widget when the id entry changed (seconds) */
 #define ID_CHANGED_TIMEOUT 1
 
 typedef struct
 {
-  EmpathyContactFactory *factory;
+  EmpathyTpContactFactory *factory;
   EmpathyContactManager *manager;
   EmpathyContact *contact;
   EmpathyContactWidgetFlags flags;
@@ -106,8 +125,6 @@ static void contact_widget_contact_update (EmpathyContactWidget *information);
 static void contact_widget_change_contact (EmpathyContactWidget *information);
 static void contact_widget_avatar_changed_cb (EmpathyAvatarChooser *chooser,
     EmpathyContactWidget *information);
-static void contact_widget_account_changed_cb (GtkComboBox *widget,
-    EmpathyContactWidget *information);
 static gboolean contact_widget_id_focus_out_cb (GtkWidget *widget,
     GdkEventFocus *event, EmpathyContactWidget *information);
 static gboolean contact_widget_entry_alias_focus_event_cb (
@@ -153,6 +170,15 @@ enum
   COL_COUNT
 };
 
+/**
+ * empathy_contact_widget_new:
+ * @contact: an #EmpathyContact
+ * @flags: #EmpathyContactWidgetFlags for the new contact widget
+ *
+ * Creates a new #EmpathyContactWidget.
+ *
+ * Return value: a new #EmpathyContactWidget
+ */
 GtkWidget *
 empathy_contact_widget_new (EmpathyContact *contact,
                             EmpathyContactWidgetFlags flags)
@@ -161,9 +187,10 @@ empathy_contact_widget_new (EmpathyContact *contact,
   GtkBuilder *gui;
   gchar *filename;
 
+  g_return_val_if_fail (contact == NULL || EMPATHY_IS_CONTACT (contact), NULL);
+
   information = g_slice_new0 (EmpathyContactWidget);
   information->flags = flags;
-  information->factory = empathy_contact_factory_dup_singleton ();
 
   filename = empathy_file_lookup ("empathy-contact-widget.ui",
       "libempathy-gtk");
@@ -206,12 +233,25 @@ empathy_contact_widget_new (EmpathyContact *contact,
   contact_widget_details_setup (information);
   contact_widget_client_setup (information);
 
-  contact_widget_set_contact (information, contact);
+  if (contact != NULL)
+    contact_widget_set_contact (information, contact);
+
+  else if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT ||
+      information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ID)
+    contact_widget_change_contact (information);
 
   return empathy_builder_unref_and_keep_widget (gui,
     information->vbox_contact_widget);
 }
 
+/**
+ * empathy_contact_widget_get_contact:
+ * @widget: an #EmpathyContactWidget
+ *
+ * Get the #EmpathyContact related with the #EmpathyContactWidget @widget.
+ *
+ * Returns: the #EmpathyContact associated with @widget
+ */
 EmpathyContact *
 empathy_contact_widget_get_contact (GtkWidget *widget)
 {
@@ -226,6 +266,13 @@ empathy_contact_widget_get_contact (GtkWidget *widget)
   return information->contact;
 }
 
+/**
+ * empathy_contact_widget_set_contact:
+ * @widget: an #EmpathyContactWidget
+ * @contact: a different #EmpathyContact
+ *
+ * Change the #EmpathyContact related with the #EmpathyContactWidget @widget.
+ */
 void
 empathy_contact_widget_set_contact (GtkWidget *widget,
                                     EmpathyContact *contact)
@@ -242,6 +289,15 @@ empathy_contact_widget_set_contact (GtkWidget *widget,
   contact_widget_set_contact (information, contact);
 }
 
+/**
+ * empathy_contact_widget_set_account_filter:
+ * @widget: an #EmpathyContactWidget
+ * @filter: a #EmpathyAccountChooserFilterFunc
+ * @user_data: user data to pass to @filter, or %NULL
+ *
+ * Set a filter on the #EmpathyAccountChooser included in the
+ * #EmpathyContactWidget.
+ */
 void
 empathy_contact_widget_set_account_filter (
     GtkWidget *widget,
@@ -272,10 +328,6 @@ contact_widget_destroy_cb (GtkWidget *widget,
     {
       g_source_remove (information->widget_id_timeout);
     }
-  if (information->factory)
-    {
-      g_object_unref (information->factory);
-    }   
   if (information->manager)
     {
       g_object_unref (information->manager);
@@ -299,7 +351,9 @@ contact_widget_remove_contact (EmpathyContactWidget *information)
           contact_widget_groups_notify_cb, information);
 
       g_object_unref (information->contact);
+      g_object_unref (information->factory);
       information->contact = NULL;
+      information->factory = NULL;
     }
 }
 
@@ -312,7 +366,13 @@ contact_widget_set_contact (EmpathyContactWidget *information,
 
   contact_widget_remove_contact (information);
   if (contact)
+    {
+      TpConnection *connection;
+
+      connection = empathy_contact_get_connection (contact);
       information->contact = g_object_ref (contact);
+      information->factory = empathy_tp_contact_factory_dup_singleton (connection);
+    }
 
   /* Update information for widgets */
   contact_widget_contact_update (information);
@@ -491,10 +551,10 @@ static void
 update_avatar_chooser_account_cb (EmpathyAccountChooser *account_chooser,
                                   EmpathyAvatarChooser *avatar_chooser)
 {
-  McAccount *account;
+  TpConnection *connection;
 
-  account = empathy_account_chooser_get_account (account_chooser);
-  g_object_set (avatar_chooser, "account", account, NULL);
+  connection = empathy_account_chooser_get_connection (account_chooser);
+  g_object_set (avatar_chooser, "connection", connection, NULL);
 }
 
 static void
@@ -505,8 +565,8 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
     {
       information->widget_account = empathy_account_chooser_new ();
 
-      g_signal_connect (information->widget_account, "changed",
-            G_CALLBACK (contact_widget_account_changed_cb),
+      g_signal_connect_swapped (information->widget_account, "changed",
+            G_CALLBACK (contact_widget_change_contact),
             information);
     }
   else
@@ -636,12 +696,12 @@ contact_widget_contact_update (EmpathyContactWidget *information)
       if (account)
         {
           g_signal_handlers_block_by_func (information->widget_account,
-                   contact_widget_account_changed_cb,
+                   contact_widget_change_contact,
                    information);
           empathy_account_chooser_set_account (
               EMPATHY_ACCOUNT_CHOOSER (information->widget_account), account);
           g_signal_handlers_unblock_by_func (information->widget_account,
-              contact_widget_account_changed_cb, information);
+              contact_widget_change_contact, information);
         }
     }
   else
@@ -683,83 +743,71 @@ contact_widget_contact_update (EmpathyContactWidget *information)
 }
 
 static void
-contact_widget_change_contact_cb (EmpathyContact *contact,
-                                  const GError *error,
-                                  gpointer information,
-                                  GObject *weak_object)
+contact_widget_got_contact_cb (EmpathyTpContactFactory *factory,
+                               EmpathyContact *contact,
+                               const GError *error,
+                               gpointer user_data,
+                               GObject *weak_object)
 {
-  if (error)
-    DEBUG ("Error: %s", error->message);
-  else
-    contact_widget_set_contact (information, contact);
-  g_object_unref (contact);
+  EmpathyContactWidget *information = user_data;
+
+  if (error != NULL)
+    {
+      DEBUG ("Error: %s", error->message);
+      return;
+    }
+
+  contact_widget_set_contact (information, contact);
 }
 
 static void
 contact_widget_change_contact (EmpathyContactWidget *information)
 {
-  EmpathyContact *contact;
-  McAccount *account;
+  EmpathyTpContactFactory *factory;
+  TpConnection *connection;
 
-  account = empathy_account_chooser_get_account (
+  connection = empathy_account_chooser_get_connection (
       EMPATHY_ACCOUNT_CHOOSER (information->widget_account));
-  if (!account)
+  if (!connection)
       return;
 
+  factory = empathy_tp_contact_factory_dup_singleton (connection);
   if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ID)
     {
       const gchar *id;
 
       id = gtk_entry_get_text (GTK_ENTRY (information->widget_id));
-      if (EMP_STR_EMPTY (id))
-          return;
-
-      contact = empathy_contact_factory_get_from_id (information->factory,
-          account, id);
+      if (!EMP_STR_EMPTY (id))
+        {
+          empathy_tp_contact_factory_get_from_id (factory, id,
+              contact_widget_got_contact_cb, information, NULL,
+              G_OBJECT (information->vbox_contact_widget));
+        }
     }
   else
     {
-      contact = empathy_contact_factory_get_user (information->factory,
-          account);
-    }
-
-  if (contact)
-    {
-      /* Give the contact ref to the callback */
-      empathy_contact_call_when_ready (contact,
-          EMPATHY_CONTACT_READY_HANDLE |
-          EMPATHY_CONTACT_READY_ID,
-          contact_widget_change_contact_cb,
-          information, NULL,
+      empathy_tp_contact_factory_get_from_handle (factory,
+          tp_connection_get_self_handle (connection),
+          contact_widget_got_contact_cb, information, NULL,
           G_OBJECT (information->vbox_contact_widget));
     }
+
+  g_object_unref (factory);
 }
 
 static void
 contact_widget_avatar_changed_cb (EmpathyAvatarChooser *chooser,
                                   EmpathyContactWidget *information)
 {
-  if (information->contact && empathy_contact_is_user (information->contact))
-    {
-      McAccount *account;
-      const gchar *data;
-      gsize size;
-      const gchar *mime_type;
+  const gchar *data;
+  gsize size;
+  const gchar *mime_type;
 
-      account = empathy_contact_get_account (information->contact);
-      empathy_avatar_chooser_get_image_data (
-          EMPATHY_AVATAR_CHOOSER (information->widget_avatar),
-          &data, &size, &mime_type);
-      empathy_contact_factory_set_avatar (information->factory, account,
-          data, size, mime_type);
-    }
-}
-
-static void
-contact_widget_account_changed_cb (GtkComboBox *widget,
-                                   EmpathyContactWidget *information)
-{
-  contact_widget_change_contact (information);
+  empathy_avatar_chooser_get_image_data (
+      EMPATHY_AVATAR_CHOOSER (information->widget_avatar),
+      &data, &size, &mime_type);
+  empathy_tp_contact_factory_set_avatar (information->factory,
+      data, size, mime_type);
 }
 
 static gboolean
@@ -781,7 +829,7 @@ contact_widget_entry_alias_focus_event_cb (GtkEditable *editable,
       const gchar *alias;
 
       alias = gtk_entry_get_text (GTK_ENTRY (editable));
-      empathy_contact_factory_set_alias (information->factory,
+      empathy_tp_contact_factory_set_alias (information->factory,
           information->contact, alias);
     }
 

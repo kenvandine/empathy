@@ -1,7 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  * Copyright (C) 2007 Xavier Claessens <xclaesse@gmail.com>
- * Copyright (C) 2007-2008 Collabora Ltd.
+ * Copyright (C) 2007-2009 Collabora Ltd.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,8 +31,8 @@
 #include <telepathy-glib/dbus.h>
 
 #include "empathy-tp-contact-list.h"
+#include "empathy-tp-contact-factory.h"
 #include "empathy-contact-list.h"
-#include "empathy-tp-group.h"
 #include "empathy-utils.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_TP | EMPATHY_DEBUG_CONTACT
@@ -40,18 +40,16 @@
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTpContactList)
 typedef struct {
-	McAccount      *account;
+	EmpathyTpContactFactory *factory;
 	TpConnection   *connection;
 	const gchar    *protocol_group;
-	gboolean        ready;
 
-	EmpathyTpGroup *publish;
-	EmpathyTpGroup *subscribe;
-	GList          *members;
-	GList          *pendings;
-
-	GList          *groups;
-	GHashTable     *contacts_groups;
+	TpChannel      *publish;
+	TpChannel      *subscribe;
+	GHashTable     *members; /* handle -> EmpathyContact */
+	GHashTable     *pendings; /* handle -> EmpathyContact */
+	GHashTable     *groups; /* group name -> TpChannel */
+	GHashTable     *add_to_group; /* group name -> GArray of handles */
 } EmpathyTpContactListPriv;
 
 typedef enum {
@@ -63,335 +61,154 @@ typedef enum {
 static void tp_contact_list_iface_init         (EmpathyContactListIface   *iface);
 
 enum {
-	DESTROY,
-	LAST_SIGNAL
-};
-
-enum {
 	PROP_0,
-	PROP_ACCOUNT,
+	PROP_CONNECTION,
 };
-
-static guint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE_WITH_CODE (EmpathyTpContactList, empathy_tp_contact_list, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (EMPATHY_TYPE_CONTACT_LIST,
 						tp_contact_list_iface_init));
 
 static void
-tp_contact_list_group_destroy_cb (EmpathyTpGroup       *group,
-				  EmpathyTpContactList *list)
+tp_contact_list_group_invalidated_cb (TpChannel *channel,
+				      guint      domain,
+				      gint       code,
+				      gchar     *message,
+				      EmpathyTpContactList *list)
 {
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	const TpIntSet *members;
+	TpIntSetIter iter;
+	const gchar *group_name;
 
-	DEBUG ("Group destroyed: %s", empathy_tp_group_get_name (group));
+	group_name = tp_channel_get_identifier (channel);
+	DEBUG ("Group %s invalidated. Message: %s", group_name, message);
 
-	priv->groups = g_list_remove (priv->groups, group);
-	g_object_unref (group);
+	/* Signal that all members are not in that group anymore */
+	members = tp_channel_group_get_members (channel);
+	tp_intset_iter_init (&iter, members);
+	while (tp_intset_iter_next (&iter)) {
+		EmpathyContact *contact;
+
+		contact = g_hash_table_lookup (priv->members,
+					       GUINT_TO_POINTER (iter.element));
+		if (contact == NULL) {
+			continue;
+		}
+
+		DEBUG ("Contact %s (%d) removed from group %s",
+			empathy_contact_get_id (contact), iter.element,
+			group_name);
+		g_signal_emit_by_name (list, "groups-changed", contact,
+				       group_name,
+				       FALSE);
+	}
+
+	g_hash_table_remove (priv->groups, group_name);
 }
 
 static void
-tp_contact_list_group_member_added_cb (EmpathyTpGroup       *group,
-				       EmpathyContact       *contact,
-				       EmpathyContact       *actor,
-				       guint                 reason,
-				       const gchar          *message,
-				       EmpathyTpContactList *list)
+tp_contact_list_group_ready_cb (TpChannel *channel,
+				const GError *error,
+				gpointer list)
 {
-	EmpathyTpContactListPriv  *priv = GET_PRIV (list);
-	const gchar               *group_name;
-	GList                    **groups;
+	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	const gchar *group_name;
 
-	if (!g_list_find (priv->members, contact)) {
+	if (error) {
+		DEBUG ("Error: %s", error->message);
+		g_object_unref (channel);
 		return;
 	}
+	
+	group_name = tp_channel_get_identifier (channel);
+	g_hash_table_insert (priv->groups, (gpointer) group_name, channel);
+	DEBUG ("Group %s added", group_name);
 
-	groups = g_hash_table_lookup (priv->contacts_groups, contact);
-	if (!groups) {
-		groups = g_slice_new0 (GList*);
-		g_hash_table_insert (priv->contacts_groups,
-				     g_object_ref (contact),
-				     groups);
+	g_signal_connect (channel, "invalidated",
+			  G_CALLBACK (tp_contact_list_group_invalidated_cb),
+			  list);
+
+	if (priv->add_to_group) {
+		GArray *handles;
+
+		handles = g_hash_table_lookup (priv->add_to_group, group_name);
+		if (handles) {
+			DEBUG ("Adding initial members to group %s", group_name);
+			tp_cli_channel_interface_group_call_add_members (channel,
+				-1, handles, NULL, NULL, NULL, NULL, NULL);
+			g_hash_table_remove (priv->add_to_group, group_name);
+		}
 	}
+}
 
-	group_name = empathy_tp_group_get_name (group);
-	if (!g_list_find_custom (*groups, group_name, (GCompareFunc) strcmp)) {
+static void
+tp_contact_list_group_members_changed_cb (TpChannel     *channel,
+					  gchar         *message,
+					  GArray        *added,
+					  GArray        *removed,
+					  GArray        *local_pending,
+					  GArray        *remote_pending,
+					  guint          actor,
+					  guint          reason,
+					  EmpathyTpContactList *list)
+{
+	EmpathyTpContactListPriv  *priv = GET_PRIV (list);
+	const gchar *group_name;
+	gint i;
+
+	group_name = tp_channel_get_identifier (channel);
+
+	for (i = 0; i < added->len; i++) {
+		EmpathyContact *contact;
+		TpHandle handle;
+
+		handle = g_array_index (added, TpHandle, i);
+		contact = g_hash_table_lookup (priv->members,
+					       GUINT_TO_POINTER (handle));
+		if (contact == NULL) {
+			continue;
+		}
+
 		DEBUG ("Contact %s (%d) added to group %s",
-			empathy_contact_get_id (contact),
-			empathy_contact_get_handle (contact),
-			group_name);
-		*groups = g_list_prepend (*groups, g_strdup (group_name));
+			empathy_contact_get_id (contact), handle, group_name);
 		g_signal_emit_by_name (list, "groups-changed", contact,
 				       group_name,
 				       TRUE);
-	}
-}
+	}	
 
-static void
-tp_contact_list_group_member_removed_cb (EmpathyTpGroup       *group,
-					 EmpathyContact       *contact,
-					 EmpathyContact       *actor,
-					 guint                 reason,
-					 const gchar          *message,
-					 EmpathyTpContactList *list)
-{
-	EmpathyTpContactListPriv  *priv = GET_PRIV (list);
-	const gchar               *group_name;
-	GList                    **groups, *l;
+	for (i = 0; i < removed->len; i++) {
+		EmpathyContact *contact;
+		TpHandle handle;
 
-	if (!g_list_find (priv->members, contact)) {
-		return;
-	}
+		handle = g_array_index (removed, TpHandle, i);
+		contact = g_hash_table_lookup (priv->members,
+					       GUINT_TO_POINTER (handle));
+		if (contact == NULL) {
+			continue;
+		}
 
-	groups = g_hash_table_lookup (priv->contacts_groups, contact);
-	if (!groups) {
-		return;
-	}
-
-	group_name = empathy_tp_group_get_name (group);
-	if ((l = g_list_find_custom (*groups, group_name, (GCompareFunc) strcmp))) {
 		DEBUG ("Contact %s (%d) removed from group %s",
-			empathy_contact_get_id (contact),
-			empathy_contact_get_handle (contact),
-			group_name);
-		g_free (l->data);
-		*groups = g_list_delete_link (*groups, l);
+			empathy_contact_get_id (contact), handle, group_name);
+
 		g_signal_emit_by_name (list, "groups-changed", contact,
 				       group_name,
 				       FALSE);
-	}
-}
-
-static EmpathyTpGroup *
-tp_contact_list_find_group (EmpathyTpContactList *list,
-			    const gchar          *group)
-{
-	EmpathyTpContactListPriv *priv = GET_PRIV (list);
-	GList                    *l;
-
-	for (l = priv->groups; l; l = l->next) {
-		if (!tp_strdiff (group, empathy_tp_group_get_name (l->data))) {
-			return l->data;
-		}
-	}
-	return NULL;
-}
-
-static TpContactListType
-tp_contact_list_get_type (EmpathyTpContactList *list,
-			  EmpathyTpGroup       *group)
-{
-	const gchar *name;
-
-	name = empathy_tp_group_get_name (group);
-	if (!tp_strdiff (name, "subscribe")) {
-		return TP_CONTACT_LIST_TYPE_SUBSCRIBE;
-	} else if (!tp_strdiff (name, "publish")) {
-		return TP_CONTACT_LIST_TYPE_PUBLISH;
-	}
-
-	return TP_CONTACT_LIST_TYPE_UNKNOWN;
+	}	
 }
 
 static void
-tp_contact_list_add_member (EmpathyTpContactList *list,
-			    EmpathyContact       *contact,
-			    EmpathyContact       *actor,
-			    guint                 reason,
-			    const gchar          *message)
-{
-	EmpathyTpContactListPriv *priv = GET_PRIV (list);
-	GList                    *l;
-
-	/* Add to the list and emit signal */
-	priv->members = g_list_prepend (priv->members, g_object_ref (contact));
-	g_signal_emit_by_name (list, "members-changed",
-			       contact, actor, reason, message,
-			       TRUE);
-
-	/* This contact is now member, implicitly accept pending. */
-	if (g_list_find (priv->pendings, contact)) {
-		empathy_tp_group_add_member (priv->publish, contact, "");
-	}
-
-	/* Update groups of the contact */
-	for (l = priv->groups; l; l = l->next) {
-		if (empathy_tp_group_is_member (l->data, contact)) {
-			tp_contact_list_group_member_added_cb (l->data, contact,
-							       NULL, 0, NULL, 
-							       list);
-		}
-	}
-}
-
-static void
-tp_contact_list_added_cb (EmpathyTpGroup       *group,
-			  EmpathyContact       *contact,
-			  EmpathyContact       *actor,
-			  guint                 reason,
-			  const gchar          *message,
-			  EmpathyTpContactList *list)
-{
-	EmpathyTpContactListPriv *priv = GET_PRIV (list);
-	TpContactListType         list_type;
-
-	list_type = tp_contact_list_get_type (list, group);
-	DEBUG ("Contact %s (%d) added to list type %d",
-		empathy_contact_get_id (contact),
-		empathy_contact_get_handle (contact),
-		list_type);
-
-	/* We now get the presence of that contact, add it to members */
-	if (list_type == TP_CONTACT_LIST_TYPE_SUBSCRIBE &&
-	    !g_list_find (priv->members, contact)) {
-		tp_contact_list_add_member (list, contact, actor, reason, message);
-	}
-
-	/* We now send our presence to that contact, remove it from pendings */
-	if (list_type == TP_CONTACT_LIST_TYPE_PUBLISH &&
-	    g_list_find (priv->pendings, contact)) {
-		g_signal_emit_by_name (list, "pendings-changed",
-				       contact, actor, reason, message,
-				       FALSE);
-		priv->pendings = g_list_remove (priv->pendings, contact);
-		g_object_unref (contact);
-	}
-}
-
-static void
-tp_contact_list_removed_cb (EmpathyTpGroup       *group,
-			    EmpathyContact       *contact,
-			    EmpathyContact       *actor,
-			    guint                 reason,
-			    const gchar          *message,
-			    EmpathyTpContactList *list)
-{
-	EmpathyTpContactListPriv *priv = GET_PRIV (list);
-	TpContactListType         list_type;
-
-	list_type = tp_contact_list_get_type (list, group);
-	DEBUG ("Contact %s (%d) removed from list type %d",
-		empathy_contact_get_id (contact),
-		empathy_contact_get_handle (contact),
-		list_type);
-
-	/* This contact refuses to send us his presence, remove from members. */
-	if (list_type == TP_CONTACT_LIST_TYPE_SUBSCRIBE &&
-	    g_list_find (priv->members, contact)) {
-		g_signal_emit_by_name (list, "members-changed",
-				       contact, actor, reason, message,
-				       FALSE);
-		priv->members = g_list_remove (priv->members, contact);
-		g_object_unref (contact);
-	}
-
-	/* We refuse to send our presence to that contact, remove from pendings */
-	if (list_type == TP_CONTACT_LIST_TYPE_PUBLISH &&
-	    g_list_find (priv->pendings, contact)) {
-		g_signal_emit_by_name (list, "pendings-changed",
-				       contact, actor, reason, message,
-				       FALSE);
-		priv->pendings = g_list_remove (priv->pendings, contact);
-		g_object_unref (contact);
-	}
-}
-
-static void
-tp_contact_list_pending_cb (EmpathyTpGroup       *group,
-			    EmpathyContact       *contact,
-			    EmpathyContact       *actor,
-			    guint                 reason,
-			    const gchar          *message,
-			    EmpathyTpContactList *list)
-{
-	EmpathyTpContactListPriv *priv = GET_PRIV (list);
-	TpContactListType         list_type;
-
-	list_type = tp_contact_list_get_type (list, group);
-	DEBUG ("Contact %s (%d) pending in list type %d",
-		empathy_contact_get_id (contact),
-		empathy_contact_get_handle (contact),
-		list_type);
-
-	/* We want this contact in our contact list but we don't get its 
-	 * presence yet. Add to members anyway. */
-	if (list_type == TP_CONTACT_LIST_TYPE_SUBSCRIBE &&
-	    !g_list_find (priv->members, contact)) {
-		tp_contact_list_add_member (list, contact, actor, reason, message);
-	}
-
-	/* This contact wants our presence, auto accept if he is member,
-	 * otherwise he is pending. */
-	if (list_type == TP_CONTACT_LIST_TYPE_PUBLISH &&
-	    !g_list_find (priv->pendings, contact)) {
-		if (g_list_find (priv->members, contact)) {
-			empathy_tp_group_add_member (priv->publish, contact, "");
-		} else {
-			priv->pendings = g_list_prepend (priv->pendings,
-							 g_object_ref (contact));
-			g_signal_emit_by_name (list, "pendings-changed",
-					       contact, actor, reason, message,
-					       TRUE);
-		}
-	}
-}
-
-static void
-tp_contact_list_invalidated_cb (TpConnection         *connection,
-				guint                 domain,
-				gint                  code,
-				gchar                *message,
-				EmpathyTpContactList *list)
-{
-	EmpathyTpContactListPriv *priv = GET_PRIV (list);
-	GList                    *l;
-
-	DEBUG ("Connection invalidated");
-
-	/* Remove all contacts */
-	for (l = priv->members; l; l = l->next) {
-		g_signal_emit_by_name (list, "members-changed", l->data,
-				       NULL, 0, NULL,
-				       FALSE);
-		g_object_unref (l->data);
-	}
-	for (l = priv->pendings; l; l = l->next) {
-		g_signal_emit_by_name (list, "pendings-changed", l->data,
-				       NULL, 0, NULL,
-				       FALSE);
-		g_object_unref (l->data);
-	}
-	g_list_free (priv->members);
-	g_list_free (priv->pendings);
-	priv->members = NULL;
-	priv->pendings = NULL;
-
-	/* Tell the world to not use us anymore */
-	g_signal_emit (list, signals[DESTROY], 0);
-}
-
-static void
-tp_contact_list_group_list_free (GList **groups)
-{
-	g_list_foreach (*groups, (GFunc) g_free, NULL);
-	g_list_free (*groups);
-	g_slice_free (GList*, groups);
-}
-
-static void
-tp_contact_list_add_channel (EmpathyTpContactList *list,
-			     const gchar          *object_path,
-			     const gchar          *channel_type,
-			     TpHandleType          handle_type,
-			     guint                 handle)
+tp_contact_list_group_add_channel (EmpathyTpContactList *list,
+				   const gchar          *object_path,
+				   const gchar          *channel_type,
+				   TpHandleType          handle_type,
+				   guint                 handle)
 {
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
 	TpChannel                *channel;
-	EmpathyTpGroup           *group;
-	const gchar              *group_name;
-	GList                    *contacts, *l;
 
-	if (strcmp (channel_type, TP_IFACE_CHANNEL_TYPE_CONTACT_LIST) != 0 ||
+	/* Only accept server-side contact groups */
+	if (tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_CONTACT_LIST) ||
 	    handle_type != TP_HANDLE_TYPE_GROUP) {
 		return;
 	}
@@ -400,39 +217,379 @@ tp_contact_list_add_channel (EmpathyTpContactList *list,
 				  object_path, channel_type,
 				  handle_type, handle, NULL);
 
-	group = empathy_tp_group_new (channel);
-	empathy_run_until_ready (group);
-	g_object_unref (channel);
+	/* TpChannel emits initial set of members just before being ready */
+	g_signal_connect (channel, "group-members-changed",
+			  G_CALLBACK (tp_contact_list_group_members_changed_cb),
+			  list);
 
-	/* Check if already exists */
-	group_name = empathy_tp_group_get_name (group);
-	if (tp_contact_list_find_group (list, group_name)) {
-		g_object_unref (group);
+	/* Give the ref to the callback */
+	tp_channel_call_when_ready (channel,
+				    tp_contact_list_group_ready_cb,
+				    list);
+}
+
+static void
+tp_contact_list_group_request_channel_cb (TpConnection *connection,
+					  const gchar  *object_path,
+					  const GError *error,
+					  gpointer      user_data,
+					  GObject      *list)
+{
+	/* The new channel will be handled in NewChannel cb. Here we only
+	 * handle the error if RequestChannel failed */
+	if (error) {
+		DEBUG ("Error: %s", error->message);
+		return;
+	}
+}
+
+static void
+tp_contact_list_group_request_handles_cb (TpConnection *connection,
+					  const GArray *handles,
+					  const GError *error,
+					  gpointer      user_data,
+					  GObject      *list)
+{
+	TpHandle channel_handle;
+
+	if (error) {
+		DEBUG ("Error: %s", error->message);
 		return;
 	}
 
-	/* Add the group */
-	DEBUG ("New server-side group: %s", group_name);
-	priv->groups = g_list_prepend (priv->groups, group);
-	g_signal_connect (group, "member-added",
-			  G_CALLBACK (tp_contact_list_group_member_added_cb),
-			  list);
-	g_signal_connect (group, "member-removed",
-			  G_CALLBACK (tp_contact_list_group_member_removed_cb),
-			  list);
-	g_signal_connect (group, "destroy",
-			  G_CALLBACK (tp_contact_list_group_destroy_cb),
-			  list);
+	channel_handle = g_array_index (handles, TpHandle, 0);
+	tp_cli_connection_call_request_channel (connection, -1,
+						TP_IFACE_CHANNEL_TYPE_CONTACT_LIST,
+						TP_HANDLE_TYPE_GROUP,
+						channel_handle,
+						TRUE,
+						tp_contact_list_group_request_channel_cb,
+						NULL, NULL,
+						list);
+}
 
-	/* Get initial members */
-	contacts = empathy_tp_group_get_members (group);
-	for (l = contacts; l; l = l->next) {
-		tp_contact_list_group_member_added_cb (group, l->data,
-						       NULL, 0, NULL,
-						       list);
-		g_object_unref (l->data);
+/* This function takes ownership of handles array */
+static void
+tp_contact_list_group_add (EmpathyTpContactList *list,
+			   const gchar          *group_name,
+			   GArray               *handles)
+{
+	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	TpChannel                *channel;
+	const gchar              *names[] = {group_name, NULL};
+
+	/* Search the channel for that group name */
+	channel = g_hash_table_lookup (priv->groups, group_name);
+	if (channel) {
+		tp_cli_channel_interface_group_call_add_members (channel, -1,
+			handles, NULL, NULL, NULL, NULL, NULL);
+		g_array_free (handles, TRUE);
+		return;
 	}
-	g_list_free (contacts);
+
+	/* That group does not exist yet, we have to:
+	 * 1) Request an handle for the group name
+	 * 2) Request a channel
+	 * 3) When NewChannel is emitted, add handles in members
+	 */
+	g_hash_table_insert (priv->add_to_group,
+			     g_strdup (group_name),
+			     handles);
+	tp_cli_connection_call_request_handles (priv->connection, -1,
+						TP_HANDLE_TYPE_GROUP, names,
+						tp_contact_list_group_request_handles_cb,
+						NULL, NULL,
+						G_OBJECT (list));
+}
+
+static void
+tp_contact_list_got_added_members_cb (EmpathyTpContactFactory *factory,
+				      guint                    n_contacts,
+				      EmpathyContact * const * contacts,
+				      guint                    n_failed,
+				      const TpHandle          *failed,
+				      const GError            *error,
+				      gpointer                 user_data,
+				      GObject                 *list)
+{
+	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	guint i;
+
+	if (error) {
+		DEBUG ("Error: %s", error->message);
+		return;
+	}
+
+	for (i = 0; i < n_contacts; i++) {
+		EmpathyContact *contact = contacts[i];
+		TpHandle handle;
+
+		handle = empathy_contact_get_handle (contact);
+		if (g_hash_table_lookup (priv->members, GUINT_TO_POINTER (handle)))
+			continue;
+
+		/* Add to the list and emit signal */
+		g_hash_table_insert (priv->members, GUINT_TO_POINTER (handle),
+				     g_object_ref (contact));
+		g_signal_emit_by_name (list, "members-changed", contact,
+				       0, 0, NULL, TRUE);
+
+		/* This contact is now member, implicitly accept pending. */
+		if (g_hash_table_lookup (priv->pendings, GUINT_TO_POINTER (handle))) {
+			GArray handles = {(gchar*) &handle, 1};
+
+			tp_cli_channel_interface_group_call_add_members (priv->publish,
+				-1, &handles, NULL, NULL, NULL, NULL, NULL);
+		}
+	}
+}
+
+static void
+tp_contact_list_got_local_pending_cb (EmpathyTpContactFactory *factory,
+				      guint                    n_contacts,
+				      EmpathyContact * const * contacts,
+				      guint                    n_failed,
+				      const TpHandle          *failed,
+				      const GError            *error,
+				      gpointer                 user_data,
+				      GObject                 *list)
+{
+	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	guint i;
+
+	if (error) {
+		DEBUG ("Error: %s", error->message);
+		return;
+	}
+
+	for (i = 0; i < n_contacts; i++) {
+		EmpathyContact *contact = contacts[i];
+		TpHandle handle;
+		const gchar *message;
+		TpChannelGroupChangeReason reason;
+
+		handle = empathy_contact_get_handle (contact);
+		if (g_hash_table_lookup (priv->members, GUINT_TO_POINTER (handle))) {
+			GArray handles = {(gchar*) &handle, 1};
+
+			/* This contact is already member, auto accept. */
+			tp_cli_channel_interface_group_call_add_members (priv->publish,
+				-1, &handles, NULL, NULL, NULL, NULL, NULL);
+		}
+		else if (tp_channel_group_get_local_pending_info (priv->publish,
+								  handle,
+								  NULL,
+								  &reason,
+								  &message)) {
+			/* Add contact to pendings */
+			g_hash_table_insert (priv->pendings, GUINT_TO_POINTER (handle),
+					     g_object_ref (contact));
+			g_signal_emit_by_name (list, "pendings-changed", contact,
+					       contact, reason, message, TRUE);
+		}
+	}
+}
+
+static void
+tp_contact_list_remove_handle (EmpathyTpContactList *list,
+			       GHashTable *table,
+			       TpHandle handle)
+{
+	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	EmpathyContact *contact;
+	const gchar *signal;
+
+	if (table == priv->pendings)
+		signal = "pendings-changed";
+	else if (table == priv->members)
+		signal = "members-changed";
+	else
+		return;
+
+	contact = g_hash_table_lookup (table, GUINT_TO_POINTER (handle));
+	if (contact) {
+		g_object_ref (contact);
+		g_hash_table_remove (table, GUINT_TO_POINTER (handle));
+		g_signal_emit_by_name (list, signal, contact, 0, 0, NULL,
+				       FALSE);
+		g_object_unref (contact);
+	}
+}
+
+static void
+tp_contact_list_publish_group_members_changed_cb (TpChannel     *channel,
+						  gchar         *message,
+						  GArray        *added,
+						  GArray        *removed,
+						  GArray        *local_pending,
+						  GArray        *remote_pending,
+						  TpHandle       actor,
+						  TpChannelGroupChangeReason reason,
+						  EmpathyTpContactList *list)
+{
+	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	guint i;
+
+	/* We now send our presence to those contacts, remove them from pendings */
+	for (i = 0; i < added->len; i++) {
+		tp_contact_list_remove_handle (list, priv->pendings,
+			g_array_index (added, TpHandle, i));
+	}
+
+	/* We refuse to send our presence to those contacts, remove from pendings */
+	for (i = 0; i < removed->len; i++) {
+		tp_contact_list_remove_handle (list, priv->pendings,
+			g_array_index (added, TpHandle, i));
+	}
+
+	/* Those contacts want our presence, auto accept those that are already
+	 * member, otherwise add in pendings. */
+	if (local_pending->len > 0) {
+		empathy_tp_contact_factory_get_from_handles (priv->factory,
+			local_pending->len, (TpHandle*) local_pending->data,
+			tp_contact_list_got_local_pending_cb, NULL, NULL,
+			G_OBJECT (list));
+	}
+}
+
+static void
+tp_contact_list_publish_request_channel_cb (TpConnection *connection,
+					    const gchar  *object_path,
+					    const GError *error,
+					    gpointer      user_data,
+					    GObject      *list)
+{
+	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+
+	if (error) {
+		DEBUG ("Error: %s", error->message);
+		return;
+	}
+
+	priv->publish = tp_channel_new (connection, object_path,
+					TP_IFACE_CHANNEL_TYPE_CONTACT_LIST,
+					TP_HANDLE_TYPE_LIST,
+					GPOINTER_TO_UINT (user_data),
+					NULL);
+
+	/* TpChannel emits initial set of members just before being ready */
+	g_signal_connect (priv->publish, "group-members-changed",
+			  G_CALLBACK (tp_contact_list_publish_group_members_changed_cb),
+			  list);
+}
+
+static void
+tp_contact_list_publish_request_handle_cb (TpConnection *connection,
+					   const GArray *handles,
+					   const GError *error,
+					   gpointer      user_data,
+					   GObject      *list)
+{
+	TpHandle handle;
+
+	if (error) {
+		DEBUG ("Error: %s", error->message);
+		return;
+	}
+
+	handle = g_array_index (handles, TpHandle, 0);
+	tp_cli_connection_call_request_channel (connection, -1,
+						TP_IFACE_CHANNEL_TYPE_CONTACT_LIST,
+						TP_HANDLE_TYPE_LIST,
+						handle,
+						TRUE,
+						tp_contact_list_publish_request_channel_cb,
+						GUINT_TO_POINTER (handle), NULL,
+						list);
+}
+
+static void
+tp_contact_list_subscribe_group_members_changed_cb (TpChannel     *channel,
+						    gchar         *message,
+						    GArray        *added,
+						    GArray        *removed,
+						    GArray        *local_pending,
+						    GArray        *remote_pending,
+						    guint          actor,
+						    guint          reason,
+						    EmpathyTpContactList *list)
+{
+	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	guint i;
+
+	/* We now get the presence of those contacts, add them to members */
+	if (added->len > 0) {
+		empathy_tp_contact_factory_get_from_handles (priv->factory,
+			added->len, (TpHandle*) added->data,
+			tp_contact_list_got_added_members_cb, NULL, NULL,
+			G_OBJECT (list));
+	}
+
+	/* Those contacts refuse to send us their presence, remove from members. */
+	for (i = 0; i < removed->len; i++) {
+		tp_contact_list_remove_handle (list, priv->members,
+			g_array_index (added, TpHandle, i));
+	}
+
+	/* We want those contacts in our contact list but we don't get their 
+	 * presence yet. Add to members anyway. */
+	if (remote_pending->len > 0) {
+		empathy_tp_contact_factory_get_from_handles (priv->factory,
+			remote_pending->len, (TpHandle*) remote_pending->data,
+			tp_contact_list_got_added_members_cb, NULL, NULL,
+			G_OBJECT (list));
+	}
+}
+
+static void
+tp_contact_list_subscribe_request_channel_cb (TpConnection *connection,
+					      const gchar  *object_path,
+					      const GError *error,
+					      gpointer      user_data,
+					      GObject      *list)
+{
+	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+
+	if (error) {
+		DEBUG ("Error: %s", error->message);
+		return;
+	}
+
+	priv->subscribe = tp_channel_new (connection, object_path,
+					  TP_IFACE_CHANNEL_TYPE_CONTACT_LIST,
+					  TP_HANDLE_TYPE_LIST,
+					  GPOINTER_TO_UINT (user_data),
+					  NULL);
+
+	/* TpChannel emits initial set of members just before being ready */
+	g_signal_connect (priv->subscribe, "group-members-changed",
+			  G_CALLBACK (tp_contact_list_subscribe_group_members_changed_cb),
+			  list);
+}
+
+static void
+tp_contact_list_subscribe_request_handle_cb (TpConnection *connection,
+					     const GArray *handles,
+					     const GError *error,
+					     gpointer      user_data,
+					     GObject      *list)
+{
+	TpHandle handle;
+
+	if (error) {
+		DEBUG ("Error: %s", error->message);
+		return;
+	}
+
+	handle = g_array_index (handles, TpHandle, 0);
+	tp_cli_connection_call_request_channel (connection, -1,
+						TP_IFACE_CHANNEL_TYPE_CONTACT_LIST,
+						TP_HANDLE_TYPE_LIST,
+						handle,
+						TRUE,
+						tp_contact_list_subscribe_request_channel_cb,
+						GUINT_TO_POINTER (handle), NULL,
+						list);
 }
 
 static void
@@ -445,13 +602,9 @@ tp_contact_list_new_channel_cb (TpConnection *proxy,
 				gpointer      user_data,
 				GObject      *list)
 {
-	EmpathyTpContactListPriv *priv = GET_PRIV (list);
-
-	if (!suppress_handler && priv->ready) {
-		tp_contact_list_add_channel (EMPATHY_TP_CONTACT_LIST (list),
-					     object_path, channel_type,
-					     handle_type, handle);
-	}
+	tp_contact_list_group_add_channel (EMPATHY_TP_CONTACT_LIST (list),
+					   object_path, channel_type,
+					   handle_type, handle);
 }
 
 static void
@@ -461,8 +614,7 @@ tp_contact_list_list_channels_cb (TpConnection    *connection,
 				  gpointer         user_data,
 				  GObject         *list)
 {
-	EmpathyTpContactListPriv *priv = GET_PRIV (list);
-	guint                     i;
+	guint i;
 
 	if (error) {
 		DEBUG ("Error: %s", error->message);
@@ -482,151 +634,10 @@ tp_contact_list_list_channels_cb (TpConnection    *connection,
 		handle_type = g_value_get_uint (g_value_array_get_nth (chan_struct, 2));
 		handle = g_value_get_uint (g_value_array_get_nth (chan_struct, 3));
 
-		tp_contact_list_add_channel (EMPATHY_TP_CONTACT_LIST (list),
-					     object_path, channel_type,
-					     handle_type, handle);
+		tp_contact_list_group_add_channel (EMPATHY_TP_CONTACT_LIST (list),
+						   object_path, channel_type,
+						   handle_type, handle);
 	}
-
-	priv->ready = TRUE;
-}
-
-static void
-tp_contact_list_request_channel_cb (TpConnection *connection,
-				    const gchar  *object_path,
-				    const GError *error,
-				    gpointer      user_data,
-				    GObject      *weak_object)
-{
-	EmpathyTpContactList     *list = EMPATHY_TP_CONTACT_LIST (weak_object);
-	EmpathyTpContactListPriv *priv = GET_PRIV (list);
-	EmpathyTpGroup           *group;
-	TpChannel                *channel;
-	TpContactListType         list_type;
-	GList                    *contacts, *l;
-
-	if (error) {
-		DEBUG ("Error: %s", error->message);
-		return;
-	}
-
-	channel = tp_channel_new (connection, object_path,
-				  TP_IFACE_CHANNEL_TYPE_CONTACT_LIST,
-				  TP_HANDLE_TYPE_LIST,
-				  GPOINTER_TO_UINT (user_data),
-				  NULL);
-	group = empathy_tp_group_new (channel);
-	empathy_run_until_ready (group);
-
-	list_type = tp_contact_list_get_type (list, group);
-	if (list_type == TP_CONTACT_LIST_TYPE_PUBLISH && !priv->publish) {
-		DEBUG ("Got publish list");
-		priv->publish = group;
-
-		/* Publish is the list of contacts to who we send our
-		 * presence. Makes no sense to be in remote-pending */
-		g_signal_connect (group, "local-pending",
-				  G_CALLBACK (tp_contact_list_pending_cb),
-				  list);
-
-		contacts = empathy_tp_group_get_local_pendings (group);
-		for (l = contacts; l; l = l->next) {
-			EmpathyPendingInfo *info = l->data;
-				tp_contact_list_pending_cb (group,
-						    info->member,
-						    info->actor,
-						    0,
-						    info->message,
-						    list);
-			empathy_pending_info_free (info);
-		}
-		g_list_free (contacts);
-	}
-	else if (list_type == TP_CONTACT_LIST_TYPE_SUBSCRIBE && !priv->subscribe) {
-		DEBUG ("Got subscribe list");
-		priv->subscribe = group;
-
-		/* Subscribe is the list of contacts from who we
-		 * receive presence. Makes no sense to be in
-		 * local-pending */
-		g_signal_connect (group, "remote-pending",
-				  G_CALLBACK (tp_contact_list_pending_cb),
-				  list);
-
-		contacts = empathy_tp_group_get_remote_pendings (group);
-		for (l = contacts; l; l = l->next) {
-			tp_contact_list_pending_cb (group,
-						    l->data,
-						    NULL, 0,
-						    NULL, list);
-			g_object_unref (l->data);
-		}
-		g_list_free (contacts);
-	} else {
-		DEBUG ("Type of contact list channel unknown or aleady "
-			"have that list: %s",
-			empathy_tp_group_get_name (group));
-		g_object_unref (group);
-		return;
-	}
-
-	/* For all list types when need to get members */
-	g_signal_connect (group, "member-added",
-			  G_CALLBACK (tp_contact_list_added_cb),
-			  list);
-	g_signal_connect (group, "member-removed",
-			  G_CALLBACK (tp_contact_list_removed_cb),
-			  list);
-
-	contacts = empathy_tp_group_get_members (group);
-	for (l = contacts; l; l = l->next) {
-		tp_contact_list_added_cb (group,
-					  l->data,
-					  NULL, 0, NULL,
-					  list);
-		g_object_unref (l->data);
-	}
-	g_list_free (contacts);
-}
-
-static void
-tp_contact_list_request_handle_cb (TpConnection *connection,
-				   const GArray *handles,
-				   const GError *error,
-				   gpointer      user_data,
-				   GObject      *list)
-{
-	guint handle;
-
-	if (error) {
-		DEBUG ("Error: %s", error->message);
-		return;
-	}
-
-	handle = g_array_index (handles, guint, 0);
-	tp_cli_connection_call_request_channel (connection, -1,
-						TP_IFACE_CHANNEL_TYPE_CONTACT_LIST,
-						TP_HANDLE_TYPE_LIST,
-						handle,
-						TRUE,
-						tp_contact_list_request_channel_cb,
-						GUINT_TO_POINTER (handle), NULL,
-						list);
-}
-
-static void
-tp_contact_list_request_list (EmpathyTpContactList *list,
-			      const gchar          *type)
-{
-	EmpathyTpContactListPriv *priv = GET_PRIV (list);
-	const gchar *names[] = {type, NULL};
-
-	tp_cli_connection_call_request_handles (priv->connection,
-						-1,
-						TP_HANDLE_TYPE_LIST,
-						names,
-						tp_contact_list_request_handle_cb,
-						NULL, NULL,
-						G_OBJECT (list));
 }
 
 static void
@@ -634,6 +645,8 @@ tp_contact_list_finalize (GObject *object)
 {
 	EmpathyTpContactListPriv *priv;
 	EmpathyTpContactList     *list;
+	GHashTableIter            iter;
+	gpointer                  channel;
 
 	list = EMPATHY_TP_CONTACT_LIST (object);
 	priv = GET_PRIV (list);
@@ -646,49 +659,55 @@ tp_contact_list_finalize (GObject *object)
 	if (priv->publish) {
 		g_object_unref (priv->publish);
 	}
-	if (priv->account) {
-		g_object_unref (priv->account);
-	}
+
 	if (priv->connection) {
-		g_signal_handlers_disconnect_by_func (priv->connection,
-						      tp_contact_list_invalidated_cb,
-						      object);
 		g_object_unref (priv->connection);
 	}
 
-	g_hash_table_destroy (priv->contacts_groups);
-	g_list_foreach (priv->groups, (GFunc) g_object_unref, NULL);
-	g_list_free (priv->groups);
-	g_list_foreach (priv->members, (GFunc) g_object_unref, NULL);
-	g_list_free (priv->members);
-	g_list_foreach (priv->pendings, (GFunc) g_object_unref, NULL);
-	g_list_free (priv->pendings);
+	if (priv->factory) {
+		g_object_unref (priv->factory);
+	}
+
+	g_hash_table_iter_init (&iter, priv->groups);
+	while (g_hash_table_iter_next (&iter, NULL, &channel)) {
+		g_signal_handlers_disconnect_by_func (channel,
+			tp_contact_list_group_invalidated_cb, list);
+	}
+
+	g_hash_table_destroy (priv->groups);
+	g_hash_table_destroy (priv->members);
+	g_hash_table_destroy (priv->pendings);
+	g_hash_table_destroy (priv->add_to_group);
 
 	G_OBJECT_CLASS (empathy_tp_contact_list_parent_class)->finalize (object);
 }
 
 static void
-tp_contact_list_connection_ready (TpConnection *connection,
-				  const GError *error,
-				  gpointer      list)
+tp_contact_list_constructed (GObject *list)
 {
+
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	gchar                    *protocol_name = NULL;
+	const gchar              *names[] = {NULL, NULL};
 
-	if (error) {
-		tp_contact_list_invalidated_cb (connection,
-						error->domain,
-						error->code,
-						error->message,
-						EMPATHY_TP_CONTACT_LIST (list));
-		return;
-	}
+	priv->factory = empathy_tp_contact_factory_dup_singleton (priv->connection);
 
-	g_signal_connect (priv->connection, "invalidated",
-			  G_CALLBACK (tp_contact_list_invalidated_cb),
-			  list);
-
-	tp_contact_list_request_list (list, "publish");
-	tp_contact_list_request_list (list, "subscribe");
+	names[0] = "publish";
+	tp_cli_connection_call_request_handles (priv->connection,
+						-1,
+						TP_HANDLE_TYPE_LIST,
+						names,
+						tp_contact_list_publish_request_handle_cb,
+						NULL, NULL,
+						G_OBJECT (list));
+	names[0] = "subscribe";
+	tp_cli_connection_call_request_handles (priv->connection,
+						-1,
+						TP_HANDLE_TYPE_LIST,
+						names,
+						tp_contact_list_subscribe_request_handle_cb,
+						NULL, NULL,
+						G_OBJECT (list));
 
 	tp_cli_connection_call_list_channels (priv->connection, -1,
 					      tp_contact_list_list_channels_cb,
@@ -699,39 +718,15 @@ tp_contact_list_connection_ready (TpConnection *connection,
 						  tp_contact_list_new_channel_cb,
 						  NULL, NULL,
 						  list, NULL);
-}
-
-static void
-tp_contact_list_constructed (GObject *list)
-{
-
-	EmpathyTpContactListPriv *priv = GET_PRIV (list);
-	MissionControl           *mc;
-	guint                     status;
-	McProfile                *profile;
-	const gchar              *protocol_name;
-
-	/* Get the connection. status==0 means CONNECTED */
-	mc = empathy_mission_control_dup_singleton ();
-	status = mission_control_get_connection_status (mc, priv->account, NULL);
-	g_return_if_fail (status == 0);
-	priv->connection = mission_control_get_tpconnection (mc, priv->account, NULL);
-	g_return_if_fail (priv->connection != NULL);
-	g_object_unref (mc);
-
-	tp_connection_call_when_ready (priv->connection,
-				       tp_contact_list_connection_ready,
-				       list);
 
 	/* Check for protocols that does not support contact groups. We can
 	 * put all contacts into a special group in that case.
 	 * FIXME: Default group should be an information in the profile */
-	profile = mc_account_get_profile (priv->account);
-	protocol_name = mc_profile_get_protocol_name (profile);
-	if (strcmp (protocol_name, "local-xmpp") == 0) {
+	tp_connection_parse_object_path (priv->connection, &protocol_name, NULL);
+	if (!tp_strdiff (protocol_name, "local-xmpp")) {
 		priv->protocol_group = _("People nearby");
 	}
-	g_object_unref (profile);
+	g_free (protocol_name);
 }
 
 static void
@@ -743,8 +738,8 @@ tp_contact_list_get_property (GObject    *object,
 	EmpathyTpContactListPriv *priv = GET_PRIV (object);
 
 	switch (param_id) {
-	case PROP_ACCOUNT:
-		g_value_set_object (value, priv->account);
+	case PROP_CONNECTION:
+		g_value_set_object (value, priv->connection);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -761,8 +756,8 @@ tp_contact_list_set_property (GObject      *object,
 	EmpathyTpContactListPriv *priv = GET_PRIV (object);
 
 	switch (param_id) {
-	case PROP_ACCOUNT:
-		priv->account = g_object_ref (g_value_get_object (value));
+	case PROP_CONNECTION:
+		priv->connection = g_value_dup_object (value);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -781,25 +776,21 @@ empathy_tp_contact_list_class_init (EmpathyTpContactListClass *klass)
 	object_class->set_property = tp_contact_list_set_property;
 
 	g_object_class_install_property (object_class,
-					 PROP_ACCOUNT,
-					 g_param_spec_object ("account",
-							      "The Account",
-							      "The account associated with the contact list",
-							      MC_TYPE_ACCOUNT,
+					 PROP_CONNECTION,
+					 g_param_spec_object ("connection",
+							      "The Connection",
+							      "The connection associated with the contact list",
+							      TP_TYPE_CONNECTION,
 							      G_PARAM_READWRITE |
 							      G_PARAM_CONSTRUCT_ONLY));
 
-	signals[DESTROY] =
-		g_signal_new ("destroy",
-			      G_TYPE_FROM_CLASS (klass),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
-
 	g_type_class_add_private (object_class, sizeof (EmpathyTpContactListPriv));
+}
+
+static void
+tp_contact_list_array_free (gpointer handles)
+{
+	g_array_free (handles, TRUE);
 }
 
 static void
@@ -809,22 +800,39 @@ empathy_tp_contact_list_init (EmpathyTpContactList *list)
 		EMPATHY_TYPE_TP_CONTACT_LIST, EmpathyTpContactListPriv);
 
 	list->priv = priv;
-	priv->contacts_groups = g_hash_table_new_full (g_direct_hash,
-						       g_direct_equal,
-						       (GDestroyNotify) g_object_unref,
-						       (GDestroyNotify) tp_contact_list_group_list_free);
+
+	/* Map group's name to group's TpChannel. The group name string is owned
+	 * by the TpChannel object */
+	priv->groups = g_hash_table_new_full (g_str_hash, g_str_equal,
+					      NULL,
+					      (GDestroyNotify) g_object_unref);
+
+	/* Map contact's handle to EmpathyContact object */
+	priv->members = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+					       NULL,
+					       (GDestroyNotify) g_object_unref);
+
+	/* Map contact's handle to EmpathyContact object */
+	priv->pendings = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+						NULL,
+						(GDestroyNotify) g_object_unref);
+
+	/* Map group's name to GArray of handle */
+	priv->add_to_group = g_hash_table_new_full (g_str_hash, g_str_equal,
+						    g_free,
+						    tp_contact_list_array_free);
 }
 
 EmpathyTpContactList *
-empathy_tp_contact_list_new (McAccount *account)
+empathy_tp_contact_list_new (TpConnection *connection)
 {
 	return g_object_new (EMPATHY_TYPE_TP_CONTACT_LIST,
-			     "account", account,
+			     "connection", connection,
 			     NULL);
 }
 
-McAccount *
-empathy_tp_contact_list_get_account (EmpathyTpContactList *list)
+TpConnection *
+empathy_tp_contact_list_get_connection (EmpathyTpContactList *list)
 {
 	EmpathyTpContactListPriv *priv;
 
@@ -832,7 +840,7 @@ empathy_tp_contact_list_get_account (EmpathyTpContactList *list)
 
 	priv = GET_PRIV (list);
 
-	return priv->account;
+	return priv->connection;
 }
 
 static void
@@ -841,15 +849,18 @@ tp_contact_list_add (EmpathyContactList *list,
 		     const gchar        *message)
 {
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	TpHandle handle;
+	GArray handles = {(gchar *) &handle, 1};
 
-	g_return_if_fail (EMPATHY_IS_TP_CONTACT_LIST (list));
-
+	handle = empathy_contact_get_handle (contact);
 	if (priv->subscribe) {
-		empathy_tp_group_add_member (priv->subscribe, contact, message);
+		tp_cli_channel_interface_group_call_add_members (priv->subscribe,
+			-1, &handles, message, NULL, NULL, NULL, NULL);
 	}
-
-	if (priv->publish && g_list_find (priv->pendings, contact)) {
-		empathy_tp_group_add_member (priv->publish, contact, message);		
+	if (priv->publish &&
+	    g_hash_table_lookup (priv->pendings, GUINT_TO_POINTER (handle))) {
+		tp_cli_channel_interface_group_call_add_members (priv->publish,
+			-1, &handles, message, NULL, NULL, NULL, NULL);
 	}
 }
 
@@ -859,14 +870,17 @@ tp_contact_list_remove (EmpathyContactList *list,
 			const gchar        *message)
 {
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	TpHandle handle;
+	GArray handles = {(gchar *) &handle, 1};
 
-	g_return_if_fail (EMPATHY_IS_TP_CONTACT_LIST (list));
-
+	handle = empathy_contact_get_handle (contact);
 	if (priv->subscribe) {
-		empathy_tp_group_remove_member (priv->subscribe, contact, message);
+		tp_cli_channel_interface_group_call_remove_members (priv->subscribe,
+			-1, &handles, message, NULL, NULL, NULL, NULL);
 	}
 	if (priv->publish) {
-		empathy_tp_group_remove_member (priv->publish, contact, message);		
+		tp_cli_channel_interface_group_call_remove_members (priv->publish,
+			-1, &handles, message, NULL, NULL, NULL, NULL);
 	}
 }
 
@@ -874,44 +888,40 @@ static GList *
 tp_contact_list_get_members (EmpathyContactList *list)
 {
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	GList *ret;
 
-	g_return_val_if_fail (EMPATHY_IS_TP_CONTACT_LIST (list), NULL);
-
-	g_list_foreach (priv->members, (GFunc) g_object_ref, NULL);
-	return g_list_copy (priv->members);
+	ret = g_hash_table_get_values (priv->members);
+	g_list_foreach (ret, (GFunc) g_object_ref, NULL);
+	return ret;
 }
 
 static GList *
 tp_contact_list_get_pendings (EmpathyContactList *list)
 {
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	GList *ret;
 
-	g_return_val_if_fail (EMPATHY_IS_TP_CONTACT_LIST (list), NULL);
-
-	g_list_foreach (priv->pendings, (GFunc) g_object_ref, NULL);
-	return g_list_copy (priv->pendings);
+	ret = g_hash_table_get_values (priv->pendings);
+	g_list_foreach (ret, (GFunc) g_object_ref, NULL);
+	return ret;
 }
 
 static GList *
 tp_contact_list_get_all_groups (EmpathyContactList *list)
 {
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
-	GList                    *groups = NULL, *l;
+	GList                    *ret, *l;
 
-	g_return_val_if_fail (EMPATHY_IS_TP_CONTACT_LIST (list), NULL);
+	ret = g_hash_table_get_keys (priv->groups);
+	for (l = ret; l; l = l->next) {
+		l->data = g_strdup (l->data);
+	}
 
 	if (priv->protocol_group) {
-		groups = g_list_prepend (groups, g_strdup (priv->protocol_group));
+		ret = g_list_prepend (ret, g_strdup (priv->protocol_group));
 	}
 
-	for (l = priv->groups; l; l = l->next) {
-		const gchar *name;
-
-		name = empathy_tp_group_get_name (l->data);
-		groups = g_list_prepend (groups, g_strdup (name));
-	}
-
-	return groups;
+	return ret;
 }
 
 static GList *
@@ -919,174 +929,119 @@ tp_contact_list_get_groups (EmpathyContactList *list,
 			    EmpathyContact     *contact)
 {
 	EmpathyTpContactListPriv  *priv = GET_PRIV (list);
-	GList                    **groups;
-	GList                     *ret = NULL, *l;
+	GList                     *ret = NULL;
+	GHashTableIter             iter;
+	gpointer                   group_name;
+	gpointer                   channel;
+	TpHandle                   handle;
 
-	g_return_val_if_fail (EMPATHY_IS_TP_CONTACT_LIST (list), NULL);
+	handle = empathy_contact_get_handle (contact);
+	g_hash_table_iter_init (&iter, priv->groups);
+	while (g_hash_table_iter_next (&iter, &group_name, &channel)) {
+		const TpIntSet *members;
+
+		members = tp_channel_group_get_members (channel);
+		if (tp_intset_is_member (members, handle)) {
+			ret = g_list_prepend (ret, g_strdup (group_name));
+		}
+	}
 
 	if (priv->protocol_group) {
 		ret = g_list_prepend (ret, g_strdup (priv->protocol_group));
 	}
 
-	groups = g_hash_table_lookup (priv->contacts_groups, contact);
-	if (!groups) {
-		return ret;
-	}
-
-	for (l = *groups; l; l = l->next) {
-		ret = g_list_prepend (ret, g_strdup (l->data));
-	}
-
-
 	return ret;
-}
-
-static EmpathyTpGroup *
-tp_contact_list_get_group (EmpathyTpContactList *list,
-			   const gchar          *group)
-{
-	EmpathyTpContactListPriv *priv = GET_PRIV (list);
-	EmpathyTpGroup           *tp_group;
-	gchar                    *object_path;
-	guint                     handle;
-	GArray                   *handles;
-	const char               *names[2] = {group, NULL};
-	GError                   *error = NULL;
-
-	tp_group = tp_contact_list_find_group (list, group);
-	if (tp_group) {
-		return tp_group;
-	}
-
-	DEBUG ("creating new group: %s", group);
-
-	if (!tp_cli_connection_run_request_handles (priv->connection, -1,
-						    TP_HANDLE_TYPE_GROUP,
-						    names,
-						    &handles,
-						    &error, NULL)) {
-		DEBUG ("Failed to RequestHandles: %s",
-			error ? error->message : "No error given");
-		g_clear_error (&error);
-		return NULL;
-	}
-	handle = g_array_index (handles, guint, 0);
-	g_array_free (handles, TRUE);
-
-	if (!tp_cli_connection_run_request_channel (priv->connection, -1,
-						    TP_IFACE_CHANNEL_TYPE_CONTACT_LIST,
-						    TP_HANDLE_TYPE_GROUP,
-						    handle,
-						    TRUE,
-						    &object_path,
-						    &error, NULL)) {
-		DEBUG ("Failed to RequestChannel: %s",
-			error ? error->message : "No error given");
-		g_clear_error (&error);
-		return NULL;
-	}
-
-	tp_contact_list_add_channel (EMPATHY_TP_CONTACT_LIST (list),
-				     object_path,
-				     TP_IFACE_CHANNEL_TYPE_CONTACT_LIST,
-				     TP_HANDLE_TYPE_GROUP, handle);
-
-	g_free (object_path);
-
-	return tp_contact_list_find_group (list, group);
 }
 
 static void
 tp_contact_list_add_to_group (EmpathyContactList *list,
 			      EmpathyContact     *contact,
-			      const gchar        *group)
+			      const gchar        *group_name)
 {
-	EmpathyTpGroup *tp_group;
+	TpHandle handle;
+	GArray *handles;
 
-	g_return_if_fail (EMPATHY_IS_TP_CONTACT_LIST (list));
-
-	tp_group = tp_contact_list_get_group (EMPATHY_TP_CONTACT_LIST (list),
-					      group);
-
-	if (tp_group) {
-		empathy_tp_group_add_member (tp_group, contact, "");
-	}
+	handle = empathy_contact_get_handle (contact);
+	handles = g_array_sized_new (FALSE, FALSE, sizeof (TpHandle), 1);
+	g_array_append_val (handles, handle);
+	tp_contact_list_group_add (EMPATHY_TP_CONTACT_LIST (list),
+				   group_name, handles);
 }
 
 static void
 tp_contact_list_remove_from_group (EmpathyContactList *list,
 				   EmpathyContact     *contact,
-				   const gchar        *group)
+				   const gchar        *group_name)
 {
-	EmpathyTpGroup *tp_group;
+	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	TpChannel                *channel;
+	TpHandle                  handle;
+	GArray                    handles = {(gchar *) &handle, 1};
 
-	g_return_if_fail (EMPATHY_IS_TP_CONTACT_LIST (list));
-
-	tp_group = tp_contact_list_find_group (EMPATHY_TP_CONTACT_LIST (list),
-					       group);
-
-	if (tp_group) {
-		empathy_tp_group_remove_member (tp_group, contact, "");
+	channel = g_hash_table_lookup (priv->groups, group_name);
+	if (channel == NULL) {
+		return;
 	}
+
+	handle = empathy_contact_get_handle (contact);
+	DEBUG ("remove contact %s (%d) from group %s",
+		empathy_contact_get_id (contact), handle, group_name);
+
+	tp_cli_channel_interface_group_call_remove_members (channel, -1,
+		&handles, NULL, NULL, NULL, NULL, NULL);
 }
 
 static void
 tp_contact_list_rename_group (EmpathyContactList *list,
-			      const gchar        *old_group,
-			      const gchar        *new_group)
+			      const gchar        *old_group_name,
+			      const gchar        *new_group_name)
 {
-	EmpathyTpGroup *tp_group;
-	GList          *members;
+	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	TpChannel                *channel;
+	const TpIntSet           *members;
+	GArray                   *handles;
 
-	g_return_if_fail (EMPATHY_IS_TP_CONTACT_LIST (list));
-
-	tp_group = tp_contact_list_find_group (EMPATHY_TP_CONTACT_LIST (list),
-					       old_group);
-	if (!tp_group) {
+	channel = g_hash_table_lookup (priv->groups, old_group_name);
+	if (channel == NULL) {
 		return;
 	}
 
-	DEBUG ("rename group %s to %s", old_group, new_group);
+	DEBUG ("rename group %s to %s", old_group_name, new_group_name);
 
-	/* Remove all members from the old group */
-	members = empathy_tp_group_get_members (tp_group);
-	empathy_tp_group_remove_members (tp_group, members, "");
-	empathy_tp_group_close (tp_group);
+	/* Remove all members and close the old channel */
+	members = tp_channel_group_get_members (channel);
+	handles = tp_intset_to_array (members);
+	tp_cli_channel_interface_group_call_remove_members (channel, -1,
+		handles, NULL, NULL, NULL, NULL, NULL);
+	tp_cli_channel_call_close (channel, -1, NULL, NULL, NULL, NULL);
 
-	/* Add all members to the new group */
-	tp_group = tp_contact_list_get_group (EMPATHY_TP_CONTACT_LIST (list),
-					      new_group);
-	empathy_tp_group_add_members (tp_group, members, "");
-
-	g_list_foreach (members, (GFunc) g_object_unref, NULL);
-	g_list_free (members);
+	tp_contact_list_group_add (EMPATHY_TP_CONTACT_LIST (list),
+				   new_group_name, handles);
 }
 
 static void
 tp_contact_list_remove_group (EmpathyContactList *list,
-			      const gchar *group)
+			      const gchar *group_name)
 {
-	EmpathyTpGroup *tp_group;
-	GList	       *members;
+	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	TpChannel                *channel;
+	const TpIntSet           *members;
+	GArray                   *handles;
 
-	g_return_if_fail (EMPATHY_IS_TP_CONTACT_LIST (list));
-
-	tp_group = tp_contact_list_find_group (EMPATHY_TP_CONTACT_LIST (list),
-					       group);
-	
-	if (!tp_group) {
+	channel = g_hash_table_lookup (priv->groups, group_name);
+	if (channel == NULL) {
 		return;
 	}
 
-	DEBUG ("remove group %s", group);
+	DEBUG ("remove group %s", group_name);
 
-	/* Remove all members of the group */
-	members = empathy_tp_group_get_members (tp_group);
-	empathy_tp_group_remove_members (tp_group, members, "");
-	empathy_tp_group_close (tp_group);
-
-	g_list_foreach (members, (GFunc) g_object_unref, NULL);
-	g_list_free (members);
+	/* Remove all members and close the channel */
+	members = tp_channel_group_get_members (channel);
+	handles = tp_intset_to_array (members);
+	tp_cli_channel_interface_group_call_remove_members (channel, -1,
+		handles, NULL, NULL, NULL, NULL, NULL);
+	tp_cli_channel_call_close (channel, -1, NULL, NULL, NULL, NULL);
+	g_array_free (handles, TRUE);
 }
 
 static void
@@ -1117,6 +1072,34 @@ empathy_tp_contact_list_can_add (EmpathyTpContactList *list)
 	if (priv->subscribe == NULL)
 		return FALSE;
 
-	flags = empathy_tp_group_get_flags (priv->subscribe);
+	flags = tp_channel_group_get_flags (priv->subscribe);
 	return (flags & TP_CHANNEL_GROUP_FLAG_CAN_ADD) != 0;
 }
+
+void
+empathy_tp_contact_list_remove_all (EmpathyTpContactList *list)
+{
+	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	GHashTableIter            iter;
+	gpointer                  contact;
+
+	g_return_if_fail (EMPATHY_IS_TP_CONTACT_LIST (list));
+
+	/* Remove all contacts */
+	g_hash_table_iter_init (&iter, priv->members);
+	while (g_hash_table_iter_next (&iter, NULL, &contact)) {
+		g_signal_emit_by_name (list, "members-changed", contact,
+				       NULL, 0, NULL,
+				       FALSE);
+	}
+	g_hash_table_remove_all (priv->members);
+
+	g_hash_table_iter_init (&iter, priv->pendings);
+	while (g_hash_table_iter_next (&iter, NULL, &contact)) {
+		g_signal_emit_by_name (list, "pendings-changed", contact,
+				       NULL, 0, NULL,
+				       FALSE);
+	}
+	g_hash_table_remove_all (priv->pendings);
+}
+

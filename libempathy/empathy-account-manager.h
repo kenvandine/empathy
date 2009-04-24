@@ -61,6 +61,16 @@ gboolean                empathy_account_manager_is_account_just_connected
                                  McAccount             *account);
 int                     empathy_account_manager_get_count
                                 (EmpathyAccountManager *manager);
+McAccount *             empathy_account_manager_get_account
+                                (EmpathyAccountManager *manager,
+                                 TpConnection          *connection);
+GList *                 empathy_account_manager_dup_accounts
+                                (EmpathyAccountManager *manager);
+TpConnection *          empathy_account_manager_get_connection
+                                (EmpathyAccountManager *manager,
+                                 McAccount             *account);
+GList *                 empathy_account_manager_dup_connections
+                                (EmpathyAccountManager *manager);
 
 G_END_DECLS
 

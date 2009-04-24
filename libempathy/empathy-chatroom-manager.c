@@ -1,7 +1,6 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  * Copyright (C) 2004-2007 Imendio AB
- * Copyright (C) 2007-2008 Collabora Ltd.
+ * Copyright (C) 2007-2009 Collabora Ltd.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -33,6 +32,7 @@
 
 #include "empathy-tp-chat.h"
 #include "empathy-chatroom-manager.h"
+#include "empathy-account-manager.h"
 #include "empathy-utils.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
@@ -45,26 +45,19 @@
 static EmpathyChatroomManager *chatroom_manager_singleton = NULL;
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyChatroomManager)
-typedef struct {
-	GList      *chatrooms;
+typedef struct
+{
+  GList *chatrooms;
   gchar *file;
+  EmpathyAccountManager *account_manager;
   /* source id of the autosave timer */
   gint save_timer_id;
 } EmpathyChatroomManagerPriv;
 
-static void     chatroom_manager_finalize          (GObject                    *object);
-static gboolean chatroom_manager_get_all           (EmpathyChatroomManager      *manager);
-static gboolean chatroom_manager_file_parse        (EmpathyChatroomManager      *manager,
-						    const gchar                *filename);
-static void     chatroom_manager_parse_chatroom    (EmpathyChatroomManager      *manager,
-						    xmlNodePtr                  node);
-static gboolean chatroom_manager_file_save         (EmpathyChatroomManager      *manager);
-static void reset_save_timeout (EmpathyChatroomManager *self);
-
 enum {
-	CHATROOM_ADDED,
-	CHATROOM_REMOVED,
-	LAST_SIGNAL
+  CHATROOM_ADDED,
+  CHATROOM_REMOVED,
+  LAST_SIGNAL
 };
 
 static guint signals[LAST_SIGNAL];
@@ -77,6 +70,238 @@ enum
 };
 
 G_DEFINE_TYPE (EmpathyChatroomManager, empathy_chatroom_manager, G_TYPE_OBJECT);
+
+/*
+ * API to save/load and parse the chatrooms file.
+ */
+
+static gboolean
+chatroom_manager_file_save (EmpathyChatroomManager *manager)
+{
+	EmpathyChatroomManagerPriv *priv;
+	xmlDocPtr                  doc;
+	xmlNodePtr                 root;
+	GList                     *l;
+
+	priv = GET_PRIV (manager);
+
+	doc = xmlNewDoc ("1.0");
+	root = xmlNewNode (NULL, "chatrooms");
+	xmlDocSetRootElement (doc, root);
+
+	for (l = priv->chatrooms; l; l = l->next) {
+		EmpathyChatroom *chatroom;
+		xmlNodePtr       node;
+		const gchar     *account_id;
+
+		chatroom = l->data;
+
+		if (!empathy_chatroom_is_favorite (chatroom)) {
+			continue;
+		}
+
+		account_id = mc_account_get_unique_name (empathy_chatroom_get_account (chatroom));
+
+		node = xmlNewChild (root, NULL, "chatroom", NULL);
+		xmlNewTextChild (node, NULL, "name", empathy_chatroom_get_name (chatroom));
+		xmlNewTextChild (node, NULL, "room", empathy_chatroom_get_room (chatroom));
+		xmlNewTextChild (node, NULL, "account", account_id);
+		xmlNewTextChild (node, NULL, "auto_connect",
+			empathy_chatroom_get_auto_connect (chatroom) ? "yes" : "no");
+	}
+
+	/* Make sure the XML is indented properly */
+	xmlIndentTreeOutput = 1;
+
+	DEBUG ("Saving file:'%s'", priv->file);
+	xmlSaveFormatFileEnc (priv->file, doc, "utf-8", 1);
+	xmlFreeDoc (doc);
+
+	xmlCleanupParser ();
+	xmlMemoryDump ();
+
+	return TRUE;
+}
+
+static gboolean
+save_timeout (EmpathyChatroomManager *self)
+{
+  EmpathyChatroomManagerPriv *priv = GET_PRIV (self);
+
+  priv->save_timer_id = 0;
+  chatroom_manager_file_save (self);
+
+  return FALSE;
+}
+
+static void
+reset_save_timeout (EmpathyChatroomManager *self)
+{
+  EmpathyChatroomManagerPriv *priv = GET_PRIV (self);
+
+  if (priv->save_timer_id > 0)
+    {
+      g_source_remove (priv->save_timer_id);
+    }
+
+  priv->save_timer_id = g_timeout_add_seconds (SAVE_TIMER,
+      (GSourceFunc) save_timeout, self);
+}
+
+static void
+chatroom_changed_cb (EmpathyChatroom *chatroom,
+                     GParamSpec *spec,
+                     EmpathyChatroomManager *self)
+{
+  reset_save_timeout (self);
+}
+
+static void
+add_chatroom (EmpathyChatroomManager *self,
+              EmpathyChatroom *chatroom)
+{
+  EmpathyChatroomManagerPriv *priv = GET_PRIV (self);
+
+  priv->chatrooms = g_list_prepend (priv->chatrooms, g_object_ref (chatroom));
+
+  g_signal_connect (chatroom, "notify",
+      G_CALLBACK (chatroom_changed_cb), self);
+}
+
+static void
+chatroom_manager_parse_chatroom (EmpathyChatroomManager *manager,
+				 xmlNodePtr             node)
+{
+	EmpathyChatroomManagerPriv *priv;
+	EmpathyChatroom            *chatroom;
+	McAccount                 *account;
+	xmlNodePtr                 child;
+	gchar                     *str;
+	gchar                     *name;
+	gchar                     *room;
+	gchar                     *account_id;
+	gboolean                   auto_connect;
+
+	priv = GET_PRIV (manager);
+
+	/* default values. */
+	name = NULL;
+	room = NULL;
+	auto_connect = TRUE;
+	account_id = NULL;
+
+	for (child = node->children; child; child = child->next) {
+		gchar *tag;
+
+		if (xmlNodeIsText (child)) {
+			continue;
+		}
+
+		tag = (gchar *) child->name;
+		str = (gchar *) xmlNodeGetContent (child);
+
+		if (strcmp (tag, "name") == 0) {
+			name = g_strdup (str);
+		}
+		else if (strcmp (tag, "room") == 0) {
+			room = g_strdup (str);
+		}
+		else if (strcmp (tag, "auto_connect") == 0) {
+			if (strcmp (str, "yes") == 0) {
+				auto_connect = TRUE;
+			} else {
+				auto_connect = FALSE;
+			}
+		}
+		else if (strcmp (tag, "account") == 0) {
+			account_id = g_strdup (str);
+		}
+
+		xmlFree (str);
+	}
+
+	account = mc_account_lookup (account_id);
+	if (!account) {
+		g_free (name);
+		g_free (room);
+		g_free (account_id);
+		return;
+	}
+
+	chatroom = empathy_chatroom_new_full (account, room, name, auto_connect);
+	empathy_chatroom_set_favorite (chatroom, TRUE);
+	add_chatroom (manager, chatroom);
+	g_signal_emit (manager, signals[CHATROOM_ADDED], 0, chatroom);
+
+	g_object_unref (account);
+	g_free (name);
+	g_free (room);
+	g_free (account_id);
+}
+
+static gboolean
+chatroom_manager_file_parse (EmpathyChatroomManager *manager,
+			     const gchar           *filename)
+{
+	EmpathyChatroomManagerPriv *priv;
+	xmlParserCtxtPtr           ctxt;
+	xmlDocPtr                  doc;
+	xmlNodePtr                 chatrooms;
+	xmlNodePtr                 node;
+
+	priv = GET_PRIV (manager);
+
+	DEBUG ("Attempting to parse file:'%s'...", filename);
+
+	ctxt = xmlNewParserCtxt ();
+
+	/* Parse and validate the file. */
+	doc = xmlCtxtReadFile (ctxt, filename, NULL, 0);
+	if (!doc) {
+		g_warning ("Failed to parse file:'%s'", filename);
+		xmlFreeParserCtxt (ctxt);
+		return FALSE;
+	}
+
+	if (!empathy_xml_validate (doc, CHATROOMS_DTD_FILENAME)) {
+		g_warning ("Failed to validate file:'%s'", filename);
+		xmlFreeDoc(doc);
+		xmlFreeParserCtxt (ctxt);
+		return FALSE;
+	}
+
+	/* The root node, chatrooms. */
+	chatrooms = xmlDocGetRootElement (doc);
+
+	for (node = chatrooms->children; node; node = node->next) {
+		if (strcmp ((gchar *) node->name, "chatroom") == 0) {
+			chatroom_manager_parse_chatroom (manager, node);
+		}
+	}
+
+	DEBUG ("Parsed %d chatrooms", g_list_length (priv->chatrooms));
+
+	xmlFreeDoc(doc);
+	xmlFreeParserCtxt (ctxt);
+
+	return TRUE;
+}
+
+static gboolean
+chatroom_manager_get_all (EmpathyChatroomManager *manager)
+{
+	EmpathyChatroomManagerPriv *priv;
+
+	priv = GET_PRIV (manager);
+
+	/* read file in */
+	if (g_file_test (priv->file, G_FILE_TEST_EXISTS) &&
+	    !chatroom_manager_file_parse (manager, priv->file)) {
+		return FALSE;
+	}
+
+	return TRUE;
+}
 
 static void
 empathy_chatroom_manager_get_property (GObject *object,
@@ -119,6 +344,41 @@ empathy_chatroom_manager_set_property (GObject *object,
     }
 }
 
+static void
+chatroom_manager_finalize (GObject *object)
+{
+  EmpathyChatroomManager *self = EMPATHY_CHATROOM_MANAGER (object);
+  EmpathyChatroomManagerPriv *priv;
+  GList *l;
+
+  priv = GET_PRIV (object);
+
+  g_object_unref (priv->account_manager);
+
+  if (priv->save_timer_id > 0)
+    {
+      /* have to save before destroy the object */
+      g_source_remove (priv->save_timer_id);
+      priv->save_timer_id = 0;
+      chatroom_manager_file_save (self);
+    }
+
+  for (l = priv->chatrooms; l != NULL; l = g_list_next (l))
+    {
+      EmpathyChatroom *chatroom = l->data;
+
+      g_signal_handlers_disconnect_by_func (chatroom, chatroom_changed_cb,
+          self);
+
+      g_object_unref (chatroom);
+    }
+
+  g_list_free (priv->chatrooms);
+  g_free (priv->file);
+
+  (G_OBJECT_CLASS (empathy_chatroom_manager_parent_class)->finalize) (object);
+}
+
 static GObject *
 empathy_chatroom_manager_constructor (GType type,
                                       guint n_props,
@@ -141,6 +401,8 @@ empathy_chatroom_manager_constructor (GType type,
   chatroom_manager_singleton = self;
   g_object_add_weak_pointer (obj, (gpointer) &chatroom_manager_singleton);
 
+  priv->account_manager = empathy_account_manager_dup_singleton ();
+
   if (priv->file == NULL)
     {
       /* Set the default file path */
@@ -161,7 +423,7 @@ empathy_chatroom_manager_constructor (GType type,
 static void
 empathy_chatroom_manager_class_init (EmpathyChatroomManagerClass *klass)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GParamSpec *param_spec;
 
   object_class->constructor = empathy_chatroom_manager_constructor;
@@ -181,201 +443,108 @@ empathy_chatroom_manager_class_init (EmpathyChatroomManagerClass *klass)
       G_PARAM_STATIC_BLURB);
   g_object_class_install_property (object_class, PROP_FILE, param_spec);
 
-	signals[CHATROOM_ADDED] =
-		g_signal_new ("chatroom-added",
-			      G_TYPE_FROM_CLASS (klass),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
-			      G_TYPE_NONE,
-			      1, EMPATHY_TYPE_CHATROOM);
-	signals[CHATROOM_REMOVED] =
-		g_signal_new ("chatroom-removed",
-			      G_TYPE_FROM_CLASS (klass),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
-			      G_TYPE_NONE,
-			      1, EMPATHY_TYPE_CHATROOM);
+  signals[CHATROOM_ADDED] = g_signal_new ("chatroom-added",
+      G_TYPE_FROM_CLASS (klass),
+      G_SIGNAL_RUN_LAST,
+      0, NULL, NULL,
+      g_cclosure_marshal_VOID__OBJECT,
+      G_TYPE_NONE,
+      1, EMPATHY_TYPE_CHATROOM);
 
-	g_type_class_add_private (object_class,
-				  sizeof (EmpathyChatroomManagerPriv));
+  signals[CHATROOM_REMOVED] = g_signal_new ("chatroom-removed",
+      G_TYPE_FROM_CLASS (klass),
+      G_SIGNAL_RUN_LAST,
+      0, NULL, NULL,
+      g_cclosure_marshal_VOID__OBJECT,
+      G_TYPE_NONE,
+      1, EMPATHY_TYPE_CHATROOM);
+
+  g_type_class_add_private (object_class, sizeof (EmpathyChatroomManagerPriv));
 }
 
 static void
 empathy_chatroom_manager_init (EmpathyChatroomManager *manager)
 {
-	EmpathyChatroomManagerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
-		EMPATHY_TYPE_CHATROOM_MANAGER, EmpathyChatroomManagerPriv);
+  EmpathyChatroomManagerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
+      EMPATHY_TYPE_CHATROOM_MANAGER, EmpathyChatroomManagerPriv);
 
-	manager->priv = priv;
-}
-
-static void
-chatroom_changed_cb (EmpathyChatroom *chatroom,
-                     GParamSpec *spec,
-                     EmpathyChatroomManager *self)
-{
-  reset_save_timeout (self);
-}
-
-static void
-chatroom_manager_finalize (GObject *object)
-{
-  EmpathyChatroomManager *self = EMPATHY_CHATROOM_MANAGER (object);
-	EmpathyChatroomManagerPriv *priv;
-  GList *l;
-
-	priv = GET_PRIV (object);
-
-  if (priv->save_timer_id > 0)
-    {
-      /* have to save before destroy the object */
-      g_source_remove (priv->save_timer_id);
-      priv->save_timer_id = 0;
-      chatroom_manager_file_save (self);
-    }
-
-  for (l = priv->chatrooms; l != NULL; l = g_list_next (l))
-    {
-      EmpathyChatroom *chatroom = l->data;
-
-      g_signal_handlers_disconnect_by_func (chatroom, chatroom_changed_cb,
-          self);
-
-      g_object_unref (chatroom);
-    }
-
-	g_list_free (priv->chatrooms);
-  g_free (priv->file);
-
-	(G_OBJECT_CLASS (empathy_chatroom_manager_parent_class)->finalize) (object);
+  manager->priv = priv;
 }
 
 EmpathyChatroomManager *
 empathy_chatroom_manager_dup_singleton (const gchar *file)
 {
-	return EMPATHY_CHATROOM_MANAGER (g_object_new (EMPATHY_TYPE_CHATROOM_MANAGER,
-		"file", file, NULL));
-}
-
-static gboolean
-save_timeout (EmpathyChatroomManager *self)
-{
-  EmpathyChatroomManagerPriv *priv = GET_PRIV (self);
-
-  priv->save_timer_id = 0;
-  chatroom_manager_file_save (self);
-
-  return FALSE;
-}
-
-static void
-reset_save_timeout (EmpathyChatroomManager *self)
-{
-  EmpathyChatroomManagerPriv *priv = GET_PRIV (self);
-
-  if (priv->save_timer_id > 0)
-    {
-      g_source_remove (priv->save_timer_id);
-    }
-
-  priv->save_timer_id = g_timeout_add_seconds (SAVE_TIMER,
-      (GSourceFunc) save_timeout, self);
-}
-
-static void
-add_chatroom (EmpathyChatroomManager *self,
-              EmpathyChatroom *chatroom)
-{
-  EmpathyChatroomManagerPriv *priv = GET_PRIV (self);
-
-  priv->chatrooms = g_list_prepend (priv->chatrooms, g_object_ref (chatroom));
-
-  g_signal_connect (chatroom, "notify",
-      G_CALLBACK (chatroom_changed_cb), self);
+  return EMPATHY_CHATROOM_MANAGER (g_object_new (EMPATHY_TYPE_CHATROOM_MANAGER,
+      "file", file, NULL));
 }
 
 gboolean
 empathy_chatroom_manager_add (EmpathyChatroomManager *manager,
 			     EmpathyChatroom        *chatroom)
 {
-	EmpathyChatroomManagerPriv *priv;
+  EmpathyChatroomManagerPriv *priv;
 
-	g_return_val_if_fail (EMPATHY_IS_CHATROOM_MANAGER (manager), FALSE);
-	g_return_val_if_fail (EMPATHY_IS_CHATROOM (chatroom), FALSE);
+  g_return_val_if_fail (EMPATHY_IS_CHATROOM_MANAGER (manager), FALSE);
+  g_return_val_if_fail (EMPATHY_IS_CHATROOM (chatroom), FALSE);
 
-	priv = GET_PRIV (manager);
+  priv = GET_PRIV (manager);
 
-	/* don't add more than once */
-	if (!empathy_chatroom_manager_find (manager,
-					   empathy_chatroom_get_account (chatroom),
-					   empathy_chatroom_get_room (chatroom))) {
-      gboolean favorite;
+  /* don't add more than once */
+  if (!empathy_chatroom_manager_find (manager,
+      empathy_chatroom_get_account (chatroom),
+      empathy_chatroom_get_room (chatroom)))
+    {
+      add_chatroom (manager, chatroom);
 
-      g_object_get (chatroom, "favorite", &favorite, NULL);
-
-    add_chatroom (manager, chatroom);
-
-    if (favorite)
-      {
+      if (empathy_chatroom_is_favorite (chatroom))
         reset_save_timeout (manager);
-      }
 
-		g_signal_emit (manager, signals[CHATROOM_ADDED], 0, chatroom);
+      g_signal_emit (manager, signals[CHATROOM_ADDED], 0, chatroom);
+      return TRUE;
+    }
 
-		return TRUE;
-	}
-
-	return FALSE;
+  return FALSE;
 }
 
 void
 empathy_chatroom_manager_remove (EmpathyChatroomManager *manager,
-				EmpathyChatroom        *chatroom)
+                                 EmpathyChatroom        *chatroom)
 {
-	EmpathyChatroomManagerPriv *priv;
-	GList                     *l;
+  EmpathyChatroomManagerPriv *priv;
+  GList *l;
 
-	g_return_if_fail (EMPATHY_IS_CHATROOM_MANAGER (manager));
-	g_return_if_fail (EMPATHY_IS_CHATROOM (chatroom));
+  g_return_if_fail (EMPATHY_IS_CHATROOM_MANAGER (manager));
+  g_return_if_fail (EMPATHY_IS_CHATROOM (chatroom));
 
-	priv = GET_PRIV (manager);
+  priv = GET_PRIV (manager);
 
-	for (l = priv->chatrooms; l; l = l->next) {
-		EmpathyChatroom *this_chatroom;
+  for (l = priv->chatrooms; l; l = l->next)
+    {
+      EmpathyChatroom *this_chatroom;
 
-		this_chatroom = l->data;
+      this_chatroom = l->data;
 
-		if (this_chatroom == chatroom ||
-        empathy_chatroom_equal (chatroom, this_chatroom)) {
-        gboolean favorite;
-			priv->chatrooms = g_list_delete_link (priv->chatrooms, l);
-
-      g_object_get (chatroom, "favorite", &favorite, NULL);
-
-      if (favorite)
+      if (this_chatroom == chatroom ||
+          empathy_chatroom_equal (chatroom, this_chatroom))
         {
-          reset_save_timeout (manager);
+          priv->chatrooms = g_list_delete_link (priv->chatrooms, l);
+          if (empathy_chatroom_is_favorite (chatroom))
+            reset_save_timeout (manager);
+
+          g_signal_emit (manager, signals[CHATROOM_REMOVED], 0, this_chatroom);
+          g_signal_handlers_disconnect_by_func (chatroom, chatroom_changed_cb,
+              manager);
+
+          g_object_unref (this_chatroom);
+          break;
         }
-
-			g_signal_emit (manager, signals[CHATROOM_REMOVED], 0, this_chatroom);
-
-      g_signal_handlers_disconnect_by_func (chatroom, chatroom_changed_cb,
-          manager);
-
-			g_object_unref (this_chatroom);
-			break;
-		}
-	}
+    }
 }
 
 EmpathyChatroom *
 empathy_chatroom_manager_find (EmpathyChatroomManager *manager,
-			      McAccount             *account,
-			      const gchar           *room)
+                               McAccount *account,
+                               const gchar *room)
 {
 	EmpathyChatroomManagerPriv *priv;
 	GList                     *l;
@@ -457,7 +626,7 @@ empathy_chatroom_manager_get_count (EmpathyChatroomManager *manager,
 		chatroom = l->data;
 
 		if (empathy_account_equal (account,
-					  empathy_chatroom_get_account (chatroom))) {
+					   empathy_chatroom_get_account (chatroom))) {
 			count++;
 		}
 	}
@@ -465,225 +634,36 @@ empathy_chatroom_manager_get_count (EmpathyChatroomManager *manager,
 	return count;
 }
 
-/*
- * API to save/load and parse the chatrooms file.
- */
-
-static gboolean
-chatroom_manager_get_all (EmpathyChatroomManager *manager)
-{
-	EmpathyChatroomManagerPriv *priv;
-
-	priv = GET_PRIV (manager);
-
-	/* read file in */
-	if (g_file_test (priv->file, G_FILE_TEST_EXISTS) &&
-	    !chatroom_manager_file_parse (manager, priv->file))
-    return FALSE;
-
-	return TRUE;
-}
-
-static gboolean
-chatroom_manager_file_parse (EmpathyChatroomManager *manager,
-			     const gchar           *filename)
-{
-	EmpathyChatroomManagerPriv *priv;
-	xmlParserCtxtPtr           ctxt;
-	xmlDocPtr                  doc;
-	xmlNodePtr                 chatrooms;
-	xmlNodePtr                 node;
-
-	priv = GET_PRIV (manager);
-
-	DEBUG ("Attempting to parse file:'%s'...", filename);
-
-	ctxt = xmlNewParserCtxt ();
-
-	/* Parse and validate the file. */
-	doc = xmlCtxtReadFile (ctxt, filename, NULL, 0);
-	if (!doc) {
-		g_warning ("Failed to parse file:'%s'", filename);
-		xmlFreeParserCtxt (ctxt);
-		return FALSE;
-	}
-
-	if (!empathy_xml_validate (doc, CHATROOMS_DTD_FILENAME)) {
-		g_warning ("Failed to validate file:'%s'", filename);
-		xmlFreeDoc(doc);
-		xmlFreeParserCtxt (ctxt);
-		return FALSE;
-	}
-
-	/* The root node, chatrooms. */
-	chatrooms = xmlDocGetRootElement (doc);
-
-	for (node = chatrooms->children; node; node = node->next) {
-		if (strcmp ((gchar *) node->name, "chatroom") == 0) {
-			chatroom_manager_parse_chatroom (manager, node);
-		}
-	}
-
-	DEBUG ("Parsed %d chatrooms", g_list_length (priv->chatrooms));
-
-	xmlFreeDoc(doc);
-	xmlFreeParserCtxt (ctxt);
-
-	return TRUE;
-}
-
-static void
-chatroom_manager_parse_chatroom (EmpathyChatroomManager *manager,
-				 xmlNodePtr             node)
-{
-	EmpathyChatroomManagerPriv *priv;
-	EmpathyChatroom            *chatroom;
-	McAccount                 *account;
-	xmlNodePtr                 child;
-	gchar                     *str;
-	gchar                     *name;
-	gchar                     *room;
-	gchar                     *account_id;
-	gboolean                   auto_connect;
-
-	priv = GET_PRIV (manager);
-
-	/* default values. */
-	name = NULL;
-	room = NULL;
-	auto_connect = TRUE;
-	account_id = NULL;
-
-	for (child = node->children; child; child = child->next) {
-		gchar *tag;
-
-		if (xmlNodeIsText (child)) {
-			continue;
-		}
-
-		tag = (gchar *) child->name;
-		str = (gchar *) xmlNodeGetContent (child);
-
-		if (strcmp (tag, "name") == 0) {
-			name = g_strdup (str);
-		}
-		else if (strcmp (tag, "room") == 0) {
-			room = g_strdup (str);
-		}
-		else if (strcmp (tag, "auto_connect") == 0) {
-			if (strcmp (str, "yes") == 0) {
-				auto_connect = TRUE;
-			} else {
-				auto_connect = FALSE;
-			}
-		}
-		else if (strcmp (tag, "account") == 0) {
-			account_id = g_strdup (str);
-		}
-
-		xmlFree (str);
-	}
-
-	account = mc_account_lookup (account_id);
-	if (!account) {
-		g_free (name);
-		g_free (room);
-		g_free (account_id);
-		return;
-	}
-
-	chatroom = empathy_chatroom_new_full (account, room, name, auto_connect);
-  g_object_set (chatroom, "favorite", TRUE, NULL);
-  add_chatroom (manager, chatroom);
-	g_signal_emit (manager, signals[CHATROOM_ADDED], 0, chatroom);
-
-	g_object_unref (account);
-	g_free (name);
-	g_free (room);
-	g_free (account_id);
-}
-
-static gboolean
-chatroom_manager_file_save (EmpathyChatroomManager *manager)
-{
-	EmpathyChatroomManagerPriv *priv;
-	xmlDocPtr                  doc;
-	xmlNodePtr                 root;
-	GList                     *l;
-
-	priv = GET_PRIV (manager);
-
-	doc = xmlNewDoc ("1.0");
-	root = xmlNewNode (NULL, "chatrooms");
-	xmlDocSetRootElement (doc, root);
-
-	for (l = priv->chatrooms; l; l = l->next) {
-		EmpathyChatroom *chatroom;
-		xmlNodePtr      node;
-		const gchar    *account_id;
-    gboolean favorite;
-
-		chatroom = l->data;
-
-    g_object_get (chatroom, "favorite", &favorite, NULL);
-    if (!favorite)
-      continue;
-
-		account_id = mc_account_get_unique_name (empathy_chatroom_get_account (chatroom));
-
-		node = xmlNewChild (root, NULL, "chatroom", NULL);
-		xmlNewTextChild (node, NULL, "name", empathy_chatroom_get_name (chatroom));
-		xmlNewTextChild (node, NULL, "room", empathy_chatroom_get_room (chatroom));
-		xmlNewTextChild (node, NULL, "account", account_id);
-		xmlNewTextChild (node, NULL, "auto_connect", empathy_chatroom_get_auto_connect (chatroom) ? "yes" : "no");
-	}
-
-	/* Make sure the XML is indented properly */
-	xmlIndentTreeOutput = 1;
-
-	DEBUG ("Saving file:'%s'", priv->file);
-	xmlSaveFormatFileEnc (priv->file, doc, "utf-8", 1);
-	xmlFreeDoc (doc);
-
-	xmlCleanupParser ();
-	xmlMemoryDump ();
-
-	return TRUE;
-}
-
 static void
 chatroom_manager_chat_destroyed_cb (EmpathyTpChat *chat,
-  gpointer user_data)
+  gpointer manager)
 {
-  EmpathyChatroomManager *manager = EMPATHY_CHATROOM_MANAGER (user_data);
-  McAccount *account = empathy_tp_chat_get_account (chat);
-  EmpathyChatroom *chatroom;
-  const gchar *roomname;
-  gboolean favorite;
+  EmpathyChatroomManagerPriv *priv = GET_PRIV (manager);
+  GList *l;
 
-  roomname = empathy_tp_chat_get_id (chat);
-  chatroom = empathy_chatroom_manager_find (manager, account, roomname);
-
-  if (chatroom == NULL)
-    return;
-
-  g_object_set (chatroom, "tp-chat", NULL, NULL);
-  g_object_get (chatroom, "favorite", &favorite, NULL);
-
-  if (!favorite)
+  for (l = priv->chatrooms; l; l = l->next)
     {
-      /* Remove the chatroom from the list, unless it's in the list of
-       * favourites..
-       * FIXME this policy should probably not be in libempathy */
-      empathy_chatroom_manager_remove (manager, chatroom);
+      EmpathyChatroom *chatroom = l->data;
+
+      if (empathy_chatroom_get_tp_chat (chatroom) != chat)
+        continue;
+
+      empathy_chatroom_set_tp_chat (chatroom, NULL);
+      if (!empathy_chatroom_is_favorite (chatroom))
+        {
+          /* Remove the chatroom from the list, unless it's in the list of
+           * favourites..
+           * FIXME this policy should probably not be in libempathy */
+          empathy_chatroom_manager_remove (manager, chatroom);
+        }
     }
 }
 
 static void
 chatroom_manager_observe_channel_cb (EmpathyDispatcher *dispatcher,
-  EmpathyDispatchOperation *operation, gpointer user_data)
+  EmpathyDispatchOperation *operation, gpointer manager)
 {
-  EmpathyChatroomManager *manager = EMPATHY_CHATROOM_MANAGER (user_data);
+  EmpathyChatroomManagerPriv *priv = GET_PRIV (manager);
   EmpathyChatroom *chatroom;
   TpChannel *channel;
   EmpathyTpChat *chat;
@@ -691,6 +671,7 @@ chatroom_manager_observe_channel_cb (EmpathyDispatcher *dispatcher,
   GQuark channel_type;
   TpHandleType handle_type;
   McAccount *account;
+  TpConnection *connection;
 
   channel_type = empathy_dispatch_operation_get_channel_type_id (operation);
 
@@ -706,7 +687,9 @@ chatroom_manager_observe_channel_cb (EmpathyDispatcher *dispatcher,
 
   chat = EMPATHY_TP_CHAT (
     empathy_dispatch_operation_get_channel_wrapper (operation));
-  account = empathy_tp_chat_get_account (chat);
+  connection = empathy_tp_chat_get_connection (chat);
+  account = empathy_account_manager_get_account (priv->account_manager,
+      connection);
 
   roomname = empathy_tp_chat_get_id (chat);
 
@@ -716,13 +699,13 @@ chatroom_manager_observe_channel_cb (EmpathyDispatcher *dispatcher,
     {
       chatroom = empathy_chatroom_new_full (account, roomname, roomname,
         FALSE);
-      g_object_set (G_OBJECT (chatroom), "tp-chat", chat, NULL);
+      empathy_chatroom_set_tp_chat (chatroom, chat);
       empathy_chatroom_manager_add (manager, chatroom);
       g_object_unref (chatroom);
     }
   else
     {
-      g_object_set (G_OBJECT (chatroom), "tp-chat", chat, NULL);
+        empathy_chatroom_set_tp_chat (chatroom, chat);
     }
 
   /* A TpChat is always destroyed as it only gets unreffed after the channel

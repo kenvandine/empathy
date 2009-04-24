@@ -1,26 +1,22 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
- * Copyright (C) 2004 Imendio AB
- * Copyright (C) 2007-2008 Collabora Ltd.
+ * Copyright (C) 2007-2009 Collabora Ltd.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Authors: Mikael Hallendal <micke@imendio.com>
- *          Martyn Russell <martyn@imendio.com>
- *          Xavier Claessens <xclaesse@gmail.com>
+ * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
 
 #ifndef __EMPATHY_CONTACT_H__
@@ -28,8 +24,8 @@
 
 #include <glib-object.h>
 
+#include <telepathy-glib/contact.h>
 #include <libmissioncontrol/mc-account.h>
-#include <libmissioncontrol/mission-control.h>
 
 G_BEGIN_DECLS
 
@@ -70,18 +66,11 @@ typedef enum {
   EMPATHY_CAPABILITIES_UNKNOWN = 1 << 7
 } EmpathyCapabilities;
 
-typedef enum {
-  EMPATHY_CONTACT_READY_NONE = 0,
-  EMPATHY_CONTACT_READY_ID = 1 << 0,
-  EMPATHY_CONTACT_READY_HANDLE = 1 << 1,
-  EMPATHY_CONTACT_READY_NAME = 1 << 2,
-  EMPATHY_CONTACT_READY_ALL = (1 << 3) - 1,
-} EmpathyContactReady;
-
 GType empathy_contact_get_type (void) G_GNUC_CONST;
-EmpathyContact * empathy_contact_new (McAccount *account);
-EmpathyContact * empathy_contact_new_full (McAccount *account, const gchar *id,
-    const gchar *name);
+EmpathyContact * empathy_contact_new (TpContact *tp_contact);
+EmpathyContact * empathy_contact_new_for_log (McAccount *account,
+    const gchar *id, const gchar *name, gboolean is_user);
+TpContact * empathy_contact_get_tp_contact (EmpathyContact *contact);
 const gchar * empathy_contact_get_id (EmpathyContact *contact);
 void empathy_contact_set_id (EmpathyContact *contact, const gchar *id);
 const gchar * empathy_contact_get_name (EmpathyContact *contact);
@@ -90,7 +79,7 @@ EmpathyAvatar * empathy_contact_get_avatar (EmpathyContact *contact);
 void empathy_contact_set_avatar (EmpathyContact *contact,
     EmpathyAvatar *avatar);
 McAccount * empathy_contact_get_account (EmpathyContact *contact);
-void empathy_contact_set_account (EmpathyContact *contact, McAccount *account);
+TpConnection * empathy_contact_get_connection (EmpathyContact *contact);
 McPresence empathy_contact_get_presence (EmpathyContact *contact);
 void empathy_contact_set_presence (EmpathyContact *contact,
     McPresence presence);
@@ -102,7 +91,6 @@ void empathy_contact_set_handle (EmpathyContact *contact, guint handle);
 EmpathyCapabilities empathy_contact_get_capabilities (EmpathyContact *contact);
 void empathy_contact_set_capabilities (EmpathyContact *contact,
     EmpathyCapabilities capabilities);
-EmpathyContactReady empathy_contact_get_ready (EmpathyContact *contact);
 gboolean empathy_contact_is_user (EmpathyContact *contact);
 void empathy_contact_set_is_user (EmpathyContact *contact,
     gboolean is_user);
@@ -110,18 +98,7 @@ gboolean empathy_contact_is_online (EmpathyContact *contact);
 const gchar * empathy_contact_get_status (EmpathyContact *contact);
 gboolean empathy_contact_can_voip (EmpathyContact *contact);
 gboolean empathy_contact_can_send_files (EmpathyContact *contact);
-gboolean empathy_contact_equal (gconstpointer v1, gconstpointer v2);
 guint empathy_contact_hash (gconstpointer key);
-
-typedef void (EmpathyContactReadyCb)
-  (EmpathyContact *contact, const GError *error, gpointer user_data,
-   GObject *weak_object);
-void empathy_contact_call_when_ready (EmpathyContact *contact,
-  EmpathyContactReady ready, EmpathyContactReadyCb *callback, gpointer
-  user_data, GDestroyNotify destroy, GObject *weak_object);
-
-void empathy_contact_run_until_ready (EmpathyContact *contact,
-    EmpathyContactReady ready, GMainLoop **loop);
 
 void empathy_contact_load_avatar_data (EmpathyContact *contact,
     const guchar *data, const gsize len, const gchar *format,

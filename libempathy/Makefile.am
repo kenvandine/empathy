@@ -21,10 +21,9 @@ libempathy_la_SOURCES =					\
 	empathy-account-manager.c			\
 	empathy-chatroom.c				\
 	empathy-chatroom-manager.c			\
-	empathy-call-factory.c			\
-	empathy-call-handler.c			\
+	empathy-call-factory.c				\
+	empathy-call-handler.c				\
 	empathy-contact.c				\
-	empathy-contact-factory.c			\
 	empathy-contact-groups.c			\
 	empathy-contact-list.c				\
 	empathy-contact-manager.c			\
@@ -47,7 +46,6 @@ libempathy_la_SOURCES =					\
 	empathy-tp-contact-factory.c			\
 	empathy-tp-contact-list.c			\
 	empathy-tp-file.c				\
-	empathy-tp-group.c				\
 	empathy-tp-roomlist.c				\
 	empathy-tp-tube.c				\
 	empathy-tube-handler.c				\
@@ -72,7 +70,6 @@ libempathy_headers =				\
 	empathy-call-factory.h			\
 	empathy-call-handler.h			\
 	empathy-contact.h			\
-	empathy-contact-factory.h		\
 	empathy-contact-groups.h		\
 	empathy-contact-list.h			\
 	empathy-contact-manager.h		\
@@ -95,7 +92,6 @@ libempathy_headers =				\
 	empathy-tp-contact-factory.h		\
 	empathy-tp-contact-list.h		\
 	empathy-tp-file.h			\
-	empathy-tp-group.h			\
 	empathy-tp-roomlist.h			\
 	empathy-tp-tube.h			\
 	empathy-tube-handler.h			\

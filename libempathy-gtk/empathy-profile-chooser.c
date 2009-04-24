@@ -30,6 +30,16 @@
 #include "empathy-profile-chooser.h"
 #include "empathy-ui-utils.h"
 
+/**
+ * SECTION:empathy-profile-chooser
+ * @title: EmpathyProfileChooser
+ * @short_description: A widget used to choose from a list of profiles
+ * @include: libempathy-gtk/empathy-account-chooser.h
+ *
+ * #EmpathyProfileChooser is a widget which provides a chooser of available
+ * profiles.
+ */
+
 enum {
 	COL_ICON,
 	COL_LABEL,
@@ -37,8 +47,17 @@ enum {
 	COL_COUNT
 };
 
+/**
+ * empathy_profile_chooser_dup_selected:
+ * @widget: an #EmpathyProfileChooser
+ *
+ * Returns a new reference to the selected #McProfile in @widget. The returned
+ * #McProfile should be unrefed with g_object_unref() when finished with.
+ *
+ * Return value: a new reference to the selected #McProfile
+ */
 McProfile*
-empathy_profile_chooser_get_selected (GtkWidget *widget)
+empathy_profile_chooser_dup_selected (GtkWidget *widget)
 {
 	GtkTreeModel *model;
 	GtkTreeIter   iter;
@@ -54,6 +73,14 @@ empathy_profile_chooser_get_selected (GtkWidget *widget)
 	return profile;
 }
 
+/**
+ * empathy_profile_chooser_n_profiles:
+ * @widget: an #EmpathyProfileChooser
+ *
+ * Returns the number of profiles in @widget.
+ *
+ * Return value: the number of profiles in @widget
+ */
 gint
 empathy_profile_chooser_n_profiles (GtkWidget *widget)
 {
@@ -115,6 +142,13 @@ profile_chooser_sort_func (GtkTreeModel *model,
 	return cmp;
 }
 
+/**
+ * empathy_profile_chooser_new:
+ *
+ * Creates a new #EmpathyProfileChooser widget.
+ *
+ * Return value: a new #EmpathyProfileChooser widget
+ */
 GtkWidget *
 empathy_profile_chooser_new (void)
 {

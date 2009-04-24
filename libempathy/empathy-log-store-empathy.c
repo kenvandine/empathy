@@ -481,8 +481,9 @@ log_store_empathy_get_messages_for_file (EmpathyLogStore *self,
 
       t = empathy_time_parse (time);
 
-      sender = empathy_contact_new_full (account, sender_id, sender_name);
-      empathy_contact_set_is_user (sender, is_user);
+      sender = empathy_contact_new_for_log (account, sender_id, sender_name,
+					    is_user);
+
       if (!EMP_STR_EMPTY (sender_avatar_token))
         empathy_contact_load_avatar_cache (sender,
             sender_avatar_token);

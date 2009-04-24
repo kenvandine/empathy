@@ -84,6 +84,11 @@ void            empathy_chatroom_set_invite_only  (EmpathyChatroom *chatroom,
 gboolean        empathy_chatroom_equal            (gconstpointer    v1,
 						   gconstpointer    v2);
 EmpathyTpChat * empathy_chatroom_get_tp_chat      (EmpathyChatroom *chatroom);
+void            empathy_chatroom_set_tp_chat      (EmpathyChatroom *chatroom,
+						   EmpathyTpChat   *tp_chat);
+gboolean        empathy_chatroom_is_favorite      (EmpathyChatroom *chatroom);
+void            empathy_chatroom_set_favorite     (EmpathyChatroom *chatroom,
+						   gboolean         favorite);
 
 G_END_DECLS
 

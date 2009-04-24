@@ -236,7 +236,7 @@ empathy_contact_file_transfer_menu_item_new (EmpathyContact *contact)
 static void
 contact_info_menu_item_activate_cb (EmpathyContact *contact)
 {
-	empathy_contact_information_dialog_show (contact, NULL, FALSE, FALSE);
+	empathy_contact_information_dialog_show (contact, NULL);
 }
 
 GtkWidget *
@@ -263,7 +263,7 @@ empathy_contact_info_menu_item_new (EmpathyContact *contact)
 static void
 contact_edit_menu_item_activate_cb (EmpathyContact *contact)
 {
-	empathy_contact_information_dialog_show (contact, NULL, TRUE, FALSE);
+	empathy_contact_edit_dialog_show (contact, NULL);
 }
 
 GtkWidget *

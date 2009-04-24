@@ -143,7 +143,7 @@ destroy_test_account (McAccount *account)
           error = NULL;
         }
 
-      gconf_entry_free (entry);
+      gconf_entry_unref (entry);
     }
 
   g_slist_free (entries);

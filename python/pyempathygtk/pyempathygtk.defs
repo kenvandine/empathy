@@ -284,6 +284,12 @@
   (return-type "McAccount*")
 )
 
+(define-method get_connection
+  (of-object "EmpathyAccountChooser")
+  (c-name "empathy_account_chooser_get_connection")
+  (return-type "TpConnection*")
+)
+
 (define-method set_account
   (of-object "EmpathyAccountChooser")
   (c-name "empathy_account_chooser_set_account")
@@ -616,12 +622,6 @@
   (of-object "EmpathyChat")
   (c-name "empathy_chat_get_remote_contact")
   (return-type "EmpathyContact*")
-)
-
-(define-method get_members_count
-  (of-object "EmpathyChat")
-  (c-name "empathy_chat_get_members_count")
-  (return-type "guint")
 )
 
 (define-method get_contact_menu
@@ -966,8 +966,23 @@
   (return-type "none")
   (parameters
     '("GtkWindow*" "parent")
-    '("gboolean" "edit")
-    '("gboolean" "is_user")
+  )
+)
+
+(define-method edit_dialog_show
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_edit_dialog_show")
+  (return-type "none")
+  (parameters
+    '("GtkWindow*" "parent")
+  )
+)
+
+(define-function contact_personal_dialog_show
+  (c-name "empathy_contact_personal_dialog_show")
+  (return-type "none")
+  (parameters
+    '("GtkWindow*" "parent")
   )
 )
 
@@ -1672,21 +1687,6 @@
   (return-type "none")
   (parameters
     '("GList*" "suggestions")
-  )
-)
-
-
-
-;; From empathy-spell-dialog.h
-
-(define-function spell_dialog_show
-  (c-name "empathy_spell_dialog_show")
-  (return-type "none")
-  (parameters
-    '("EmpathyChat*" "chat")
-    '("GtkTextIter*" "start")
-    '("GtkTextIter*" "end")
-    '("const-gchar*" "word")
   )
 )
 

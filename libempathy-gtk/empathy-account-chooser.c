@@ -37,6 +37,23 @@
 #include "empathy-ui-utils.h"
 #include "empathy-account-chooser.h"
 
+/**
+ * SECTION:empathy-account-chooser
+ * @title:EmpathyAccountChooser
+ * @short_description: A widget used to choose from a list of accounts
+ * @include: libempathy-gtk/empathy-account-chooser.h
+ *
+ * #EmpathyAccountChooser is a widget which extends #GtkComboBox to provide
+ * a chooser of available accounts.
+ */
+
+/**
+ * EmpathyAccountChooser:
+ * @parent: parent object
+ *
+ * Widget which extends #GtkComboBox to provide a chooser of available accounts.
+ */
+
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyAccountChooser)
 typedef struct {
 	EmpathyAccountManager          *manager;
@@ -112,6 +129,11 @@ empathy_account_chooser_class_init (EmpathyAccountChooserClass *klass)
 	object_class->get_property = account_chooser_get_property;
 	object_class->set_property = account_chooser_set_property;
 
+	/**
+	 * EmpathyAccountChooser:has-all-option:
+	 *
+	 * Have an additional option in the list to mean all accounts.
+	 */
 	g_object_class_install_property (object_class,
 					 PROP_HAS_ALL_OPTION,
 					 g_param_spec_boolean ("has-all-option",
@@ -209,6 +231,13 @@ account_chooser_set_property (GObject      *object,
 	};
 }
 
+/**
+ * empathy_account_chooser_new:
+ *
+ * Creates a new #EmpathyAccountChooser.
+ *
+ * Return value: A new #EmpathyAccountChooser
+ */
 GtkWidget *
 empathy_account_chooser_new (void)
 {
@@ -219,8 +248,18 @@ empathy_account_chooser_new (void)
 	return chooser;
 }
 
+/**
+ * empathy_account_chooser_dup_account:
+ * @chooser: an #EmpathyAccountChooser
+ *
+ * Returns the account which is currently selected in the chooser or %NULL
+ * if there is no account selected. The #McAccount returned should be
+ * unrefed with g_object_unref() when finished with.
+ *
+ * Return value: a new ref to the #McAccount currently selected, or %NULL.
+ */
 McAccount *
-empathy_account_chooser_get_account (EmpathyAccountChooser *chooser)
+empathy_account_chooser_dup_account (EmpathyAccountChooser *chooser)
 {
 	EmpathyAccountChooserPriv *priv;
 	McAccount                *account;
@@ -241,6 +280,44 @@ empathy_account_chooser_get_account (EmpathyAccountChooser *chooser)
 	return account;
 }
 
+/**
+ * empathy_account_chooser_get_connection:
+ * @chooser: an #EmpathyAccountChooser
+ *
+ * Returns a borrowed reference to the #TpConnection associated with the
+ * account currently selected. The caller must reference the returned object with
+ * g_object_ref() if it will be kept
+ *
+ * Return value: a borrowed reference to the #TpConnection associated with the
+ * account curently selected.
+ */
+TpConnection *
+empathy_account_chooser_get_connection (EmpathyAccountChooser *chooser)
+{
+	EmpathyAccountChooserPriv *priv;
+	McAccount                 *account;
+	TpConnection              *connection;
+
+	g_return_val_if_fail (EMPATHY_IS_ACCOUNT_CHOOSER (chooser), NULL);
+
+	priv = GET_PRIV (chooser);
+
+	account = empathy_account_chooser_dup_account (chooser);
+	connection = empathy_account_manager_get_connection (priv->manager, account);
+	g_object_unref (account);
+
+	return connection;
+}
+
+/**
+ * empathy_account_chooser_set_account:
+ * @chooser: an #EmpathyAccountChooser
+ * @account: an #McAccount
+ *
+ * Sets the currently selected account to @account, if it exists in the list.
+ *
+ * Return value: whether the chooser was set to @account.
+ */
 gboolean
 empathy_account_chooser_set_account (EmpathyAccountChooser *chooser,
 				     McAccount             *account)
@@ -266,6 +343,16 @@ empathy_account_chooser_set_account (EmpathyAccountChooser *chooser,
 	return data.set;
 }
 
+/**
+ * empathy_account_chooser_get_has_all_option:
+ * @chooser: an #EmpathyAccountChooser
+ *
+ * Returns whether @chooser has the #EmpathyAccountChooser:has-all-option property
+ * set to true.
+ *
+ * Return value: whether @chooser has the #EmpathyAccountChooser:has-all-option property
+ * enabled.
+ */
 gboolean
 empathy_account_chooser_get_has_all_option (EmpathyAccountChooser *chooser)
 {
@@ -278,6 +365,13 @@ empathy_account_chooser_get_has_all_option (EmpathyAccountChooser *chooser)
 	return priv->has_all_option;
 }
 
+/**
+ * empathy_account_chooser_set_has_all_option:
+ * @chooser: an #EmpathyAccountChooser
+ * @has_all_option: a new value for the #EmpathyAccountChooser:has-all-option property
+ *
+ * Sets the #EmpathyAccountChooser:has-all-option property.
+ */
 void
 empathy_account_chooser_set_has_all_option (EmpathyAccountChooser *chooser,
 					   gboolean              has_all_option)
@@ -618,6 +712,15 @@ account_chooser_filter_foreach (GtkTreeModel *model,
 	return FALSE;
 }
 
+/**
+ * empathy_account_chooser_set_filter:
+ * @chooser: an #EmpathyAccountChooser
+ * @filter: a filter
+ * @user_data: data to pass to @filter, or %NULL
+ *
+ * Sets a filter on the @chooser so only accounts that are %TRUE in the eyes
+ * of the filter are visible in the @chooser.
+ */
 void
 empathy_account_chooser_set_filter (EmpathyAccountChooser           *chooser,
                                     EmpathyAccountChooserFilterFunc  filter,
@@ -639,6 +742,27 @@ empathy_account_chooser_set_filter (EmpathyAccountChooser           *chooser,
 	gtk_tree_model_foreach (model, account_chooser_filter_foreach, chooser);
 }
 
+/**
+ * EmpathyAccountChooserFilterFunc:
+ * @account: an #McAccount
+ * @user_data: user data, or %NULL
+ *
+ * A function which decides whether the account indicated by @account
+ * is visible.
+ *
+ * Return value: whether the account indicated by @account is visible.
+ */
+
+/**
+ * empathy_account_chooser_filter_is_connected:
+ * @account: an #McAccount
+ * @user_data: user data or %NULL
+ *
+ * A useful #EmpathyAccountChooserFilterFunc that one could pass into
+ * empathy_account_chooser_set_filter() and only show connected accounts.
+ *
+ * Return value: Whether @account is connected
+ */
 gboolean
 empathy_account_chooser_filter_is_connected (McAccount *account,
 					     gpointer   user_data)

@@ -618,7 +618,7 @@ log_window_chats_populate (EmpathyLogWindow *window)
 	GtkTreeIter           iter;
 
 	account_chooser = EMPATHY_ACCOUNT_CHOOSER (window->account_chooser_chats);
-	account = empathy_account_chooser_get_account (account_chooser);
+	account = empathy_account_chooser_dup_account (account_chooser);
 
 	view = GTK_TREE_VIEW (window->treeview_chats);
 	model = gtk_tree_view_get_model (view);

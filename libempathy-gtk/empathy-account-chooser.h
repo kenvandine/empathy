@@ -47,6 +47,8 @@ typedef struct _EmpathyAccountChooserClass EmpathyAccountChooserClass;
 
 struct _EmpathyAccountChooser {
 	GtkComboBox parent;
+
+	/*<private>*/
 	gpointer priv;
 };
 
@@ -56,7 +58,8 @@ struct _EmpathyAccountChooserClass {
 
 GType          empathy_account_chooser_get_type           (void) G_GNUC_CONST;
 GtkWidget *    empathy_account_chooser_new                (void);
-McAccount *    empathy_account_chooser_get_account        (EmpathyAccountChooser *chooser);
+McAccount *    empathy_account_chooser_dup_account        (EmpathyAccountChooser *chooser);
+TpConnection * empathy_account_chooser_get_connection     (EmpathyAccountChooser *chooser);
 gboolean       empathy_account_chooser_set_account        (EmpathyAccountChooser *chooser,
 							   McAccount            *account);
 gboolean       empathy_account_chooser_get_has_all_option (EmpathyAccountChooser *chooser);

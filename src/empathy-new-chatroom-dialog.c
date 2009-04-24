@@ -342,7 +342,7 @@ new_chatroom_dialog_update_widgets (EmpathyNewChatroomDialog *dialog)
 	const gchar           *room;
 	
 	account_chooser = EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser);
-	account = empathy_account_chooser_get_account (account_chooser);
+	account = empathy_account_chooser_dup_account (account_chooser);
 	profile = mc_account_get_profile (account);
 	protocol = mc_profile_get_protocol_name (profile);
 
@@ -388,7 +388,7 @@ new_chatroom_dialog_account_changed_cb (GtkComboBox             *combobox,
 	new_chatroom_dialog_model_clear (dialog);
 
 	account_chooser = EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser);
-	account = empathy_account_chooser_get_account (account_chooser);
+	account = empathy_account_chooser_dup_account (account_chooser);
 	dialog->room_list = empathy_tp_roomlist_new (account);
 
 	if (dialog->room_list) {
@@ -409,6 +409,8 @@ new_chatroom_dialog_account_changed_cb (GtkComboBox             *combobox,
 	}
 
 	new_chatroom_dialog_update_widgets (dialog);
+
+	g_object_unref (account);
 }
 
 static void
@@ -533,7 +535,7 @@ static void
 new_chatroom_dialog_join (EmpathyNewChatroomDialog *dialog)
 {
 	EmpathyAccountChooser *account_chooser;
-	McAccount             *account;
+	TpConnection          *connection;
 	const gchar           *room;
 	const gchar           *server = NULL;
 	gchar                 *room_name = NULL;
@@ -542,7 +544,7 @@ new_chatroom_dialog_join (EmpathyNewChatroomDialog *dialog)
 	server = gtk_entry_get_text (GTK_ENTRY (dialog->entry_server));
 
 	account_chooser = EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser);
-	account = empathy_account_chooser_get_account (account_chooser);
+	connection = empathy_account_chooser_get_connection (account_chooser);
 
 	if (!EMP_STR_EMPTY (server)) {
 		room_name = g_strconcat (room, "@", server, NULL);
@@ -551,7 +553,7 @@ new_chatroom_dialog_join (EmpathyNewChatroomDialog *dialog)
 	}
 
 	DEBUG ("Requesting channel for '%s'", room_name);
-	empathy_dispatcher_join_muc (account, room_name, NULL, NULL);
+	empathy_dispatcher_join_muc (connection, room_name, NULL, NULL);
 
 	g_free (room_name);
 }

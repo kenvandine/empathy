@@ -390,8 +390,6 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
                                  const gchar *service,
                                  GHashTable *parameters)
 {
-  MissionControl *mc;
-  McAccount *account;
   TpConnection *connection;
   TpChannel *channel;
   gchar *object_path;
@@ -408,12 +406,7 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
   g_return_val_if_fail (hostname != NULL, NULL);
   g_return_val_if_fail (service != NULL, NULL);
 
-  mc = empathy_mission_control_dup_singleton ();
-  account = empathy_contact_get_account (contact);
-  connection = mission_control_get_tpconnection (mc, account, NULL);
-  g_object_unref (mc);
-
-  tp_connection_run_until_ready (connection, FALSE, NULL, NULL);
+  connection = empathy_contact_get_connection (contact);
 
   request = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
       (GDestroyNotify) tp_g_value_slice_free);

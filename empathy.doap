@@ -6,6 +6,7 @@
          xmlns="http://usefulinc.com/ns/doap#">
   <name xml:lang="en">Empathy Instant Messenger</name>
   <shortdesc xml:lang="en">Send and receive instant messages</shortdesc>
+  <category rdf:resource="http://api.gnome.org/doap-extensions#desktop" />
 
   <homepage rdf:resource="http://live.gnome.org/Empathy" />
   <mailing-list rdf:resource="http://lists.freedesktop.org/mailman/listinfo/telepathy" />

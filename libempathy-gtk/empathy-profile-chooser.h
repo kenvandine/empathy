@@ -27,7 +27,7 @@
 G_BEGIN_DECLS
 
 GtkWidget * empathy_profile_chooser_new          (void);
-McProfile * empathy_profile_chooser_get_selected (GtkWidget *widget);
+McProfile * empathy_profile_chooser_dup_selected (GtkWidget *widget);
 gint        empathy_profile_chooser_n_profiles   (GtkWidget *widget);
 
 G_END_DECLS

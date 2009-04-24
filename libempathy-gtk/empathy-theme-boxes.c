@@ -208,9 +208,9 @@ theme_boxes_maybe_append_header (EmpathyThemeBoxes *theme,
 	DEBUG ("Maybe add fancy header");
 
 	/* Only insert a header if the previously inserted block is not the same
-	 * as this one. This catches all the different cases:
+	 * as this one.
 	 */
-	if (last_contact && empathy_contact_equal (last_contact, contact)) {
+	if (last_contact == contact) {
 		return;
 	}
 

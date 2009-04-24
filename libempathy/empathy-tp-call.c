@@ -27,7 +27,7 @@
 #include <telepathy-glib/interfaces.h>
 
 #include "empathy-tp-call.h"
-#include "empathy-contact-factory.h"
+#include "empathy-tp-contact-factory.h"
 #include "empathy-utils.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_TP
@@ -253,22 +253,27 @@ tp_call_request_streams_for_capabilities (EmpathyTpCall *call,
   g_array_free (stream_types, TRUE);
 }
 
-static EmpathyContact *
-tp_call_dup_contact_from_handle (EmpathyTpCall *call, TpHandle handle)
+static void
+tp_call_got_contact_cb (EmpathyTpContactFactory *factory,
+                        EmpathyContact          *contact,
+                        const GError            *error,
+                        gpointer                 user_data,
+                        GObject                 *call)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
-  EmpathyContactFactory *factory;
-  McAccount *account;
-  EmpathyContact *contact;
 
-  factory = empathy_contact_factory_dup_singleton ();
-  account = empathy_channel_get_account (priv->channel);
-  contact = empathy_contact_factory_get_from_handle (factory, account, handle);
+  if (error)
+    {
+      DEBUG ("Error: %s", error->message);
+      return;
+    }
 
-  g_object_unref (factory);
-  g_object_unref (account);
-
-  return contact;
+  priv->contact = g_object_ref (contact);
+  priv->is_incoming = TRUE;
+  priv->status = EMPATHY_TP_CALL_STATUS_PENDING;
+  g_object_notify (G_OBJECT (call), "is-incoming");
+  g_object_notify (G_OBJECT (call), "contact");
+  g_object_notify (G_OBJECT (call), "status");
 }
 
 static void
@@ -288,13 +293,15 @@ tp_call_update_status (EmpathyTpCall *call)
     {
       if (priv->contact == NULL && iter.element != self_handle)
         {
+          EmpathyTpContactFactory *factory;
+          TpConnection *connection;
+
           /* We found the remote contact */
-          priv->contact = tp_call_dup_contact_from_handle (call, iter.element);
-          priv->is_incoming = TRUE;
-          priv->status = EMPATHY_TP_CALL_STATUS_PENDING;
-          g_object_notify (G_OBJECT (call), "is-incoming");
-          g_object_notify (G_OBJECT (call), "contact");
-          g_object_notify (G_OBJECT (call), "status");
+          connection = tp_channel_borrow_connection (priv->channel);
+          factory = empathy_tp_contact_factory_dup_singleton (connection);
+          empathy_tp_contact_factory_get_from_handle (factory, iter.element,
+              tp_call_got_contact_cb, NULL, NULL, G_OBJECT (call));
+          g_object_unref (factory);
         }
 
       if (priv->status == EMPATHY_TP_CALL_STATUS_PENDING &&
@@ -307,20 +314,6 @@ tp_call_update_status (EmpathyTpCall *call)
     }
 
   g_object_unref (call);
-}
-
-static void
-tp_call_members_changed_cb (TpChannel *channel,
-                            gchar *message,
-                            GArray *added,
-                            GArray *removed,
-                            GArray *local_pending,
-                            GArray *remote_pending,
-                            guint actor,
-                            guint reason,
-                            EmpathyTpCall *call)
-{
-  tp_call_update_status (call);
 }
 
 void
@@ -392,8 +385,8 @@ tp_call_constructor (GType type,
 
   /* Update status when members changes */
   tp_call_update_status (call);
-  g_signal_connect (priv->channel, "group-members-changed",
-      G_CALLBACK (tp_call_members_changed_cb), call);
+  g_signal_connect_swapped (priv->channel, "group-members-changed",
+      G_CALLBACK (tp_call_update_status), call);
 
   return object;
 }

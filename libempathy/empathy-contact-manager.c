@@ -86,9 +86,6 @@ contact_manager_groups_changed_cb (EmpathyTpContactList  *list,
 			       contact, group, is_member);
 }
 
-static void contact_manager_destroy_cb (EmpathyTpContactList  *list,
-					EmpathyContactManager *manager);
-
 static void
 contact_manager_disconnect_foreach (gpointer key,
 				    gpointer value,
@@ -107,75 +104,60 @@ contact_manager_disconnect_foreach (gpointer key,
 	g_signal_handlers_disconnect_by_func (list,
 					      contact_manager_groups_changed_cb,
 					      manager);
-	g_signal_handlers_disconnect_by_func (list,
-					      contact_manager_destroy_cb,
-					      manager);
 }
 
 static void
-contact_manager_destroy_cb (EmpathyTpContactList  *list,
-			    EmpathyContactManager *manager)
+contact_manager_invalidated_cb (TpProxy *connection,
+				guint    domain,
+				gint     code,
+				gchar   *message,
+				EmpathyContactManager *manager)
 {
 	EmpathyContactManagerPriv *priv = GET_PRIV (manager);
-	McAccount                 *account;
+	EmpathyTpContactList *list;
 
-	account = empathy_tp_contact_list_get_account (list);
+	DEBUG ("Removing connection: %s (%s)",
+		tp_proxy_get_object_path (TP_PROXY (connection)),
+		message);
 
-	DEBUG ("Removing account: %s", mc_account_get_display_name (account));
-
-	contact_manager_disconnect_foreach (account, list, manager);
-	g_hash_table_remove (priv->lists, account);
+	list = g_hash_table_lookup (priv->lists, connection);
+	if (list) {
+		empathy_tp_contact_list_remove_all (list);
+		g_hash_table_remove (priv->lists, connection);		
+	}
 }
 
 static void
-contact_manager_add_account (EmpathyContactManager *manager,
-			     McAccount             *account)
+contact_manager_new_connection_cb (EmpathyAccountManager *account_manager,
+				   TpConnection *connection,
+				   EmpathyContactManager *self)
 {
-	EmpathyContactManagerPriv *priv = GET_PRIV (manager);
+	EmpathyContactManagerPriv *priv = GET_PRIV (self);
 	EmpathyTpContactList      *list;
 
-	if (g_hash_table_lookup (priv->lists, account)) {
+	if (g_hash_table_lookup (priv->lists, connection)) {
 		return;
 	}
 
-	DEBUG ("Adding new account: %s", mc_account_get_display_name (account));
+	DEBUG ("Adding new connection: %s",
+		tp_proxy_get_object_path (TP_PROXY (connection)));
 
-	list = empathy_tp_contact_list_new (account);
-	if (!list) {
-		return;
-	}
-
-	g_hash_table_insert (priv->lists, g_object_ref (account), list);
+	list = empathy_tp_contact_list_new (connection);
+	g_hash_table_insert (priv->lists, g_object_ref (connection), list);
+	g_signal_connect (connection, "invalidated",
+			  G_CALLBACK (contact_manager_invalidated_cb),
+			  self);
 
 	/* Connect signals */
 	g_signal_connect (list, "members-changed",
 			  G_CALLBACK (contact_manager_members_changed_cb),
-			  manager);
+			  self);
 	g_signal_connect (list, "pendings-changed",
 			  G_CALLBACK (contact_manager_pendings_changed_cb),
-			  manager);
+			  self);
 	g_signal_connect (list, "groups-changed",
 			  G_CALLBACK (contact_manager_groups_changed_cb),
-			  manager);
-	g_signal_connect (list, "destroy",
-			  G_CALLBACK (contact_manager_destroy_cb),
-			  manager);
-}
-
-static void
-contact_manager_connection_changed_cb (EmpathyAccountManager *account_manager,
-				       McAccount *account,
-				       TpConnectionStatusReason  reason,
-				       TpConnectionStatus current,
-				       TpConnectionStatus previous,
-				       EmpathyContactManager *manager)
-{
-	if (current != TP_CONNECTION_STATUS_CONNECTED) {
-		/* We only care about newly connected accounts */
-		return;
-	}
-
-	contact_manager_add_account (manager, account);
+			  self);
 }
 
 static void
@@ -189,7 +171,7 @@ contact_manager_finalize (GObject *object)
 	g_hash_table_destroy (priv->lists);
 
 	g_signal_handlers_disconnect_by_func (priv->account_manager,
-					      contact_manager_connection_changed_cb,
+					      contact_manager_new_connection_cb,
 					      object);
 	g_object_unref (priv->account_manager);
 
@@ -232,34 +214,30 @@ empathy_contact_manager_class_init (EmpathyContactManagerClass *klass)
 static void
 empathy_contact_manager_init (EmpathyContactManager *manager)
 {
-	GSList                    *accounts, *l;
-	MissionControl            *mc;
+	GList *connections, *l;
 	EmpathyContactManagerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
 		EMPATHY_TYPE_CONTACT_MANAGER, EmpathyContactManagerPriv);
 
 	manager->priv = priv;
-	priv->lists = g_hash_table_new_full (empathy_account_hash,
-					     empathy_account_equal,
+	priv->lists = g_hash_table_new_full (empathy_proxy_hash,
+					     empathy_proxy_equal,
 					     (GDestroyNotify) g_object_unref,
 					     (GDestroyNotify) g_object_unref);
 	priv->account_manager = empathy_account_manager_dup_singleton ();
 	priv->contact_monitor = NULL;
 
-	g_signal_connect (priv->account_manager,
-			  "account-connection-changed",
-			  G_CALLBACK (contact_manager_connection_changed_cb), manager);
-
-	mc = empathy_mission_control_dup_singleton ();
+	g_signal_connect (priv->account_manager, "new-connection",
+			  G_CALLBACK (contact_manager_new_connection_cb),
+			  manager);
 
 	/* Get ContactList for existing connections */
-	accounts = mission_control_get_online_connections (mc, NULL);
-	for (l = accounts; l; l = l->next) {
-		contact_manager_add_account (manager, l->data);
+	connections = empathy_account_manager_dup_connections (priv->account_manager);
+	for (l = connections; l; l = l->next) {
+		contact_manager_new_connection_cb (priv->account_manager,
+						   l->data, manager);
 		g_object_unref (l->data);
 	}
-
-	g_slist_free (accounts);
-	g_object_unref (mc);
+	g_list_free (connections);
 }
 
 EmpathyContactManager *
@@ -270,14 +248,14 @@ empathy_contact_manager_dup_singleton (void)
 
 EmpathyTpContactList *
 empathy_contact_manager_get_list (EmpathyContactManager *manager,
-				  McAccount             *account)
+				  TpConnection          *connection)
 {
 	EmpathyContactManagerPriv *priv = GET_PRIV (manager);
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT_MANAGER (manager), NULL);
-	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
+	g_return_val_if_fail (TP_IS_CONNECTION (connection), NULL);
 
-	return g_hash_table_lookup (priv->lists, account);
+	return g_hash_table_lookup (priv->lists, connection);
 }
 
 static void
@@ -287,12 +265,12 @@ contact_manager_add (EmpathyContactList *manager,
 {
 	EmpathyContactManagerPriv *priv = GET_PRIV (manager);
 	EmpathyContactList        *list;
-	McAccount                 *account;
+	TpConnection              *connection;
 
 	g_return_if_fail (EMPATHY_IS_CONTACT_MANAGER (manager));
 
-	account = empathy_contact_get_account (contact);
-	list = g_hash_table_lookup (priv->lists, account);
+	connection = empathy_contact_get_connection (contact);
+	list = g_hash_table_lookup (priv->lists, connection);
 
 	if (list) {
 		empathy_contact_list_add (list, contact, message);
@@ -301,17 +279,17 @@ contact_manager_add (EmpathyContactList *manager,
 
 static void
 contact_manager_remove (EmpathyContactList *manager,
-			EmpathyContact      *contact,
+			EmpathyContact     *contact,
 			const gchar        *message)
 {
 	EmpathyContactManagerPriv *priv = GET_PRIV (manager);
 	EmpathyContactList        *list;
-	McAccount                 *account;
+	TpConnection              *connection;
 
 	g_return_if_fail (EMPATHY_IS_CONTACT_MANAGER (manager));
 
-	account = empathy_contact_get_account (contact);
-	list = g_hash_table_lookup (priv->lists, account);
+	connection = empathy_contact_get_connection (contact);
+	list = g_hash_table_lookup (priv->lists, connection);
 
 	if (list) {
 		empathy_contact_list_remove (list, contact, message);
@@ -319,7 +297,7 @@ contact_manager_remove (EmpathyContactList *manager,
 }
 
 static void
-contact_manager_get_members_foreach (McAccount             *account,
+contact_manager_get_members_foreach (TpConnection          *connection,
 				     EmpathyTpContactList  *list,
 				     GList                **contacts)
 {
@@ -357,7 +335,7 @@ contact_manager_get_monitor (EmpathyContactList *manager)
 }
 
 static void
-contact_manager_get_pendings_foreach (McAccount             *account,
+contact_manager_get_pendings_foreach (TpConnection          *connection,
 				      EmpathyTpContactList  *list,
 				      GList                **contacts)
 {
@@ -383,7 +361,7 @@ contact_manager_get_pendings (EmpathyContactList *manager)
 }
 
 static void
-contact_manager_get_all_groups_foreach (McAccount             *account,
+contact_manager_get_all_groups_foreach (TpConnection          *connection,
 					EmpathyTpContactList  *list,
 					GList                **all_groups)
 {
@@ -424,12 +402,12 @@ contact_manager_get_groups (EmpathyContactList *manager,
 {
 	EmpathyContactManagerPriv *priv = GET_PRIV (manager);
 	EmpathyContactList        *list;
-	McAccount                 *account;
+	TpConnection              *connection;
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT_MANAGER (manager), NULL);
 
-	account = empathy_contact_get_account (contact);
-	list = g_hash_table_lookup (priv->lists, account);
+	connection = empathy_contact_get_connection (contact);
+	list = g_hash_table_lookup (priv->lists, connection);
 
 	if (list) {
 		return empathy_contact_list_get_groups (list, contact);
@@ -445,12 +423,12 @@ contact_manager_add_to_group (EmpathyContactList *manager,
 {
 	EmpathyContactManagerPriv *priv = GET_PRIV (manager);
 	EmpathyContactList        *list;
-	McAccount                 *account;
+	TpConnection              *connection;
 
 	g_return_if_fail (EMPATHY_IS_CONTACT_MANAGER (manager));
 
-	account = empathy_contact_get_account (contact);
-	list = g_hash_table_lookup (priv->lists, account);
+	connection = empathy_contact_get_connection (contact);
+	list = g_hash_table_lookup (priv->lists, connection);
 
 	if (list) {
 		empathy_contact_list_add_to_group (list, contact, group);
@@ -464,12 +442,12 @@ contact_manager_remove_from_group (EmpathyContactList *manager,
 {
 	EmpathyContactManagerPriv *priv = GET_PRIV (manager);
 	EmpathyContactList        *list;
-	McAccount                 *account;
+	TpConnection              *connection;
 
 	g_return_if_fail (EMPATHY_IS_CONTACT_MANAGER (manager));
 
-	account = empathy_contact_get_account (contact);
-	list = g_hash_table_lookup (priv->lists, account);
+	connection = empathy_contact_get_connection (contact);
+	list = g_hash_table_lookup (priv->lists, connection);
 
 	if (list) {
 		empathy_contact_list_remove_from_group (list, contact, group);
@@ -482,7 +460,7 @@ typedef struct {
 } RenameGroupData;
 
 static void
-contact_manager_rename_group_foreach (McAccount            *account,
+contact_manager_rename_group_foreach (TpConnection         *connection,
 				      EmpathyTpContactList *list,
 				      RenameGroupData      *data)
 {
@@ -508,7 +486,7 @@ contact_manager_rename_group (EmpathyContactList *manager,
 			      &data);
 }
 
-static void contact_manager_remove_group_foreach (McAccount	*account,
+static void contact_manager_remove_group_foreach (TpConnection         *connection,
 						  EmpathyTpContactList *list,
 						  const gchar *group)
 {
@@ -547,14 +525,14 @@ contact_manager_iface_init (EmpathyContactListIface *iface)
 
 gboolean
 empathy_contact_manager_can_add (EmpathyContactManager *manager,
-				 McAccount             *account)
+				 TpConnection          *connection)
 {
 	EmpathyContactManagerPriv *priv = GET_PRIV (manager);
 	EmpathyTpContactList      *list;
 	
 	g_return_val_if_fail (EMPATHY_IS_CONTACT_MANAGER (manager), FALSE);
 
-	list = g_hash_table_lookup (priv->lists, account);
+	list = g_hash_table_lookup (priv->lists, connection);
 	if (list == NULL)
 		return FALSE;
 

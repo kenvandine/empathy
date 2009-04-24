@@ -45,7 +45,6 @@
 #include "empathy-chat.h"
 #include "empathy-conf.h"
 #include "empathy-spell.h"
-#include "empathy-spell-dialog.h"
 #include "empathy-contact-list-store.h"
 #include "empathy-contact-list-view.h"
 #include "empathy-contact-menu.h"
@@ -65,7 +64,6 @@
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyChat)
 typedef struct {
 	EmpathyTpChat     *tp_chat;
-	gulong            tp_chat_destroy_handler;
 	McAccount         *account;
 	gchar             *id;
 	gchar             *name;
@@ -190,17 +188,15 @@ chat_connect_channel_reconnected (EmpathyDispatchOperation *dispatch,
 }
 
 static void
-chat_connection_changed_cb (EmpathyAccountManager *manager,
-			    McAccount *account,
-			    TpConnectionStatusReason reason,
-			    TpConnectionStatus current,
-			    TpConnectionStatus previous,
-			    EmpathyChat *chat)
+chat_new_connection_cb (EmpathyAccountManager *manager,
+			TpConnection *connection,
+			EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
+	McAccount *account;
 
-	if (current == TP_CONNECTION_STATUS_CONNECTED && !priv->tp_chat &&
-	    empathy_account_equal (account, priv->account) &&
+	account = empathy_account_manager_get_account (manager, connection);
+	if (!priv->tp_chat && empathy_account_equal (account, priv->account) &&
 	    priv->handle_type != TP_HANDLE_TYPE_NONE &&
 	    !EMP_STR_EMPTY (priv->id)) {
 		
@@ -208,12 +204,14 @@ chat_connection_changed_cb (EmpathyAccountManager *manager,
 
 		switch (priv->handle_type) {
 			case TP_HANDLE_TYPE_CONTACT:
-				empathy_dispatcher_chat_with_contact_id (account, priv->id,
+				empathy_dispatcher_chat_with_contact_id (
+					connection, priv->id,
 					chat_connect_channel_reconnected,
 					chat);
 				break;
 			case TP_HANDLE_TYPE_ROOM:
-				empathy_dispatcher_join_muc (account, priv->id,
+				empathy_dispatcher_join_muc (connection,
+					priv->id,
 					chat_connect_channel_reconnected,
 					chat);
 				break;
@@ -596,7 +594,7 @@ chat_property_changed_cb (EmpathyTpChat *tp_chat,
 
 static void
 chat_input_text_buffer_changed_cb (GtkTextBuffer *buffer,
-				   EmpathyChat    *chat)
+                                   EmpathyChat    *chat)
 {
 	EmpathyChatPriv *priv;
 	GtkTextIter     start, end;
@@ -612,8 +610,8 @@ chat_input_text_buffer_changed_cb (GtkTextBuffer *buffer,
 	}
 
 	empathy_conf_get_bool (empathy_conf_get (),
-			      EMPATHY_PREFS_CHAT_SPELL_CHECKER_ENABLED,
-			      &spell_checker);
+                           EMPATHY_PREFS_CHAT_SPELL_CHECKER_ENABLED,
+                           &spell_checker);
 
 	gtk_text_buffer_get_start_iter (buffer, &start);
 
@@ -932,13 +930,42 @@ chat_spell_free (EmpathyChatSpell *chat_spell)
 }
 
 static void
-chat_text_check_word_spelling_cb (GtkMenuItem     *menuitem,
-				  EmpathyChatSpell *chat_spell)
+chat_spelling_menu_activate_cb (GtkMenuItem     *menu_item,
+				                EmpathyChatSpell *chat_spell)
 {
-	empathy_spell_dialog_show (chat_spell->chat,
-				  &chat_spell->start,
-				  &chat_spell->end,
-				  chat_spell->word);
+    empathy_chat_correct_word (chat_spell->chat,
+                               &(chat_spell->start),
+                               &(chat_spell->end),
+                               gtk_menu_item_get_label (menu_item));
+}
+
+static GtkWidget*
+chat_spelling_build_menu (EmpathyChatSpell *chat_spell)
+{
+    GtkWidget *menu, *menu_item;
+    GList     *suggestions, *l;
+
+    menu = gtk_menu_new ();
+    suggestions = empathy_spell_get_suggestions (chat_spell->word);
+    if (suggestions == NULL) {
+        menu_item = gtk_menu_item_new_with_label (_("(No Suggestions)"));
+	gtk_widget_set_sensitive (menu_item, FALSE);
+        gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+    } else {
+        for (l = suggestions; l; l = l->next) {
+            menu_item = gtk_menu_item_new_with_label (l->data);
+            g_signal_connect (G_OBJECT (menu_item),
+                          "activate",
+                          G_CALLBACK (chat_spelling_menu_activate_cb),
+                          chat_spell);
+            gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+        }
+    }
+    empathy_spell_free_suggestions (suggestions);
+
+    gtk_widget_show_all (menu);
+
+    return menu;
 }
 
 static void
@@ -961,7 +988,8 @@ chat_input_populate_popup_cb (GtkTextView *view,
 	GtkTextIter           iter, start, end;
 	GtkWidget            *item;
 	gchar                *str = NULL;
-	EmpathyChatSpell      *chat_spell;
+	EmpathyChatSpell     *chat_spell;
+	GtkWidget            *spell_menu;
 	EmpathySmileyManager *smiley_manager;
 	GtkWidget            *smiley_menu;
 	GtkWidget            *image;
@@ -1026,14 +1054,14 @@ chat_input_populate_popup_cb (GtkTextView *view,
 		gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 		gtk_widget_show (item);
 
-		item = gtk_image_menu_item_new_with_mnemonic (_("_Check Word Spelling..."));
+		item = gtk_image_menu_item_new_with_mnemonic (_("_Spelling Suggestions"));
 		image = gtk_image_new_from_icon_name (GTK_STOCK_SPELL_CHECK,
 						      GTK_ICON_SIZE_MENU);
 		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-		g_signal_connect (item,
-				  "activate",
-				  G_CALLBACK (chat_text_check_word_spelling_cb),
-				  chat_spell);
+
+		spell_menu = chat_spelling_build_menu (chat_spell);
+		gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), spell_menu);
+
 		gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 		gtk_widget_show (item);
 	}
@@ -1138,10 +1166,6 @@ chat_members_changed_cb (EmpathyTpChat  *tp_chat,
 
 	if (priv->block_events_timeout_id == 0) {
 		gchar *str;
-
-		empathy_contact_run_until_ready (contact,
-						 EMPATHY_CONTACT_READY_NAME,
-						 NULL);
 
 		if (is_member) {
 			str = g_strdup_printf (_("%s has joined the room"),
@@ -1434,13 +1458,26 @@ chat_finalize (GObject *object)
 	chat_composing_remove_timeout (chat);
 
 	g_signal_handlers_disconnect_by_func (priv->account_manager,
-					      chat_connection_changed_cb, object);
+					      chat_new_connection_cb, object);
 
 	g_object_unref (priv->account_manager);
 	g_object_unref (priv->log_manager);
 
 	if (priv->tp_chat) {
-		g_signal_handler_disconnect (priv->tp_chat, priv->tp_chat_destroy_handler);
+		g_signal_handlers_disconnect_by_func (priv->tp_chat,
+			chat_destroy_cb, chat);
+		g_signal_handlers_disconnect_by_func (priv->tp_chat,
+			chat_message_received_cb, chat);
+		g_signal_handlers_disconnect_by_func (priv->tp_chat,
+			chat_send_error_cb, chat);
+		g_signal_handlers_disconnect_by_func (priv->tp_chat,
+			chat_state_changed_cb, chat);
+		g_signal_handlers_disconnect_by_func (priv->tp_chat,
+			chat_property_changed_cb, chat);
+		g_signal_handlers_disconnect_by_func (priv->tp_chat,
+			chat_members_changed_cb, chat);
+		g_signal_handlers_disconnect_by_func (priv->tp_chat,
+			chat_remote_contact_changed_cb, chat);
 		empathy_tp_chat_close (priv->tp_chat);
 		g_object_unref (priv->tp_chat);
 	}
@@ -1578,8 +1615,8 @@ empathy_chat_init (EmpathyChat *chat)
 	priv->account_manager = empathy_account_manager_dup_singleton ();
 
 	g_signal_connect (priv->account_manager,
-			  "account-connection-changed",
-			  G_CALLBACK (chat_connection_changed_cb),
+			  "new-connection",
+			  G_CALLBACK (chat_new_connection_cb),
 			  chat);
 
 	/* Block events for some time to avoid having "has come online" or
@@ -1613,6 +1650,7 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 			  EmpathyTpChat *tp_chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
+	TpConnection    *connection;
 
 	g_return_if_fail (EMPATHY_IS_CHAT (chat));
 	g_return_if_fail (EMPATHY_IS_TP_CHAT (tp_chat));
@@ -1627,8 +1665,14 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 	}
 
 	priv->tp_chat = g_object_ref (tp_chat);
-	priv->account = g_object_ref (empathy_tp_chat_get_account (tp_chat));
+	connection = empathy_tp_chat_get_connection (priv->tp_chat);
+	priv->account = empathy_account_manager_get_account (priv->account_manager,
+							     connection);
+	g_object_ref (priv->account);
 
+	g_signal_connect (tp_chat, "destroy",
+			  G_CALLBACK (chat_destroy_cb),
+			  chat);
 	g_signal_connect (tp_chat, "message-received",
 			  G_CALLBACK (chat_message_received_cb),
 			  chat);
@@ -1647,10 +1691,6 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 	g_signal_connect_swapped (tp_chat, "notify::remote-contact",
 				  G_CALLBACK (chat_remote_contact_changed_cb),
 				  chat);
-	priv->tp_chat_destroy_handler =
-		g_signal_connect (tp_chat, "destroy",
-			  G_CALLBACK (chat_destroy_cb),
-			  chat);
 
 	chat_remote_contact_changed_cb (chat);
 
@@ -1728,20 +1768,6 @@ empathy_chat_get_remote_contact (EmpathyChat *chat)
 	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
 
 	return priv->remote_contact;
-}
-
-guint
-empathy_chat_get_members_count (EmpathyChat *chat)
-{
-	EmpathyChatPriv *priv = GET_PRIV (chat);
-
-	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), 0);
-
-	if (priv->tp_chat) {
-		return empathy_tp_chat_get_members_count (priv->tp_chat);
-	}
-
-	return 0;
 }
 
 GtkWidget *

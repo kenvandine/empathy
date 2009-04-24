@@ -24,6 +24,7 @@
 
 #include "empathy-dispatch-operation.h"
 #include <libempathy/empathy-enum-types.h>
+#include <libempathy/empathy-tp-contact-factory.h>
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-call.h>
 #include <libempathy/empathy-tp-file.h>
@@ -173,10 +174,37 @@ empathy_dispatch_operation_invalidated (TpProxy *proxy, guint domain,
 }
 
 static void
+dispatcher_operation_got_contact_cb (EmpathyTpContactFactory *factory,
+                                     EmpathyContact *contact,
+                                     const GError *error,
+                                     gpointer user_data,
+                                     GObject *self)
+{
+  EmpathyDispatchOperationPriv *priv = GET_PRIV (self);
+
+  if (error)
+    {
+      /* FIXME: We should cancel the operation */
+      DEBUG ("Error: %s", error->message);
+      return;
+    }
+
+  if (priv->contact != NULL)
+    g_object_unref (priv->contact);
+  priv->contact = g_object_ref (contact);
+  g_object_notify (G_OBJECT (self), "contact");
+
+  tp_channel_call_when_ready (priv->channel,
+    empathy_dispatch_operation_channel_ready_cb, self);
+}
+
+static void
 empathy_dispatch_operation_constructed (GObject *object)
 {
   EmpathyDispatchOperation *self = EMPATHY_DISPATCH_OPERATION (object);
   EmpathyDispatchOperationPriv *priv = GET_PRIV (self);
+  TpHandle handle;
+  TpHandleType handle_type;
 
   empathy_dispatch_operation_set_status (self,
     EMPATHY_DISPATCHER_OPERATION_STATE_PREPARING);
@@ -184,6 +212,19 @@ empathy_dispatch_operation_constructed (GObject *object)
   priv->invalidated_handler =
     g_signal_connect (priv->channel, "invalidated",
       G_CALLBACK (empathy_dispatch_operation_invalidated), self);
+
+  handle = tp_channel_get_handle (priv->channel, &handle_type);
+
+  if (handle_type == TP_CONN_HANDLE_TYPE_CONTACT && priv->contact == NULL)
+    {
+      EmpathyTpContactFactory *factory;
+
+      factory = empathy_tp_contact_factory_dup_singleton (priv->connection);
+      empathy_tp_contact_factory_get_from_handle (factory, handle,
+      	dispatcher_operation_got_contact_cb, NULL, NULL, object);
+      g_object_unref (factory);
+      return;
+    }
 
   tp_channel_call_when_ready (priv->channel,
     empathy_dispatch_operation_channel_ready_cb, self);
@@ -365,6 +406,23 @@ empathy_dispatcher_operation_tp_chat_ready_cb (GObject *object,
 }
 
 static void
+empathy_dispatcher_operation_tp_file_ready_cb (GObject *object,
+  GParamSpec *spec, gpointer user_data)
+{
+  EmpathyDispatchOperation *self = EMPATHY_DISPATCH_OPERATION (user_data);
+  EmpathyDispatchOperationPriv *priv = GET_PRIV (self);
+
+  if (!empathy_tp_file_is_ready (EMPATHY_TP_FILE (priv->channel_wrapper)))
+    return;
+
+  g_signal_handler_disconnect (priv->channel_wrapper, priv->ready_handler);
+  priv->ready_handler = 0;
+
+  empathy_dispatch_operation_set_status (self,
+    EMPATHY_DISPATCHER_OPERATION_STATE_PENDING);
+}
+
+static void
 empathy_dispatch_operation_channel_ready_cb (TpChannel *channel,
   const GError *error, gpointer user_data)
 {
@@ -395,18 +453,23 @@ empathy_dispatch_operation_channel_ready_cb (TpChannel *channel,
             G_CALLBACK (empathy_dispatcher_operation_tp_chat_ready_cb), self);
           return;
         }
-
     }
   else if (channel_type == TP_IFACE_QUARK_CHANNEL_TYPE_STREAMED_MEDIA)
     {
-       EmpathyTpCall *call = empathy_tp_call_new (channel);
-       priv->channel_wrapper = G_OBJECT (call);
-
+      EmpathyTpCall *call = empathy_tp_call_new (channel);
+      priv->channel_wrapper = G_OBJECT (call);
     }
   else if (channel_type == TP_IFACE_QUARK_CHANNEL_TYPE_FILE_TRANSFER)
     {
-       EmpathyTpFile *file = empathy_tp_file_new (channel);
-       priv->channel_wrapper = G_OBJECT (file);
+      EmpathyTpFile *file = empathy_tp_file_new (channel);
+      priv->channel_wrapper = G_OBJECT (file);
+
+      if (!empathy_tp_file_is_ready (file))
+        {
+          priv->ready_handler = g_signal_connect (file, "notify::ready",
+            G_CALLBACK (empathy_dispatcher_operation_tp_file_ready_cb), self);
+          return;
+        }
     }
 
 ready:
@@ -524,7 +587,7 @@ empathy_dispatch_operation_get_tp_connection (
 
   priv = GET_PRIV (operation);
 
-  return g_object_ref (priv->connection);
+  return priv->connection;
 }
 
 TpChannel *
