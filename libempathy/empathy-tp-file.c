@@ -566,7 +566,7 @@ static void
 tp_file_check_if_ready (EmpathyTpFile *tp_file)
 {
   if (tp_file->priv->ready || tp_file->priv->contact == NULL ||
-      tp_file->priv->state == 0)
+      tp_file->priv->state == TP_FILE_TRANSFER_STATE_NONE)
     return;
 
   tp_file->priv->ready = TRUE;
