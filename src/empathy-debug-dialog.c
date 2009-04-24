@@ -798,6 +798,71 @@ debug_dialog_save_clicked_cb (GtkToolButton *tool_button,
   gtk_widget_show (file_chooser);
 }
 
+static gboolean
+debug_dialog_copy_model_foreach (GtkTreeModel *model,
+    GtkTreePath *path,
+    GtkTreeIter *iter,
+    gpointer user_data)
+{
+  gchar **text = (gchar **) user_data;
+  gchar *tmp;
+  gchar *domain, *category, *message, *level_str, *level_upper;
+  gdouble timestamp;
+  gchar *line;
+
+  gtk_tree_model_get (model, iter,
+      COL_DEBUG_TIMESTAMP, &timestamp,
+      COL_DEBUG_DOMAIN, &domain,
+      COL_DEBUG_CATEGORY, &category,
+      COL_DEBUG_LEVEL_STRING, &level_str,
+      COL_DEBUG_MESSAGE, &message,
+      -1);
+
+  level_upper = g_ascii_strup (level_str, -1);
+
+  line = g_strdup_printf ("%s%s%s-%s: %e: %s\n",
+      domain, EMP_STR_EMPTY (category) ? "" : "/",
+      category, level_upper, timestamp, message);
+
+  tmp = g_strconcat (*text, line, NULL);
+
+  g_free (*text);
+  g_free (line);
+  g_free (level_upper);
+  g_free (level_str);
+  g_free (domain);
+  g_free (category);
+  g_free (message);
+
+  *text = tmp;
+
+  return FALSE;
+}
+
+static void
+debug_dialog_copy_clicked_cb (GtkToolButton *tool_button,
+    EmpathyDebugDialog *debug_dialog)
+{
+  EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
+  GtkClipboard *clipboard;
+  gchar *text;
+
+  text = g_strdup ("");
+
+  gtk_tree_model_foreach (priv->store_filter,
+      debug_dialog_copy_model_foreach, &text);
+
+  clipboard = gtk_clipboard_get_for_display (
+      gtk_widget_get_display (GTK_WIDGET (tool_button)),
+      GDK_SELECTION_CLIPBOARD);
+
+  DEBUG ("Copying text to clipboard (length: %u)", strlen (text));
+
+  gtk_clipboard_set_text (clipboard, text, -1);
+
+  g_free (text);
+}
+
 static GObject *
 debug_dialog_constructor (GType type,
     guint n_construct_params,
@@ -857,6 +922,14 @@ debug_dialog_constructor (GType type,
   item = gtk_tool_button_new_from_stock (GTK_STOCK_SAVE);
   g_signal_connect (item, "clicked",
       G_CALLBACK (debug_dialog_save_clicked_cb), object);
+  gtk_widget_show (GTK_WIDGET (item));
+  gtk_tool_item_set_is_important (GTK_TOOL_ITEM (item), TRUE);
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
+  /* Copy */
+  item = gtk_tool_button_new_from_stock (GTK_STOCK_COPY);
+  g_signal_connect (item, "clicked",
+      G_CALLBACK (debug_dialog_copy_clicked_cb), object);
   gtk_widget_show (GTK_WIDGET (item));
   gtk_tool_item_set_is_important (GTK_TOOL_ITEM (item), TRUE);
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
