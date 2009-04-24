@@ -747,9 +747,6 @@ tp_file_set_property (GObject *object,
         g_free (tp_file->priv->content_hash);
         tp_file->priv->content_hash = g_value_dup_string (value);
         break;
-      case PROP_READY:
-        tp_file->priv->ready = g_value_get_boolean (value);
-        break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
         break;
@@ -1091,8 +1088,7 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
           "ready",
           "Whether the object is ready",
           FALSE,
-          G_PARAM_READWRITE |
-          G_PARAM_CONSTRUCT));
+          G_PARAM_READABLE));
 
   g_object_class_install_property (object_class,
       PROP_FILENAME,
