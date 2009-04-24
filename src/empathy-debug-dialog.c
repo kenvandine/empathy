@@ -233,7 +233,7 @@ debug_dialog_cm_chooser_changed_cb (GtkComboBox *cm_chooser,
   TpDBusDaemon *dbus;
   GError *error = NULL;
   gchar *bus_name;
-  TpConnection *connection;
+  TpProxy *proxy;
   GtkTreeIter iter;
 
   if (!gtk_combo_box_get_active_iter (cm_chooser, &iter))
@@ -258,17 +258,12 @@ debug_dialog_cm_chooser_changed_cb (GtkComboBox *cm_chooser,
 
   gtk_tree_model_get (GTK_TREE_MODEL (priv->cms), &iter,
       COL_CM_UNIQUE_NAME, &bus_name, -1);
-  connection = tp_connection_new (dbus, bus_name, DEBUG_OBJECT_PATH, &error);
+  proxy = g_object_new (TP_TYPE_PROXY,
+      "bus-name", bus_name,
+      "dbus-daemon", dbus,
+      "object-path", DEBUG_OBJECT_PATH,
+      NULL);
   g_free (bus_name);
-
-  if (error != NULL)
-    {
-      DEBUG ("Getting a new TpConnection failed: %s", error->message);
-      g_error_free (error);
-      g_object_unref (dbus);
-      g_object_unref (mc);
-      return;
-    }
 
   gtk_list_store_clear (priv->store);
 
@@ -286,7 +281,7 @@ debug_dialog_cm_chooser_changed_cb (GtkComboBox *cm_chooser,
   if (priv->proxy != NULL)
     g_object_unref (priv->proxy);
 
-  priv->proxy = TP_PROXY (connection);
+  priv->proxy = proxy;
 
   tp_proxy_add_interface_by_id (priv->proxy, emp_iface_quark_debug ());
 
