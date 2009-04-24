@@ -45,7 +45,6 @@
 #include "empathy-chat.h"
 #include "empathy-conf.h"
 #include "empathy-spell.h"
-#include "empathy-spell-dialog.h"
 #include "empathy-contact-list-store.h"
 #include "empathy-contact-list-view.h"
 #include "empathy-contact-menu.h"
@@ -595,7 +594,7 @@ chat_property_changed_cb (EmpathyTpChat *tp_chat,
 
 static void
 chat_input_text_buffer_changed_cb (GtkTextBuffer *buffer,
-				   EmpathyChat    *chat)
+                                   EmpathyChat    *chat)
 {
 	EmpathyChatPriv *priv;
 	GtkTextIter     start, end;
@@ -611,8 +610,8 @@ chat_input_text_buffer_changed_cb (GtkTextBuffer *buffer,
 	}
 
 	empathy_conf_get_bool (empathy_conf_get (),
-			      EMPATHY_PREFS_CHAT_SPELL_CHECKER_ENABLED,
-			      &spell_checker);
+                           EMPATHY_PREFS_CHAT_SPELL_CHECKER_ENABLED,
+                           &spell_checker);
 
 	gtk_text_buffer_get_start_iter (buffer, &start);
 
@@ -931,13 +930,42 @@ chat_spell_free (EmpathyChatSpell *chat_spell)
 }
 
 static void
-chat_text_check_word_spelling_cb (GtkMenuItem     *menuitem,
-				  EmpathyChatSpell *chat_spell)
+chat_spelling_menu_activate_cb (GtkMenuItem     *menu_item,
+				                EmpathyChatSpell *chat_spell)
 {
-	empathy_spell_dialog_show (chat_spell->chat,
-				  &chat_spell->start,
-				  &chat_spell->end,
-				  chat_spell->word);
+    empathy_chat_correct_word (chat_spell->chat,
+                               &(chat_spell->start),
+                               &(chat_spell->end),
+                               gtk_menu_item_get_label (menu_item));
+}
+
+static GtkWidget*
+chat_spelling_build_menu (EmpathyChatSpell *chat_spell)
+{
+    GtkWidget *menu, *menu_item;
+    GList     *suggestions, *l;
+
+    menu = gtk_menu_new ();
+    suggestions = empathy_spell_get_suggestions (chat_spell->word);
+    if (suggestions == NULL) {
+        menu_item = gtk_menu_item_new_with_label (_("(No Suggestions)"));
+	gtk_widget_set_sensitive (menu_item, FALSE);
+        gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+    } else {
+        for (l = suggestions; l; l = l->next) {
+            menu_item = gtk_menu_item_new_with_label (l->data);
+            g_signal_connect (G_OBJECT (menu_item),
+                          "activate",
+                          G_CALLBACK (chat_spelling_menu_activate_cb),
+                          chat_spell);
+            gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+        }
+    }
+    empathy_spell_free_suggestions (suggestions);
+
+    gtk_widget_show_all (menu);
+
+    return menu;
 }
 
 static void
@@ -960,7 +988,8 @@ chat_input_populate_popup_cb (GtkTextView *view,
 	GtkTextIter           iter, start, end;
 	GtkWidget            *item;
 	gchar                *str = NULL;
-	EmpathyChatSpell      *chat_spell;
+	EmpathyChatSpell     *chat_spell;
+	GtkWidget            *spell_menu;
 	EmpathySmileyManager *smiley_manager;
 	GtkWidget            *smiley_menu;
 	GtkWidget            *image;
@@ -1025,14 +1054,14 @@ chat_input_populate_popup_cb (GtkTextView *view,
 		gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 		gtk_widget_show (item);
 
-		item = gtk_image_menu_item_new_with_mnemonic (_("_Check Word Spelling..."));
+		item = gtk_image_menu_item_new_with_mnemonic (_("_Spelling Suggestions"));
 		image = gtk_image_new_from_icon_name (GTK_STOCK_SPELL_CHECK,
 						      GTK_ICON_SIZE_MENU);
 		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-		g_signal_connect (item,
-				  "activate",
-				  G_CALLBACK (chat_text_check_word_spelling_cb),
-				  chat_spell);
+
+		spell_menu = chat_spelling_build_menu (chat_spell);
+		gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), spell_menu);
+
 		gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 		gtk_widget_show (item);
 	}

@@ -1692,21 +1692,6 @@
 
 
 
-;; From empathy-spell-dialog.h
-
-(define-function spell_dialog_show
-  (c-name "empathy_spell_dialog_show")
-  (return-type "none")
-  (parameters
-    '("EmpathyChat*" "chat")
-    '("GtkTextIter*" "start")
-    '("GtkTextIter*" "end")
-    '("const-gchar*" "word")
-  )
-)
-
-
-
 ;; From empathy-theme-boxes.h
 
 (define-function theme_boxes_get_type

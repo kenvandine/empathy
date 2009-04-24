@@ -76,7 +76,6 @@ python /usr/share/pygobject/2.0/codegen/h2def.py	\
 	empathy-profile-chooser.h		\
 	empathy-smiley-manager.h		\
 	empathy-spell.h				\
-	empathy-spell-dialog.h			\
 	empathy-theme-boxes.h			\
 	empathy-theme-irc.h			\
 	empathy-theme-manager.h			\

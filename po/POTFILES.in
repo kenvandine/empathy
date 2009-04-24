@@ -37,8 +37,6 @@ libempathy-gtk/empathy-log-window.c
 [type: gettext/glade]libempathy-gtk/empathy-log-window.ui
 [type: gettext/glade]libempathy-gtk/empathy-new-message-dialog.ui
 libempathy-gtk/empathy-presence-chooser.c
-libempathy-gtk/empathy-spell-dialog.c
-[type: gettext/glade]libempathy-gtk/empathy-spell-dialog.ui
 libempathy-gtk/empathy-status-preset-dialog.c
 [type: gettext/glade]libempathy-gtk/empathy-status-preset-dialog.ui
 libempathy-gtk/empathy-theme-boxes.c
