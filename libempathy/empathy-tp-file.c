@@ -585,7 +585,7 @@ tp_file_got_contact_cb (EmpathyTpContactFactory *factory,
   if (error)
     {
       DEBUG ("Error: %s", error->message);
-      empathy_tp_file_close (tp_file);
+      empathy_tp_file_cancel (tp_file);
       return;
     }
 
@@ -1160,12 +1160,6 @@ empathy_tp_file_cancel (EmpathyTpFile *tp_file)
 
   if (tp_file->priv->cancellable != NULL)
     g_cancellable_cancel (tp_file->priv->cancellable);
-}
-
-void
-empathy_tp_file_close (EmpathyTpFile *tp_file)
-{
-  empathy_tp_file_cancel (tp_file);
 }
 
 /**
