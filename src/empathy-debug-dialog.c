@@ -76,6 +76,7 @@ typedef struct
   GtkTreeModel *store_filter;
   TpProxy *proxy;
   TpProxySignalConnection *signal_connection;
+  TpProxySignalConnection *name_owner_changed_signal;
   gboolean paused;
   GtkListStore *cms;
   gboolean dispose_run;
@@ -238,6 +239,11 @@ debug_dialog_cm_chooser_changed_cb (GtkComboBox *cm_chooser,
   if (!gtk_combo_box_get_active_iter (cm_chooser, &iter))
     {
       DEBUG ("No CM is selected");
+      if (gtk_tree_model_iter_n_children (
+          GTK_TREE_MODEL (priv->cms), NULL) > 0)
+        {
+          gtk_combo_box_set_active (cm_chooser, 0);
+        }
       return;
     }
 
@@ -427,9 +433,89 @@ debug_dialog_list_connection_names_cb (const gchar * const *names,
   g_object_unref (dbus);
 }
 
+static gboolean
+debug_dialog_remove_cm_foreach (GtkTreeModel *model,
+    GtkTreePath *path,
+    GtkTreeIter *iter,
+    gpointer user_data)
+{
+  const gchar *unique_name_to_remove = (const gchar *) user_data;
+  gchar *name;
+  gboolean found = FALSE;
+
+  gtk_tree_model_get (model, iter, COL_CM_UNIQUE_NAME, &name, -1);
+
+  if (!tp_strdiff (name, unique_name_to_remove))
+    {
+      found = TRUE;
+      gtk_list_store_remove (GTK_LIST_STORE (model), iter);
+    }
+
+  g_free (name);
+
+  return found;
+}
+
+#define CM_WELL_KNOWN_NAME_PREFIX \
+    "org.freedesktop.Telepathy.ConnectionManager."
+
+static void
+debug_dialog_name_owner_changed_cb (TpDBusDaemon *proxy,
+    const gchar *arg0,
+    const gchar *arg1,
+    const gchar *arg2,
+    gpointer user_data,
+    GObject *weak_object)
+{
+  EmpathyDebugDialogPriv *priv = GET_PRIV (user_data);
+
+  /* Wow, I hate all of this code... */
+  if (!g_str_has_prefix (arg0, CM_WELL_KNOWN_NAME_PREFIX))
+    return;
+
+  if (EMP_STR_EMPTY (arg1) && !EMP_STR_EMPTY (arg2))
+    {
+      /* A connection manager joined -- because it's guaranteed
+       * that the CM just joined (because o.fd.Tp.CM.foo
+       * just joined), we don't need to check whether the unique
+       * name is in the CM model. Hooray.
+       */
+      GtkTreeIter iter;
+      const gchar *name = arg0 + strlen (CM_WELL_KNOWN_NAME_PREFIX);
+
+      DEBUG ("Adding new CM '%s' at %s.", name, arg2);
+
+      gtk_list_store_append (priv->cms, &iter);
+      gtk_list_store_set (priv->cms, &iter,
+          COL_CM_NAME, name,
+          COL_CM_UNIQUE_NAME, arg2,
+          -1);
+    }
+  else if (!EMP_STR_EMPTY (arg1) && EMP_STR_EMPTY (arg2))
+    {
+      /* A connection manager died -- because it's guaranteed
+       * that the CM itself just died (because o.fd.Tp.CM.foo
+       * just died), we don't need to check that it was already
+       * in the model.
+       */
+      gchar *to_remove;
+
+      /* Can't pass a const into a GtkTreeModelForeachFunc. */
+      to_remove = g_strdup (arg1);
+
+      DEBUG ("Removing CM from %s.", to_remove);
+
+      gtk_tree_model_foreach (GTK_TREE_MODEL (priv->cms),
+          debug_dialog_remove_cm_foreach, to_remove);
+
+      g_free (to_remove);
+    }
+}
+
 static void
 debug_dialog_fill_cm_chooser (EmpathyDebugDialog *debug_dialog)
 {
+  EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
   TpDBusDaemon *dbus;
   GError *error = NULL;
 
@@ -444,6 +530,10 @@ debug_dialog_fill_cm_chooser (EmpathyDebugDialog *debug_dialog)
 
   tp_list_connection_names (dbus, debug_dialog_list_connection_names_cb,
       debug_dialog, NULL, NULL);
+
+  priv->name_owner_changed_signal =
+      tp_cli_dbus_daemon_connect_to_name_owner_changed (dbus,
+      debug_dialog_name_owner_changed_cb, debug_dialog, NULL, NULL, NULL);
 
   g_object_unref (dbus);
 }
@@ -975,6 +1065,9 @@ debug_dialog_dispose (GObject *object)
 
   if (priv->store != NULL)
     g_object_unref (priv->store);
+
+  if (priv->name_owner_changed_signal != NULL)
+    tp_proxy_signal_connection_disconnect (priv->name_owner_changed_signal);
 
   if (priv->proxy != NULL)
     {
