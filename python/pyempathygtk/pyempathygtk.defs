@@ -278,9 +278,9 @@
   (return-type "GtkWidget*")
 )
 
-(define-method get_account
+(define-method dup_account
   (of-object "EmpathyAccountChooser")
-  (c-name "empathy_account_chooser_get_account")
+  (c-name "empathy_account_chooser_dup_account")
   (return-type "McAccount*")
 )
 
@@ -1145,9 +1145,9 @@
   )
 )
 
-(define-method get_selected
+(define-method dup_selected
   (of-object "EmpathyContactListView")
-  (c-name "empathy_contact_list_view_get_selected")
+  (c-name "empathy_contact_list_view_dup_selected")
   (return-type "EmpathyContact*")
 )
 
@@ -1546,8 +1546,8 @@
   (return-type "GtkWidget*")
 )
 
-(define-function profile_chooser_get_selected
-  (c-name "empathy_profile_chooser_get_selected")
+(define-function profile_chooser_dup_selected
+  (c-name "empathy_profile_chooser_dup_selected")
   (return-type "McProfile*")
   (parameters
     '("GtkWidget*" "widget")
