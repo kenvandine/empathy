@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=empathy&component=general\n"
-"POT-Creation-Date: 2009-04-24 02:09+0000\n"
-"PO-Revision-Date: 2009-04-24 20:30+0200\n"
+"POT-Creation-Date: 2009-04-24 20:08+0000\n"
+"PO-Revision-Date: 2009-04-25 20:26+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -982,12 +982,10 @@ msgid "Custom messages..."
 msgstr "Mensajes personalizados…"
 
 #: ../libempathy-gtk/empathy-status-preset-dialog.c:360
-#| msgid "Edit Custom Messages..."
 msgid "Enter Custom Message"
 msgstr "Introducir mensaje personalizado"
 
 #: ../libempathy-gtk/empathy-status-preset-dialog.c:482
-#| msgid "Edit Custom Messages..."
 msgid "Edit Custom Messages"
 msgstr "Editar mensajes personalizados"
 
@@ -1002,12 +1000,10 @@ msgid "Saved Presets"
 msgstr "Guardar mensaje"
 
 #: ../libempathy-gtk/empathy-status-preset-dialog.ui.h:3
-#| msgid "gtk-clear"
 msgid "gtk-add"
 msgstr "gtk-add"
 
 #: ../libempathy-gtk/empathy-status-preset-dialog.ui.h:4
-#| msgid "gtk-ok"
 msgid "gtk-remove"
 msgstr "gtk-remove"
 
@@ -1509,7 +1505,7 @@ msgstr "Tema:"
 msgid "Typing a message."
 msgstr "Tecleando un mensaje."
 
-#: ../src/empathy-chat-window.c:889 ../src/empathy-event-manager.c:430
+#: ../src/empathy-chat-window.c:889 ../src/empathy-event-manager.c:429
 #, c-format
 msgid "New message from %s"
 msgstr "Nuevo mensaje de %s"
@@ -1530,76 +1526,76 @@ msgstr "Autoconectar"
 msgid "Manage Favorite Rooms"
 msgstr "Gestionar salas favoritas"
 
-#: ../src/empathy-event-manager.c:378
+#: ../src/empathy-event-manager.c:377
 msgid "Incoming call"
 msgstr "Llamada entrante"
 
-#: ../src/empathy-event-manager.c:381
+#: ../src/empathy-event-manager.c:380
 #, c-format
 msgid "%s is calling you, do you want to answer?"
 msgstr "%s le está llamando, ¿quiere responder?"
 
-#: ../src/empathy-event-manager.c:388
+#: ../src/empathy-event-manager.c:387
 msgid "_Reject"
 msgstr "_Rechazar"
 
-#: ../src/empathy-event-manager.c:394
+#: ../src/empathy-event-manager.c:393
 msgid "_Answer"
 msgstr "Re_spuesta"
 
-#: ../src/empathy-event-manager.c:508
+#: ../src/empathy-event-manager.c:507
 #, c-format
 msgid "Incoming call from %s"
 msgstr "Llamada entrante de %s"
 
-#: ../src/empathy-event-manager.c:548
+#: ../src/empathy-event-manager.c:547
 #, c-format
 msgid "%s is offering you an invitation"
 msgstr "%s le está ofreciendo una invitación"
 
-#: ../src/empathy-event-manager.c:554
+#: ../src/empathy-event-manager.c:553
 msgid "An external application will be started to handle it."
 msgstr "Se iniciará una aplicación externa para manejarla."
 
-#: ../src/empathy-event-manager.c:559
+#: ../src/empathy-event-manager.c:558
 msgid "You don't have the needed external application to handle it."
 msgstr "No tiene la aplicación externa necesaria para manejarla."
 
-#: ../src/empathy-event-manager.c:686
+#: ../src/empathy-event-manager.c:685
 msgid "Room invitation"
 msgstr "Invitación a una sala"
 
-#: ../src/empathy-event-manager.c:689
+#: ../src/empathy-event-manager.c:688
 #, c-format
 msgid "%s is inviting you to join %s"
 msgstr "%s le está invitando a unirse a %s"
 
 #. Decline button
-#: ../src/empathy-event-manager.c:697 ../src/empathy-ft-manager.c:1031
+#: ../src/empathy-event-manager.c:696 ../src/empathy-ft-manager.c:1037
 msgid "_Decline"
 msgstr "_Rechazar"
 
-#: ../src/empathy-event-manager.c:702
+#: ../src/empathy-event-manager.c:701
 #: ../src/empathy-new-chatroom-dialog.ui.h:6
 msgid "_Join"
 msgstr "_Unirse"
 
-#: ../src/empathy-event-manager.c:741
+#: ../src/empathy-event-manager.c:740
 #, c-format
 msgid "%s invited you to join %s"
 msgstr "%s le ha invitado a unirse a %s"
 
-#: ../src/empathy-event-manager.c:849
+#: ../src/empathy-event-manager.c:848
 #, c-format
 msgid "Incoming file transfer from %s"
 msgstr "Transferencia de archivo entrante de %s"
 
-#: ../src/empathy-event-manager.c:924
+#: ../src/empathy-event-manager.c:923
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "Petición de suscripción de %s"
 
-#: ../src/empathy-event-manager.c:928
+#: ../src/empathy-event-manager.c:927
 #, c-format
 msgid ""
 "\n"
@@ -1649,109 +1645,115 @@ msgid "Unknown reason"
 msgstr "Razón desconocida"
 
 #. translators: first %s is filename, second %s is the contact name
-#: ../src/empathy-ft-manager.c:226
+#: ../src/empathy-ft-manager.c:228
 #, c-format
 msgid "Receiving \"%s\" from %s"
 msgstr "Recibiendo «%s» de %s"
 
 #. translators: first %s is filename, second %s is the contact name
-#: ../src/empathy-ft-manager.c:229
+#: ../src/empathy-ft-manager.c:231
 #, c-format
 msgid "Sending \"%s\" to %s"
 msgstr "Enviando «%s» a %s"
 
-#: ../src/empathy-ft-manager.c:239
+#: ../src/empathy-ft-manager.c:242
 msgctxt "file size"
 msgid "Unknown"
 msgstr "Desconocido"
 
 #. translators: first %s is the transferred size, second %s is
 #. * the total file size
-#: ../src/empathy-ft-manager.c:247
+#: ../src/empathy-ft-manager.c:251
 #, c-format
-msgid "%s of %s"
-msgstr "%s de %s"
+#| msgid "%s of %s"
+msgid "%s of %s at %s/s"
+msgstr "%s de %s en %s/s"
 
-#: ../src/empathy-ft-manager.c:254
+#: ../src/empathy-ft-manager.c:259
 msgid "Waiting for the other participant's response"
 msgstr "Esperando la respuesta del otro participante"
 
-#: ../src/empathy-ft-manager.c:264
+#: ../src/empathy-ft-manager.c:269
 #, c-format
 msgid "\"%s\" received from %s"
 msgstr "«%s» recibido de %s"
 
-#: ../src/empathy-ft-manager.c:270
+#: ../src/empathy-ft-manager.c:275
 #, c-format
 msgid "\"%s\" sent to %s"
 msgstr "«%s» enviado a %s"
 
-#: ../src/empathy-ft-manager.c:273
+#: ../src/empathy-ft-manager.c:278
 msgid "File transfer completed"
 msgstr "Transferencia de archivo completada"
 
-#: ../src/empathy-ft-manager.c:282
+#: ../src/empathy-ft-manager.c:287
 #, c-format
 msgid "\"%s\" receiving from %s"
 msgstr "«%s» recibiendo de %s"
 
-#: ../src/empathy-ft-manager.c:288
+#: ../src/empathy-ft-manager.c:293
 #, c-format
 msgid "\"%s\" sending to %s"
 msgstr "«%s» enviando a %s"
 
-#: ../src/empathy-ft-manager.c:291
+#: ../src/empathy-ft-manager.c:296
 #, c-format
 msgid "File transfer canceled: %s"
 msgstr "Transferencia de archivo cancelada: %s"
 
-#: ../src/empathy-ft-manager.c:306
+#: ../src/empathy-ft-manager.c:310
+msgctxt "remaining time"
+msgid "Stalled"
+msgstr "Parado"
+
+#: ../src/empathy-ft-manager.c:313
 msgctxt "remaining time"
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../src/empathy-ft-manager.c:366
+#: ../src/empathy-ft-manager.c:372
 msgctxt "file transfer percent"
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../src/empathy-ft-manager.c:662
+#: ../src/empathy-ft-manager.c:668
 msgid "%"
 msgstr "%"
 
-#: ../src/empathy-ft-manager.c:674
+#: ../src/empathy-ft-manager.c:680
 msgid "File"
 msgstr "Archivo"
 
-#: ../src/empathy-ft-manager.c:696
+#: ../src/empathy-ft-manager.c:702
 msgid "Remaining"
 msgstr "Restantes"
 
-#: ../src/empathy-ft-manager.c:894
+#: ../src/empathy-ft-manager.c:900
 msgid "Cannot save file to this location"
 msgstr "No se puede guardar el archivo en esta ubicación"
 
-#: ../src/empathy-ft-manager.c:940
+#: ../src/empathy-ft-manager.c:946
 msgid "Save file as..."
 msgstr "Guardar archivo como…"
 
-#: ../src/empathy-ft-manager.c:1010
+#: ../src/empathy-ft-manager.c:1016
 msgid "unknown size"
 msgstr "tamaño desconocido"
 
-#: ../src/empathy-ft-manager.c:1016
+#: ../src/empathy-ft-manager.c:1022
 #, c-format
 msgid "%s would like to send you a file"
 msgstr "%s quiere enviarle un archivo"
 
 #. Translators: the first %s is the file name, the second %s is the file size
-#: ../src/empathy-ft-manager.c:1022
+#: ../src/empathy-ft-manager.c:1028
 #, c-format
 msgid "Do you want to accept the file \"%s\" (%s)?"
 msgstr "¿Quiere aceptar el archivo «%s» (%s)?"
 
 #. Accept button
-#: ../src/empathy-ft-manager.c:1040
+#: ../src/empathy-ft-manager.c:1046
 msgid "_Accept"
 msgstr "_Aceptar"
 
