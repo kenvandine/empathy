@@ -753,6 +753,10 @@ tp_chat_check_if_ready (EmpathyTpChat *chat)
 
 	DEBUG ("Ready!");
 
+	tp_cli_channel_type_text_connect_to_received (priv->channel,
+						      tp_chat_received_cb,
+						      NULL, NULL,
+						      G_OBJECT (chat), NULL);
 	priv->listing_pending_messages = TRUE;
 	tp_cli_channel_type_text_call_list_pending_messages (priv->channel, -1,
 							     FALSE,
@@ -760,10 +764,6 @@ tp_chat_check_if_ready (EmpathyTpChat *chat)
 							     NULL, NULL,
 							     G_OBJECT (chat));
 
-	tp_cli_channel_type_text_connect_to_received (priv->channel,
-						      tp_chat_received_cb,
-						      NULL, NULL,
-						      G_OBJECT (chat), NULL);
 	tp_cli_channel_type_text_connect_to_sent (priv->channel,
 						  tp_chat_sent_cb,
 						  NULL, NULL,
