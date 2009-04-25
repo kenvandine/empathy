@@ -1240,7 +1240,8 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
   /**
    * EmpathyTpFile:ready:
    *
-   * Whether the #EmpathyTpFile is ready to use.
+   * Whether the #EmpathyTpFile is ready to use. This property returns
+   * the same as empathy_tp_file_is_ready().
    */
   g_object_class_install_property (object_class,
       PROP_READY,
