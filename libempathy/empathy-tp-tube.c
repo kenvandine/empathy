@@ -418,7 +418,7 @@ empathy_tp_tube_new (TpChannel *channel)
  * empathy_tp_tube_new_stream_tube:
  * @contact: the #EmpathyContact to which the tube is offered
  * @type: the type of the listening address of the local service. Either
- * TP_SOCKET_ADDRESS_TYPE_IPV4 or TP_SOCKET_ADDRESS_TYPE_IPV6.
+ * %TP_SOCKET_ADDRESS_TYPE_IPV4 or %TP_SOCKET_ADDRESS_TYPE_IPV6.
  * @hostname: the address of the local service
  * @port: the port of the local service
  * @service: the service name of the tube
