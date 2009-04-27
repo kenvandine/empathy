@@ -14,7 +14,7 @@
   <maintainer>
     <foaf:Person>
       <foaf:name>Xavier Claessens</foaf:name>
-      <foaf:mbox rdf:resource="xclaesse@gmail.com" />
+      <foaf:mbox rdf:resource="mailto:xclaesse@gmail.com" />
       <gnome:userid>xclaesse</gnome:userid>
     </foaf:Person>
   </maintainer>
