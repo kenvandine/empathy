@@ -77,6 +77,13 @@ typedef struct {
  * #EmpathyTpTube is a convenient object wrapping a Telepathy tube channel.
  */
 
+/**
+ * EmpathyTpTube:
+ * @parent: parent object
+ *
+ * An object wrapping a Telepathy tube channel.
+ */
+
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTpTube)
 typedef struct
 {
