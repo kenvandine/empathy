@@ -68,6 +68,14 @@ typedef struct {
     GObject *weak_object;
 } ReadyCbData;
 
+/**
+ * SECTION:empathy-tp-tube
+ * @title:EmpathyTpTube
+ * @short_description: A wrapper around a Telepathy tube channel
+ * @include: libempathy/empathy-tp-tube.h
+ *
+ * #EmpathyTpTube is a convenient object wrapping a Telepathy tube channel.
+ */
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTpTube)
 typedef struct
@@ -347,15 +355,30 @@ empathy_tp_tube_class_init (EmpathyTpTubeClass *klass)
   object_class->set_property = tp_tube_set_property;
   object_class->get_property = tp_tube_get_property;
 
+  /**
+   * EmpathyTpTube:channel:
+   *
+   * The #TpChannel wrapped by the tube object.
+   */
   g_object_class_install_property (object_class, PROP_CHANNEL,
       g_param_spec_object ("channel", "channel", "channel", TP_TYPE_CHANNEL,
       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * EmpathyTpTube:state:
+   *
+   * The state of the tube.
+   */
   g_object_class_install_property (object_class, PROP_STATE,
       g_param_spec_uint ("state", "state", "state",
         0, NUM_EMP_TUBE_CHANNEL_STATES, 0,
         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_STRINGS));
-
+  /**
+   * EmpathyTpTube::destroy:
+   * @self: the tube object
+   *
+   * Emitted when then tube has been invalidated.
+   */
   signals[DESTROY] = g_signal_new ("destroy",
       G_TYPE_FROM_CLASS (klass),
       G_SIGNAL_RUN_LAST,
@@ -375,6 +398,14 @@ empathy_tp_tube_init (EmpathyTpTube *tube)
   tube->priv = priv;
 }
 
+/**
+ * empathy_tp_tube_new:
+ * @channel: a #TpChannel
+ *
+ * Creates a new #EmpathyTpTube.
+ *
+ * Return value: a new #EmpathyTpTube
+ */
 EmpathyTpTube *
 empathy_tp_tube_new (TpChannel *channel)
 {
@@ -383,6 +414,20 @@ empathy_tp_tube_new (TpChannel *channel)
   return g_object_new (EMPATHY_TYPE_TP_TUBE, "channel", channel,  NULL);
 }
 
+/**
+ * empathy_tp_tube_new_stream_tube:
+ * @contact: the #EmpathyContact to which the tube is offered
+ * @type: the type of the listening address of the local service. Either
+ * TP_SOCKET_ADDRESS_TYPE_IPV4 or TP_SOCKET_ADDRESS_TYPE_IPV6.
+ * @hostname: the address of the local service
+ * @port: the port of the local service
+ * @service: the service name of the tube
+ * @parameters: the parameters of the tube
+ *
+ * Creates and offers a new #EmpathyTpTube of ChannelType StreamTube.
+ *
+ * Return value: a new #EmpathyTpTube
+ */
 EmpathyTpTube *
 empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
     TpSocketAddressType type,
@@ -527,6 +572,15 @@ tp_tube_accept_stream_cb (TpProxy *proxy,
    data->callback (tube, &eaddress, NULL, data->user_data);
 }
 
+/**
+ * empathy_tp_tube_accept_stream_tube:
+ * @tube: an #EmpathyTpTube
+ * @type: the type of address the connection manager should listen on
+ * @callback: called when the tube has been accepted
+ * @user_data: arbitrary user-supplied data passed to the callback
+ *
+ * Accepts @tube of ChannelType StreamTube and call @callback once it's done.
+ */
 void
 empathy_tp_tube_accept_stream_tube (EmpathyTpTube *tube,
   TpSocketAddressType type,
