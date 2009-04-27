@@ -22,6 +22,7 @@
 #include <config.h>
 
 #include <telepathy-glib/connection.h>
+#include <telepathy-glib/proxy.h>
 #include <telepathy-glib/util.h>
 #include <extensions/extensions.h>
 
@@ -34,13 +35,14 @@
 
 typedef struct {
   TpSocketAddressType type;
-  EmpatyTpTubeAcceptStreamTubeCb *callback;
+  EmpathyTpTubeAcceptStreamTubeCb *callback;
   gpointer user_data;
 } EmpathyTpTubeAcceptData;
 
 static EmpathyTpTubeAcceptData *
 new_empathy_tp_tube_accept_data (TpSocketAddressType type,
-  EmpatyTpTubeAcceptStreamTubeCb *callback, gpointer user_data)
+  EmpathyTpTubeAcceptStreamTubeCb *callback,
+  gpointer user_data)
 {
   EmpathyTpTubeAcceptData *r;
 
@@ -59,11 +61,29 @@ free_empathy_tp_tube_accept_data (gpointer data)
 }
 
 
+typedef struct {
+    EmpathyTpTubeReadyCb *callback;
+    gpointer user_data;
+    GDestroyNotify destroy;
+    GObject *weak_object;
+} ReadyCbData;
+
+/**
+ * SECTION:empathy-tp-tube
+ * @title:EmpathyTpTube
+ * @short_description: A wrapper around a Telepathy tube channel
+ * @include: libempathy/empathy-tp-tube.h
+ *
+ * #EmpathyTpTube is a convenient object wrapping a Telepathy tube channel.
+ */
+
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTpTube)
 typedef struct
 {
   TpChannel *channel;
   EmpTubeChannelState state;
+  gboolean ready;
+  GSList *ready_callbacks;
 } EmpathyTpTubePriv;
 
 enum
@@ -91,6 +111,10 @@ tp_tube_state_changed_cb (TpProxy *proxy,
 {
   EmpathyTpTubePriv *priv = GET_PRIV (tube);
 
+  if (!priv->ready)
+    /* We didn't get the state yet */
+    return;
+
   DEBUG ("Tube state changed");
 
   priv->state = state;
@@ -98,11 +122,11 @@ tp_tube_state_changed_cb (TpProxy *proxy,
 }
 
 static void
-tp_tube_invalidated_cb (TpChannel     *channel,
-                        GQuark         domain,
-                        gint           code,
-                        gchar         *message,
-                        EmpathyTpTube *tube)
+tp_tube_invalidated_cb (TpChannel *channel,
+    GQuark domain,
+    gint code,
+    gchar *message,
+    EmpathyTpTube *tube)
 {
   DEBUG ("Channel invalidated: %s", message);
   g_signal_emit (tube, signals[DESTROY], 0);
@@ -110,9 +134,9 @@ tp_tube_invalidated_cb (TpChannel     *channel,
 
 static void
 tp_tube_async_cb (TpChannel *channel,
-                  const GError *error,
-                  gpointer user_data,
-                  GObject *tube)
+    const GError *error,
+    gpointer user_data,
+    GObject *tube)
 {
   if (error)
       DEBUG ("Error %s: %s", (gchar*) user_data, error->message);
@@ -120,9 +144,9 @@ tp_tube_async_cb (TpChannel *channel,
 
 static void
 tp_tube_set_property (GObject *object,
-                      guint prop_id,
-                      const GValue *value,
-                      GParamSpec *pspec)
+    guint prop_id,
+    const GValue *value,
+    GParamSpec *pspec)
 {
   EmpathyTpTubePriv *priv = GET_PRIV (object);
 
@@ -139,9 +163,9 @@ tp_tube_set_property (GObject *object,
 
 static void
 tp_tube_get_property (GObject *object,
-                      guint prop_id,
-                      GValue *value,
-                      GParamSpec *pspec)
+    guint prop_id,
+    GValue *value,
+    GParamSpec *pspec)
 {
   EmpathyTpTubePriv *priv = GET_PRIV (object);
 
@@ -159,10 +183,113 @@ tp_tube_get_property (GObject *object,
   }
 }
 
+static void weak_object_notify (gpointer data,
+    GObject *old_object);
+
+static ReadyCbData *
+ready_cb_data_new (EmpathyTpTube *self,
+    EmpathyTpTubeReadyCb *callback,
+    gpointer user_data,
+    GDestroyNotify destroy,
+    GObject *weak_object)
+{
+  ReadyCbData *d = g_slice_new0 (ReadyCbData);
+  d->callback = callback;
+  d->user_data = user_data;
+  d->destroy = destroy;
+  d->weak_object = weak_object;
+
+  if (weak_object != NULL)
+    g_object_weak_ref (weak_object, weak_object_notify, self);
+
+  return d;
+}
+
+static void
+ready_cb_data_free (ReadyCbData *data,
+    EmpathyTpTube *self)
+{
+  if (data->destroy != NULL)
+    data->destroy (data->user_data);
+
+  if (data->weak_object != NULL)
+    g_object_weak_unref (data->weak_object,
+        weak_object_notify, self);
+
+  g_slice_free (ReadyCbData, data);
+}
+
+static void
+weak_object_notify (gpointer data,
+    GObject *old_object)
+{
+  EmpathyTpTube *self = EMPATHY_TP_TUBE (data);
+  EmpathyTpTubePriv *priv = GET_PRIV (self);
+  GSList *l, *ln;
+
+  for (l = priv->ready_callbacks ; l != NULL ; l = ln )
+    {
+      ReadyCbData *d = (ReadyCbData *) l->data;
+      ln = g_slist_next (l);
+
+      if (d->weak_object == old_object)
+        {
+          ready_cb_data_free (d, self);
+          priv->ready_callbacks = g_slist_delete_link (priv->ready_callbacks,
+            l);
+        }
+    }
+}
+
+
+static void
+tube_is_ready (EmpathyTpTube *self,
+    const GError *error)
+{
+  EmpathyTpTubePriv *priv = GET_PRIV (self);
+  GSList *l;
+
+  priv->ready = TRUE;
+
+  for (l = priv->ready_callbacks ; l != NULL ; l = g_slist_next (l))
+    {
+      ReadyCbData *data = (ReadyCbData *) l->data;
+
+      data->callback (self, error, data->user_data, data->weak_object);
+      ready_cb_data_free (data, self);
+    }
+
+  g_slist_free (priv->ready_callbacks);
+  priv->ready_callbacks = NULL;
+}
+
+static void
+got_tube_state_cb (TpProxy *proxy,
+    const GValue *out_value,
+    const GError *error,
+    gpointer user_data,
+    GObject *weak_object)
+{
+  EmpathyTpTube *self = EMPATHY_TP_TUBE (user_data);
+  EmpathyTpTubePriv *priv = GET_PRIV (self);
+
+  if (error != NULL)
+    {
+      DEBUG ("Error getting State property: %s", error->message);
+    }
+  else
+    {
+      priv->state = g_value_get_uint (out_value);
+      g_object_notify (G_OBJECT (self), "state");
+    }
+
+  tube_is_ready (self, error);
+}
+
 static GObject *
 tp_tube_constructor (GType type,
-                     guint n_props,
-                     GObjectConstructParam *props)
+    guint n_props,
+    GObjectConstructParam *props)
 {
   GObject *self;
   EmpathyTpTubePriv *priv;
@@ -174,9 +301,15 @@ tp_tube_constructor (GType type,
   g_signal_connect (priv->channel, "invalidated",
       G_CALLBACK (tp_tube_invalidated_cb), self);
 
+  priv->ready = FALSE;
+
   emp_cli_channel_interface_tube_connect_to_tube_channel_state_changed (
     TP_PROXY (priv->channel), tp_tube_state_changed_cb, NULL, NULL,
     self, NULL);
+
+  tp_cli_dbus_properties_call_get (priv->channel, -1,
+      EMP_IFACE_CHANNEL_INTERFACE_TUBE, "State", got_tube_state_cb,
+      self, NULL, G_OBJECT (self));
 
   return self;
 }
@@ -184,7 +317,9 @@ tp_tube_constructor (GType type,
 static void
 tp_tube_finalize (GObject *object)
 {
+  EmpathyTpTube *self = EMPATHY_TP_TUBE (object);
   EmpathyTpTubePriv *priv = GET_PRIV (object);
+  GSList *l;
 
   DEBUG ("Finalizing: %p", object);
 
@@ -196,6 +331,16 @@ tp_tube_finalize (GObject *object)
         "closing tube", NULL, NULL);
       g_object_unref (priv->channel);
     }
+
+  for (l = priv->ready_callbacks; l != NULL; l = g_slist_next (l))
+    {
+      ReadyCbData *d = (ReadyCbData *) l->data;
+
+      ready_cb_data_free (d, self);
+    }
+
+  g_slist_free (priv->ready_callbacks);
+  priv->ready_callbacks = NULL;
 
   G_OBJECT_CLASS (empathy_tp_tube_parent_class)->finalize (object);
 }
@@ -210,15 +355,30 @@ empathy_tp_tube_class_init (EmpathyTpTubeClass *klass)
   object_class->set_property = tp_tube_set_property;
   object_class->get_property = tp_tube_get_property;
 
+  /**
+   * EmpathyTpTube:channel:
+   *
+   * The #TpChannel wrapped by the tube object.
+   */
   g_object_class_install_property (object_class, PROP_CHANNEL,
       g_param_spec_object ("channel", "channel", "channel", TP_TYPE_CHANNEL,
       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * EmpathyTpTube:state:
+   *
+   * The state of the tube.
+   */
   g_object_class_install_property (object_class, PROP_STATE,
       g_param_spec_uint ("state", "state", "state",
         0, NUM_EMP_TUBE_CHANNEL_STATES, 0,
         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_STRINGS));
-
+  /**
+   * EmpathyTpTube::destroy:
+   * @self: the tube object
+   *
+   * Emitted when then tube has been invalidated.
+   */
   signals[DESTROY] = g_signal_new ("destroy",
       G_TYPE_FROM_CLASS (klass),
       G_SIGNAL_RUN_LAST,
@@ -233,11 +393,19 @@ static void
 empathy_tp_tube_init (EmpathyTpTube *tube)
 {
   EmpathyTpTubePriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (tube,
-		EMPATHY_TYPE_TP_TUBE, EmpathyTpTubePriv);
+      EMPATHY_TYPE_TP_TUBE, EmpathyTpTubePriv);
 
   tube->priv = priv;
 }
 
+/**
+ * empathy_tp_tube_new:
+ * @channel: a #TpChannel
+ *
+ * Creates a new #EmpathyTpTube.
+ *
+ * Return value: a new #EmpathyTpTube
+ */
 EmpathyTpTube *
 empathy_tp_tube_new (TpChannel *channel)
 {
@@ -246,13 +414,27 @@ empathy_tp_tube_new (TpChannel *channel)
   return g_object_new (EMPATHY_TYPE_TP_TUBE, "channel", channel,  NULL);
 }
 
+/**
+ * empathy_tp_tube_new_stream_tube:
+ * @contact: the #EmpathyContact to which the tube is offered
+ * @type: the type of the listening address of the local service. Either
+ * %TP_SOCKET_ADDRESS_TYPE_IPV4 or %TP_SOCKET_ADDRESS_TYPE_IPV6.
+ * @hostname: the address of the local service
+ * @port: the port of the local service
+ * @service: the service name of the tube
+ * @parameters: the parameters of the tube
+ *
+ * Creates and offers a new #EmpathyTpTube of ChannelType StreamTube.
+ *
+ * Return value: a new #EmpathyTpTube
+ */
 EmpathyTpTube *
 empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
-                                 TpSocketAddressType type,
-                                 const gchar *hostname,
-                                 guint port,
-                                 const gchar *service,
-                                 GHashTable *parameters)
+    TpSocketAddressType type,
+    const gchar *hostname,
+    guint port,
+    const gchar *service,
+    GHashTable *parameters)
 {
   TpConnection *connection;
   TpChannel *channel;
@@ -355,10 +537,10 @@ OUT:
 
 static void
 tp_tube_accept_stream_cb (TpProxy *proxy,
-                          const GValue *address,
-                          const GError *error,
-                          gpointer user_data,
-                          GObject *weak_object)
+    const GValue *address,
+    const GError *error,
+    gpointer user_data,
+    GObject *weak_object)
 {
   EmpathyTpTube *tube = EMPATHY_TP_TUBE (weak_object);
   EmpathyTpTubeAcceptData *data = (EmpathyTpTubeAcceptData *)user_data;
@@ -390,9 +572,19 @@ tp_tube_accept_stream_cb (TpProxy *proxy,
    data->callback (tube, &eaddress, NULL, data->user_data);
 }
 
+/**
+ * empathy_tp_tube_accept_stream_tube:
+ * @tube: an #EmpathyTpTube
+ * @type: the type of address the connection manager should listen on
+ * @callback: called when the tube has been accepted
+ * @user_data: arbitrary user-supplied data passed to the callback
+ *
+ * Accepts @tube of ChannelType StreamTube and call @callback once it's done.
+ */
 void
 empathy_tp_tube_accept_stream_tube (EmpathyTpTube *tube,
-  TpSocketAddressType type, EmpatyTpTubeAcceptStreamTubeCb *callback,
+  TpSocketAddressType type,
+  EmpathyTpTubeAcceptStreamTubeCb *callback,
   gpointer user_data)
 {
   EmpathyTpTubePriv *priv = GET_PRIV (tube);
@@ -413,4 +605,56 @@ empathy_tp_tube_accept_stream_tube (EmpathyTpTube *tube,
      free_empathy_tp_tube_accept_data, G_OBJECT (tube));
 
   tp_g_value_slice_free (control_param);
+}
+
+/**
+ * EmpathyTpTubeReadyCb:
+ * @tube: an #EmpathyTpTube
+ * @error: %NULL on success, or the reason why the tube can't be ready
+ * @user_data: the @user_data passed to empathy_tp_tube_call_when_ready()
+ * @weak_object: the @weak_object passed to
+ *               empathy_tp_tube_call_when_ready()
+ *
+ * Called as the result of empathy_tp_tube_call_when_ready(). If the
+ * tube's properties could be retrieved,
+ * @error is %NULL and @tube is considered to be ready. Otherwise, @error is
+ * non-%NULL and @tube is not ready.
+ */
+
+/**
+ * empathy_tp_tube_call_when_ready:
+ * @tube: an #EmpathyTpTube
+ * @callback: called when the tube becomes ready
+ * @user_data: arbitrary user-supplied data passed to the callback
+ * @destroy: called to destroy @user_data
+ * @weak_object: object to reference weakly; if it is destroyed, @callback
+ *               will not be called, but @destroy will still be called
+ *
+ * If @tube is ready for use, call @callback immediately, then return.
+ * Otherwise, arrange for @callback to be called when @tube becomes
+ * ready for use.
+ */
+void
+empathy_tp_tube_call_when_ready (EmpathyTpTube *self,
+    EmpathyTpTubeReadyCb *callback,
+    gpointer user_data,
+    GDestroyNotify destroy,
+    GObject *weak_object)
+{
+  EmpathyTpTubePriv *priv = GET_PRIV (self);
+
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (callback != NULL);
+
+  if (priv->ready)
+    {
+      callback (self, NULL, user_data, weak_object);
+      if (destroy != NULL)
+        destroy (user_data);
+    }
+  else
+    {
+      priv->ready_callbacks = g_slist_prepend (priv->ready_callbacks,
+          ready_cb_data_new (self, callback, user_data, destroy, weak_object));
+    }
 }

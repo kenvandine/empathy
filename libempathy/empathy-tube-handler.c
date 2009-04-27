@@ -59,7 +59,31 @@ typedef struct
   gchar *channel;
   guint handle_type;
   guint handle;
+  EmpathyTpTube *tube;
 } IdleData;
+
+static void
+tube_ready_cb (EmpathyTpTube *tube,
+    const GError *error,
+    gpointer user_data,
+    GObject *weak_object)
+{
+  IdleData *idle_data = user_data;
+
+  g_signal_emit (idle_data->thandler, signals[NEW_TUBE], 0, tube);
+}
+
+static void
+tube_ready_destroy_notify (gpointer data)
+{
+  IdleData *idle_data = data;
+
+  g_object_unref (idle_data->tube);
+  g_free (idle_data->bus_name);
+  g_free (idle_data->connection);
+  g_free (idle_data->channel);
+  g_slice_free (IdleData, idle_data);
+}
 
 static gboolean
 tube_handler_handle_tube_idle_cb (gpointer data)
@@ -67,7 +91,6 @@ tube_handler_handle_tube_idle_cb (gpointer data)
   IdleData *idle_data = data;
   TpConnection *connection;
   TpChannel *channel;
-  EmpathyTpTube *tube;
   static TpDBusDaemon *daemon = NULL;
 
   DEBUG ("New tube to be handled");
@@ -82,16 +105,12 @@ tube_handler_handle_tube_idle_cb (gpointer data)
       idle_data->handle, NULL);
   tp_channel_run_until_ready (channel, NULL, NULL);
 
-  tube = empathy_tp_tube_new (channel);
-  g_signal_emit (idle_data->thandler, signals[NEW_TUBE], 0, tube);
+  idle_data->tube = empathy_tp_tube_new (channel);
+  empathy_tp_tube_call_when_ready (idle_data->tube, tube_ready_cb, idle_data,
+      tube_ready_destroy_notify, NULL);
 
-  g_object_unref (tube);
   g_object_unref (channel);
   g_object_unref (connection);
-  g_free (idle_data->bus_name);
-  g_free (idle_data->connection);
-  g_free (idle_data->channel);
-  g_slice_free (IdleData, idle_data);
 
   return FALSE;
 }
