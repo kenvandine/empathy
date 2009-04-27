@@ -85,21 +85,20 @@ tube_ready_destroy_notify (gpointer data)
   g_slice_free (IdleData, idle_data);
 }
 
-static gboolean
-tube_handler_handle_tube_idle_cb (gpointer data)
+static void
+connection_ready_cb (TpConnection *connection,
+                     const GError *error,
+                     gpointer data)
 {
-  IdleData *idle_data = data;
-  TpConnection *connection;
   TpChannel *channel;
-  static TpDBusDaemon *daemon = NULL;
+  IdleData *idle_data = data;
 
-  DEBUG ("New tube to be handled");
+  if (error != NULL)
+    {
+      DEBUG ("connection has been invalidated: %s", error->message);
+      return;
+    }
 
-  if (!daemon)
-    daemon = tp_dbus_daemon_new (tp_get_bus ());
-
-  connection = tp_connection_new (daemon, idle_data->bus_name,
-      idle_data->connection, NULL);
   channel = tp_channel_new (connection, idle_data->channel,
       TP_IFACE_CHANNEL_TYPE_TUBES, idle_data->handle_type,
       idle_data->handle, NULL);
@@ -111,6 +110,24 @@ tube_handler_handle_tube_idle_cb (gpointer data)
 
   g_object_unref (channel);
   g_object_unref (connection);
+}
+
+static gboolean
+tube_handler_handle_tube_idle_cb (gpointer data)
+{
+  IdleData *idle_data = data;
+  TpConnection *connection;
+  static TpDBusDaemon *daemon = NULL;
+
+  DEBUG ("New tube to be handled");
+
+  if (!daemon)
+    daemon = tp_dbus_daemon_new (tp_get_bus ());
+
+  connection = tp_connection_new (daemon, idle_data->bus_name,
+      idle_data->connection, NULL);
+  tp_connection_call_when_ready (connection,
+      connection_ready_cb, idle_data);
 
   return FALSE;
 }
