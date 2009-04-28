@@ -96,6 +96,8 @@ connection_ready_cb (TpConnection *connection,
   if (error != NULL)
     {
       DEBUG ("connection has been invalidated: %s", error->message);
+      tube_ready_destroy_notify (data);
+      g_object_unref (connection);
       return;
     }
 
