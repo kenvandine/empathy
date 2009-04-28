@@ -30,6 +30,7 @@
 #include "empathy-call-handler.h"
 #include "empathy-dispatcher.h"
 #include "empathy-marshal.h"
+#include "empathy-tp-contact-factory.h"
 #include "empathy-utils.h"
 
 G_DEFINE_TYPE(EmpathyCallHandler, empathy_call_handler, G_TYPE_OBJECT)
@@ -114,6 +115,17 @@ empathy_call_handler_init (EmpathyCallHandler *obj)
 }
 
 static void
+empathy_call_handler_constructed (GObject *object)
+{
+  EmpathyCallHandlerPriv *priv = GET_PRIV (object);
+
+  if (priv->contact == NULL)
+    {
+      g_object_get (priv->call, "contact", &(priv->contact), NULL);
+    }
+}
+
+static void
 empathy_call_handler_set_property (GObject *object,
   guint property_id, const GValue *value, GParamSpec *pspec)
 {
@@ -160,6 +172,7 @@ empathy_call_handler_class_init (EmpathyCallHandlerClass *klass)
 
   g_type_class_add_private (klass, sizeof (EmpathyCallHandlerPriv));
 
+  object_class->constructed = empathy_call_handler_constructed;
   object_class->set_property = empathy_call_handler_set_property;
   object_class->get_property = empathy_call_handler_get_property;
   object_class->dispose = empathy_call_handler_dispose;
