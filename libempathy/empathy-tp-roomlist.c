@@ -236,24 +236,18 @@ tp_roomlist_invalidated_cb (TpChannel         *channel,
 }
 
 static void
-tp_roomlist_request_channel_cb (TpConnection *connection,
-				const gchar  *object_path,
-				const GError *error,
-				gpointer      user_data,
-				GObject      *list)
+channel_ready_cb (TpChannel *channel,
+		  const GError *error,
+		  gpointer user_data)
 {
+	EmpathyTpRoomlist *list = EMPATHY_TP_ROOMLIST (user_data);
 	EmpathyTpRoomlistPriv *priv = GET_PRIV (list);
 
-	if (error) {
-		DEBUG ("Error requesting channel: %s", error->message);
+	if (error != NULL) {
+		DEBUG ("Channel invalidated: %s", error->message);
+		g_signal_emit (list, signals[DESTROY], 0);
 		return;
 	}
-
-	priv->channel = tp_channel_new (priv->connection, object_path,
-					TP_IFACE_CHANNEL_TYPE_ROOM_LIST,
-					TP_HANDLE_TYPE_NONE,
-					0, NULL);
-	tp_channel_run_until_ready (priv->channel, NULL, NULL);
 
 	g_signal_connect (priv->channel, "invalidated",
 			  G_CALLBACK (tp_roomlist_invalidated_cb),
@@ -274,6 +268,28 @@ tp_roomlist_request_channel_cb (TpConnection *connection,
 							      tp_roomlist_get_listing_rooms_cb,
 							      NULL, NULL,
 							      G_OBJECT (list));
+
+}
+
+static void
+tp_roomlist_request_channel_cb (TpConnection *connection,
+				const gchar  *object_path,
+				const GError *error,
+				gpointer      user_data,
+				GObject      *list)
+{
+	EmpathyTpRoomlistPriv *priv = GET_PRIV (list);
+
+	if (error) {
+		DEBUG ("Error requesting channel: %s", error->message);
+		return;
+	}
+
+	priv->channel = tp_channel_new (priv->connection, object_path,
+					TP_IFACE_CHANNEL_TYPE_ROOM_LIST,
+					TP_HANDLE_TYPE_NONE,
+					0, NULL);
+	tp_channel_call_when_ready (priv->channel, channel_ready_cb, list);
 }
 
 static void
