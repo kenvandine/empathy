@@ -87,8 +87,8 @@ tube_ready_destroy_notify (gpointer data)
 
 static void
 channel_ready_cb (TpChannel *channel,
-                  const GError *error,
-                  gpointer data)
+    const GError *error,
+    gpointer data)
 {
   IdleData *idle_data = data;
 
@@ -109,8 +109,8 @@ channel_ready_cb (TpChannel *channel,
 
 static void
 connection_ready_cb (TpConnection *connection,
-                     const GError *error,
-                     gpointer data)
+    const GError *error,
+    gpointer data)
 {
   TpChannel *channel;
   IdleData *idle_data = data;
@@ -153,12 +153,12 @@ tube_handler_handle_tube_idle_cb (gpointer data)
 
 static void
 tube_handler_handle_tube (EmpSvcTubeHandler *self,
-                          const gchar *bus_name,
-                          const gchar *connection,
-                          const gchar *channel,
-                          guint handle_type,
-                          guint handle,
-                          DBusGMethodInvocation *context)
+    const gchar *bus_name,
+    const gchar *connection,
+    const gchar *channel,
+    guint handle_type,
+    guint handle,
+    DBusGMethodInvocation *context)
 {
   EmpathyTubeHandler *thandler = EMPATHY_TUBE_HANDLER (self);
   IdleData *data;
@@ -199,7 +199,8 @@ empathy_tube_handler_init (EmpathyTubeHandler *thandler)
 }
 
 EmpathyTubeHandler *
-empathy_tube_handler_new (TpTubeType type, const gchar *service)
+empathy_tube_handler_new (TpTubeType type,
+    const gchar *service)
 {
   EmpathyTubeHandler *thandler = NULL;
   DBusGProxy *proxy;
@@ -299,4 +300,3 @@ empathy_tube_handler_build_object_path (TpTubeType type,
 
   return str;
 }
-
