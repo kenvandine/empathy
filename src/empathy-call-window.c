@@ -579,6 +579,30 @@ empathy_call_window_init (EmpathyCallWindow *self)
   g_object_unref (gui);
 }
 
+static void
+empathy_call_window_constructed (GObject *object)
+{
+  EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (object);
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
+  EmpathyContact *contact;
+
+  g_assert (priv->handler != NULL);
+
+  g_object_get (priv->handler, "contact", &contact, NULL);
+
+  if (contact != NULL)
+    {
+      gchar *tmp;
+
+      tmp = g_strdup_printf (_("Call with %s"),
+          empathy_contact_get_name (contact));
+      gtk_window_set_title (GTK_WINDOW (self), tmp);
+
+      g_free (tmp);
+      g_object_unref (contact);
+    }
+}
+
 static void empathy_call_window_dispose (GObject *object);
 static void empathy_call_window_finalize (GObject *object);
 
@@ -624,6 +648,7 @@ empathy_call_window_class_init (
   g_type_class_add_private (empathy_call_window_class,
     sizeof (EmpathyCallWindowPriv));
 
+  object_class->constructed = empathy_call_window_constructed;
   object_class->set_property = empathy_call_window_set_property;
   object_class->get_property = empathy_call_window_get_property;
 
