@@ -168,13 +168,13 @@ empathy_call_handler_class_init (EmpathyCallHandlerClass *klass)
   param_spec = g_param_spec_object ("contact",
     "contact", "The remote contact",
     EMPATHY_TYPE_CONTACT,
-    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+    G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (object_class, PROP_CONTACT, param_spec);
 
   param_spec = g_param_spec_object ("tp-call",
     "tp-call", "The calls channel wrapper",
     EMPATHY_TYPE_TP_CALL,
-    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+    G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (object_class, PROP_TP_CALL, param_spec);
 
   signals[CONFERENCE_ADDED] =
