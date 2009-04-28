@@ -86,6 +86,28 @@ tube_ready_destroy_notify (gpointer data)
 }
 
 static void
+channel_ready_cb (TpChannel *channel,
+                  const GError *error,
+                  gpointer data)
+{
+  IdleData *idle_data = data;
+
+  if (error != NULL)
+    {
+      DEBUG ("channel has been invalidated: %s", error->message);
+      tube_ready_destroy_notify (data);
+      g_object_unref (channel);
+      return;
+    }
+
+  idle_data->tube = empathy_tp_tube_new (channel);
+  empathy_tp_tube_call_when_ready (idle_data->tube, tube_ready_cb, idle_data,
+      tube_ready_destroy_notify, NULL);
+
+  g_object_unref (channel);
+}
+
+static void
 connection_ready_cb (TpConnection *connection,
                      const GError *error,
                      gpointer data)
@@ -104,13 +126,8 @@ connection_ready_cb (TpConnection *connection,
   channel = tp_channel_new (connection, idle_data->channel,
       TP_IFACE_CHANNEL_TYPE_TUBES, idle_data->handle_type,
       idle_data->handle, NULL);
-  tp_channel_run_until_ready (channel, NULL, NULL);
+  tp_channel_call_when_ready (channel, channel_ready_cb, idle_data);
 
-  idle_data->tube = empathy_tp_tube_new (channel);
-  empathy_tp_tube_call_when_ready (idle_data->tube, tube_ready_cb, idle_data,
-      tube_ready_destroy_notify, NULL);
-
-  g_object_unref (channel);
   g_object_unref (connection);
 }
 
