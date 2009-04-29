@@ -30,7 +30,6 @@
 #include "empathy-call-handler.h"
 #include "empathy-dispatcher.h"
 #include "empathy-marshal.h"
-#include "empathy-tp-contact-factory.h"
 #include "empathy-utils.h"
 
 G_DEFINE_TYPE(EmpathyCallHandler, empathy_call_handler, G_TYPE_OBJECT)
