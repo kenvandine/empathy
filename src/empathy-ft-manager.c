@@ -1,8 +1,7 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  * Copyright (C) 2003, 2004 Xan Lopez
  * Copyright (C) 2007 Marco Barisione <marco@barisione.org>
- * Copyright (C) 2008 Collabora Ltd.
+ * Copyright (C) 2008-2009 Collabora Ltd.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -23,6 +22,7 @@
  *          Marco Barisione <marco@barisione.org>
  *          Jonny Lamb <jonny.lamb@collabora.co.uk>
  *          Xavier Claessens <xclaesse@gmail.com>
+ *          Cosimo Cecchi <cosimo.cecchi@collabora.co.uk>
  */
 
 /* The original file transfer manager code was copied from Epiphany */
@@ -73,10 +73,10 @@ enum
  *
  * Private fields of the #EmpathyFTManager class.
  */
-struct _EmpathyFTManagerPriv
-{
+typedef struct {
   GtkTreeModel *model;
-  GHashTable *tp_file_to_row_ref;
+  GHashTable *ft_handler_to_row_ref;
+  GHashTable *cancellable_refs;
 
   /* Widgets */
   GtkWidget *window;
@@ -85,7 +85,7 @@ struct _EmpathyFTManagerPriv
   GtkWidget *abort_button;
 
   guint save_geometry_id;
-};
+} EmpathyFTManagerPriv;
 
 enum
 {
@@ -95,6 +95,8 @@ enum
 };
 
 G_DEFINE_TYPE (EmpathyFTManager, empathy_ft_manager, G_TYPE_OBJECT);
+
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyFTManager)
 
 static EmpathyFTManager *manager_singleton = NULL;
 
@@ -375,35 +377,6 @@ ft_manager_progress_cell_data_func (GtkTreeViewColumn *col,
   g_object_set (renderer, "text", text, "value", percent, NULL);
 }
 
-static gboolean
-ft_manager_save_geometry_timeout_cb (EmpathyFTManager *ft_manager)
-{
-  gint x, y, w, h;
-
-  gtk_window_get_size (GTK_WINDOW (ft_manager->priv->window), &w, &h);
-  gtk_window_get_position (GTK_WINDOW (ft_manager->priv->window), &x, &y);
-
-  empathy_geometry_save ("ft-manager", x, y, w, h);
-
-  ft_manager->priv->save_geometry_id = 0;
-
-  return FALSE;
-}
-
-static gboolean
-ft_manager_configure_event_cb (GtkWidget *widget,
-                               GdkEventConfigure *event,
-                               EmpathyFTManager *ft_manager)
-{
-  if (ft_manager->priv->save_geometry_id != 0)
-    g_source_remove (ft_manager->priv->save_geometry_id);
-
-  ft_manager->priv->save_geometry_id = g_timeout_add (500,
-      (GSourceFunc) ft_manager_save_geometry_timeout_cb, ft_manager);
-
-  return FALSE;
-}
-
 static void
 ft_manager_remove_file_from_model (EmpathyFTManager *ft_manager,
                                   EmpathyTpFile *tp_file)
@@ -450,33 +423,13 @@ ft_manager_remove_file_from_model (EmpathyFTManager *ft_manager,
   empathy_tp_file_cancel (tp_file);
 }
 
-static gboolean
-remove_finished_transfer_foreach (gpointer key,
-                                  gpointer value,
-                                  gpointer user_data)
-{
-  EmpathyTpFile *tp_file = EMPATHY_TP_FILE (key);
-  EmpathyFTManager *self = EMPATHY_FT_MANAGER (user_data);
-  TpFileTransferState state;
-
-  state = empathy_tp_file_get_state (tp_file, NULL);
-  if (state == TP_FILE_TRANSFER_STATE_COMPLETED ||
-      state == TP_FILE_TRANSFER_STATE_CANCELLED)
-    {
-      ft_manager_remove_file_from_model (self, tp_file);
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
 static void
 ft_manager_state_changed_cb (EmpathyTpFile *tp_file,
                              GParamSpec *pspec,
                              EmpathyFTManager *ft_manager)
 {
   if (empathy_tp_file_get_state (tp_file, NULL) ==
-      TP_FILE_TRANSFER_STATE_COMPLETED)
+      EMP_FILE_TRANSFER_STATE_COMPLETED)
     {
       GtkRecentManager *manager;
       const gchar *uri;
@@ -490,13 +443,104 @@ ft_manager_state_changed_cb (EmpathyTpFile *tp_file,
     ft_manager_update_ft_row (ft_manager, tp_file);
 }
 
+static gboolean
+remove_finished_transfer_foreach (gpointer key,
+                                  gpointer value,
+                                  gpointer user_data)
+{
+  EmpathyFTHandler *handler = key;
+  EmpathyFTManager *manager = user_data;
+  EmpFileTransferState state;
+
+  state = empathy_ft_handler_get_state (handler);
+  if (state == EMP_FILE_TRANSFER_STATE_COMPLETED ||
+      state == EMP_FILE_TRANSFER_STATE_CANCELLED)
+    {
+      ft_manager_remove_file_from_model (manager, handler);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+ft_manager_start_transfer (EmpathyFTManager *manager,
+                           EmpathyFTHandler *handler)
+{
+  GCancellable *cancellable;
+  EmpathyFTManagerPriv *priv;
+
+  priv = GET_PRIV (manager);
+
+  cancellable = g_cancellable_new ();
+  g_hash_table_insert (priv->cancellable_refs, g_object_ref (handler),
+      cancellable);
+
+  /* now connect the signals */
+  g_signal_connect (handler, "transfer-error",
+      G_CALLBACK (ft_handler_transfer_error_cb), manager);
+  
+  if (empathy_ft_handler_is_incoming (handler)) {
+    g_signal_connect (handler, "hashing-started",
+        G_CALLBACK (ft_handler_hashing_started_cb), manager);
+  } else {
+    g_signal_connect (handler, "transfer-started",
+        G_CALLBACK (ft_handler_transfer_started_cb), manager);
+  }
+
+  empathy_ft_handler_start_transfer (handler, cancellable);
+}
+
+static void
+ft_manager_add_handler_to_list (EmpathyFTManager *ft_manager,
+                                EmpathyFTHandler *handler)
+{
+  GtkTreeRowReference *row_ref;
+  GtkTreeIter iter;
+  GtkTreeSelection *selection;
+  GtkTreePath *path;
+  GIcon *icon;
+  const char *content_type;
+  EmpathyFTManagerPriv *priv = GET_PRIV (manager);
+
+  /* get the icon name from the mime-type of the file. */
+  content_type = empathy_ft_handler_get_content_type (handler);
+  icon = g_content_type_get_icon (content_type);
+
+  /* append the handler in the store */
+  gtk_list_store_insert_with_values (GTK_LIST_STORE (priv->model),
+      &iter, G_MAXINT, COL_FT_OBJECT, handler, COL_ICON, icon, -1);
+  g_object_unref (icon);
+
+  /* insert the new row_ref in the hash table  */
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (priv->model), &iter);
+  row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (priv->model), path);
+  gtk_tree_path_free (path);
+  g_hash_table_insert (priv->ft_handler_to_row_ref, g_object_ref (handler),
+      row_ref);
+
+  /* select the new row */
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
+  gtk_tree_selection_select_iter (selection, &iter);
+
+  /* hook up the signals and start the transfer */
+  ft_manager_start_transfer (manager, handler);
+
+  /* update the row with the initial values */
+  ft_manager_update_ft_row (manager, handler);
+}
+
 static void
 ft_manager_clear (EmpathyFTManager *ft_manager)
 {
+  EmpathyFTManagerPriv *priv;
+
   DEBUG ("Clearing file transfer list");
 
+  priv = GET_PRIV (ft_manager);
+
   /* Remove completed and cancelled transfers */
-  g_hash_table_foreach_remove (ft_manager->priv->tp_file_to_row_ref,
+  g_hash_table_foreach_remove (priv->ft_handler_to_row_ref,
       remove_finished_transfer_foreach, ft_manager);
 }
 
@@ -506,21 +550,27 @@ ft_manager_open (EmpathyFTManager *ft_manager)
   GtkTreeSelection *selection;
   GtkTreeIter iter;
   GtkTreeModel *model;
-  EmpathyTpFile *tp_file;
-  const gchar *uri;
+  EmpathyFTHandler *handler;
+  char *uri;
+  GFile *file;
+  EmpathyFTManagerPriv *priv;
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (ft_manager->priv->treeview));
+  priv = GET_PRIV (ft_manager);
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
 
   if (!gtk_tree_selection_get_selected (selection, &model, &iter))
     return;
 
-  gtk_tree_model_get (model, &iter, COL_FT_OBJECT, &tp_file, -1);
-  g_return_if_fail (tp_file != NULL);
+  gtk_tree_model_get (model, &iter, COL_FT_OBJECT, &handler, -1);
 
-  uri = g_object_get_data (G_OBJECT (tp_file), "uri");
+  file = empathy_ft_handler_get_gfile (handler);
+  uri = g_file_get_uri (file);
+
   DEBUG ("Opening URI: %s", uri);
-  empathy_url_show (GTK_WIDGET (ft_manager->priv->window), uri);
-  g_object_unref (tp_file);
+  empathy_url_show (GTK_WIDGET (priv->window), uri);
+
+  g_object_unref (handler);
+  g_free (uri);
 }
 
 static void
@@ -529,22 +579,59 @@ ft_manager_stop (EmpathyFTManager *ft_manager)
   GtkTreeSelection *selection;
   GtkTreeIter iter;
   GtkTreeModel *model;
-  EmpathyTpFile *tp_file;
+  EmpathyFTHandler *handler;
+  GCancellable *cancellable;
+  EmpathyFTManagerPriv *priv;
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (ft_manager->priv->treeview));
+  priv = GET_PRIV (ft_manager)
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
 
   if (!gtk_tree_selection_get_selected (selection, &model, &iter))
     return;
 
-  gtk_tree_model_get (model, &iter, COL_FT_OBJECT, &tp_file, -1);
-  g_return_if_fail (tp_file != NULL);
+  gtk_tree_model_get (model, &iter, COL_FT_OBJECT, &handler, -1);
+  g_return_if_fail (handler != NULL);
 
   DEBUG ("Stopping file transfer: contact=%s, filename=%s",
-      empathy_contact_get_name (empathy_tp_file_get_contact (tp_file)),
-      empathy_tp_file_get_filename (tp_file));
+      empathy_contact_get_name (empathy_ft_handler_get_contact (handler)),
+      empathy_ft_handler_get_filename (handler));
 
-  empathy_tp_file_cancel (tp_file);
-  g_object_unref (tp_file);
+  cancellable = g_hash_table_lookup (priv->cancellable_refs, handler);
+  g_assert (cancellable != NULL);
+
+  g_cancellable_cancel (cancellable);
+}
+
+static gboolean
+ft_manager_save_geometry_timeout_cb (EmpathyFTManager *ft_manager)
+{
+  EmpathyFTManagerPriv *priv = GET_PRIV (ft_manager);
+  gint x, y, w, h;
+
+  gtk_window_get_size (GTK_WINDOW (priv->window), &w, &h);
+  gtk_window_get_position (GTK_WINDOW (priv->window), &x, &y);
+
+  empathy_geometry_save ("ft-manager", x, y, w, h);
+
+  priv->save_geometry_id = 0;
+
+  return FALSE;
+}
+
+static gboolean
+ft_manager_configure_event_cb (GtkWidget *widget,
+                               GdkEventConfigure *event,
+                               EmpathyFTManager *ft_manager)
+{
+  EmpathyFTManagerPriv *priv = GET_PRIV (ft_manager);
+
+  if (priv->save_geometry_id != 0)
+    g_source_remove (priv->save_geometry_id);
+
+  priv->save_geometry_id = g_timeout_add (500,
+      (GSourceFunc) ft_manager_save_geometry_timeout_cb, ft_manager);
+
+  return FALSE;
 }
 
 static void
@@ -605,9 +692,6 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
   GtkTreeSelection *selection;
   gchar *filename;
 
-  if (ft_manager->priv->window != NULL)
-    return;
-
   filename = empathy_file_lookup ("empathy-ft-manager.ui", "src");
   gui = empathy_builder_get_file (filename,
       "ft_manager_dialog", &ft_manager->priv->window,
@@ -658,7 +742,7 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
       G_TYPE_ICON,    /* icon */
       G_TYPE_STRING,  /* message */
       G_TYPE_STRING,  /* remaining */
-      G_TYPE_OBJECT); /* ft_file */
+      G_TYPE_OBJECT); /* ft_handler */
   gtk_tree_view_set_model (view, GTK_TREE_MODEL (liststore));
   ft_manager->priv->model = GTK_TREE_MODEL (liststore);
   g_object_unref (liststore);
@@ -710,6 +794,8 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
       "text", COL_REMAINING, NULL);
 }
 
+/* GObject method overrides */
+
 static void
 empathy_ft_manager_finalize (GObject *object)
 {
@@ -735,9 +821,13 @@ empathy_ft_manager_init (EmpathyFTManager *ft_manager)
 
   ft_manager->priv = priv;
 
-  priv->tp_file_to_row_ref = g_hash_table_new_full (g_direct_hash,
+  priv->ft_handler_to_row_ref = g_hash_table_new_full (g_direct_hash,
       g_direct_equal, (GDestroyNotify) g_object_unref,
       (GDestroyNotify) gtk_tree_row_reference_free);
+  priv->cancellable_refs = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+      (GDestroyNotify) g_object_unref, (GDestroyNotify) g_object_unref);
+
+  ft_manager_build_ui (ft_manager);
 }
 
 static GObject *
@@ -774,6 +864,8 @@ empathy_ft_manager_class_init (EmpathyFTManagerClass *klass)
   g_type_class_add_private (object_class, sizeof (EmpathyFTManagerPriv));
 }
 
+/* public methods */
+
 /**
  * empathy_ft_manager_dup_singleton:
  *
@@ -805,294 +897,16 @@ empathy_ft_manager_get_dialog (EmpathyFTManager *ft_manager)
   return ft_manager->priv->window;
 }
 
-static void
-ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
-                                EmpathyTpFile *tp_file)
-{
-  GtkTreeRowReference *row_ref;
-  GtkTreeIter iter;
-  GtkTreeSelection *selection;
-  GtkTreePath *path;
-  GIcon *icon;
-  const gchar *content_type;
-
-  ft_manager_build_ui (ft_manager);
-
-  /* Get the icon name from the mime-type of the file. */
-  content_type = empathy_tp_file_get_content_type (tp_file);
-  icon = g_content_type_get_icon (content_type);
-
-  /* Append the ft in the store */
-  gtk_list_store_insert_with_values (GTK_LIST_STORE (ft_manager->priv->model),
-      &iter, G_MAXINT, COL_FT_OBJECT, tp_file, COL_ICON, icon, -1);
-
-  g_object_unref (icon);
-
-  /* Insert the new row_ref in the hash table  */
-  path = gtk_tree_model_get_path (GTK_TREE_MODEL (ft_manager->priv->model),
-      &iter);
-  row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (
-      ft_manager->priv->model), path);
-  gtk_tree_path_free (path);
-  g_hash_table_insert (ft_manager->priv->tp_file_to_row_ref,
-      g_object_ref (tp_file), row_ref);
-
-  /* Select the new row */
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (
-      ft_manager->priv->treeview));
-  gtk_tree_selection_select_iter (selection, &iter);
-
-  /* Update the row with the initial values, and keep track of changes */
-  ft_manager_update_ft_row (ft_manager, tp_file);
-  g_signal_connect (tp_file, "notify::state",
-      G_CALLBACK (ft_manager_state_changed_cb), ft_manager);
-  g_signal_connect (tp_file, "refresh",
-      G_CALLBACK (ft_manager_refresh_cb), ft_manager);
-
-  gtk_window_present (GTK_WINDOW (ft_manager->priv->window));
-}
-
-typedef struct {
-  EmpathyFTManager *ft_manager;
-  EmpathyTpFile *tp_file;
-} ReceiveResponseData;
-
-static void
-ft_manager_receive_response_data_free (ReceiveResponseData *response_data)
-{
-  if (!response_data)
-    return;
-
-  g_object_unref (response_data->tp_file);
-  g_object_unref (response_data->ft_manager);
-  g_slice_free (ReceiveResponseData, response_data);
-}
-
-static void
-ft_manager_save_dialog_response_cb (GtkDialog *widget,
-                                    gint response_id,
-                                    ReceiveResponseData *response_data)
-{
-  if (response_id == GTK_RESPONSE_OK)
-    {
-      gchar *uri;
-      gchar *folder;
-
-      uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (widget));
-
-      if (uri)
-        {
-          GFile *file;
-          GError *error = NULL;
-
-          file = g_file_new_for_uri (uri);
-          empathy_tp_file_accept (response_data->tp_file, 0, file, &error);
-
-          if (error)
-            {
-              GtkWidget *dialog;
-
-              DEBUG ("Error with opening file to write to: %s",
-                  error->message ? error->message : "no error");
-
-              /* Error is already translated */
-              dialog = gtk_message_dialog_new (NULL, 0, GTK_MESSAGE_ERROR,
-                  GTK_BUTTONS_CLOSE, _("Cannot save file to this location"));
-
-              gtk_message_dialog_format_secondary_text (
-                  GTK_MESSAGE_DIALOG (dialog), "%s",
-                  error->message);
-
-              g_signal_connect (dialog, "response",
-                  G_CALLBACK (gtk_widget_destroy), NULL);
-
-              gtk_widget_show (dialog);
-
-              g_error_free (error);
-              return;
-            }
-
-          g_object_set_data_full (G_OBJECT (response_data->tp_file),
-              "uri", uri, g_free);
-
-          ft_manager_add_tp_file_to_list (response_data->ft_manager,
-              response_data->tp_file);
-
-          g_object_unref (file);
-        }
-
-      folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (widget));
-      if (folder)
-        {
-          empathy_conf_set_string (empathy_conf_get (),
-              EMPATHY_PREFS_FILE_TRANSFER_DEFAULT_FOLDER,
-              folder);
-          g_free (folder);
-        }
-    }
-
-  gtk_widget_destroy (GTK_WIDGET (widget));
-  ft_manager_receive_response_data_free (response_data);
-}
-
-static void
-ft_manager_create_save_dialog (ReceiveResponseData *response_data)
-{
-  GtkWidget *widget;
-  gchar *folder;
-
-  DEBUG ("Creating save file chooser");
-
-  widget = gtk_file_chooser_dialog_new (_("Save file as..."),
-      NULL, GTK_FILE_CHOOSER_ACTION_SAVE,
-      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-      GTK_STOCK_SAVE_AS, GTK_RESPONSE_OK,
-      NULL);
-
-  if (!empathy_conf_get_string (empathy_conf_get (),
-      EMPATHY_PREFS_FILE_TRANSFER_DEFAULT_FOLDER,
-      &folder) || !folder)
-    folder = g_strdup (g_get_user_special_dir (G_USER_DIRECTORY_DOWNLOAD));
-
-  if (folder)
-    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (widget), folder);
-
-  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (widget),
-      empathy_tp_file_get_filename (response_data->tp_file));
-
-  gtk_dialog_set_default_response (GTK_DIALOG (widget),
-      GTK_RESPONSE_OK);
-
-  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (widget),
-      TRUE);
-
-  g_signal_connect (widget, "response",
-      G_CALLBACK (ft_manager_save_dialog_response_cb), response_data);
-
-  gtk_widget_show (widget);
-
-  g_free (folder);
-}
-
-static void
-ft_manager_receive_file_response_cb (GtkWidget *dialog,
-                                     gint response,
-                                     ReceiveResponseData *response_data)
-{
-  if (response == GTK_RESPONSE_ACCEPT)
-    ft_manager_create_save_dialog (response_data);
-  else
-    {
-      empathy_tp_file_cancel (response_data->tp_file);
-      ft_manager_receive_response_data_free (response_data);
-    }
-
-  gtk_widget_destroy (dialog);
-}
-
-static void
-ft_manager_display_accept_dialog (EmpathyFTManager *ft_manager,
-                                  EmpathyTpFile *tp_file)
-{
-  GtkWidget *dialog;
-  GtkWidget *image;
-  GtkWidget *button;
-  const gchar *contact_name;
-  const gchar *filename;
-  guint64 size;
-  gchar *size_str;
-  ReceiveResponseData *response_data;
-
-  g_return_if_fail (EMPATHY_IS_FT_MANAGER (ft_manager));
-  g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
-
-  DEBUG ("Creating accept dialog");
-
-  contact_name = empathy_contact_get_name (empathy_tp_file_get_contact (tp_file));
-  filename = empathy_tp_file_get_filename (tp_file);
-
-  size = empathy_tp_file_get_size (tp_file);
-  if (size == EMPATHY_TP_FILE_UNKNOWN_SIZE)
-    size_str = g_strdup (_("unknown size"));
-  else
-    size_str = g_format_size_for_display (size);
-
-  dialog = gtk_message_dialog_new (NULL, 0, GTK_MESSAGE_INFO,
-      GTK_BUTTONS_NONE,
-      _("%s would like to send you a file"),
-      contact_name);
-
-  gtk_message_dialog_format_secondary_text
-      (GTK_MESSAGE_DIALOG (dialog),
-       /* Translators: the first %s is the file name, the second %s is the file size */
-       _("Do you want to accept the file \"%s\" (%s)?"),
-       filename, size_str);
-
-  /* Icon */
-  image = gtk_image_new_from_stock (GTK_STOCK_SAVE, GTK_ICON_SIZE_DIALOG);
-  gtk_widget_show (image);
-  gtk_message_dialog_set_image (GTK_MESSAGE_DIALOG (dialog), image);
-
-  /* Decline button */
-  button = gtk_button_new_with_mnemonic (_("_Decline"));
-  gtk_button_set_image (GTK_BUTTON (button),
-      gtk_image_new_from_stock (GTK_STOCK_CANCEL,
-          GTK_ICON_SIZE_BUTTON));
-  gtk_widget_show (button);
-  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button,
-      GTK_RESPONSE_REJECT);
-
-  /* Accept button */
-  button = gtk_button_new_with_mnemonic (_("_Accept"));
-  gtk_button_set_image (GTK_BUTTON (button),
-      gtk_image_new_from_stock (GTK_STOCK_SAVE,
-          GTK_ICON_SIZE_BUTTON));
-  gtk_widget_show (button);
-  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button,
-      GTK_RESPONSE_ACCEPT);
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-  gtk_widget_grab_default (button);
-
-  response_data = g_slice_new0 (ReceiveResponseData);
-  response_data->ft_manager = g_object_ref (ft_manager);
-  response_data->tp_file = g_object_ref (tp_file);
-
-  g_signal_connect (dialog, "response",
-      G_CALLBACK (ft_manager_receive_file_response_cb), response_data);
-
-  gtk_widget_show (dialog);
-
-  g_free (size_str);
-}
-
-/**
- * empathy_ft_manager_add_tp_file:
- * @ft_manager: an #EmpathyFTManager
- * @ft: an #EmpathyFT
- *
- * Adds a file transfer to the file transfer manager dialog @ft_manager.
- * The manager dialog then shows the progress and other information about
- * @ft.
- */
 void
-empathy_ft_manager_add_tp_file (EmpathyFTManager *ft_manager,
-                                EmpathyTpFile *tp_file)
+empathy_ft_manager_add_handler (EmpathyFTManager *ft_manager,
+                                EmpathyFTHandler *handler)
 {
-  TpFileTransferState state;
+  EmpathyFTManagerPriv *priv = GET_PRIV (ft_manager);
 
   g_return_if_fail (EMPATHY_IS_FT_MANAGER (ft_manager));
-  g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
+  g_return_if_fail (EMPATHY_IS_FT_HANDLER (handler));
 
-  state = empathy_tp_file_get_state (tp_file, NULL);
-
-  DEBUG ("Adding a file transfer: contact=%s, filename=%s, state=%d",
-      empathy_contact_get_name (empathy_tp_file_get_contact (tp_file)),
-      empathy_tp_file_get_filename (tp_file), state);
-
-  if (state == TP_FILE_TRANSFER_STATE_PENDING &&
-      empathy_tp_file_is_incoming (tp_file))
-    ft_manager_display_accept_dialog (ft_manager, tp_file);
-  else
-    ft_manager_add_tp_file_to_list (ft_manager, tp_file);
+  ft_manager_add_handler_to_list (ft_manager, handler);
+  gtk_window_present (GTK_WINDOW (priv->window));
 }
 
