@@ -417,17 +417,20 @@ new_ft_handler_cb (EmpathyFTFactory *factory,
 		   EmpathyFTHandler *handler,
 		   gpointer user_data)
 {
-	/* TODO: add to FT window */
+	EmpathyFTManager *ft_manager;
+
+	ft_manager = empathy_ft_manager_dup_singleton ();
+	empathy_ft_manager_add_handler (ft_manager, handler);
 }
 
 static void
 new_call_handler_cb (EmpathyCallFactory *factory, EmpathyCallHandler *handler,
 	gboolean outgoing, gpointer user_data)
 {
-		EmpathyCallWindow *window;
+	EmpathyCallWindow *window;
 
-		window = empathy_call_window_new (handler);
-		gtk_widget_show (GTK_WIDGET (window));
+	window = empathy_call_window_new (handler);
+	gtk_widget_show (GTK_WIDGET (window));
 }
 
 int
