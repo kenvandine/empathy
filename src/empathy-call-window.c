@@ -66,6 +66,7 @@ struct _EmpathyCallWindowPriv
 {
   gboolean dispose_has_run;
   EmpathyCallHandler *handler;
+  EmpathyContact *contact;
 
   gboolean connected;
 
@@ -580,26 +581,41 @@ empathy_call_window_init (EmpathyCallWindow *self)
 }
 
 static void
+set_window_title (EmpathyCallWindow *self)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
+  gchar *tmp;
+
+  tmp = g_strdup_printf (_("Call with %s"),
+      empathy_contact_get_name (priv->contact));
+  gtk_window_set_title (GTK_WINDOW (self), tmp);
+  g_free (tmp);
+}
+
+static void
+contact_name_changed_cb (EmpathyContact *contact,
+                         GParamSpec *pspec,
+                         EmpathyCallWindow *self)
+{
+  set_window_title (self);
+}
+
+static void
 empathy_call_window_constructed (GObject *object)
 {
   EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (object);
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
-  EmpathyContact *contact;
 
   g_assert (priv->handler != NULL);
 
-  g_object_get (priv->handler, "contact", &contact, NULL);
+  g_object_get (priv->handler, "contact", &(priv->contact), NULL);
 
-  if (contact != NULL)
+  if (priv->contact != NULL)
     {
-      gchar *tmp;
+      set_window_title (self);
 
-      tmp = g_strdup_printf (_("Call with %s"),
-          empathy_contact_get_name (contact));
-      gtk_window_set_title (GTK_WINDOW (self), tmp);
-
-      g_free (tmp);
-      g_object_unref (contact);
+      g_signal_connect (priv->contact, "notify::name",
+          G_CALLBACK (contact_name_changed_cb), self);
     }
 }
 
@@ -707,6 +723,14 @@ empathy_call_window_dispose (GObject *object)
   if (priv->ui_manager != NULL)
     g_object_unref (priv->ui_manager);
   priv->ui_manager = NULL;
+
+  if (priv->contact != NULL)
+    {
+      g_object_unref (priv->contact);
+      g_signal_handlers_disconnect_by_func (priv->contact,
+          contact_name_changed_cb, self);
+      priv->contact = NULL;
+    }
 
   /* release any references held by the object here */
   if (G_OBJECT_CLASS (empathy_call_window_parent_class)->dispose)
