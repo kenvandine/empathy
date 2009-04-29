@@ -617,6 +617,11 @@ empathy_call_window_constructed (GObject *object)
       g_signal_connect (priv->contact, "notify::name",
           G_CALLBACK (contact_name_changed_cb), self);
     }
+  else
+    {
+      g_warning ("call handler doesn't have a contact");
+      gtk_window_set_title (GTK_WINDOW (self), _("Call"));
+    }
 }
 
 static void empathy_call_window_dispose (GObject *object);
