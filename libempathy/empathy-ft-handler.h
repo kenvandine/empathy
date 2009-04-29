@@ -53,6 +53,11 @@ typedef struct {
   GObjectClass parent_class;
 } EmpathyFTHandlerClass;
 
+/* we need to define some additional states for the handler */
+typedef enum {
+  EMPATHY_FT_HANDLER_STATE_SETUP = 6
+} EmpathyFTHandlerState;
+
 typedef void (* EmpathyFTHandlerReadyCallback) (EmpathyFTHandler *handler,
                                                 GError *error,
                                                 gpointer user_data);
@@ -72,7 +77,13 @@ void empathy_ft_handler_incoming_set_destination (EmpathyFTHandler *handler,
 void empathy_ft_handler_start_transfer (EmpathyFTHandler *handler,
     GCancellable *cancellable);
 
+/* properties of the transfer */
 const char * empathy_ft_handler_get_filename (EmpathyFTHandler *handler);
+const char * empathy_ft_handler_get_content_type (EmpathyFTHandler *handler);
+EmpathyContact * empathy_ft_handler_get_contact (EmpathyFTHandler *handler);
+GFile * empathy_ft_handler_get_gfile (EmpathyFTHandler *handler);
+EmpathyFTHandlerState empathy_ft_handler_get_state (EmpathyFTHandler *handler);
+gboolean empathy_ft_handler_is_incoming (EmpathyFTHandler *handler);
 
 G_END_DECLS
 

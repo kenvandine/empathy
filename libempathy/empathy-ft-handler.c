@@ -95,6 +95,7 @@ typedef struct {
   guint64 mtime;
   gchar *content_hash;
   EmpFileHashType content_hash_type;
+  EmpathyFTHandlerState current_state;
 } EmpathyFTHandlerPriv;
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -374,12 +375,22 @@ ft_handler_create_channel_cb (EmpathyDispatchOperation *operation,
 {
   EmpathyFTHandler *handler = user_data;
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
+  GError *my_error = NULL;
 
   DEBUG ("FT: dispatcher create channel CB");
 
   if (error != NULL)
     {
-      /* TODO: error handling */
+      g_signal_emit (handler, signals[TRANSFER_ERROR], 0, error);
+      return;
+    }
+
+  g_cancellable_set_error_if_cancelled (priv->cancellable, &my_error);
+
+  if (my_error != NULL)
+    {
+      g_signal_emit (handler, signals[TRANSFER_ERROR], 0, my_error);
+      g_clear_error (&my_error);
       return;
     }
 
@@ -815,7 +826,7 @@ channel_get_all_properties_cb (TpProxy *proxy,
   account = empathy_channel_get_account (TP_CHANNEL (proxy));
   c_handle = tp_channel_get_handle (TP_CHANNEL (proxy), NULL);
   priv->contact = empathy_contact_factory_get_from_handle
-      (c_factory, account,c_handle);
+      (c_factory, account, c_handle);
 
   g_object_unref (c_factory);
   g_object_unref (account);
@@ -928,4 +939,68 @@ empathy_ft_handler_get_filename (EmpathyFTHandler *handler)
   priv = GET_PRIV (handler);
 
   return priv->filename;
+}
+
+const char *
+empathy_ft_handler_get_content_type (EmpathyFTHandler *handler)
+{
+  EmpathyFTHandlerPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_FT_HANDLER (handler), NULL);
+
+  priv = GET_PRIV (handler);
+
+  return priv->content_type;
+}
+
+EmpathyContact *
+empathy_ft_handler_get_contact (EmpathyFTHandler *handler)
+{
+  EmpathyFTHandlerPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_FT_HANDLER (handler), NULL);
+
+  priv = GET_PRIV (handler);
+
+  return priv->contact;
+}
+
+GFile *
+empathy_ft_handler_get_gfile (EmpathyFTHandler *handler)
+{
+  EmpathyFTHandlerPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_FT_HANDLER (handler), NULL);
+
+  priv = GET_PRIV (handler);
+
+  return priv->gfile;
+}
+
+/* FIXME! */
+EmpathyFTHandlerState
+empathy_ft_handler_get_state (EmpathyFTHandler *handler)
+{
+  EmpathyFTHandlerPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_FT_HANDLER (handler), -1);
+
+  priv = GET_PRIV (handler);
+
+  return priv->current_state;
+}
+
+gboolean
+empathy_ft_handler_is_incoming (EmpathyFTHandler *handler)
+{
+  EmpathyFTHandlerPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_FT_HANDLER (handler), FALSE);
+
+  priv = GET_PRIV (handler);
+
+  if (priv->tpfile == NULL)
+    return FALSE;
+
+  return empathy_tp_file_is_incoming (priv->tpfile);  
 }
