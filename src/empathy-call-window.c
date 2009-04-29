@@ -633,7 +633,7 @@ empathy_call_window_class_init (
   param_spec = g_param_spec_object ("handler",
     "handler", "The call handler",
     EMPATHY_TYPE_CALL_HANDLER,
-    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+    G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (object_class,
     PROP_CALL_HANDLER, param_spec);
 
