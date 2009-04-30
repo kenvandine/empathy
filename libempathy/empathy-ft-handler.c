@@ -95,7 +95,7 @@ typedef struct {
   guint64 mtime;
   gchar *content_hash;
   EmpFileHashType content_hash_type;
-  EmpathyFTHandlerState current_state;
+  EmpFileTransferState current_state;
 } EmpathyFTHandlerPriv;
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -977,9 +977,9 @@ empathy_ft_handler_get_gfile (EmpathyFTHandler *handler)
   return priv->gfile;
 }
 
-/* FIXME! */
-EmpathyFTHandlerState
-empathy_ft_handler_get_state (EmpathyFTHandler *handler)
+EmpFileTransferState
+empathy_ft_handler_get_state (EmpathyFTHandler *handler,
+                              char **state_string)
 {
   EmpathyFTHandlerPriv *priv;
 
@@ -1015,4 +1015,16 @@ empathy_ft_handler_get_transferred_bytes (EmpathyFTHandler *handler)
   priv = GET_PRIV (handler);
 
   return priv->transferred_bytes;
+}
+
+guint64
+empathy_ft_handler_get_total_bytes (EmpathyFTHandler *handler)
+{
+  EmpathyFTHandlerPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_FT_HANDLER (handler), 0);
+
+  priv = GET_PRIV (handler);
+
+  return priv->total_bytes;
 }
