@@ -28,6 +28,8 @@
 #include <gio/gio.h>
 #include <glib.h>
 
+#include "extensions/extensions.h"
+
 #include <telepathy-glib/channel.h>
 
 G_BEGIN_DECLS
@@ -93,7 +95,7 @@ void empathy_tp_file_close (EmpathyTpFile *tp_file);
 
 gboolean empathy_tp_file_is_incoming (EmpathyTpFile *tp_file);
 
-guint empathy_tp_file_get_state (EmpathyTpFile *tp_file, guint *reason);
+EmpFileTransferState empathy_tp_file_get_state (EmpathyTpFile *tp_file, guint *reason);
 
 G_END_DECLS
 
