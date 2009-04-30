@@ -1004,3 +1004,15 @@ empathy_ft_handler_is_incoming (EmpathyFTHandler *handler)
 
   return empathy_tp_file_is_incoming (priv->tpfile);  
 }
+
+guint64
+empathy_ft_handler_get_transferred_bytes (EmpathyFTHandler *handler)
+{
+  EmpathyFTHandlerPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_FT_HANDLER (handler), 0);
+
+  priv = GET_PRIV (handler);
+
+  return priv->transferred_bytes;
+}

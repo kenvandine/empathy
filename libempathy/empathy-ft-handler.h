@@ -84,6 +84,7 @@ EmpathyContact * empathy_ft_handler_get_contact (EmpathyFTHandler *handler);
 GFile * empathy_ft_handler_get_gfile (EmpathyFTHandler *handler);
 EmpathyFTHandlerState empathy_ft_handler_get_state (EmpathyFTHandler *handler);
 gboolean empathy_ft_handler_is_incoming (EmpathyFTHandler *handler);
+guint64 empathy_ft_handler_get_transferred_bytes (EmpathyFTHandler *handler);
 
 G_END_DECLS
 
