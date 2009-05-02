@@ -100,6 +100,7 @@ G_DEFINE_TYPE (EmpathyFTManager, empathy_ft_manager, G_TYPE_OBJECT);
 
 static EmpathyFTManager *manager_singleton = NULL;
 
+#if 0
 static gchar *
 ft_manager_format_interval (gint interval)
 {
@@ -118,6 +119,7 @@ ft_manager_format_interval (gint interval)
     /* Translators: time left, when is is less than one hour */
     return g_strdup_printf (_("%02u.%02u"), mins, secs);
 }
+#endif
 
 static void
 ft_manager_update_buttons (EmpathyFTManager *manager)
@@ -129,7 +131,7 @@ ft_manager_update_buttons (EmpathyFTManager *manager)
   TpFileTransferState state;
   gboolean open_enabled = FALSE;
   gboolean abort_enabled = FALSE;
-  EmpathyFTManagerPriv *priv = GET_PRIV (ft_manager);
+  EmpathyFTManagerPriv *priv = GET_PRIV (manager);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
 
@@ -153,6 +155,7 @@ ft_manager_update_buttons (EmpathyFTManager *manager)
   gtk_widget_set_sensitive (priv->abort_button, abort_enabled);
 }
 
+#if 0
 static const gchar *
 ft_manager_state_change_reason_to_string (TpFileTransferStateChangeReason reason)
 {
@@ -173,14 +176,7 @@ ft_manager_state_change_reason_to_string (TpFileTransferStateChangeReason reason
     }
   return _("Unknown reason");
 }
-
-static void
-ft_manager_transferred_bytes_changed_cb (EmpathyTpFile *tp_file,
-                                         GParamSpec *pspec,
-                                         EmpathyFTManager *manager)
-{
-  ft_manager_update_ft_row (manager, tp_file);
-}
+#endif
 
 static void
 ft_manager_selection_changed (GtkTreeSelection *selection,
@@ -210,23 +206,33 @@ ft_manager_progress_cell_data_func (GtkTreeViewColumn *col,
   g_object_set (renderer, "text", text, "value", percent, NULL);
 }
 
+static GtkTreeRowReference *
+ft_manager_get_row_from_handler (EmpathyFTManager *manager,
+                                 EmpathyFTHandler *handler)
+{
+  EmpathyFTManagerPriv *priv = GET_PRIV (manager);
+
+  return g_hash_table_lookup (priv->ft_handler_to_row_ref, handler);
+}
+
 static void
 ft_manager_remove_file_from_model (EmpathyFTManager *manager,
-                                  EmpathyTpFile *tp_file)
+                                   EmpathyFTHandler *handler)
 {
   GtkTreeRowReference *row_ref;
   GtkTreeSelection *selection;
   GtkTreePath *path = NULL;
   GtkTreeIter iter;
   gboolean update_selection;
-  EmpathyFTManager *priv = GET_PRIV (manager);
+  GCancellable *cancellable;
+  EmpathyFTManagerPriv *priv = GET_PRIV (manager);
 
-  row_ref = ft_manager_get_row_from_tp_file (manager, tp_file);
+  row_ref = ft_manager_get_row_from_handler (manager, handler);
   g_return_if_fail (row_ref);
 
   DEBUG ("Removing file transfer from window: contact=%s, filename=%s",
-      empathy_contact_get_name (empathy_tp_file_get_contact (tp_file)),
-      empathy_tp_file_get_filename (tp_file));
+      empathy_contact_get_name (empathy_ft_handler_get_contact (handler)),
+      empathy_ft_handler_get_filename (handler));
 
   /* Get the iter from the row_ref */
   path = gtk_tree_row_reference_get_path (row_ref);
@@ -253,27 +259,11 @@ ft_manager_remove_file_from_model (EmpathyFTManager *manager,
   if (update_selection)
     gtk_tree_selection_select_iter (selection, &iter);
 
-  empathy_tp_file_close (tp_file);
-}
+  cancellable = g_hash_table_lookup (priv->cancellable_refs, handler);
 
-static void
-ft_manager_state_changed_cb (EmpathyTpFile *tp_file,
-                             GParamSpec *pspec,
-                             EmpathyFTManager *manager)
-{
-  if (empathy_tp_file_get_state (tp_file, NULL) ==
-      EMP_FILE_TRANSFER_STATE_COMPLETED)
-    {
-      GtkRecentManager *manager;
-      const gchar *uri;
-
-      manager = gtk_recent_manager_get_default ();
-      uri = g_object_get_data (G_OBJECT (tp_file), "uri");
-      if (uri != NULL)
-        gtk_recent_manager_add_item (manager, uri);
-    }
-
-    ft_manager_update_ft_row (manager, tp_file);
+  if (cancellable != NULL) {
+    g_cancellable_cancel (cancellable);
+  }
 }
 
 static gboolean
@@ -283,11 +273,9 @@ remove_finished_transfer_foreach (gpointer key,
 {
   EmpathyFTHandler *handler = key;
   EmpathyFTManager *manager = user_data;
-  EmpFileTransferState state;
+  EmpathyFTManagerPriv *priv = GET_PRIV (manager);
 
-  state = empathy_ft_handler_get_state (handler);
-  if (state == EMP_FILE_TRANSFER_STATE_COMPLETED ||
-      state == EMP_FILE_TRANSFER_STATE_CANCELLED)
+  if (!g_hash_table_lookup (priv->cancellable_refs, handler))
     {
       ft_manager_remove_file_from_model (manager, handler);
       return TRUE;
@@ -296,176 +284,99 @@ remove_finished_transfer_foreach (gpointer key,
   return FALSE;
 }
 
-static GtkTreeRowReference *
-ft_manager_get_row_from_tp_file (EmpathyFTManager *manager,
-                                 EmpathyFTHandler *handler)
+static char *
+ft_manager_format_progress_bytes_and_percentage (guint64 current,
+                                                 guint64 total,
+                                                 int *percentage)
 {
-  EmpathyFTManagerPriv *priv = GET_PRIV (manager);
+  char *total_str, *current_str, *retval;
 
-  return g_hash_table_lookup (priv->ft_handler_to_row_ref, tp_file);
+  total_str = g_format_size_for_display (total);
+  current_str = g_format_size_for_display (current);
+
+  /* translators: first %s is the currently processed size, second %s is
+   * the total file size */
+  retval = g_strdup_printf (_("%s of %s"), current_str, total_str);
+
+  g_free (total_str);
+  g_free (current_str);
+
+  if (percentage != NULL)
+    {
+      if (total != 0) 
+        *percentage = current * 100 / total;
+      else
+        *percentage = -1;
+    }
+
+  return retval;
+}
+
+static char *
+ft_manager_format_contact_info (EmpathyFTHandler *handler)
+{
+  gboolean incoming;
+  const char *filename, *contact_name;
+  char *first_line_format, *retval;
+
+  incoming = empathy_ft_handler_is_incoming (handler);
+  contact_name = empathy_contact_get_name
+    (empathy_ft_handler_get_contact (handler));
+  filename = empathy_ft_handler_get_filename (handler);
+
+  if (incoming)
+    /* translators: first %s is filename, second %s is the contact name */
+    first_line_format = _("Receiving \"%s\" from %s");
+  else
+    /* translators: first %s is filename, second %s is the contact name */
+    first_line_format = _("Sending \"%s\" to %s");
+
+  retval = g_strdup_printf (first_line_format, filename, contact_name);
+
+  g_free (first_line_format);
+
+  return retval;
 }
 
 static void
-ft_manager_update_handler_row (EmpathyFTManager *manager,
-                               EmpathyFTHandler *handler)
+ft_manager_update_handler_message (EmpathyFTManager *manager,
+                                   GtkTreeRowReference *row_ref,
+                                   const char *message)
 {
-  GtkTreeRowReference  *row_ref;
   GtkTreePath *path;
   GtkTreeIter iter;
-  const gchar *filename;
-  const gchar *contact_name;
-  const gchar *msg;
-  gchar *msg_dup = NULL;
-  gchar *remaining_str = NULL;
-  gchar *first_line_format;
-  gchar *first_line = NULL;
-  gchar *second_line = NULL;
-  guint64 transferred_bytes;
-  guint64 total_size;
-  gint remaining = -1;
-  gint percent;
-  TpFileTransferState state;
-  TpFileTransferStateChangeReason reason;
-  gboolean incoming;
   EmpathyFTManagerPriv *priv = GET_PRIV (manager);
 
-  row_ref = ft_manager_get_row_from_handler (manager, handler);
-  g_return_if_fail (row_ref != NULL);
-
-  filename = empathy_ft_handler_get_filename (handler);
-  contact_name = empathy_contact_get_name
-    (empathy_ft_handler_get_contact (handler));
-  transferred_bytes = empathy_ft_handler_get_transferred_bytes (handler);
-  total_size = empathy_tp_file_get_size (tp_file);
-  state = empathy_tp_file_get_state (tp_file, &reason);
-  incoming = empathy_tp_file_is_incoming (tp_file);
-  speed = empathy_tp_file_get_speed (tp_file);
-
-  switch (state)
-    {
-      case TP_FILE_TRANSFER_STATE_NONE:
-        /* This should never happen, the CM is broken. But we avoid warning
-         * because it's not our fault. */
-        DEBUG ("State is NONE, probably a broken CM");
-        break;
-      case TP_FILE_TRANSFER_STATE_PENDING:
-      case TP_FILE_TRANSFER_STATE_OPEN:
-      case TP_FILE_TRANSFER_STATE_ACCEPTED:
-        if (incoming)
-          /* translators: first %s is filename, second %s is the contact name */
-          first_line_format = _("Receiving \"%s\" from %s");
-        else
-          /* translators: first %s is filename, second %s is the contact name */
-          first_line_format = _("Sending \"%s\" to %s");
-
-        first_line = g_strdup_printf (first_line_format, filename, contact_name);
-
-        if (state == TP_FILE_TRANSFER_STATE_OPEN || incoming)
-          {
-            gchar *total_size_str;
-            gchar *transferred_bytes_str;
-            gchar *speed_str;
-
-            if (total_size == EMPATHY_TP_FILE_UNKNOWN_SIZE)
-              total_size_str = g_strdup (C_("file size", "Unknown"));
-            else
-              total_size_str = g_format_size_for_display (total_size);
-
-            transferred_bytes_str = g_format_size_for_display (transferred_bytes);
-            speed_str = g_format_size_for_display (speed);
-
-            /* translators: first %s is the transferred size, second %s is
-             * the total file size */
-            second_line = g_strdup_printf (_("%s of %s at %s/s"),
-                transferred_bytes_str, total_size_str, speed_str);
-            g_free (transferred_bytes_str);
-            g_free (total_size_str);
-            g_free (speed_str);
-
-          }
-        else
-          second_line = g_strdup (_("Waiting for the other participant's response"));
-
-      remaining = empathy_tp_file_get_remaining_time (tp_file);
-      break;
-
-    case TP_FILE_TRANSFER_STATE_COMPLETED:
-      if (incoming)
-        /* translators: first %s is filename, second %s
-         * is the contact name */
-        first_line = g_strdup_printf (
-            _("\"%s\" received from %s"), filename,
-            contact_name);
-      else
-        /* translators: first %s is filename, second %s
-         * is the contact name */
-        first_line = g_strdup_printf (
-            _("\"%s\" sent to %s"), filename,
-            contact_name);
-
-      second_line = g_strdup (_("File transfer completed"));
-
-      break;
-
-    case TP_FILE_TRANSFER_STATE_CANCELLED:
-      if (incoming)
-        /* translators: first %s is filename, second %s
-         * is the contact name */
-        first_line = g_strdup_printf (
-            _("\"%s\" receiving from %s"), filename,
-            contact_name);
-      else
-        /* translators: first %s is filename, second %s
-         * is the contact name */
-        first_line = g_strdup_printf (
-            _("\"%s\" sending to %s"), filename,
-            contact_name);
-
-      second_line = g_strdup_printf (_("File transfer canceled: %s"),
-          ft_manager_state_change_reason_to_string (reason));
-
-      break;
-    }
-
-  if (total_size != EMPATHY_TP_FILE_UNKNOWN_SIZE && total_size != 0)
-    percent = transferred_bytes * 100 / total_size;
-  else
-    percent = -1;
-
-  if (remaining < 0)
-    {
-      if (state == TP_FILE_TRANSFER_STATE_OPEN)
-        remaining_str = g_strdup (C_("remaining time", "Stalled"));
-      else if (state != TP_FILE_TRANSFER_STATE_COMPLETED &&
-               state != TP_FILE_TRANSFER_STATE_CANCELLED)
-        remaining_str = g_strdup (C_("remaining time", "Unknown"));
-    }
-  else
-    remaining_str = ft_manager_format_interval (remaining);
-
-  if (first_line != NULL && second_line != NULL)
-    msg = msg_dup = g_strdup_printf ("%s\n%s", first_line, second_line);
-  else
-    msg = first_line ? first_line : second_line;
-
-  /* Set new values in the store */
+  /* Set new value in the store */
   path = gtk_tree_row_reference_get_path (row_ref);
   gtk_tree_model_get_iter (priv->model, &iter, path);
   gtk_list_store_set (GTK_LIST_STORE (priv->model),
       &iter,
-      COL_PERCENT, percent,
-      COL_MESSAGE, msg ? msg : "",
-      COL_REMAINING, remaining_str ? remaining_str : "",
+      COL_MESSAGE, message ? message : "",
+      -1);
+
+  gtk_tree_path_free (path);
+}
+
+static void
+ft_manager_update_handler_progress (EmpathyFTManager *manager,
+                                    GtkTreeRowReference *row_ref,
+                                    int percentage)
+{
+  GtkTreePath *path;
+  GtkTreeIter iter;
+  EmpathyFTManagerPriv *priv = GET_PRIV (manager);
+
+  /* Set new value in the store */
+  path = gtk_tree_row_reference_get_path (row_ref);
+  gtk_tree_model_get_iter (priv->model, &iter, path);
+  gtk_list_store_set (GTK_LIST_STORE (priv->model),
+      &iter,
+      COL_PERCENT, percentage,
       -1);
 
   gtk_tree_path_free (path);
 
-  g_free (msg_dup);
-  g_free (first_line);
-  g_free (second_line);
-  g_free (remaining_str);
-
-  ft_manager_update_buttons (manager);
 }
 
 static void
@@ -477,10 +388,47 @@ ft_handler_transfer_error_cb (EmpathyFTHandler *handler,
 }
 
 static void
-ft_handler_hashing_started_cb (EmpathyFTHandler *handler,
-                               EmpathyFTManager *manager)
+ft_handler_transfer_done_cb (EmpathyFTHandler *handler,
+                             EmpathyTpFile *tp_file,
+                             EmpathyFTManager *manager)
 {
-  /* TODO: implement */
+  const char *contact_name;
+  const char *filename;
+  char *first_line, *second_line, *message;
+  gboolean incoming;
+  GtkTreeRowReference *row_ref;
+  EmpathyFTManagerPriv *priv = GET_PRIV (manager);
+
+  row_ref = ft_manager_get_row_from_handler (manager, handler);
+  g_return_if_fail (row_ref != NULL);
+
+  incoming = empathy_ft_handler_is_incoming (handler);
+  contact_name = empathy_contact_get_name
+    (empathy_ft_handler_get_contact (handler));
+  filename = empathy_ft_handler_get_filename (handler);
+
+  if (incoming)
+    /* translators: first %s is filename, second %s
+     * is the contact name */
+    first_line = g_strdup_printf (_("\"%s\" received from %s"), filename,
+        contact_name);
+  else
+    /* translators: first %s is filename, second %s
+     * is the contact name */
+    first_line = g_strdup_printf (_("\"%s\" sent to %s"), filename,
+        contact_name);
+
+  second_line = g_strdup (_("File transfer completed"));
+
+  message = g_strdup_printf ("%s\n%s", first_line, second_line);
+  ft_manager_update_handler_message (manager, row_ref, message);
+
+  /* remove the cancellable object */
+  g_hash_table_remove (priv->cancellable_refs, handler);
+
+  g_free (message);
+  g_free (first_line);
+  g_free (second_line);
 }
 
 static void
@@ -489,8 +437,23 @@ ft_handler_transfer_progress_cb (EmpathyFTHandler *handler,
                                  guint64 total_bytes,
                                  EmpathyFTManager *manager)
 {
-  ft_manager_update_handler_progress (manager, handler,
-    current_bytes, total_bytes);
+  char *first_line, *second_line, *message;
+  int percentage;
+  GtkTreeRowReference *row_ref;
+
+  row_ref = ft_manager_get_row_from_handler (manager, handler);
+  g_return_if_fail (row_ref != NULL);
+
+  first_line = ft_manager_format_contact_info (handler);
+  second_line = ft_manager_format_progress_bytes_and_percentage
+    (current_bytes, total_bytes, &percentage);
+
+  message = g_strdup_printf ("%s\n%s", first_line, second_line);
+
+  ft_manager_update_handler_message (manager, row_ref, message);
+  ft_manager_update_handler_progress (manager, row_ref, percentage);
+
+  g_free (message);
 }
 
 static void
@@ -498,10 +461,73 @@ ft_handler_transfer_started_cb (EmpathyFTHandler *handler,
                                 EmpathyTpFile *tp_file,
                                 EmpathyFTManager *manager)
 {
-  g_signal_connect (handler, "transfer-progress",
-    G_CALLBACK (ft_handler_transfer_progress_cb), manager);
+  guint64 transferred_bytes, total_bytes;
 
-  ft_manager_update_handler_row (manager, handler);
+  g_signal_connect (handler, "transfer-progress",
+      G_CALLBACK (ft_handler_transfer_progress_cb), manager);
+  g_signal_connect (handler, "transfer-done",
+      G_CALLBACK (ft_handler_transfer_done_cb), manager);
+
+  transferred_bytes = empathy_ft_handler_get_transferred_bytes (handler);
+  total_bytes = empathy_ft_handler_get_total_bytes (handler);
+
+  ft_handler_transfer_progress_cb (handler, transferred_bytes, total_bytes,
+      manager);
+}
+
+static void
+ft_handler_hashing_done_cb (EmpathyFTHandler *handler,
+                            EmpathyFTManager *manager)
+{
+  g_signal_connect (handler, "transfer-started",
+      G_CALLBACK (ft_handler_transfer_started_cb), manager);
+}
+
+static void
+ft_handler_hashing_progress_cb (EmpathyFTHandler *handler,
+                                guint64 current_bytes,
+                                guint64 total_bytes,
+                                EmpathyFTManager *manager)
+{
+  char *first_line, *second_line, *message;
+  GtkTreeRowReference *row_ref;
+
+  row_ref = ft_manager_get_row_from_handler (manager, handler);
+  g_return_if_fail (row_ref != NULL);
+
+  first_line =  g_strdup_printf (_("Hashing \"%s\""),
+      empathy_ft_handler_get_filename (handler));
+  second_line = ft_manager_format_progress_bytes_and_percentage
+    (current_bytes, total_bytes, NULL);
+
+  message = g_strdup_printf ("%s\n%s", first_line, second_line);
+
+  ft_manager_update_handler_message (manager, row_ref, message);
+
+  g_free (message);
+}
+
+static void
+ft_handler_hashing_started_cb (EmpathyFTHandler *handler,
+                               EmpathyFTManager *manager)
+{
+  char *message;
+  GtkTreeRowReference *row_ref;
+
+  g_signal_connect (handler, "hashing-progress",
+     G_CALLBACK (ft_handler_hashing_progress_cb), manager);
+  g_signal_connect (handler, "hashing-done",
+     G_CALLBACK (ft_handler_hashing_done_cb), manager);
+
+  row_ref = ft_manager_get_row_from_handler (manager, handler);
+  g_return_if_fail (row_ref != NULL);
+
+  message =  g_strdup_printf (_("Hashing \"%s\""),
+      empathy_ft_handler_get_filename (handler));
+
+  ft_manager_update_handler_message (manager, row_ref, message);
+
+  g_free (message);
 }
 
 static void
@@ -542,6 +568,7 @@ ft_manager_add_handler_to_list (EmpathyFTManager *manager,
   GtkTreePath *path;
   GIcon *icon;
   const char *content_type;
+  char *first_line, *second_line, *message;
   EmpathyFTManagerPriv *priv = GET_PRIV (manager);
 
   /* get the icon name from the mime-type of the file. */
@@ -568,7 +595,15 @@ ft_manager_add_handler_to_list (EmpathyFTManager *manager,
   ft_manager_start_transfer (manager, handler);
 
   /* update the row with the initial values */
-  ft_manager_update_ft_row (manager, handler);
+  first_line = ft_manager_format_contact_info (handler);
+  second_line = g_strdup (_("Waiting for the other participant's response"));
+  message = g_strdup_printf ("%s\n%s", first_line, second_line);
+
+  ft_manager_update_handler_message (manager, row_ref, message);
+
+  g_free (first_line);
+  g_free (second_line);
+  g_free (message);
 }
 
 static void
@@ -623,7 +658,8 @@ ft_manager_stop (EmpathyFTManager *manager)
   GCancellable *cancellable;
   EmpathyFTManagerPriv *priv;
 
-  priv = GET_PRIV (manager)
+  priv = GET_PRIV (manager);
+
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
 
   if (!gtk_tree_selection_get_selected (selection, &model, &iter))
@@ -919,24 +955,6 @@ EmpathyFTManager *
 empathy_ft_manager_dup_singleton (void)
 {
   return g_object_new (EMPATHY_TYPE_FT_MANAGER, NULL);
-}
-
-/**
- * empathy_ft_manager_get_dialog:
- * @ft_manager: an #EmpathyFTManager
- *
- * Returns the #GtkWidget of @manager.
- *
- * Returns: the dialog
- */
-GtkWidget *
-empathy_ft_manager_get_dialog (EmpathyFTManager *manager)
-{
-  EmpathyFTManagerPriv *priv = GET_PRIV (manager);
-
-  g_return_val_if_fail (EMPATHY_IS_FT_MANAGER (manager), NULL);
-
-  return priv->window;
 }
 
 void
