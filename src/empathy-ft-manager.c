@@ -127,28 +127,42 @@ ft_manager_update_buttons (EmpathyFTManager *manager)
   GtkTreeSelection *selection;
   GtkTreeModel *model;
   GtkTreeIter iter;
+<<<<<<< HEAD:src/empathy-ft-manager.c
   EmpathyTpFile *tp_file;
   TpFileTransferState state;
+=======
+  EmpathyFTHandler *handler;
+>>>>>>> Use the proper TP interface instead of emp_cli:src/empathy-ft-manager.c
   gboolean open_enabled = FALSE;
   gboolean abort_enabled = FALSE;
+  gboolean is_completed, is_cancelled;
   EmpathyFTManagerPriv *priv = GET_PRIV (manager);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
 
   if (gtk_tree_selection_get_selected (selection, &model, &iter))
     {
-      gtk_tree_model_get (model, &iter, COL_FT_OBJECT, &tp_file, -1);
-      state = empathy_tp_file_get_state (tp_file, NULL);
+      gtk_tree_model_get (model, &iter, COL_FT_OBJECT, &handler, -1);
+
+      is_completed = empathy_ft_handler_is_completed (handler);
+      is_cancelled = empathy_ft_handler_is_cancelled (handler);
 
       /* I can open the file if the transfer is completed and was incoming */
+<<<<<<< HEAD:src/empathy-ft-manager.c
       open_enabled = (state == TP_FILE_TRANSFER_STATE_COMPLETED &&
         empathy_tp_file_is_incoming (tp_file));
 
       /* I can abort if the transfer is not already finished */
       abort_enabled = (state != TP_FILE_TRANSFER_STATE_CANCELLED &&
         state != TP_FILE_TRANSFER_STATE_COMPLETED);
+=======
+      open_enabled = (is_completed && empathy_ft_handler_is_incoming (handler));
 
-      g_object_unref (tp_file);
+      /* I can abort if the transfer is not already finished */
+      abort_enabled = (is_cancelled == FALSE && is_completed == FALSE);
+>>>>>>> Use the proper TP interface instead of emp_cli:src/empathy-ft-manager.c
+
+      g_object_unref (handler);
     }
 
   gtk_widget_set_sensitive (priv->open_button, open_enabled);
@@ -273,9 +287,9 @@ remove_finished_transfer_foreach (gpointer key,
 {
   EmpathyFTHandler *handler = key;
   EmpathyFTManager *manager = user_data;
-  EmpathyFTManagerPriv *priv = GET_PRIV (manager);
 
-  if (!g_hash_table_lookup (priv->cancellable_refs, handler))
+  if (empathy_ft_handler_is_completed (handler) ||
+      empathy_ft_handler_is_cancelled (handler))
     {
       ft_manager_remove_file_from_model (manager, handler);
       return TRUE;
@@ -316,8 +330,8 @@ static char *
 ft_manager_format_contact_info (EmpathyFTHandler *handler)
 {
   gboolean incoming;
-  const char *filename, *contact_name;
-  char *first_line_format, *retval;
+  const char *filename, *contact_name, *first_line_format;
+  char *retval;
 
   incoming = empathy_ft_handler_is_incoming (handler);
   contact_name = empathy_contact_get_name
@@ -332,8 +346,6 @@ ft_manager_format_contact_info (EmpathyFTHandler *handler)
     first_line_format = _("Sending \"%s\" to %s");
 
   retval = g_strdup_printf (first_line_format, filename, contact_name);
-
-  g_free (first_line_format);
 
   return retval;
 }
@@ -425,6 +437,9 @@ ft_handler_transfer_done_cb (EmpathyFTHandler *handler,
 
   /* remove the cancellable object */
   g_hash_table_remove (priv->cancellable_refs, handler);
+
+  /* update buttons */
+  ft_manager_update_buttons (manager);
 
   g_free (message);
   g_free (first_line);
