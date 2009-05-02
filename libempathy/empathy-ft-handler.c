@@ -96,6 +96,9 @@ typedef struct {
   gchar *content_hash;
   EmpFileHashType content_hash_type;
   EmpFileTransferState current_state;
+
+  gboolean is_completed;
+  gboolean is_cancelled;
 } EmpathyFTHandlerPriv;
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -345,11 +348,18 @@ ft_transfer_operation_callback (EmpathyTpFile *tp_file,
                                 gpointer user_data)
 {
   EmpathyFTHandler *handler = user_data;
+  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
 
   if (error != NULL)
-    g_signal_emit (handler, signals[TRANSFER_ERROR], 0, error);
-  else
-    g_signal_emit (handler, signals[TRANSFER_DONE], 0);
+    {
+      priv->is_cancelled = TRUE;
+      g_signal_emit (handler, signals[TRANSFER_ERROR], 0, error);
+    }
+  else 
+    {
+      priv->is_completed = TRUE;
+      g_signal_emit (handler, signals[TRANSFER_DONE], 0, tp_file);
+    }
 }
 
 static void
@@ -381,6 +391,7 @@ ft_handler_create_channel_cb (EmpathyDispatchOperation *operation,
 
   if (error != NULL)
     {
+      priv->is_cancelled = TRUE;
       g_signal_emit (handler, signals[TRANSFER_ERROR], 0, error);
       return;
     }
@@ -389,8 +400,10 @@ ft_handler_create_channel_cb (EmpathyDispatchOperation *operation,
 
   if (my_error != NULL)
     {
+      priv->is_cancelled = TRUE;
       g_signal_emit (handler, signals[TRANSFER_ERROR], 0, my_error);
       g_clear_error (&my_error);
+
       return;
     }
 
@@ -434,7 +447,7 @@ ft_handler_check_if_allowed (EmpathyFTHandler *handler)
   account = empathy_contact_get_account (priv->contact);
 
   allowed = empathy_dispatcher_find_channel_class (dispatcher, account,
-      EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, TP_HANDLE_TYPE_CONTACT);
+      TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, TP_HANDLE_TYPE_CONTACT);
 
   if (!tp_strv_contains ((const gchar * const *) allowed,
       TP_IFACE_CHANNEL ".TargetHandle"))
@@ -460,7 +473,7 @@ ft_handler_populate_outgoing_request (EmpathyFTHandler *handler)
 
   /* org.freedesktop.Telepathy.Channel.ChannelType */
   value = tp_g_value_slice_new (G_TYPE_STRING);
-  g_value_set_string (value, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER);
+  g_value_set_string (value, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER);
   g_hash_table_insert (request, TP_IFACE_CHANNEL ".ChannelType", value);
 
   /* org.freedesktop.Telepathy.Channel.TargetHandleType */
@@ -477,25 +490,25 @@ ft_handler_populate_outgoing_request (EmpathyFTHandler *handler)
   value = tp_g_value_slice_new (G_TYPE_STRING);
   g_value_set_string (value, priv->content_type);
   g_hash_table_insert (request,
-      EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentType", value);
+      TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentType", value);
 
   /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Filename */
   value = tp_g_value_slice_new (G_TYPE_STRING);
   g_value_set_string (value, priv->filename);
   g_hash_table_insert (request,
-      EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Filename", value);
+      TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Filename", value);
 
   /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Size */
   value = tp_g_value_slice_new (G_TYPE_UINT64);
   g_value_set_uint64 (value, (guint64) priv->total_bytes);
   g_hash_table_insert (request,
-      EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Size", value);
+      TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Size", value);
 
   /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Date */
   value = tp_g_value_slice_new (G_TYPE_UINT64);
   g_value_set_uint64 (value, (guint64) priv->mtime);
   g_hash_table_insert (request,
-      EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Date", value);
+      TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Date", value);
 }
 
 static void
@@ -546,13 +559,14 @@ hash_job_async_close_stream_cb (GObject *source,
   value = tp_g_value_slice_new (G_TYPE_STRING);
   g_value_set_string (value, g_checksum_get_string (hash_data->checksum));
   g_hash_table_insert (priv->request,
-      EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentHash", value);
+      TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentHash", value);
 
 cleanup:
   hash_data_free (hash_data);
 
   if (error != NULL)
     {
+      priv->is_cancelled = TRUE;
       g_signal_emit (handler, signals[TRANSFER_ERROR], 0, error);
       g_clear_error (&error);
     }
@@ -646,6 +660,7 @@ ft_handler_read_async_cb (GObject *source,
   stream = g_file_read_finish (priv->gfile, res, &error);
   if (error != NULL)
     {
+      priv->is_cancelled = TRUE;
       g_signal_emit (handler, signals[TRANSFER_ERROR], 0, error);
       g_clear_error (&error);
 
@@ -666,7 +681,7 @@ ft_handler_read_async_cb (GObject *source,
   value = tp_g_value_slice_new (G_TYPE_UINT);
   g_value_set_uint (value, EMP_FILE_HASH_TYPE_MD5);
   g_hash_table_insert (priv->request,
-      EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentHashType", value);
+      TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentHashType", value);
 
   g_signal_emit (handler, signals[HASHING_STARTED], 0);
 
@@ -686,6 +701,7 @@ ft_handler_complete_request (EmpathyFTHandler *handler)
           EMPATHY_FT_ERROR_NOT_SUPPORTED,
           _("File transfer not supported by remote contact"));
 
+      priv->is_cancelled = TRUE;
       g_signal_emit (handler, signals[TRANSFER_ERROR], 0, myerr);
       g_clear_error (&myerr);
 
@@ -886,7 +902,7 @@ empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
   data->handler = g_object_ref (handler);
 
   tp_cli_dbus_properties_call_get_all (channel,
-      -1, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER,
+      -1, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER,
       channel_get_all_properties_cb, data, callbacks_data_free, G_OBJECT (handler));
 }
 
@@ -1027,4 +1043,28 @@ empathy_ft_handler_get_total_bytes (EmpathyFTHandler *handler)
   priv = GET_PRIV (handler);
 
   return priv->total_bytes;
+}
+
+gboolean
+empathy_ft_handler_is_completed (EmpathyFTHandler *handler)
+{
+  EmpathyFTHandlerPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_FT_HANDLER (handler), FALSE);
+
+  priv = GET_PRIV (handler);
+
+  return priv->is_completed;
+}
+
+gboolean
+empathy_ft_handler_is_cancelled (EmpathyFTHandler *handler)
+{
+  EmpathyFTHandlerPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_FT_HANDLER (handler), FALSE);
+
+  priv = GET_PRIV (handler);
+
+  return priv->is_cancelled;
 }

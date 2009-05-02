@@ -82,6 +82,8 @@ EmpFileTransferState empathy_ft_handler_get_state (EmpathyFTHandler *handler,
 gboolean empathy_ft_handler_is_incoming (EmpathyFTHandler *handler);
 guint64 empathy_ft_handler_get_transferred_bytes (EmpathyFTHandler *handler);
 guint64 empathy_ft_handler_get_total_bytes (EmpathyFTHandler *handler);
+gboolean empathy_ft_handler_is_completed (EmpathyFTHandler *handler);
+gboolean empathy_ft_handler_is_cancelled (EmpathyFTHandler *handler);
 
 G_END_DECLS
 
