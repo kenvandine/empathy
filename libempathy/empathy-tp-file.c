@@ -88,7 +88,7 @@ typedef struct {
   /* transfer properties */
   gboolean incoming;
   time_t start_time;
-  gchar *unix_socket_path;
+  GArray *unix_socket_path;
   guint64 offset;
 
   /* GCancellable we're passed when offering/accepting the transfer */
@@ -201,7 +201,6 @@ static void
 tp_file_start_transfer (EmpathyTpFile *tp_file)
 {
   gint fd;
-  size_t path_len;
   struct sockaddr_un addr;
   GError *error = NULL;
   EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
@@ -224,8 +223,8 @@ tp_file_start_transfer (EmpathyTpFile *tp_file)
 
   memset (&addr, 0, sizeof (addr));
   addr.sun_family = AF_UNIX;
-  path_len = strlen (priv->unix_socket_path);
-  strncpy (addr.sun_path, priv->unix_socket_path, path_len);
+  strncpy (addr.sun_path, priv->unix_socket_path->data,
+      priv->unix_socket_path->len);
 
   if (connect (fd, (struct sockaddr*) &addr, sizeof (addr)) < 0)
     {
@@ -282,7 +281,7 @@ tp_file_start_transfer (EmpathyTpFile *tp_file)
 }
 
 static void
-tp_file_state_changed_cb (TpProxy *proxy,
+tp_file_state_changed_cb (TpChannel *proxy,
                           guint state,
                           guint reason,
                           gpointer user_data,
@@ -316,7 +315,7 @@ tp_file_state_changed_cb (TpProxy *proxy,
 }
 
 static void
-tp_file_transferred_bytes_changed_cb (TpProxy *proxy,
+tp_file_transferred_bytes_changed_cb (TpChannel *proxy,
                                       guint64 count,
                                       gpointer user_data,
                                       GObject *weak_object)
@@ -330,7 +329,7 @@ tp_file_transferred_bytes_changed_cb (TpProxy *proxy,
 }
 
 static void
-ft_operation_provide_or_accept_file_cb (TpProxy *proxy,
+ft_operation_provide_or_accept_file_cb (TpChannel *proxy,
                                         const GValue *address,
                                         const GError *error,
                                         gpointer user_data,
@@ -362,9 +361,23 @@ ft_operation_provide_or_accept_file_cb (TpProxy *proxy,
       return;
     }
 
-  priv->unix_socket_path = g_value_dup_string (address);
+  if (G_VALUE_TYPE (address) == DBUS_TYPE_G_UCHAR_ARRAY)
+    {
+      priv->unix_socket_path = g_value_dup_boxed (address);
+    }
+  else if (G_VALUE_TYPE (address) == G_TYPE_STRING)
+    {
+      /* Old bugged version of telepathy-salut used to store the address
+       * as a 's' instead of an 'ay' */
+      const gchar *path;
 
-  DEBUG ("Got unix socket path: %s", priv->unix_socket_path);
+      path = g_value_get_string (address);
+      priv->unix_socket_path = g_array_sized_new (TRUE, FALSE, sizeof (gchar),
+                                                  strlen (path));
+      g_array_insert_vals (priv->unix_socket_path, 0, path, strlen (path));
+    }
+
+  DEBUG ("Got unix socket path: %s", priv->unix_socket_path->data);
 
   if (priv->state == EMP_FILE_TRANSFER_STATE_OPEN)
     tp_file_start_transfer (tp_file);
@@ -397,8 +410,8 @@ file_read_async_cb (GObject *source,
   g_value_init (&nothing, G_TYPE_STRING);
   g_value_set_static_string (&nothing, "");
 
-  emp_cli_channel_type_file_transfer_call_provide_file (
-      TP_PROXY (priv->channel), -1,
+  tp_cli_channel_type_file_transfer_call_provide_file (
+      priv->channel, -1,
       TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
       &nothing, ft_operation_provide_or_accept_file_cb, NULL, NULL, G_OBJECT (tp_file));
 }
@@ -431,7 +444,7 @@ file_replace_async_cb (GObject *source,
   g_value_init (&nothing, G_TYPE_STRING);
   g_value_set_static_string (&nothing, "");
 
-  emp_cli_channel_type_file_transfer_call_accept_file (TP_PROXY (priv->channel),
+  tp_cli_channel_type_file_transfer_call_accept_file (priv->channel,
       -1, TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
       &nothing, priv->offset,
       ft_operation_provide_or_accept_file_cb, NULL, NULL, G_OBJECT (tp_file));
@@ -551,16 +564,16 @@ do_constructor (GType type,
   g_signal_connect (priv->channel, "invalidated",
     G_CALLBACK (tp_file_invalidated_cb), tp_file);
 
-  emp_cli_channel_type_file_transfer_connect_to_file_transfer_state_changed (
-      TP_PROXY (priv->channel), tp_file_state_changed_cb, NULL, NULL,
+  tp_cli_channel_type_file_transfer_connect_to_file_transfer_state_changed (
+      priv->channel, tp_file_state_changed_cb, NULL, NULL,
       G_OBJECT (tp_file), NULL);
 
-  emp_cli_channel_type_file_transfer_connect_to_transferred_bytes_changed (
-      TP_PROXY (priv->channel), tp_file_transferred_bytes_changed_cb,
+  tp_cli_channel_type_file_transfer_connect_to_transferred_bytes_changed (
+      priv->channel, tp_file_transferred_bytes_changed_cb,
       NULL, NULL, G_OBJECT (tp_file), NULL);
 
   tp_cli_dbus_properties_call_get (priv->channel,
-      -1, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, "State", tp_file_get_state_cb,
+      -1, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, "State", tp_file_get_state_cb,
       NULL, NULL, file_obj);
 
   priv->state_change_reason =
