@@ -76,7 +76,6 @@ enum
 typedef struct {
   GtkTreeModel *model;
   GHashTable *ft_handler_to_row_ref;
-  GHashTable *cancellable_refs;
 
   /* Widgets */
   GtkWidget *window;
@@ -238,7 +237,6 @@ ft_manager_remove_file_from_model (EmpathyFTManager *manager,
   GtkTreePath *path = NULL;
   GtkTreeIter iter;
   gboolean update_selection;
-  GCancellable *cancellable;
   EmpathyFTManagerPriv *priv = GET_PRIV (manager);
 
   row_ref = ft_manager_get_row_from_handler (manager, handler);
@@ -272,12 +270,6 @@ ft_manager_remove_file_from_model (EmpathyFTManager *manager,
 
   if (update_selection)
     gtk_tree_selection_select_iter (selection, &iter);
-
-  cancellable = g_hash_table_lookup (priv->cancellable_refs, handler);
-
-  if (cancellable != NULL) {
-    g_cancellable_cancel (cancellable);
-  }
 }
 
 static gboolean
@@ -409,7 +401,6 @@ ft_handler_transfer_done_cb (EmpathyFTHandler *handler,
   char *first_line, *second_line, *message;
   gboolean incoming;
   GtkTreeRowReference *row_ref;
-  EmpathyFTManagerPriv *priv = GET_PRIV (manager);
 
   DEBUG ("Transfer done");
 
@@ -436,9 +427,6 @@ ft_handler_transfer_done_cb (EmpathyFTHandler *handler,
 
   message = g_strdup_printf ("%s\n%s", first_line, second_line);
   ft_manager_update_handler_message (manager, row_ref, message);
-
-  /* remove the cancellable object */
-  g_hash_table_remove (priv->cancellable_refs, handler);
 
   /* update buttons */
   ft_manager_update_buttons (manager);
@@ -578,15 +566,10 @@ static void
 ft_manager_start_transfer (EmpathyFTManager *manager,
                            EmpathyFTHandler *handler)
 {
-  GCancellable *cancellable;
   EmpathyFTManagerPriv *priv;
   gboolean is_incoming;
 
   priv = GET_PRIV (manager);
-
-  cancellable = g_cancellable_new ();
-  g_hash_table_insert (priv->cancellable_refs, g_object_ref (handler),
-      cancellable);
 
   is_incoming = empathy_ft_handler_is_incoming (handler);
 
@@ -604,7 +587,7 @@ ft_manager_start_transfer (EmpathyFTManager *manager,
         G_CALLBACK (ft_handler_hashing_started_cb), manager);
   }
 
-  empathy_ft_handler_start_transfer (handler, cancellable);
+  empathy_ft_handler_start_transfer (handler);
 }
 
 static void
@@ -706,7 +689,6 @@ ft_manager_stop (EmpathyFTManager *manager)
   GtkTreeIter iter;
   GtkTreeModel *model;
   EmpathyFTHandler *handler;
-  GCancellable *cancellable;
   EmpathyFTManagerPriv *priv;
 
   priv = GET_PRIV (manager);
@@ -723,10 +705,9 @@ ft_manager_stop (EmpathyFTManager *manager)
       empathy_contact_get_name (empathy_ft_handler_get_contact (handler)),
       empathy_ft_handler_get_filename (handler));
 
-  cancellable = g_hash_table_lookup (priv->cancellable_refs, handler);
-  g_assert (cancellable != NULL);
+  empathy_ft_handler_cancel_transfer (handler);
 
-  g_cancellable_cancel (cancellable);
+  g_object_unref (handler);
 }
 
 static gboolean
@@ -953,8 +934,6 @@ empathy_ft_manager_init (EmpathyFTManager *manager)
   priv->ft_handler_to_row_ref = g_hash_table_new_full (g_direct_hash,
       g_direct_equal, (GDestroyNotify) g_object_unref,
       (GDestroyNotify) gtk_tree_row_reference_free);
-  priv->cancellable_refs = g_hash_table_new_full (g_direct_hash, g_direct_equal,
-      (GDestroyNotify) g_object_unref, (GDestroyNotify) g_object_unref);
 
   ft_manager_build_ui (manager);
 }

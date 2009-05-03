@@ -912,15 +912,14 @@ empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
 }
 
 void
-empathy_ft_handler_start_transfer (EmpathyFTHandler *handler,
-                                   GCancellable *cancellable)
+empathy_ft_handler_start_transfer (EmpathyFTHandler *handler)
 {
   EmpathyFTHandlerPriv *priv;
 
   g_return_if_fail (EMPATHY_IS_FT_HANDLER (handler));
 
   priv = GET_PRIV (handler);
-  priv->cancellable = g_object_ref (cancellable);
+  priv->cancellable = g_cancellable_new ();
 
   if (priv->tpfile == NULL)
     {
@@ -938,6 +937,20 @@ empathy_ft_handler_start_transfer (EmpathyFTHandler *handler,
           ft_transfer_progress_callback, handler,
           ft_transfer_operation_callback, handler);
     }
+}
+
+void
+empathy_ft_handler_cancel_transfer (EmpathyFTHandler *handler)
+{
+  EmpathyFTHandlerPriv *priv;
+
+  g_return_if_fail (EMPATHY_IS_FT_HANDLER (handler));
+
+  priv = GET_PRIV (handler);
+
+  g_return_if_fail (priv->tpfile != NULL);
+
+  empathy_tp_file_cancel (priv->tpfile);
 }
 
 void

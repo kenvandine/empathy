@@ -69,8 +69,8 @@ void empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
 void empathy_ft_handler_incoming_set_destination (EmpathyFTHandler *handler,
     GFile *destination);
 
-void empathy_ft_handler_start_transfer (EmpathyFTHandler *handler,
-    GCancellable *cancellable);
+void empathy_ft_handler_start_transfer (EmpathyFTHandler *handler);
+void empathy_ft_handler_cancel_transfer (EmpathyFTHandler *handler);
 
 /* properties of the transfer */
 const char * empathy_ft_handler_get_filename (EmpathyFTHandler *handler);
