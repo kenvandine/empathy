@@ -350,6 +350,8 @@ ft_transfer_operation_callback (EmpathyTpFile *tp_file,
   EmpathyFTHandler *handler = user_data;
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
 
+  DEBUG ("Transfer operation callback, error %p", error);
+
   if (error != NULL)
     {
       priv->is_cancelled = TRUE;

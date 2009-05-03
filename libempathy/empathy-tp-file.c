@@ -162,6 +162,8 @@ ft_operation_close_clean (EmpathyTpFile *tp_file)
 {
   EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
 
+  DEBUG ("Splice close clean");
+
   if (priv->op_callback)
     priv->op_callback (tp_file, NULL, priv->op_user_data);
 }
@@ -171,6 +173,8 @@ ft_operation_close_with_error (EmpathyTpFile *tp_file,
                                GError *error)
 {
   EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
+
+  DEBUG ("Splice close with error %s", error->message);
 
   if (priv->op_callback)
     priv->op_callback (tp_file, error, priv->op_user_data);
@@ -194,8 +198,6 @@ splice_stream_ready_cb (GObject *source,
       g_clear_error (&error);
       return;
     }
-
-  ft_operation_close_clean (tp_file);
 }
 
 static void
@@ -301,6 +303,9 @@ tp_file_state_changed_cb (TpChannel *proxy,
       priv->in_stream ? "present" : "not present",
       priv->out_stream ? "present" : "not present");
 
+  priv->state = state;
+  priv->state_change_reason = reason;
+
   /* If the channel is open AND we have the socket path, we can start the
    * transfer. The socket path could be NULL if we are not doing the actual
    * data transfer but are just an observer for the channel.
@@ -309,8 +314,8 @@ tp_file_state_changed_cb (TpChannel *proxy,
       priv->unix_socket_path != NULL)
     tp_file_start_transfer (EMPATHY_TP_FILE (weak_object));
 
-  priv->state = state;
-  priv->state_change_reason = reason;
+  if (state == EMP_FILE_TRANSFER_STATE_COMPLETED)
+    ft_operation_close_clean (EMPATHY_TP_FILE (weak_object));
 
   g_object_notify (weak_object, "state");
 }
