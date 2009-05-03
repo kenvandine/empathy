@@ -50,6 +50,10 @@ typedef struct {
   EmpathyCapabilities capabilities;
   gboolean is_user;
   guint hash;
+  /* Location is composed of string keys and GValues.
+   * Example: a "city" key would have "Helsinki" as string GValue,
+   *          a "latitude" would have 65.0 as double GValue.
+   */
   GHashTable *location;
 } EmpathyContactPriv;
 
@@ -234,7 +238,7 @@ empathy_contact_class_init (EmpathyContactClass *class)
         "Contact location",
         "Physical location of the contact",
         G_TYPE_HASH_TABLE,
-        G_PARAM_READABLE));
+        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   signals[PRESENCE_CHANGED] =
     g_signal_new ("presence-changed",
@@ -1018,11 +1022,17 @@ empathy_avatar_save_to_file (EmpathyAvatar *self,
 
 /**
  * empathy_contact_get_location:
- * @contact: the contact
+ * @contact: an #EmpathyContact
  *
  * Returns the user's location if available.  The keys are defined in
  * empathy-location.h. If the contact doesn't have location
- * information, the GHashTable will be empthy.
+ * information, the GHashTable will be empthy. Use #g_hash_table_unref when
+ * you are done with the #GHashTable.
+ *
+ * It is composed of string keys and GValues.  Keys are
+ * defined in empathy-location.h such as #EMPATHY_LOCATION_COUNTRY.
+ * Example: a "city" key would have "Helsinki" as string GValue,
+ *          a "latitude" would have 65.0 as double GValue.
  *
  * Returns: a #GHashTable of location values
  */
@@ -1035,7 +1045,7 @@ empathy_contact_get_location (EmpathyContact *contact)
 
   priv = GET_PRIV (contact);
 
-  return priv->location;
+  return g_hash_table_ref (priv->location);
 }
 
 /**
@@ -1044,6 +1054,10 @@ empathy_contact_get_location (EmpathyContact *contact)
  * @location: the location
  *
  * Sets the user's location based on the location #GHashTable passed.
+ * It is composed of string keys and GValues.  Keys are
+ * defined in empathy-location.h such as #EMPATHY_LOCATION_COUNTRY.
+ * Example: a "city" key would have "Helsinki" as string GValue,
+ *          a "latitude" would have 65.0 as double GValue.
  */
 void 
 empathy_contact_set_location (EmpathyContact *contact,
