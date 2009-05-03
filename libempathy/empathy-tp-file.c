@@ -806,4 +806,3 @@ empathy_tp_file_is_ready (EmpathyTpFile *tp_file)
 
   return tp_file->priv->ready;
 }
-
