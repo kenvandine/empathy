@@ -461,15 +461,8 @@ empathy_dispatch_operation_channel_ready_cb (TpChannel *channel,
     }
   else if (channel_type == TP_IFACE_QUARK_CHANNEL_TYPE_FILE_TRANSFER)
     {
-      EmpathyTpFile *file = empathy_tp_file_new (channel);
-      priv->channel_wrapper = G_OBJECT (file);
-
-      if (!empathy_tp_file_is_ready (file))
-        {
-          priv->ready_handler = g_signal_connect (file, "notify::ready",
-            G_CALLBACK (empathy_dispatcher_operation_tp_file_ready_cb), self);
-          return;
-        }
+       EmpathyTpFile *file = empathy_tp_file_new (channel, priv->incoming);
+       priv->channel_wrapper = G_OBJECT (file);
     }
 
 ready:

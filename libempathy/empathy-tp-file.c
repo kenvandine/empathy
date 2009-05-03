@@ -106,6 +106,7 @@ typedef struct {
 enum {
   PROP_0,
   PROP_CHANNEL,
+  PROP_INCOMING,
   PROP_STATE
 };
 
@@ -379,6 +380,9 @@ ft_operation_provide_or_accept_file_cb (TpChannel *proxy,
 
   DEBUG ("Got unix socket path: %s", priv->unix_socket_path->data);
 
+  /* if the channel is already open, start the transfer now, otherwise,
+   * wait for the state change signal.
+   */
   if (priv->state == EMP_FILE_TRANSFER_STATE_OPEN)
     tp_file_start_transfer (tp_file);
 }
@@ -516,6 +520,9 @@ do_get_property (GObject *object,
       case PROP_CHANNEL:
         g_value_set_object (value, priv->channel);
         break;
+      case PROP_INCOMING:
+        g_value_set_boolean (value, priv->incoming);
+        break;
       case PROP_STATE:
         g_value_set_uint (value, priv->state);
         break;
@@ -536,6 +543,9 @@ do_set_property (GObject *object,
     {
       case PROP_CHANNEL:
         priv->channel = g_object_ref (g_value_get_object (value));
+        break;
+      case PROP_INCOMING:
+        priv->incoming = g_value_get_boolean (value);
         break;
       case PROP_STATE:
         priv->state = g_value_get_uint (value);
@@ -604,6 +614,15 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
           G_PARAM_CONSTRUCT_ONLY));
 
   g_object_class_install_property (object_class,
+      PROP_INCOMING,
+      g_param_spec_boolean ("incoming",
+          "direction of transfer",
+          "The direction of the file being transferred",
+          FALSE,
+          G_PARAM_READWRITE |
+          G_PARAM_CONSTRUCT_ONLY));
+
+  g_object_class_install_property (object_class,
       PROP_STATE,
       g_param_spec_uint ("state",
           "state of the transfer",
@@ -630,14 +649,14 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
  * Return value: a new #EmpathyTpFile
  */
 EmpathyTpFile *
-empathy_tp_file_new (TpChannel *channel)
+empathy_tp_file_new (TpChannel *channel, gboolean incoming)
 {
   EmpathyTpFile *tp_file;
 
   g_return_val_if_fail (TP_IS_CHANNEL (channel), NULL);
 
   tp_file = g_object_new (EMPATHY_TYPE_TP_FILE,
-      "channel", channel,
+      "channel", channel, "incoming", incoming,
       NULL);
 
   return tp_file;
@@ -664,7 +683,6 @@ empathy_tp_file_accept (EmpathyTpFile *tp_file,
   priv->progress_user_data = progress_user_data;
   priv->op_callback = op_callback;
   priv->op_user_data = op_user_data;
-  priv->incoming = TRUE;
   priv->offset = offset;
 
   g_file_replace_async (gfile, NULL, FALSE, G_FILE_CREATE_NONE,
@@ -691,7 +709,6 @@ empathy_tp_file_offer (EmpathyTpFile *tp_file,
   priv->progress_user_data = progress_user_data;
   priv->op_callback = op_callback;
   priv->op_user_data = op_user_data;
-  priv->incoming = FALSE;
 
   g_file_read_async (gfile, G_PRIORITY_DEFAULT, cancellable,
       file_read_async_cb, tp_file);

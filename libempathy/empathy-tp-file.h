@@ -71,7 +71,7 @@ GType empathy_tp_file_get_type (void) G_GNUC_CONST;
 
 /* public methods */
 
-EmpathyTpFile * empathy_tp_file_new (TpChannel *channel);
+EmpathyTpFile * empathy_tp_file_new (TpChannel *channel, gboolean incoming);
 
 void empathy_tp_file_accept (EmpathyTpFile *tp_file,
   guint64 offset,
