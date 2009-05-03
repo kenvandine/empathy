@@ -44,8 +44,6 @@
 #include "empathy-time.h"
 #include "empathy-utils.h"
 
-#include "extensions/extensions.h"
-
 #define DEBUG_FLAG EMPATHY_DEBUG_FT
 #include "empathy-debug.h"
 
@@ -82,8 +80,8 @@ typedef struct {
   GOutputStream *out_stream;
 
   /* org.freedesktop.Telepathy.Channel.Type.FileTransfer D-Bus properties */
-  EmpFileTransferState state;
-  EmpFileTransferStateChangeReason state_change_reason;
+  TpFileTransferState state;
+  TpFileTransferStateChangeReason state_change_reason;
 
   /* transfer properties */
   gboolean incoming;

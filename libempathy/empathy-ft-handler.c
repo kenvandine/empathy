@@ -21,7 +21,6 @@
  
 /* empathy-ft-handler.c */
 
-#include <extensions/extensions.h>
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <telepathy-glib/util.h>
@@ -94,8 +93,8 @@ typedef struct {
   guint64 transferred_bytes;
   guint64 mtime;
   gchar *content_hash;
-  EmpFileHashType content_hash_type;
-  EmpFileTransferState current_state;
+  TpFileHashType content_hash_type;
+  TpFileTransferState current_state;
 
   gboolean is_completed;
   gboolean is_cancelled;
@@ -684,7 +683,7 @@ ft_handler_read_async_cb (GObject *source,
 
   /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.ContentHashType */
   value = tp_g_value_slice_new (G_TYPE_UINT);
-  g_value_set_uint (value, EMP_FILE_HASH_TYPE_MD5);
+  g_value_set_uint (value, TP_FILE_HASH_TYPE_MD5);
   g_hash_table_insert (priv->request,
       TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentHashType", value);
 
@@ -1011,7 +1010,7 @@ empathy_ft_handler_get_gfile (EmpathyFTHandler *handler)
   return priv->gfile;
 }
 
-EmpFileTransferState
+TpFileTransferState
 empathy_ft_handler_get_state (EmpathyFTHandler *handler,
                               char **state_string)
 {

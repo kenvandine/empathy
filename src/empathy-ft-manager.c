@@ -46,7 +46,6 @@
 
 #include "empathy-ft-manager.h"
 
-#include "extensions/extensions.h"
 
 /**
  * SECTION:empathy-ft-manager
