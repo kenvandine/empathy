@@ -128,7 +128,7 @@ tp_file_get_state_cb (TpProxy *proxy,
   if (error)
     {
       /* set a default value for the state */
-      priv->state = EMP_FILE_TRANSFER_STATE_NONE;
+      priv->state = TP_FILE_TRANSFER_STATE_NONE;
       return;
     }
 
@@ -146,13 +146,13 @@ tp_file_invalidated_cb (TpProxy       *proxy,
 
   DEBUG ("Channel invalidated: %s", message);
 
-  if (priv->state != EMP_FILE_TRANSFER_STATE_COMPLETED &&
-      priv->state != EMP_FILE_TRANSFER_STATE_CANCELLED)
+  if (priv->state != TP_FILE_TRANSFER_STATE_COMPLETED &&
+      priv->state != TP_FILE_TRANSFER_STATE_CANCELLED)
     {
       /* The channel is not in a finished state, an error occured */
-      priv->state = EMP_FILE_TRANSFER_STATE_CANCELLED;
+      priv->state = TP_FILE_TRANSFER_STATE_CANCELLED;
       priv->state_change_reason =
-          EMP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_ERROR;
+          TP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_ERROR;
       g_object_notify (G_OBJECT (tp_file), "state");
     }
 }
@@ -310,11 +310,11 @@ tp_file_state_changed_cb (TpChannel *proxy,
    * transfer. The socket path could be NULL if we are not doing the actual
    * data transfer but are just an observer for the channel.
    */
-  if (state == EMP_FILE_TRANSFER_STATE_OPEN &&
+  if (state == TP_FILE_TRANSFER_STATE_OPEN &&
       priv->unix_socket_path != NULL)
     tp_file_start_transfer (EMPATHY_TP_FILE (weak_object));
 
-  if (state == EMP_FILE_TRANSFER_STATE_COMPLETED)
+  if (state == TP_FILE_TRANSFER_STATE_COMPLETED)
     ft_operation_close_clean (EMPATHY_TP_FILE (weak_object));
 
   g_object_notify (weak_object, "state");
@@ -388,7 +388,7 @@ ft_operation_provide_or_accept_file_cb (TpChannel *proxy,
   /* if the channel is already open, start the transfer now, otherwise,
    * wait for the state change signal.
    */
-  if (priv->state == EMP_FILE_TRANSFER_STATE_OPEN)
+  if (priv->state == TP_FILE_TRANSFER_STATE_OPEN)
     tp_file_start_transfer (tp_file);
 }
 
@@ -592,7 +592,7 @@ do_constructor (GType type,
       NULL, NULL, file_obj);
 
   priv->state_change_reason =
-      EMP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE;
+      TP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE;
 
   return file_obj;
 }
