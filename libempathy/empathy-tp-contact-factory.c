@@ -127,7 +127,7 @@ tp_contact_factory_set_location_cb (TpProxy *proxy,
 				    gpointer user_data,
 				    GObject *weak_object)
 {
-	if (error) {
+	if (error != NULL) {
 		DEBUG ("Error setting location: %s", error->message);
 	}
 }
@@ -322,7 +322,7 @@ tp_contact_factory_update_location (EmpathyTpContactFactory *tp_factory,
 	EmpathyContact      *contact;
 
 	contact = tp_contact_factory_find_by_handle (tp_factory, handle);
-	if (!contact) {
+	if (contact == NULL) {
 		return;
 	}
 
@@ -413,16 +413,13 @@ tp_contact_factory_got_locations (EmpathyTpContactFactory *tp_factory,
 	GHashTableIter iter;
 	gpointer key, value;
 
-	if (error) {
+	if (error != NULL) {
 		DEBUG ("Error: %s", error->message);
-		/* FIXME Should set the capabilities of the contacts for which this request
-		 * originated to NONE */
 		return;
 	}
 
 	g_hash_table_iter_init (&iter, locations);
 	while (g_hash_table_iter_next (&iter, &key, &value)) {
-		/* do something with key and value */
 		guint        handle = GPOINTER_TO_INT (key);
 		GHashTable  *location = value;
 
@@ -464,13 +461,13 @@ tp_contact_factory_capabilities_changed_cb (TpConnection    *connection,
 	}
 }
 
-static void 
+static void
 update_location_for_each (gpointer key,
 			  gpointer value,
 			  gpointer user_data)
 {
 	GHashTable *location = (GHashTable*) user_data;
-	g_hash_table_insert (location, g_strdup(key), tp_g_value_slice_dup (value));
+	g_hash_table_insert (location, g_strdup (key), tp_g_value_slice_dup (value));
 }
 
 static void
@@ -484,13 +481,17 @@ tp_contact_factory_location_updated_cb (TpProxy      *proxy,
 	EmpathyContact          *contact;
 	GHashTable              *new_location;
 
-	new_location = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
+	contact = tp_contact_factory_find_by_handle (tp_factory, handle);
+
+	if (contact == NULL)
+		return;
+
+	new_location = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
 		(GDestroyNotify) tp_g_value_slice_free);
 
 	// Copy keys
 	g_hash_table_foreach (location, update_location_for_each, new_location);
 
-	contact = tp_contact_factory_find_by_handle (tp_factory, handle);
 	empathy_contact_set_location (contact, new_location);
 }
 
