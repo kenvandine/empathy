@@ -411,6 +411,8 @@ ft_handler_transfer_done_cb (EmpathyFTHandler *handler,
   GtkTreeRowReference *row_ref;
   EmpathyFTManagerPriv *priv = GET_PRIV (manager);
 
+  DEBUG ("Transfer done");
+
   row_ref = ft_manager_get_row_from_handler (manager, handler);
   g_return_if_fail (row_ref != NULL);
 
@@ -456,6 +458,8 @@ ft_handler_transfer_progress_cb (EmpathyFTHandler *handler,
   int percentage;
   GtkTreeRowReference *row_ref;
 
+  DEBUG ("Transfer progress");
+
   row_ref = ft_manager_get_row_from_handler (manager, handler);
   g_return_if_fail (row_ref != NULL);
 
@@ -478,6 +482,8 @@ ft_handler_transfer_started_cb (EmpathyFTHandler *handler,
 {
   guint64 transferred_bytes, total_bytes;
 
+  DEBUG ("Transfer started");
+
   g_signal_connect (handler, "transfer-progress",
       G_CALLBACK (ft_handler_transfer_progress_cb), manager);
   g_signal_connect (handler, "transfer-done",
@@ -494,6 +500,25 @@ static void
 ft_handler_hashing_done_cb (EmpathyFTHandler *handler,
                             EmpathyFTManager *manager)
 {
+  GtkTreeRowReference *row_ref;
+  char *first_line, *second_line, *message;
+
+  DEBUG ("Hashing done");
+
+  row_ref = ft_manager_get_row_from_handler (manager, handler);
+  g_return_if_fail (row_ref != NULL);
+
+  /* update the message */
+  first_line = ft_manager_format_contact_info (handler);
+  second_line = g_strdup (_("Waiting for the other participant's response"));
+  message = g_strdup_printf ("%s\n%s", first_line, second_line);
+
+  ft_manager_update_handler_message (manager, row_ref, message);
+
+  g_free (message);
+  g_free (first_line);
+  g_free (second_line);
+
   g_signal_connect (handler, "transfer-started",
       G_CALLBACK (ft_handler_transfer_started_cb), manager);
 }
@@ -506,6 +531,8 @@ ft_handler_hashing_progress_cb (EmpathyFTHandler *handler,
 {
   char *first_line, *second_line, *message;
   GtkTreeRowReference *row_ref;
+
+  DEBUG ("Hashing progress");
 
   row_ref = ft_manager_get_row_from_handler (manager, handler);
   g_return_if_fail (row_ref != NULL);
@@ -529,6 +556,8 @@ ft_handler_hashing_started_cb (EmpathyFTHandler *handler,
   char *message;
   GtkTreeRowReference *row_ref;
 
+  DEBUG ("Hashing started");
+
   g_signal_connect (handler, "hashing-progress",
      G_CALLBACK (ft_handler_hashing_progress_cb), manager);
   g_signal_connect (handler, "hashing-done",
@@ -551,6 +580,7 @@ ft_manager_start_transfer (EmpathyFTManager *manager,
 {
   GCancellable *cancellable;
   EmpathyFTManagerPriv *priv;
+  gboolean is_incoming;
 
   priv = GET_PRIV (manager);
 
@@ -558,16 +588,20 @@ ft_manager_start_transfer (EmpathyFTManager *manager,
   g_hash_table_insert (priv->cancellable_refs, g_object_ref (handler),
       cancellable);
 
+  is_incoming = empathy_ft_handler_is_incoming (handler);
+
+  DEBUG ("Start transfer, is incoming %d", is_incoming);
+
   /* now connect the signals */
   g_signal_connect (handler, "transfer-error",
       G_CALLBACK (ft_handler_transfer_error_cb), manager);
 
-  if (empathy_ft_handler_is_incoming (handler)) {
-    g_signal_connect (handler, "hashing-started",
-        G_CALLBACK (ft_handler_hashing_started_cb), manager);
-  } else {
+  if (is_incoming) {
     g_signal_connect (handler, "transfer-started",
         G_CALLBACK (ft_handler_transfer_started_cb), manager);
+  } else {
+    g_signal_connect (handler, "hashing-started",
+        G_CALLBACK (ft_handler_hashing_started_cb), manager);
   }
 
   empathy_ft_handler_start_transfer (handler, cancellable);
@@ -606,15 +640,17 @@ ft_manager_add_handler_to_list (EmpathyFTManager *manager,
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
   gtk_tree_selection_select_iter (selection, &iter);
 
+  /* update the row with the initial values */
+  if (empathy_ft_handler_is_incoming (handler)) {
+    first_line = ft_manager_format_contact_info (handler);
+    second_line = g_strdup (_("Waiting for the other participant's response"));
+    message = g_strdup_printf ("%s\n%s", first_line, second_line);
+
+    ft_manager_update_handler_message (manager, row_ref, message);
+  }
+
   /* hook up the signals and start the transfer */
   ft_manager_start_transfer (manager, handler);
-
-  /* update the row with the initial values */
-  first_line = ft_manager_format_contact_info (handler);
-  second_line = g_strdup (_("Waiting for the other participant's response"));
-  message = g_strdup_printf ("%s\n%s", first_line, second_line);
-
-  ft_manager_update_handler_message (manager, row_ref, message);
 
   g_free (first_line);
   g_free (second_line);
@@ -977,6 +1013,8 @@ empathy_ft_manager_add_handler (EmpathyFTManager *manager,
                                 EmpathyFTHandler *handler)
 {
   EmpathyFTManagerPriv *priv = GET_PRIV (manager);
+
+  DEBUG ("Adding handler");
 
   g_return_if_fail (EMPATHY_IS_FT_MANAGER (manager));
   g_return_if_fail (EMPATHY_IS_FT_HANDLER (handler));
