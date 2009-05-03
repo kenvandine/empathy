@@ -409,6 +409,9 @@ ft_handler_create_channel_cb (EmpathyDispatchOperation *operation,
 
   priv->tpfile = g_object_ref
       (empathy_dispatch_operation_get_channel_wrapper (operation));
+
+  g_signal_emit (handler, signals[TRANSFER_STARTED], 0, priv->tpfile);
+
   empathy_tp_file_offer (priv->tpfile, priv->gfile, priv->cancellable,
       ft_transfer_progress_callback, handler,
       ft_transfer_operation_callback, handler);
