@@ -104,8 +104,7 @@ typedef struct {
 enum {
   PROP_0,
   PROP_CHANNEL,
-  PROP_INCOMING,
-  PROP_STATE
+  PROP_INCOMING
 };
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTpFile)
@@ -151,7 +150,6 @@ tp_file_invalidated_cb (TpProxy       *proxy,
       priv->state = TP_FILE_TRANSFER_STATE_CANCELLED;
       priv->state_change_reason =
           TP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_ERROR;
-      g_object_notify (G_OBJECT (tp_file), "state");
     }
 }
 
@@ -314,8 +312,6 @@ tp_file_state_changed_cb (TpChannel *proxy,
 
   if (state == TP_FILE_TRANSFER_STATE_COMPLETED)
     ft_operation_close_clean (EMPATHY_TP_FILE (weak_object));
-
-  g_object_notify (weak_object, "state");
 }
 
 static void
@@ -325,6 +321,10 @@ tp_file_transferred_bytes_changed_cb (TpChannel *proxy,
                                       GObject *weak_object)
 {
   EmpathyTpFilePriv *priv = GET_PRIV (weak_object);
+
+  /* don't notify for 0 bytes count */
+  if (count == 0)
+    return;
 
   /* notify clients */
   if (priv->progress_callback)
@@ -505,7 +505,9 @@ do_finalize (GObject *object)
 {
   EmpathyTpFilePriv *priv = GET_PRIV (object);
 
-  g_free (priv->unix_socket_path);
+  DEBUG ("%p", object);
+
+  g_array_free (priv->unix_socket_path, TRUE);
 
   G_OBJECT_CLASS (empathy_tp_file_parent_class)->finalize (object);
 }
@@ -525,9 +527,6 @@ do_get_property (GObject *object,
         break;
       case PROP_INCOMING:
         g_value_set_boolean (value, priv->incoming);
-        break;
-      case PROP_STATE:
-        g_value_set_uint (value, priv->state);
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -549,9 +548,6 @@ do_set_property (GObject *object,
         break;
       case PROP_INCOMING:
         priv->incoming = g_value_get_boolean (value);
-        break;
-      case PROP_STATE:
-        priv->state = g_value_get_uint (value);
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -624,17 +620,6 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
           FALSE,
           G_PARAM_READWRITE |
           G_PARAM_CONSTRUCT_ONLY));
-
-  g_object_class_install_property (object_class,
-      PROP_STATE,
-      g_param_spec_uint ("state",
-          "state of the transfer",
-          "The file transfer state",
-          0,
-          G_MAXUINT,
-          G_MAXUINT,
-          G_PARAM_READWRITE |
-          G_PARAM_CONSTRUCT));
 
   g_type_class_add_private (object_class, sizeof (EmpathyTpFilePriv));
 }
