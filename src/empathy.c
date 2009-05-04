@@ -421,6 +421,8 @@ new_ft_handler_cb (EmpathyFTFactory *factory,
 
 	ft_manager = empathy_ft_manager_dup_singleton ();
 	empathy_ft_manager_add_handler (ft_manager, handler);
+
+	g_object_unref (handler);
 }
 
 static void
