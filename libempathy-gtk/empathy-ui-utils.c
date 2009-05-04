@@ -1504,6 +1504,9 @@ empathy_receive_file_with_file_chooser (EmpathyFTHandler *handler)
 					      NULL);
 	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (widget),
 		empathy_ft_handler_get_filename (handler));
+	gtk_file_chooser_set_do_overwrite_confirmation
+		(GTK_FILE_CHOOSER (widget), TRUE);
+
 	g_signal_connect (widget, "response",
 		G_CALLBACK (file_manager_receive_file_response_cb), handler);
 
