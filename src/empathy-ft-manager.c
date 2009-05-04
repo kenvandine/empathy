@@ -327,6 +327,49 @@ ft_manager_format_contact_info (EmpathyFTHandler *handler)
   return retval;
 }
 
+static char *
+ft_manager_format_error_message (EmpathyFTHandler *handler,
+                                 const GError *error)
+{
+  const char *contact_name, *filename;
+  EmpathyContact *contact;
+  char *first_line, *message;
+  gboolean incoming;
+
+  contact_name = NULL;
+  incoming = empathy_ft_handler_is_incoming (handler);
+
+  contact = empathy_ft_handler_get_contact (handler);
+  if (contact)
+    contact_name = empathy_contact_get_name (contact);
+
+  filename = empathy_ft_handler_get_filename (handler);
+
+  if (incoming)
+    /* filename/contact_name here are either both NULL or both valid */
+    if (filename && contact_name)
+      /* translators: first %s is filename, second %s
+       * is the contact name */
+      first_line = g_strdup_printf (_("Error receiving \"%s\" from %s"), filename,
+          contact_name);
+    else
+      first_line = g_strdup (_("Error receiving a file"));
+  else
+    /* translators: first %s is filename, second %s
+     * is the contact name */
+    if (filename && contact_name)
+      first_line = g_strdup_printf (_("Error sending \"%s\" to %s"), filename,
+          contact_name);
+    else
+      first_line = g_strdup (_("Error sending a file"));
+
+  message = g_strdup_printf ("%s\n%s", first_line, error->message);
+
+  g_free (first_line);
+
+  return message;
+}
+
 static void
 ft_manager_update_handler_message (EmpathyFTManager *manager,
                                    GtkTreeRowReference *row_ref,
@@ -373,9 +416,7 @@ ft_handler_transfer_error_cb (EmpathyFTHandler *handler,
                               GError *error,
                               EmpathyFTManager *manager)
 {
-  const char *contact_name, *filename;
-  char *first_line, *message;
-  gboolean incoming;
+  char *message;
   GtkTreeRowReference *row_ref;
 
   DEBUG ("Transfer error %s", error->message);
@@ -383,28 +424,11 @@ ft_handler_transfer_error_cb (EmpathyFTHandler *handler,
   row_ref = ft_manager_get_row_from_handler (manager, handler);
   g_return_if_fail (row_ref != NULL);
 
-  incoming = empathy_ft_handler_is_incoming (handler);  
-  contact_name = empathy_contact_get_name
-    (empathy_ft_handler_get_contact (handler));
-  filename = empathy_ft_handler_get_filename (handler);
-
-  if (incoming)
-    /* translators: first %s is filename, second %s
-     * is the contact name */
-    first_line = g_strdup_printf (_("Error receiving \"%s\" from %s"), filename,
-        contact_name);
-  else
-    /* translators: first %s is filename, second %s
-     * is the contact name */
-    first_line = g_strdup_printf (_("Error sensing \"%s\" to %s"), filename,
-        contact_name);
-
-  message = g_strdup_printf ("%s\n%s", first_line, error->message);
+  message = ft_manager_format_error_message (handler, error);
 
   ft_manager_update_handler_message (manager, row_ref, message);
   ft_manager_update_buttons (manager);
 
-  g_free (first_line);
   g_free (message);
 }
 
@@ -609,25 +633,33 @@ ft_manager_start_transfer (EmpathyFTManager *manager,
 
 static void
 ft_manager_add_handler_to_list (EmpathyFTManager *manager,
-                                EmpathyFTHandler *handler)
+                                EmpathyFTHandler *handler,
+                                const GError *error)
 {
   GtkTreeRowReference *row_ref;
   GtkTreeIter iter;
   GtkTreeSelection *selection;
   GtkTreePath *path;
   GIcon *icon;
-  const char *content_type;
-  char *first_line, *second_line, *message;
+  const char *content_type, *second_line;
+  char *first_line, *message;
   EmpathyFTManagerPriv *priv = GET_PRIV (manager);
+
+  icon = NULL;
 
   /* get the icon name from the mime-type of the file. */
   content_type = empathy_ft_handler_get_content_type (handler);
-  icon = g_content_type_get_icon (content_type);
+
+  if (content_type != NULL)
+    icon = g_content_type_get_icon (content_type);
 
   /* append the handler in the store */
   gtk_list_store_insert_with_values (GTK_LIST_STORE (priv->model),
-      &iter, G_MAXINT, COL_FT_OBJECT, handler, COL_ICON, icon, -1);
-  g_object_unref (icon);
+      &iter, G_MAXINT, COL_FT_OBJECT, handler,
+      COL_ICON, icon, -1);
+
+  if (icon != NULL)
+    g_object_unref (icon);
 
   /* insert the new row_ref in the hash table  */
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (priv->model), &iter);
@@ -640,21 +672,30 @@ ft_manager_add_handler_to_list (EmpathyFTManager *manager,
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
   gtk_tree_selection_select_iter (selection, &iter);
 
+  if (error != NULL)
+    {
+      message = ft_manager_format_error_message (handler, error);
+      ft_manager_update_handler_message (manager, row_ref, message);
+
+      g_free (message);
+      return;
+    }
+
   /* update the row with the initial values */
   if (empathy_ft_handler_is_incoming (handler)) {
     first_line = ft_manager_format_contact_info (handler);
-    second_line = g_strdup (_("Waiting for the other participant's response"));
+    second_line = _("Waiting for the other participant's response");
     message = g_strdup_printf ("%s\n%s", first_line, second_line);
 
     ft_manager_update_handler_message (manager, row_ref, message);
+
+    g_free (first_line);
+    g_free (message);
   }
+
 
   /* hook up the signals and start the transfer */
   ft_manager_start_transfer (manager, handler);
-
-  g_free (first_line);
-  g_free (second_line);
-  g_free (message);
 }
 
 static void
@@ -1015,7 +1056,21 @@ empathy_ft_manager_add_handler (EmpathyFTManager *manager,
   g_return_if_fail (EMPATHY_IS_FT_MANAGER (manager));
   g_return_if_fail (EMPATHY_IS_FT_HANDLER (handler));
 
-  ft_manager_add_handler_to_list (manager, handler);
+  ft_manager_add_handler_to_list (manager, handler, NULL);
   gtk_window_present (GTK_WINDOW (priv->window));
 }
 
+void
+empathy_ft_manager_display_error (EmpathyFTManager *manager,
+                                  EmpathyFTHandler *handler,
+                                  const GError *error)
+{
+  EmpathyFTManagerPriv *priv = GET_PRIV (manager);
+
+  g_return_if_fail (EMPATHY_IS_FT_MANAGER (manager));
+  g_return_if_fail (EMPATHY_IS_FT_HANDLER (handler));
+  g_return_if_fail (error != NULL);
+
+  ft_manager_add_handler_to_list (manager, handler, error);
+  gtk_window_present (GTK_WINDOW (priv->window));
+}

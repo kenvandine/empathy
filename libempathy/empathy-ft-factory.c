@@ -117,7 +117,7 @@ ft_handler_incoming_ready_cb (EmpathyFTHandler *handler,
 
   if (error != NULL)
     {
-      /* TODO: error handling */
+      /* TODO: error handling */      
       return;
     }
 

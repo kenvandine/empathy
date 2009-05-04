@@ -64,6 +64,8 @@ GType empathy_ft_manager_get_type (void);
 EmpathyFTManager *empathy_ft_manager_dup_singleton (void);
 void empathy_ft_manager_add_handler (EmpathyFTManager *ft_manager,
     EmpathyFTHandler *handler);
+void empathy_ft_manager_display_error (EmpathyFTManager *ft_manager,
+    EmpathyFTHandler *handler, const GError *error);
 
 G_END_DECLS
 
