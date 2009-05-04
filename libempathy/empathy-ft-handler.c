@@ -192,6 +192,8 @@ do_finalize (GObject *object)
 {
   EmpathyFTHandlerPriv *priv = GET_PRIV (object);
 
+  DEBUG ("%p", object);
+
   g_free (priv->content_type);
   priv->content_type = NULL;
 
@@ -371,6 +373,8 @@ ft_transfer_operation_callback (EmpathyTpFile *tp_file,
     {
       priv->is_completed = TRUE;
       g_signal_emit (handler, signals[TRANSFER_DONE], 0, tp_file);
+
+      empathy_tp_file_close (tp_file);
     }
 }
 
@@ -381,6 +385,11 @@ ft_transfer_progress_callback (EmpathyTpFile *tp_file,
 {
   EmpathyFTHandler *handler = user_data;
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
+
+  if (transferred_bytes == 0) {
+      g_signal_emit (handler, signals[TRANSFER_STARTED], 0, tp_file);
+  }
+    
 
   if (priv->transferred_bytes != transferred_bytes)
     {
@@ -418,8 +427,6 @@ ft_handler_create_channel_cb (EmpathyDispatchOperation *operation,
 
   priv->tpfile = g_object_ref
       (empathy_dispatch_operation_get_channel_wrapper (operation));
-
-  g_signal_emit (handler, signals[TRANSFER_STARTED], 0, priv->tpfile);
 
   empathy_tp_file_offer (priv->tpfile, priv->gfile, priv->cancellable,
       ft_transfer_progress_callback, handler,
@@ -574,7 +581,6 @@ hash_job_async_close_stream_cb (GObject *source,
       TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentHash", value);
 
 cleanup:
-  hash_data_free (hash_data);
 
   if (error != NULL)
     {
@@ -587,6 +593,8 @@ cleanup:
       /* the request is complete now, push it to the dispatcher */
       ft_handler_push_to_dispatcher (handler);
     }
+
+  hash_data_free (hash_data);
 }
 
 static void
@@ -928,11 +936,6 @@ empathy_ft_handler_start_transfer (EmpathyFTHandler *handler)
     }
   else
     {
-      /* emit the start signal now, so that we can catch errors in the
-       * op callback.
-       */
-      g_signal_emit (handler, signals[TRANSFER_STARTED], 0, priv->tpfile);
-
       /* TODO: add support for resume. */
       empathy_tp_file_accept (priv->tpfile, 0, priv->gfile, priv->cancellable,
           ft_transfer_progress_callback, handler,
