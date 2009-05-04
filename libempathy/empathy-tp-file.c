@@ -737,37 +737,6 @@ empathy_tp_file_is_incoming (EmpathyTpFile *tp_file)
   return priv->incoming;
 }
 
-/**
- * empathy_tp_file_get_state:
- * @tp_file: an #EmpathyTpFile
- * @reason: return location for state change reason, or %NULL
- *
- * Gets the current state of @tp_file. If @reason is not %NULL, then
- * it is set to the reason of the last state change.
- *
- * Return value: a #TpFileTransferState
- */
-TpFileTransferState
-empathy_tp_file_get_state (EmpathyTpFile *tp_file,
-                           TpFileTransferStateChangeReason *reason)
-{
-  EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
-
-  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file),
-      TP_FILE_TRANSFER_STATE_NONE);
-
-  if (reason != NULL)
-    *reason = priv->state_change_reason;
-
-  return priv->state;
-}
-
-/**
- * empathy_tp_file_cancel:
- * @tp_file: an #EmpathyTpFile
- *
- * Cancels the file transfer, @tp_file.
- */
 void
 empathy_tp_file_cancel (EmpathyTpFile *tp_file)
 {
@@ -781,7 +750,8 @@ empathy_tp_file_cancel (EmpathyTpFile *tp_file)
   tp_cli_channel_call_close (priv->channel, -1,
     NULL, NULL, NULL, NULL);
 
-  if (priv->cancellable != NULL)
+  if (priv->cancellable != NULL &&
+      !g_cancellable_is_cancelled (priv->cancellable))
     g_cancellable_cancel (priv->cancellable);
 }
 

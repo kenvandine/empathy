@@ -125,12 +125,7 @@ ft_manager_update_buttons (EmpathyFTManager *manager)
   GtkTreeSelection *selection;
   GtkTreeModel *model;
   GtkTreeIter iter;
-<<<<<<< HEAD:src/empathy-ft-manager.c
-  EmpathyTpFile *tp_file;
-  TpFileTransferState state;
-=======
   EmpathyFTHandler *handler;
->>>>>>> Use the proper TP interface instead of emp_cli:src/empathy-ft-manager.c
   gboolean open_enabled = FALSE;
   gboolean abort_enabled = FALSE;
   gboolean is_completed, is_cancelled;
@@ -146,19 +141,10 @@ ft_manager_update_buttons (EmpathyFTManager *manager)
       is_cancelled = empathy_ft_handler_is_cancelled (handler);
 
       /* I can open the file if the transfer is completed and was incoming */
-<<<<<<< HEAD:src/empathy-ft-manager.c
-      open_enabled = (state == TP_FILE_TRANSFER_STATE_COMPLETED &&
-        empathy_tp_file_is_incoming (tp_file));
-
-      /* I can abort if the transfer is not already finished */
-      abort_enabled = (state != TP_FILE_TRANSFER_STATE_CANCELLED &&
-        state != TP_FILE_TRANSFER_STATE_COMPLETED);
-=======
       open_enabled = (is_completed && empathy_ft_handler_is_incoming (handler));
 
       /* I can abort if the transfer is not already finished */
       abort_enabled = (is_cancelled == FALSE && is_completed == FALSE);
->>>>>>> Use the proper TP interface instead of emp_cli:src/empathy-ft-manager.c
 
       g_object_unref (handler);
     }
@@ -387,7 +373,39 @@ ft_handler_transfer_error_cb (EmpathyFTHandler *handler,
                               GError *error,
                               EmpathyFTManager *manager)
 {
-  /* TODO: implement */
+  const char *contact_name, *filename;
+  char *first_line, *message;
+  gboolean incoming;
+  GtkTreeRowReference *row_ref;
+
+  DEBUG ("Transfer error %s", error->message);
+
+  row_ref = ft_manager_get_row_from_handler (manager, handler);
+  g_return_if_fail (row_ref != NULL);
+
+  incoming = empathy_ft_handler_is_incoming (handler);  
+  contact_name = empathy_contact_get_name
+    (empathy_ft_handler_get_contact (handler));
+  filename = empathy_ft_handler_get_filename (handler);
+
+  if (incoming)
+    /* translators: first %s is filename, second %s
+     * is the contact name */
+    first_line = g_strdup_printf (_("Error receiving \"%s\" from %s"), filename,
+        contact_name);
+  else
+    /* translators: first %s is filename, second %s
+     * is the contact name */
+    first_line = g_strdup_printf (_("Error sensing \"%s\" to %s"), filename,
+        contact_name);
+
+  message = g_strdup_printf ("%s\n%s", first_line, error->message);
+
+  ft_manager_update_handler_message (manager, row_ref, message);
+  ft_manager_update_buttons (manager);
+
+  g_free (first_line);
+  g_free (message);
 }
 
 static void

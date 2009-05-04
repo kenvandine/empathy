@@ -77,8 +77,6 @@ const char * empathy_ft_handler_get_filename (EmpathyFTHandler *handler);
 const char * empathy_ft_handler_get_content_type (EmpathyFTHandler *handler);
 EmpathyContact * empathy_ft_handler_get_contact (EmpathyFTHandler *handler);
 GFile * empathy_ft_handler_get_gfile (EmpathyFTHandler *handler);
-TpFileTransferState empathy_ft_handler_get_state (EmpathyFTHandler *handler,
-                                                   char **state_string);
 gboolean empathy_ft_handler_is_incoming (EmpathyFTHandler *handler);
 guint64 empathy_ft_handler_get_transferred_bytes (EmpathyFTHandler *handler);
 guint64 empathy_ft_handler_get_total_bytes (EmpathyFTHandler *handler);

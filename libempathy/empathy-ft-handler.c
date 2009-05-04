@@ -97,7 +97,6 @@ typedef struct {
   TpFileTransferState current_state;
 
   gboolean is_completed;
-  gboolean is_cancelled;
 } EmpathyFTHandlerPriv;
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -302,6 +301,7 @@ empathy_ft_handler_init (EmpathyFTHandler *self)
     EMPATHY_TYPE_FT_HANDLER, EmpathyFTHandlerPriv);
 
   self->priv = priv;
+  priv->cancellable = g_cancellable_new ();
 }
 
 /* private functions */
@@ -342,6 +342,18 @@ hash_data_free (HashingData *data)
 }
 
 static void
+emit_error_signal (EmpathyFTHandler *handler,
+                   const GError *error)
+{
+  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
+
+  if (!g_cancellable_is_cancelled (priv->cancellable))
+    g_cancellable_cancel (priv->cancellable);
+
+  g_signal_emit (handler, signals[TRANSFER_ERROR], 0, error);
+}
+
+static void
 ft_transfer_operation_callback (EmpathyTpFile *tp_file,
                                 const GError *error,
                                 gpointer user_data)
@@ -353,8 +365,7 @@ ft_transfer_operation_callback (EmpathyTpFile *tp_file,
 
   if (error != NULL)
     {
-      priv->is_cancelled = TRUE;
-      g_signal_emit (handler, signals[TRANSFER_ERROR], 0, error);
+      emit_error_signal (handler, error);
     }
   else 
     {
@@ -386,24 +397,21 @@ ft_handler_create_channel_cb (EmpathyDispatchOperation *operation,
 {
   EmpathyFTHandler *handler = user_data;
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
-  GError *my_error = NULL;
+  GError *my_error = (GError *) error;
 
   DEBUG ("Dispatcher create channel CB");
 
-  if (error != NULL)
+  if (my_error == NULL)
     {
-      priv->is_cancelled = TRUE;
-      g_signal_emit (handler, signals[TRANSFER_ERROR], 0, error);
-      return;
+      g_cancellable_set_error_if_cancelled (priv->cancellable, &my_error);
     }
-
-  g_cancellable_set_error_if_cancelled (priv->cancellable, &my_error);
 
   if (my_error != NULL)
     {
-      priv->is_cancelled = TRUE;
-      g_signal_emit (handler, signals[TRANSFER_ERROR], 0, my_error);
-      g_clear_error (&my_error);
+      emit_error_signal (handler, my_error);
+
+      if (my_error != error)
+        g_clear_error (&my_error);
 
       return;
     }
@@ -570,9 +578,7 @@ cleanup:
 
   if (error != NULL)
     {
-      priv->is_cancelled = TRUE;
-      g_signal_emit (handler, signals[TRANSFER_ERROR], 0, error);
-      g_clear_error (&error);
+      emit_error_signal (handler, error);
     }
   else
     {
@@ -664,8 +670,7 @@ ft_handler_read_async_cb (GObject *source,
   stream = g_file_read_finish (priv->gfile, res, &error);
   if (error != NULL)
     {
-      priv->is_cancelled = TRUE;
-      g_signal_emit (handler, signals[TRANSFER_ERROR], 0, error);
+      emit_error_signal (handler, error);
       g_clear_error (&error);
 
       return;
@@ -705,9 +710,7 @@ ft_handler_complete_request (EmpathyFTHandler *handler)
           EMPATHY_FT_ERROR_NOT_SUPPORTED,
           _("File transfer not supported by remote contact"));
 
-      priv->is_cancelled = TRUE;
-      g_signal_emit (handler, signals[TRANSFER_ERROR], 0, myerr);
-      g_clear_error (&myerr);
+      emit_error_signal (handler, myerr);
 
       return;
     }
@@ -918,7 +921,6 @@ empathy_ft_handler_start_transfer (EmpathyFTHandler *handler)
   g_return_if_fail (EMPATHY_IS_FT_HANDLER (handler));
 
   priv = GET_PRIV (handler);
-  priv->cancellable = g_cancellable_new ();
 
   if (priv->tpfile == NULL)
     {
@@ -1010,19 +1012,6 @@ empathy_ft_handler_get_gfile (EmpathyFTHandler *handler)
   return priv->gfile;
 }
 
-TpFileTransferState
-empathy_ft_handler_get_state (EmpathyFTHandler *handler,
-                              char **state_string)
-{
-  EmpathyFTHandlerPriv *priv;
-
-  g_return_val_if_fail (EMPATHY_IS_FT_HANDLER (handler), -1);
-
-  priv = GET_PRIV (handler);
-
-  return priv->current_state;
-}
-
 gboolean
 empathy_ft_handler_is_incoming (EmpathyFTHandler *handler)
 {
@@ -1083,5 +1072,5 @@ empathy_ft_handler_is_cancelled (EmpathyFTHandler *handler)
 
   priv = GET_PRIV (handler);
 
-  return priv->is_cancelled;
+  return g_cancellable_is_cancelled (priv->cancellable);
 }

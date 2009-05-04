@@ -93,8 +93,6 @@ void empathy_tp_file_close (EmpathyTpFile *tp_file);
 
 gboolean empathy_tp_file_is_incoming (EmpathyTpFile *tp_file);
 
-TpFileTransferState empathy_tp_file_get_state (EmpathyTpFile *tp_file, guint *reason);
-
 G_END_DECLS
 
 #endif /* __EMPATHY_TP_FILE_H__ */
