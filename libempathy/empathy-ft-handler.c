@@ -107,9 +107,6 @@ typedef struct {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-/* prototypes */
-static void schedule_hash_chunk (HashingData *hash_data);
-
 /* GObject implementations */
 static void
 do_get_property (GObject *object,
@@ -570,10 +567,8 @@ ft_handler_populate_outgoing_request (EmpathyFTHandler *handler)
       TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Date", value);
 }
 
-static void
-hash_job_async_close_stream_cb (GObject *source,
-                                GAsyncResult *res,
-                                gpointer user_data)
+static gboolean
+hash_job_done (gpointer user_data)
 {
   HashingData *hash_data = user_data;
   EmpathyFTHandler *handler = hash_data->handler;
@@ -584,25 +579,6 @@ hash_job_async_close_stream_cb (GObject *source,
   DEBUG ("Closing stream after hashing.");
 
   priv = GET_PRIV (handler);
-
-  /* if we're here we for sure have done reading, check if we stopped due
-   * to an error.
-   */
-  g_input_stream_close_finish (hash_data->stream, res, &error);
-  if (error != NULL)
-    {
-      if (hash_data->error != NULL)
-        {
-          /* if we already stopped due to an error, probably we're completely
-           * hosed for some reason. just return the first read error
-           * to the user.
-           */
-          g_clear_error (&error);
-          error = hash_data->error;
-        }
-
-      goto cleanup;
-    }
 
   if (hash_data->error != NULL)
     {
@@ -635,68 +611,69 @@ cleanup:
     }
 
   hash_data_free (hash_data);
+
+  return FALSE;
 }
 
-static void
-hash_job_async_read_cb (GObject *source,
-                        GAsyncResult *res,
-                        gpointer user_data)
+static gboolean
+emit_hashing_progress (gpointer user_data)
+{
+  HashingData *hash_data = user_data;
+
+  g_signal_emit (hash_data->handler, signals[HASHING_PROGRESS], 0,
+      (guint64) hash_data->total_read, (guint64) hash_data->total_bytes);
+
+  return FALSE;
+}
+
+static gboolean
+do_hash_job (GIOSchedulerJob *job,
+             GCancellable *cancellable,
+             gpointer user_data)
 {
   HashingData *hash_data = user_data;
   gssize bytes_read;
+  EmpathyFTHandlerPriv *priv;
   GError *error = NULL;
 
-  bytes_read = g_input_stream_read_finish (hash_data->stream, res, &error);
+  priv = GET_PRIV (hash_data->handler);
+
+again:
+  if (hash_data->buffer == NULL)
+    hash_data->buffer = g_malloc0 (BUFFER_SIZE);
+
+  bytes_read = g_input_stream_read (hash_data->stream, hash_data->buffer,
+                                    BUFFER_SIZE, cancellable, &error);
   if (error != NULL)
-    {
-      hash_data->error = error;
-      hash_data->done_reading = TRUE;
-      goto out;
-    }
+    goto out;
 
   hash_data->total_read += bytes_read;
 
   /* we now have the chunk */
-  if (bytes_read == 0)
-    {
-      hash_data->done_reading = TRUE;
-      goto out;
-    }
-  else
+  if (bytes_read > 0)
     {
       g_checksum_update (hash_data->checksum, hash_data->buffer, bytes_read);
-      g_signal_emit (hash_data->handler, signals[HASHING_PROGRESS], 0,
-          (guint64) hash_data->total_read, (guint64) hash_data->total_bytes);
-    }
+      g_io_scheduler_job_send_to_mainloop_async (job, emit_hashing_progress,
+          hash_data, NULL);
 
-out:
-  g_free (hash_data->buffer);
-  hash_data->buffer = NULL;
+      g_free (hash_data->buffer);
+      hash_data->buffer = NULL;
 
-  schedule_hash_chunk (hash_data);
-}
-
-static void
-schedule_hash_chunk (HashingData *hash_data)
-{
-  EmpathyFTHandlerPriv *priv;
-
-  priv = GET_PRIV (hash_data->handler);
-
-  if (hash_data->done_reading)
-    {
-      g_input_stream_close_async (hash_data->stream, G_PRIORITY_DEFAULT,
-          priv->cancellable, hash_job_async_close_stream_cb, hash_data);
+      goto again;
     }
   else
-    {
-      if (hash_data->buffer == NULL)
-        hash_data->buffer = g_malloc0 (BUFFER_SIZE);
+  {
+    g_input_stream_close (hash_data->stream, cancellable, &error);
+  }
 
-      g_input_stream_read_async (hash_data->stream, hash_data->buffer,
-          BUFFER_SIZE, G_PRIORITY_DEFAULT, priv->cancellable,
-          hash_job_async_read_cb, hash_data);
-    }
+out:
+  if (error)
+    hash_data->error = error;
+
+  g_io_scheduler_job_send_to_mainloop_async (job, hash_job_done,
+      hash_data, NULL);
+
+  return FALSE;
 }
 
 static void
@@ -740,7 +717,8 @@ ft_handler_read_async_cb (GObject *source,
 
   g_signal_emit (handler, signals[HASHING_STARTED], 0);
 
-  schedule_hash_chunk (hash_data);
+  g_io_scheduler_push_job (do_hash_job, hash_data, NULL,
+      G_PRIORITY_DEFAULT, priv->cancellable);
 }
 
 static void
