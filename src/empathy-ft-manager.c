@@ -98,9 +98,8 @@ G_DEFINE_TYPE (EmpathyFTManager, empathy_ft_manager, G_TYPE_OBJECT);
 
 static EmpathyFTManager *manager_singleton = NULL;
 
-#if 0
 static gchar *
-ft_manager_format_interval (gint interval)
+ft_manager_format_interval (guint interval)
 {
   gint hours, mins, secs;
 
@@ -117,7 +116,6 @@ ft_manager_format_interval (gint interval)
     /* Translators: time left, when is is less than one hour */
     return g_strdup_printf (_("%02u.%02u"), mins, secs);
 }
-#endif
 
 static void
 ft_manager_update_buttons (EmpathyFTManager *manager)
@@ -255,19 +253,27 @@ remove_finished_transfer_foreach (gpointer key,
 static char *
 ft_manager_format_progress_bytes_and_percentage (guint64 current,
                                                  guint64 total,
+                                                 gdouble speed,
                                                  int *percentage)
 {
   char *total_str, *current_str, *retval;
+  char *speed_str = NULL;
 
   total_str = g_format_size_for_display (total);
   current_str = g_format_size_for_display (current);
 
+  if (speed > 0)
+    speed_str = g_format_size_for_display ((goffset) speed);
+
   /* translators: first %s is the currently processed size, second %s is
    * the total file size */
-  retval = g_strdup_printf (_("%s of %s"), current_str, total_str);
+  retval = speed_str ?
+    g_strdup_printf (_("%s of %s at %s/s"), current_str, total_str, speed_str) :
+    g_strdup_printf (_("%s of %s"), current_str, total_str);
 
   g_free (total_str);
   g_free (current_str);
+  g_free (speed_str);
 
   if (percentage != NULL)
     {
@@ -389,6 +395,30 @@ ft_manager_update_handler_progress (EmpathyFTManager *manager,
 }
 
 static void
+ft_manager_update_handler_time (EmpathyFTManager *manager,
+                                GtkTreeRowReference *row_ref,
+                                guint remaining_time)
+{
+  GtkTreePath *path;
+  GtkTreeIter iter;
+  EmpathyFTManagerPriv *priv = GET_PRIV (manager);
+  char *remaining_str;
+
+  remaining_str = ft_manager_format_interval (remaining_time);
+
+  /* Set new value in the store */
+  path = gtk_tree_row_reference_get_path (row_ref);
+  gtk_tree_model_get_iter (priv->model, &iter, path);
+  gtk_list_store_set (GTK_LIST_STORE (priv->model),
+      &iter,
+      COL_REMAINING, remaining_str,
+      -1);
+
+  gtk_tree_path_free (path);
+  g_free (remaining_str);
+}
+
+static void
 ft_handler_transfer_error_cb (EmpathyFTHandler *handler,
                               GError *error,
                               EmpathyFTManager *manager)
@@ -458,6 +488,8 @@ static void
 ft_handler_transfer_progress_cb (EmpathyFTHandler *handler,
                                  guint64 current_bytes,
                                  guint64 total_bytes,
+                                 guint remaining_time,
+                                 gdouble speed,
                                  EmpathyFTManager *manager)
 {
   char *first_line, *second_line, *message;
@@ -471,12 +503,15 @@ ft_handler_transfer_progress_cb (EmpathyFTHandler *handler,
 
   first_line = ft_manager_format_contact_info (handler);
   second_line = ft_manager_format_progress_bytes_and_percentage
-    (current_bytes, total_bytes, &percentage);
+    (current_bytes, total_bytes, speed, &percentage);
 
   message = g_strdup_printf ("%s\n%s", first_line, second_line);
 
   ft_manager_update_handler_message (manager, row_ref, message);
   ft_manager_update_handler_progress (manager, row_ref, percentage);
+
+  if (remaining_time > 0)
+    ft_manager_update_handler_time (manager, row_ref, remaining_time);
 
   g_free (message);
 }
@@ -499,7 +534,7 @@ ft_handler_transfer_started_cb (EmpathyFTHandler *handler,
   total_bytes = empathy_ft_handler_get_total_bytes (handler);
 
   ft_handler_transfer_progress_cb (handler, transferred_bytes, total_bytes,
-      manager);
+      0, -1, manager);
 }
 
 static void
@@ -544,7 +579,7 @@ ft_handler_hashing_progress_cb (EmpathyFTHandler *handler,
   first_line =  g_strdup_printf (_("Hashing \"%s\""),
       empathy_ft_handler_get_filename (handler));
   second_line = ft_manager_format_progress_bytes_and_percentage
-    (current_bytes, total_bytes, NULL);
+    (current_bytes, total_bytes, -1, NULL);
 
   message = g_strdup_printf ("%s\n%s", first_line, second_line);
 

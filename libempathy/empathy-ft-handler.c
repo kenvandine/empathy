@@ -29,6 +29,7 @@
 #include "empathy-contact-factory.h"
 #include "empathy-dispatcher.h"
 #include "empathy-marshal.h"
+#include "empathy-time.h"
 #include "empathy-utils.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_FT
@@ -95,6 +96,11 @@ typedef struct {
   gchar *content_hash;
   TpFileHashType content_hash_type;
   TpFileTransferState current_state;
+
+  /* time and speed */
+  gdouble speed;
+  guint remaining_time;
+  time_t last_update_time;
 
   gboolean is_completed;
 } EmpathyFTHandlerPriv;
@@ -183,6 +189,12 @@ do_dispose (GObject *object)
     g_object_unref (priv->cancellable);
     priv->cancellable = NULL;
   }
+
+  if (priv->request != NULL)
+    {
+      g_hash_table_unref (priv->request);
+      priv->request = NULL;
+    }
   
   G_OBJECT_CLASS (empathy_ft_handler_parent_class)->dispose (object);
 }
@@ -205,12 +217,6 @@ do_finalize (GObject *object)
 
   g_free (priv->content_hash);
   priv->content_hash = NULL;
-
-  if (priv->request != NULL)
-    {
-      g_hash_table_destroy (priv->request);
-      priv->request = NULL;
-    }
 
   G_OBJECT_CLASS (empathy_ft_handler_parent_class)->finalize (object);
 }
@@ -272,9 +278,9 @@ empathy_ft_handler_class_init (EmpathyFTHandlerClass *klass)
   signals[TRANSFER_PROGRESS] =
     g_signal_new ("transfer-progress", G_TYPE_FROM_CLASS (klass),
         G_SIGNAL_RUN_LAST, 0, NULL, NULL,
-        _empathy_marshal_VOID__UINT64_UINT64,
+        _empathy_marshal_VOID__UINT64_UINT64_UINT_DOUBLE,
         G_TYPE_NONE,
-        2, G_TYPE_UINT64, G_TYPE_UINT64);
+        4, G_TYPE_UINT64, G_TYPE_UINT64, G_TYPE_UINT, G_TYPE_DOUBLE);
 
   signals[HASHING_STARTED] =
     g_signal_new ("hashing-started", G_TYPE_FROM_CLASS (klass),
@@ -379,6 +385,33 @@ ft_transfer_operation_callback (EmpathyTpFile *tp_file,
 }
 
 static void
+update_remaining_time_and_speed (EmpathyFTHandler *handler,
+                                 guint64 transferred_bytes)
+{
+  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
+  time_t elapsed_time, current_time;
+  guint64 transferred, last_transferred_bytes;
+  gdouble speed;
+  gint remaining_time;
+
+  last_transferred_bytes = priv->transferred_bytes;
+  priv->transferred_bytes = transferred_bytes;
+
+  current_time = empathy_time_get_current ();
+  elapsed_time = current_time - priv->last_update_time;
+
+  if (elapsed_time >= 1)
+    {
+      transferred = transferred_bytes - last_transferred_bytes;
+      speed = (gdouble) transferred / (gdouble) elapsed_time;
+      remaining_time = (priv->total_bytes - transferred) / speed;
+      priv->speed = speed;
+      priv->remaining_time = remaining_time;
+      priv->last_update_time = current_time;
+    }
+}
+
+static void
 ft_transfer_progress_callback (EmpathyTpFile *tp_file,
                                guint64 transferred_bytes,
                                gpointer user_data)
@@ -386,16 +419,19 @@ ft_transfer_progress_callback (EmpathyTpFile *tp_file,
   EmpathyFTHandler *handler = user_data;
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
 
-  if (transferred_bytes == 0) {
+  if (transferred_bytes == 0)
+    {
+      priv->last_update_time = empathy_time_get_current ();
       g_signal_emit (handler, signals[TRANSFER_STARTED], 0, tp_file);
-  }
-    
+    }
 
   if (priv->transferred_bytes != transferred_bytes)
     {
-      priv->transferred_bytes = transferred_bytes;
+      update_remaining_time_and_speed (handler, transferred_bytes);
+
       g_signal_emit (handler, signals[TRANSFER_PROGRESS], 0,
-          transferred_bytes, priv->total_bytes);
+          transferred_bytes, priv->total_bytes, priv->remaining_time,
+          priv->speed);
     }
 }
 
@@ -409,10 +445,6 @@ ft_handler_create_channel_cb (EmpathyDispatchOperation *operation,
   GError *my_error = (GError *) error;
 
   DEBUG ("Dispatcher create channel CB");
-
-  /* we can destroy now the request */
-  g_hash_table_destroy (priv->request);
-  priv->request = NULL;
 
   if (my_error == NULL)
     {
