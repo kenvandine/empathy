@@ -26,7 +26,7 @@
 #include <telepathy-glib/util.h>
 
 #include "empathy-ft-handler.h"
-#include "empathy-contact-factory.h"
+#include "empathy-tp-contact-factory.h"
 #include "empathy-dispatcher.h"
 #include "empathy-marshal.h"
 #include "empathy-time.h"
@@ -475,16 +475,16 @@ static void
 ft_handler_push_to_dispatcher (EmpathyFTHandler *handler)
 {
   EmpathyDispatcher *dispatcher;
-  McAccount *account;
+  TpConnection *connection;
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
 
   DEBUG ("Pushing request to the dispatcher");
 
   dispatcher = empathy_dispatcher_dup_singleton ();
-  account = empathy_contact_get_account (priv->contact);
+  connection = empathy_contact_get_connection (priv->contact);
 
   /* I want to own a reference to the request, and destroy it later */
-  empathy_dispatcher_create_channel (dispatcher, account,
+  empathy_dispatcher_create_channel (dispatcher, connection,
       g_hash_table_ref (priv->request), ft_handler_create_channel_cb, handler);
 
   g_object_unref (dispatcher);
@@ -495,14 +495,14 @@ ft_handler_check_if_allowed (EmpathyFTHandler *handler)
 {
   EmpathyDispatcher *dispatcher;
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
-  McAccount *account;
+  TpConnection *connection;
   GStrv allowed;
   gboolean res = TRUE;
 
   dispatcher = empathy_dispatcher_dup_singleton ();
-  account = empathy_contact_get_account (priv->contact);
+  connection = empathy_contact_get_connection (priv->contact);
 
-  allowed = empathy_dispatcher_find_channel_class (dispatcher, account,
+  allowed = empathy_dispatcher_find_channel_class (dispatcher, connection,
       TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, TP_HANDLE_TYPE_CONTACT);
 
   if (!tp_strv_contains ((const gchar * const *) allowed,
@@ -800,29 +800,27 @@ out:
   callbacks_data_free (cb_data);
 }
 
-static void
-ft_handler_contact_ready_cb (EmpathyContact *contact,
-                             const GError *error,
-                             gpointer user_data,
-                             GObject *weak_object)  
+static void 
+contact_factory_contact_cb (EmpathyTpContactFactory *factory,
+                            EmpathyContact *contact,
+                            const GError *error,
+                            gpointer user_data,
+                            GObject *weak_object)
 {
   CallbacksData *cb_data = user_data;
-  EmpathyFTHandlerPriv *priv = GET_PRIV (weak_object);
+  EmpathyFTHandler *handler = EMPATHY_FT_HANDLER (weak_object);
+  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
 
-  g_assert (priv->contact != NULL);
-  g_assert (priv->gfile != NULL);
+  if (error != NULL)
+    {
+      cb_data->callback (NULL, (GError *) error, cb_data->user_data);
+      g_object_unref (handler);
+      return;
+    }
 
-  DEBUG ("Contact is ready.");
+  priv->contact = contact;
 
-  /* start collecting info about the file */
-  g_file_query_info_async (priv->gfile,
-      G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME ","
-      G_FILE_ATTRIBUTE_STANDARD_SIZE ","
-      G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE ","
-      G_FILE_ATTRIBUTE_TIME_MODIFIED,
-      G_FILE_QUERY_INFO_NONE, G_PRIORITY_DEFAULT,
-      NULL, (GAsyncReadyCallback) ft_handler_gfile_ready_cb,
-      cb_data);
+  cb_data->callback (handler, NULL, cb_data->user_data);
 }
 
 static void
@@ -835,9 +833,8 @@ channel_get_all_properties_cb (TpProxy *proxy,
   CallbacksData *cb_data = user_data;
   EmpathyFTHandler *handler = EMPATHY_FT_HANDLER (weak_object);
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
-  EmpathyContactFactory *c_factory;
-  guint c_handle;
-  McAccount *account;
+  EmpathyTpContactFactory *c_factory;
+  TpHandle c_handle;
 
   if (error != NULL)
     {
@@ -869,16 +866,12 @@ channel_get_all_properties_cb (TpProxy *proxy,
 
   g_hash_table_destroy (properties);
 
-  c_factory = empathy_contact_factory_dup_singleton ();
-  account = empathy_channel_get_account (TP_CHANNEL (proxy));
+  c_factory = empathy_tp_contact_factory_dup_singleton
+      (tp_channel_borrow_connection (TP_CHANNEL (proxy)));
   c_handle = tp_channel_get_handle (TP_CHANNEL (proxy), NULL);
-  priv->contact = empathy_contact_factory_get_from_handle
-      (c_factory, account, c_handle);
-
-  g_object_unref (c_factory);
-  g_object_unref (account);
-
-  cb_data->callback (handler, NULL, cb_data->user_data);
+  empathy_tp_contact_factory_get_from_handle (c_factory, c_handle,
+      contact_factory_contact_cb, cb_data, callbacks_data_free,
+      G_OBJECT (handler));
 }
 
 /* public methods */
@@ -906,9 +899,14 @@ empathy_ft_handler_new_outgoing (EmpathyContact *contact,
   data->user_data = user_data;
   data->handler = g_object_ref (handler);
 
-  empathy_contact_call_when_ready (priv->contact,
-      EMPATHY_CONTACT_READY_HANDLE,
-      ft_handler_contact_ready_cb, data, NULL, G_OBJECT (handler));
+  /* start collecting info about the file */
+  g_file_query_info_async (priv->gfile,
+      G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME ","
+      G_FILE_ATTRIBUTE_STANDARD_SIZE ","
+      G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE ","
+      G_FILE_ATTRIBUTE_TIME_MODIFIED,
+      G_FILE_QUERY_INFO_NONE, G_PRIORITY_DEFAULT,
+      NULL, (GAsyncReadyCallback) ft_handler_gfile_ready_cb, data);
 }
 
 void
@@ -934,7 +932,7 @@ empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
 
   tp_cli_dbus_properties_call_get_all (channel,
       -1, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER,
-      channel_get_all_properties_cb, data, callbacks_data_free, G_OBJECT (handler));
+      channel_get_all_properties_cb, data, NULL, G_OBJECT (handler));
 }
 
 void

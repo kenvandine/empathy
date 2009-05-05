@@ -814,21 +814,3 @@ empathy_tp_file_cancel (EmpathyTpFile *tp_file)
 {
   close_channel_internal (tp_file, TRUE);
 }
-
-/**
- * empathy_tp_file_is_ready:
- * @tp_file: an #EmpathyTpFile
- *
- * Returns whether the file channel @tp_file is ready for use.
- *
- * @tp_file is classed as ready if its state is no longer
- * %TP_FILE_TRANSFER_STATE_NONE, or if details about the remote
- * contact have been fully received.
- *
- * Return value: %TRUE if @tp_file is ready for use
- */
-gboolean
-empathy_tp_file_is_ready (EmpathyTpFile *tp_file)
-{
-  close_channel_internal (tp_file, FALSE);
-}

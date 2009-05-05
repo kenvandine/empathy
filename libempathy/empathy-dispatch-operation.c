@@ -406,23 +406,6 @@ empathy_dispatcher_operation_tp_chat_ready_cb (GObject *object,
 }
 
 static void
-empathy_dispatcher_operation_tp_file_ready_cb (GObject *object,
-  GParamSpec *spec, gpointer user_data)
-{
-  EmpathyDispatchOperation *self = EMPATHY_DISPATCH_OPERATION (user_data);
-  EmpathyDispatchOperationPriv *priv = GET_PRIV (self);
-
-  if (!empathy_tp_file_is_ready (EMPATHY_TP_FILE (priv->channel_wrapper)))
-    return;
-
-  g_signal_handler_disconnect (priv->channel_wrapper, priv->ready_handler);
-  priv->ready_handler = 0;
-
-  empathy_dispatch_operation_set_status (self,
-    EMPATHY_DISPATCHER_OPERATION_STATE_PENDING);
-}
-
-static void
 empathy_dispatch_operation_channel_ready_cb (TpChannel *channel,
   const GError *error, gpointer user_data)
 {
