@@ -186,6 +186,8 @@ splice_stream_ready_cb (GObject *source,
 
   tp_file = user_data;
 
+  DEBUG ("Splice stream ready cb");
+
   g_output_stream_splice_finish (G_OUTPUT_STREAM (source), res, &error);
 
   if (error != NULL)
@@ -457,6 +459,25 @@ file_replace_async_cb (GObject *source,
       ft_operation_provide_or_accept_file_cb, NULL, NULL, G_OBJECT (tp_file));
 }
 
+static void
+close_channel_internal (EmpathyTpFile *tp_file,
+                        gboolean cancel)
+{
+  EmpathyTpFilePriv *priv;
+
+  g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
+  
+  priv = GET_PRIV (tp_file);
+
+  DEBUG ("Closing channel..");
+  tp_cli_channel_call_close (priv->channel, -1,
+    NULL, NULL, NULL, NULL);
+
+  if (priv->cancellable != NULL &&
+      !g_cancellable_is_cancelled (priv->cancellable) && cancel)
+    g_cancellable_cancel (priv->cancellable);
+}
+
 /* GObject methods */
 
 static void
@@ -725,19 +746,7 @@ empathy_tp_file_is_incoming (EmpathyTpFile *tp_file)
 void
 empathy_tp_file_cancel (EmpathyTpFile *tp_file)
 {
-  EmpathyTpFilePriv *priv;
-
-  g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
-  
-  priv = GET_PRIV (tp_file);
-
-  DEBUG ("Closing channel..");
-  tp_cli_channel_call_close (priv->channel, -1,
-    NULL, NULL, NULL, NULL);
-
-  if (priv->cancellable != NULL &&
-      !g_cancellable_is_cancelled (priv->cancellable))
-    g_cancellable_cancel (priv->cancellable);
+  close_channel_internal (tp_file, TRUE);
 }
 
 /**
@@ -755,7 +764,5 @@ empathy_tp_file_cancel (EmpathyTpFile *tp_file)
 gboolean
 empathy_tp_file_is_ready (EmpathyTpFile *tp_file)
 {
-  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), FALSE);
-
-  return tp_file->priv->ready;
+  close_channel_internal (tp_file, FALSE);
 }
