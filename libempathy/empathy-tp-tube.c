@@ -258,6 +258,8 @@ tube_is_ready (EmpathyTpTube *self,
 
   priv->ready = TRUE;
 
+  /* tube has to stay alive while we call the callbacks */
+  g_object_ref (self);
   for (l = priv->ready_callbacks ; l != NULL ; l = g_slist_next (l))
     {
       ReadyCbData *data = (ReadyCbData *) l->data;
@@ -265,6 +267,7 @@ tube_is_ready (EmpathyTpTube *self,
       data->callback (self, error, data->user_data, data->weak_object);
       ready_cb_data_free (data, self);
     }
+  g_object_unref (self);
 
   g_slist_free (priv->ready_callbacks);
   priv->ready_callbacks = NULL;
