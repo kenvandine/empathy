@@ -410,6 +410,10 @@ ft_handler_create_channel_cb (EmpathyDispatchOperation *operation,
 
   DEBUG ("Dispatcher create channel CB");
 
+  /* we can destroy now the request */
+  g_hash_table_destroy (priv->request);
+  priv->request = NULL;
+
   if (my_error == NULL)
     {
       g_cancellable_set_error_if_cancelled (priv->cancellable, &my_error);
@@ -447,8 +451,9 @@ ft_handler_push_to_dispatcher (EmpathyFTHandler *handler)
   dispatcher = empathy_dispatcher_dup_singleton ();
   account = empathy_contact_get_account (priv->contact);
 
-  empathy_dispatcher_create_channel (dispatcher, account, priv->request,
-      ft_handler_create_channel_cb, handler);
+  /* I want to own a reference to the request, and destroy it later */
+  empathy_dispatcher_create_channel (dispatcher, account,
+      g_hash_table_ref (priv->request), ft_handler_create_channel_cb, handler);
 
   g_object_unref (dispatcher);
 }
@@ -605,8 +610,6 @@ hash_job_async_read_cb (GObject *source,
   HashingData *hash_data = user_data;
   gssize bytes_read;
   GError *error = NULL;
-
-  DEBUG ("Reading a chunk for hashing.");
 
   bytes_read = g_input_stream_read_finish (hash_data->stream, res, &error);
   if (error != NULL)
@@ -952,9 +955,13 @@ empathy_ft_handler_cancel_transfer (EmpathyFTHandler *handler)
 
   priv = GET_PRIV (handler);
 
-  g_return_if_fail (priv->tpfile != NULL);
-
-  empathy_tp_file_cancel (priv->tpfile);
+  /* if we don't have an EmpathyTpFile, we are hashing, so
+   * we can just cancel the GCancellable to stop it.
+   */
+  if (priv->tpfile == NULL)
+    g_cancellable_cancel (priv->cancellable);
+  else
+    empathy_tp_file_cancel (priv->tpfile);
 }
 
 void
