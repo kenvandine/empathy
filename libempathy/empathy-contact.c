@@ -1050,8 +1050,8 @@ empathy_contact_get_location (EmpathyContact *contact)
 
 /**
  * empathy_contact_set_location:
- * @contact: the contact
- * @location: the location
+ * @contact: an #EmpathyContact
+ * @location: a #GHashTable of the location
  *
  * Sets the user's location based on the location #GHashTable passed.
  * It is composed of string keys and GValues.  Keys are
