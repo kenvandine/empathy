@@ -1084,3 +1084,13 @@ empathy_ft_manager_display_error (EmpathyFTManager *manager,
   ft_manager_add_handler_to_list (manager, handler, error);
   gtk_window_present (GTK_WINDOW (priv->window));
 }
+
+void
+empathy_ft_manager_show (EmpathyFTManager *manager)
+{
+  EmpathyFTManagerPriv *priv = GET_PRIV (manager);
+
+  g_return_if_fail (EMPATHY_IS_FT_MANAGER (manager));
+
+  gtk_window_present (GTK_WINDOW (priv->window));
+}

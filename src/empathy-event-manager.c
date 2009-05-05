@@ -752,6 +752,32 @@ event_manager_muc_invite_got_contact_cb (EmpathyTpContactFactory *factory,
 }
 
 static void
+event_manager_ft_got_contact_cb (EmpathyTpContactFactory *factory,
+                                 EmpathyContact *contact,
+                                 const GError *error,
+                                 gpointer user_data,
+                                 GObject *object)
+{
+  EventManagerApproval *approval = (EventManagerApproval *) user_data;
+  char *header;
+
+  approval->contact = contact;
+
+  header = g_strdup_printf (_("Incoming file transfer from %s"),
+                            empathy_contact_get_name (approval->contact));
+
+  event_manager_add (approval->manager, approval->contact,
+      EMPATHY_IMAGE_DOCUMENT_SEND, header, NULL, approval,
+      event_channel_process_func, NULL);
+
+  /* FIXME better sound for incoming file transfers ?*/
+  empathy_sound_play (empathy_main_window_get (),
+                      EMPATHY_SOUND_CONVERSATION_NEW);
+
+  g_free (header);
+}
+
+static void
 event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
   EmpathyDispatchOperation  *operation, EmpathyEventManager *manager)
 {
@@ -839,23 +865,18 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
     }
   else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER))
     {
-      EmpathyTpFile *file;
-      gchar *header;
+      TpChannel *channel;
+      TpConnection *connection;
+      TpHandle handle;
+      EmpathyTpContactFactory *factory;
 
-      file = EMPATHY_TP_FILE (empathy_dispatch_operation_get_channel_wrapper (operation));
-      approval->contact = g_object_ref (empathy_tp_file_get_contact (file));
+      channel = empathy_dispatch_operation_get_channel (operation);
+      handle = tp_channel_get_handle (channel, NULL);
 
-      header = g_strdup_printf (_("Incoming file transfer from %s"),
-        empathy_contact_get_name (approval->contact));
-
-      event_manager_add (manager, approval->contact, EMPATHY_IMAGE_DOCUMENT_SEND,
-        header, NULL, approval, event_channel_process_func, NULL);
-
-      /* FIXME better sound for incoming file transfers ?*/
-      empathy_sound_play (empathy_main_window_get (),
-        EMPATHY_SOUND_CONVERSATION_NEW);
-
-      g_free (header);
+      connection = tp_channel_borrow_connection (channel);
+      factory = empathy_tp_contact_factory_dup_singleton (connection);
+      empathy_tp_contact_factory_get_from_handle (factory, handle,
+        event_manager_ft_got_contact_cb, approval, NULL, G_OBJECT (manager));
     }
   else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAM_TUBE) ||
       !tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_DBUS_TUBE))

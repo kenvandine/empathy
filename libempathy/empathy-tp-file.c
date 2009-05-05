@@ -812,5 +812,15 @@ empathy_tp_file_is_incoming (EmpathyTpFile *tp_file)
 void
 empathy_tp_file_cancel (EmpathyTpFile *tp_file)
 {
+  g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
+
   close_channel_internal (tp_file, TRUE);
+}
+
+void
+empathy_tp_file_close (EmpathyTpFile *tp_file)
+{
+  g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
+
+  close_channel_internal (tp_file, FALSE);
 }

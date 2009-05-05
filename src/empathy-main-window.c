@@ -696,12 +696,10 @@ main_window_view_show_ft_manager (GtkAction         *action,
 				  EmpathyMainWindow *window)
 {
 	EmpathyFTManager *manager;
-	GtkWidget *dialog;
 
 	manager = empathy_ft_manager_dup_singleton ();
-	dialog = empathy_ft_manager_get_dialog (manager);
+	empathy_ft_manager_show (manager);
 
-	gtk_window_present (GTK_WINDOW (dialog));
 	g_object_unref (manager);
 }
 

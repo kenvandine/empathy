@@ -66,6 +66,7 @@ void empathy_ft_manager_add_handler (EmpathyFTManager *ft_manager,
     EmpathyFTHandler *handler);
 void empathy_ft_manager_display_error (EmpathyFTManager *ft_manager,
     EmpathyFTHandler *handler, const GError *error);
+void empathy_ft_manager_show (EmpathyFTManager *manager);
 
 G_END_DECLS
 
