@@ -1484,6 +1484,8 @@ file_manager_receive_file_response_cb (GtkDialog *dialog,
 
 		g_object_unref (factory);
 		g_object_unref (file);
+	} else {
+		g_object_unref (handler);
 	}
 
 	gtk_widget_destroy (GTK_WIDGET (dialog));
