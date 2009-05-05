@@ -98,6 +98,8 @@ typedef struct {
   EmpathyTpFileOperationCallback op_callback;
   gpointer op_user_data;
 
+  gboolean is_closed;
+
   gboolean dispose_run;
 } EmpathyTpFilePriv;
 
@@ -160,6 +162,11 @@ ft_operation_close_clean (EmpathyTpFile *tp_file)
 
   DEBUG ("FT operation close clean");
 
+  if (priv->is_closed)
+    return;
+  else
+    priv->is_closed = TRUE;
+
   if (priv->op_callback)
     priv->op_callback (tp_file, NULL, priv->op_user_data);
 }
@@ -171,6 +178,11 @@ ft_operation_close_with_error (EmpathyTpFile *tp_file,
   EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
 
   DEBUG ("FT operation close with error %s", error->message);
+
+  if (priv->is_closed)
+    return;
+  else
+    priv->is_closed = TRUE;
 
   /* close the channel if it's not cancelled already */
   if (priv->state != TP_FILE_TRANSFER_STATE_CANCELLED)

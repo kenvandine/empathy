@@ -419,6 +419,9 @@ ft_transfer_progress_callback (EmpathyTpFile *tp_file,
   EmpathyFTHandler *handler = user_data;
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
 
+  if (empathy_ft_handler_is_cancelled (handler))
+    return;
+
   if (transferred_bytes == 0)
     {
       priv->last_update_time = empathy_time_get_current ();
