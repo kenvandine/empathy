@@ -561,8 +561,6 @@ ft_handler_hashing_progress_cb (EmpathyFTHandler *handler,
   char *first_line, *second_line, *message;
   GtkTreeRowReference *row_ref;
 
-  DEBUG ("Hashing progress");
-
   row_ref = ft_manager_get_row_from_handler (manager, handler);
   g_return_if_fail (row_ref != NULL);
 
