@@ -406,13 +406,17 @@ tp_contact_factory_got_capabilities (EmpathyTpContactFactory *tp_factory,
 }
 
 static void
-tp_contact_factory_got_locations (EmpathyTpContactFactory *tp_factory,
+tp_contact_factory_got_locations (TpProxy                 *tp_proxy,
 				  GHashTable              *locations,
-				  const GError            *error)
+				  const GError            *error,
+				  gpointer                 user_data,
+				  GObject                 *weak_object)
 {
 	GHashTableIter iter;
 	gpointer key, value;
+	EmpathyTpContactFactory *tp_factory;
 
+	tp_factory = EMPATHY_TP_CONTACT_FACTORY (user_data);
 	if (error != NULL) {
 		DEBUG ("Error: %s", error->message);
 		return;
@@ -427,8 +431,7 @@ tp_contact_factory_got_locations (EmpathyTpContactFactory *tp_factory,
 						    handle,
 						    location);
 	}
-
-	g_hash_table_unref (locations);
+	g_print ("Got location\n");
 }
 
 static void
@@ -470,28 +473,14 @@ tp_contact_factory_location_updated_cb (TpProxy      *proxy,
 {
 	EmpathyTpContactFactory *tp_factory = EMPATHY_TP_CONTACT_FACTORY (weak_object);
 	EmpathyContact          *contact;
-	GHashTable              *new_location;
-	GHashTableIter           iter;
-	gpointer                 key;
-	gpointer                 value;
 
 	contact = tp_contact_factory_find_by_handle (tp_factory, handle);
 
 	if (contact == NULL)
 		return;
 
-	new_location = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
-		(GDestroyNotify) tp_g_value_slice_free);
-
-	// Copy keys
-	g_hash_table_iter_init (&iter, location);
-	while (g_hash_table_iter_next (&iter, &key, &value)) {
-		g_hash_table_insert (location,
-			g_strdup (key),
-			tp_g_value_slice_dup (value));
-	}
-
-	empathy_contact_set_location (contact, new_location);
+	g_print ("Location updated\n");
+	empathy_contact_set_location (contact, location);
 }
 
 static void
@@ -592,7 +581,6 @@ tp_contact_factory_add_contact (EmpathyTpContactFactory *tp_factory,
 	GArray handles = {(gchar*) &handle, 1};
 	GHashTable *tokens;
 	GPtrArray *capabilities;
-	GHashTable *locations;
 	GError *error = NULL;
 
 	/* Keep a weak ref to that contact */
@@ -640,15 +628,15 @@ tp_contact_factory_add_contact (EmpathyTpContactFactory *tp_factory,
 									&error,
 									NULL);
 	tp_contact_factory_got_capabilities (tp_factory, capabilities, error);
+	g_clear_error (&error);
 
-	emp_cli_connection_interface_location_run_get_locations (TP_PROXY (priv->connection),
+	emp_cli_connection_interface_location_call_get_locations (TP_PROXY (priv->connection),
 								 -1,
 								 &handles,
-								 &locations,
-								 &error,
+								 tp_contact_factory_got_locations,
+								 tp_factory,
+								 NULL,
 								 NULL);
-	tp_contact_factory_got_locations (tp_factory, locations, error);
-	g_clear_error (&error);
 
 	DEBUG ("Contact added: %s (%d)",
 		empathy_contact_get_id (contact),
