@@ -153,29 +153,6 @@ ft_manager_update_buttons (EmpathyFTManager *manager)
   gtk_widget_set_sensitive (priv->abort_button, abort_enabled);
 }
 
-#if 0
-static const gchar *
-ft_manager_state_change_reason_to_string (TpFileTransferStateChangeReason reason)
-{
-  switch (reason)
-    {
-      case TP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE:
-        return _("No reason was specified");
-      case TP_FILE_TRANSFER_STATE_CHANGE_REASON_REQUESTED:
-        return _("The change in state was requested");
-      case TP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_STOPPED:
-        return _("You canceled the file transfer");
-      case TP_FILE_TRANSFER_STATE_CHANGE_REASON_REMOTE_STOPPED:
-        return _("The other participant canceled the file transfer");
-      case TP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_ERROR:
-        return _("Error while trying to transfer the file");
-      case TP_FILE_TRANSFER_STATE_CHANGE_REASON_REMOTE_ERROR:
-        return _("The other participant is unable to transfer the file");
-    }
-  return _("Unknown reason");
-}
-#endif
-
 static void
 ft_manager_selection_changed (GtkTreeSelection *selection,
                               EmpathyFTManager *manager)

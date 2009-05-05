@@ -158,7 +158,7 @@ ft_operation_close_clean (EmpathyTpFile *tp_file)
 {
   EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
 
-  DEBUG ("Splice close clean");
+  DEBUG ("FT operation close clean");
 
   if (priv->op_callback)
     priv->op_callback (tp_file, NULL, priv->op_user_data);
@@ -170,7 +170,11 @@ ft_operation_close_with_error (EmpathyTpFile *tp_file,
 {
   EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
 
-  DEBUG ("Splice close with error %s", error->message);
+  DEBUG ("FT operation close with error %s", error->message);
+
+  /* close the channel if it's not cancelled already */
+  if (priv->state != TP_FILE_TRANSFER_STATE_CANCELLED)
+    empathy_tp_file_cancel (tp_file);
 
   if (priv->op_callback)
     priv->op_callback (tp_file, error, priv->op_user_data);
@@ -281,6 +285,45 @@ tp_file_start_transfer (EmpathyTpFile *tp_file)
     }
 }
 
+static GError *
+error_from_state_change_reason (TpFileTransferStateChangeReason reason)
+{
+  const char *string;
+  GError *retval;
+
+  string = NULL;
+
+  switch (reason)
+    {
+      case TP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE:
+        string = _("No reason was specified");
+        break;
+      case TP_FILE_TRANSFER_STATE_CHANGE_REASON_REQUESTED:
+        string = _("The change in state was requested");
+        break;
+      case TP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_STOPPED:
+        string = _("You canceled the file transfer");
+        break;
+      case TP_FILE_TRANSFER_STATE_CHANGE_REASON_REMOTE_STOPPED:
+        string = _("The other participant canceled the file transfer");
+        break;
+      case TP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_ERROR:
+        string = _("Error while trying to transfer the file");
+        break;
+      case TP_FILE_TRANSFER_STATE_CHANGE_REASON_REMOTE_ERROR:
+        string = _("The other participant is unable to transfer the file");
+        break;
+      default:
+        string = _("Unknown reason");
+        break;
+    }
+
+  retval = g_error_new_literal (EMPATHY_FT_ERROR_QUARK,
+      EMPATHY_FT_ERROR_TP_ERROR, string);
+
+  return retval;
+}
+
 static void
 tp_file_state_changed_cb (TpChannel *proxy,
                           guint state,
@@ -289,6 +332,7 @@ tp_file_state_changed_cb (TpChannel *proxy,
                           GObject *weak_object)
 {
   EmpathyTpFilePriv *priv = GET_PRIV (weak_object);
+  GError *error;
 
   if (state == priv->state)
     return;
@@ -314,6 +358,12 @@ tp_file_state_changed_cb (TpChannel *proxy,
 
   if (state == TP_FILE_TRANSFER_STATE_COMPLETED)
     ft_operation_close_clean (EMPATHY_TP_FILE (weak_object));
+
+  if (state == TP_FILE_TRANSFER_STATE_CANCELLED)
+    {
+      error = error_from_state_change_reason (priv->state_change_reason);
+      ft_operation_close_with_error (EMPATHY_TP_FILE (weak_object), error);
+    }
 }
 
 static void
@@ -528,7 +578,11 @@ do_finalize (GObject *object)
 
   DEBUG ("%p", object);
 
-  g_array_free (priv->unix_socket_path, TRUE);
+  if (priv->unix_socket_path != NULL)
+    {
+      g_array_free (priv->unix_socket_path, TRUE);
+      priv->unix_socket_path = NULL;
+    }
 
   G_OBJECT_CLASS (empathy_tp_file_parent_class)->finalize (object);
 }
