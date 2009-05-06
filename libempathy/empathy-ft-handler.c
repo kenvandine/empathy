@@ -244,20 +244,25 @@ empathy_ft_handler_class_init (EmpathyFTHandlerClass *klass)
   param_spec = g_param_spec_object ("contact",
     "contact", "The remote contact",
     EMPATHY_TYPE_CONTACT,
-    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
   g_object_class_install_property (object_class, PROP_CONTACT, param_spec);
 
   param_spec = g_param_spec_object ("gfile",
     "gfile", "The GFile we're handling",
     G_TYPE_FILE,
-    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
   g_object_class_install_property (object_class, PROP_G_FILE, param_spec);
 
   param_spec = g_param_spec_object ("tp-file",
     "tp-file", "The file's channel wrapper",
     EMPATHY_TYPE_TP_FILE,
-    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
   g_object_class_install_property (object_class, PROP_TP_FILE, param_spec);
+
+  param_spec = g_param_spec_boolean ("use-hash",
+    "use-hash", "Whether we should use checksum when sending or receiving",
+    FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
+  g_object_class_install_property (object_class, PROP_USE_HASH, param_spec);
 
   /* signals */
   signals[TRANSFER_STARTED] =
