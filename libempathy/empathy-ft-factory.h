@@ -59,7 +59,7 @@ GType empathy_ft_factory_get_type (void);
 /* public methods */
 EmpathyFTFactory* empathy_ft_factory_dup_singleton (void);
 void empathy_ft_factory_new_transfer_outgoing (EmpathyFTFactory *factory,
-  EmpathyContact *contact, GFile *source);
+  EmpathyContact *contact, GFile *source, gboolean use_hash);
 void empathy_ft_factory_claim_channel (EmpathyFTFactory *factory,
   EmpathyDispatchOperation *operation);
 void empathy_ft_factory_set_destination_for_incoming_handler
