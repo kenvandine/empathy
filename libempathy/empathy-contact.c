@@ -1059,7 +1059,7 @@ empathy_contact_get_location (EmpathyContact *contact)
  * Example: a "city" key would have "Helsinki" as string GValue,
  *          a "latitude" would have 65.0 as double GValue.
  */
-void 
+void
 empathy_contact_set_location (EmpathyContact *contact,
                               GHashTable *location)
 {

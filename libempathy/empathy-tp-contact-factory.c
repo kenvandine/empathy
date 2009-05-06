@@ -431,7 +431,6 @@ tp_contact_factory_got_locations (TpProxy                 *tp_proxy,
 						    handle,
 						    location);
 	}
-	g_print ("Got location\n");
 }
 
 static void
@@ -479,7 +478,6 @@ tp_contact_factory_location_updated_cb (TpProxy      *proxy,
 	if (contact == NULL)
 		return;
 
-	g_print ("Location updated\n");
 	empathy_contact_set_location (contact, location);
 }
 
