@@ -44,7 +44,8 @@ G_DEFINE_TYPE (EmpathyFTHandler, empathy_ft_handler, G_TYPE_OBJECT)
 enum {
   PROP_TP_FILE = 1,
   PROP_G_FILE,
-  PROP_CONTACT
+  PROP_CONTACT,
+  PROP_USE_HASH
 };
 
 enum {
@@ -78,9 +79,11 @@ typedef struct {
 /* private data */
 typedef struct {
   gboolean dispose_run;
+
   GFile *gfile;
   EmpathyTpFile *tpfile;
   GCancellable *cancellable;
+  gboolean use_hash;
 
   /* request for the new transfer */
   GHashTable *request;
@@ -127,6 +130,9 @@ do_get_property (GObject *object,
       case PROP_TP_FILE:
         g_value_set_object (value, priv->tpfile);
         break;
+      case PROP_USE_HASH:
+        g_value_set_boolean (value, priv->use_hash);
+        break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -150,6 +156,9 @@ do_set_property (GObject *object,
         break;
       case PROP_TP_FILE:
         priv->tpfile = g_value_dup_object (value);
+        break;
+      case PROP_USE_HASH:
+        priv->use_hash = g_value_get_boolean (value);
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -742,9 +751,13 @@ ft_handler_complete_request (EmpathyFTHandler *handler)
   /* populate the request table with all the known properties */
   ft_handler_populate_outgoing_request (handler);
 
-  /* now start hashing the file */
-  g_file_read_async (priv->gfile, G_PRIORITY_DEFAULT,
-      priv->cancellable, ft_handler_read_async_cb, handler);
+  if (priv->use_hash)
+    /* start hashing the file */
+    g_file_read_async (priv->gfile, G_PRIORITY_DEFAULT,
+        priv->cancellable, ft_handler_read_async_cb, handler);
+  else
+    /* push directly the handler to the dispatcher */
+    ft_handler_push_to_dispatcher (handler);
 }
 
 static void
@@ -879,6 +892,7 @@ channel_get_all_properties_cb (TpProxy *proxy,
 void
 empathy_ft_handler_new_outgoing (EmpathyContact *contact,
                                  GFile *source,
+                                 gboolean use_hash,
                                  EmpathyFTHandlerReadyCallback callback,
                                  gpointer user_data)
 {
@@ -890,7 +904,7 @@ empathy_ft_handler_new_outgoing (EmpathyContact *contact,
   g_return_if_fail (G_IS_FILE (source));
 
   handler = g_object_new (EMPATHY_TYPE_FT_HANDLER,
-      "contact", contact, "gfile", source, NULL);
+      "contact", contact, "gfile", source, "use-hash", use_hash, NULL);
 
   priv = GET_PRIV (handler);
 
