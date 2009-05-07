@@ -105,6 +105,7 @@ PKG_CHECK_MODULES(LIBEMPATHYGTK,
    telepathy-glib >= $TELEPATHY_GLIB_REQUIRED
    libmissioncontrol >= $MISSION_CONTROL_REQUIRED
    telepathy-farsight
+   farsight2-0.10
    gstreamer-0.10
    gstreamer-interfaces-0.10
 ])
