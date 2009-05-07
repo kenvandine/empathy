@@ -27,6 +27,8 @@
 #include <telepathy-farsight/channel.h>
 #include <telepathy-farsight/stream.h>
 
+#include <gst/farsight/fs-element-added-notifier.h>
+
 #include "empathy-call-handler.h"
 #include "empathy-dispatcher.h"
 #include "empathy-marshal.h"
@@ -59,6 +61,7 @@ typedef struct {
   EmpathyTpCall *call;
   EmpathyContact *contact;
   TfChannel *tfchannel;
+  FsElementAddedNotifier *fsnotifier;
 } EmpathyCallHandlerPriv;
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyCallHandler)
@@ -90,6 +93,12 @@ empathy_call_handler_dispose (GObject *object)
     }
 
   priv->call = NULL;
+
+  if (priv->fsnotifier != NULL)
+    {
+      g_object_unref (priv->fsnotifier);
+    }
+  priv->fsnotifier = NULL;
 
   /* release any references held by the object here */
   if (G_OBJECT_CLASS (empathy_call_handler_parent_class)->dispose)
@@ -252,10 +261,49 @@ empathy_call_handler_bus_message (EmpathyCallHandler *handler,
 }
 
 static void
+conference_element_added (FsElementAddedNotifier *notifier,
+    GstBin *bin,
+    GstElement *element,
+    gpointer user_data)
+{
+  GstElementFactory *factory;
+  const gchar *name;
+
+  factory = gst_element_get_factory (element);
+  name = gst_plugin_feature_get_name (GST_PLUGIN_FEATURE (factory));
+
+  if (!tp_strdiff (name, "x264enc"))
+    {
+      /* Ensure that the encoder creates the baseline profile */
+      g_object_set (element,
+          "byte-stream", TRUE,
+          "bframes", 0,
+          "b-adapt", FALSE,
+          "cabac", FALSE,
+          "dct8x8", FALSE,
+          NULL);
+    }
+  else if (!tp_strdiff (name, "gstrtpbin"))
+    {
+      /* Lower the jitterbuffer latency to make it more suitable for video
+       * conferencing */
+      g_object_set (element, "latency", 100, NULL);
+    }
+}
+
+static void
 empathy_call_handler_tf_channel_session_created_cb (TfChannel *tfchannel,
   FsConference *conference, FsParticipant *participant,
   EmpathyCallHandler *self)
 {
+  EmpathyCallHandlerPriv *priv = GET_PRIV (self);
+
+  priv->fsnotifier = fs_element_added_notifier_new ();
+  fs_element_added_notifier_add (priv->fsnotifier, GST_BIN (conference));
+
+  g_signal_connect (priv->fsnotifier, "element-added",
+    G_CALLBACK (conference_element_added), NULL);
+
   g_signal_emit (G_OBJECT (self), signals[CONFERENCE_ADDED], 0,
     GST_ELEMENT (conference));
 }
