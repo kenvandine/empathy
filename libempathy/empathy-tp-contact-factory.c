@@ -46,6 +46,7 @@ typedef struct {
 	guint           avatar_max_height;
 	guint           avatar_max_size;
 	gboolean        can_request_ft;
+	gboolean        has_location_iface;
 } EmpathyTpContactFactoryPriv;
 
 G_DEFINE_TYPE (EmpathyTpContactFactory, empathy_tp_contact_factory, G_TYPE_OBJECT);
@@ -628,13 +629,15 @@ tp_contact_factory_add_contact (EmpathyTpContactFactory *tp_factory,
 	tp_contact_factory_got_capabilities (tp_factory, capabilities, error);
 	g_clear_error (&error);
 
-	emp_cli_connection_interface_location_call_get_locations (TP_PROXY (priv->connection),
-								 -1,
-								 &handles,
-								 tp_contact_factory_got_locations,
-								 tp_factory,
-								 NULL,
-								 NULL);
+	if (priv->has_location_iface == TRUE) {
+		emp_cli_connection_interface_location_call_get_locations (TP_PROXY (priv->connection),
+									 -1,
+									 &handles,
+									 tp_contact_factory_got_locations,
+									 tp_factory,
+									 NULL,
+									 NULL);
+	}
 
 	DEBUG ("Contact added: %s (%d)",
 		empathy_contact_get_id (contact),
@@ -1042,6 +1045,40 @@ empathy_tp_contact_factory_set_location (EmpathyTpContactFactory *tp_factory,
 }
 
 static void
+tp_connection_get_interfaces_cb (TpConnection *proxy,
+				 const gchar **interfaces,
+				 const GError *error,
+				 gpointer data,
+				 GObject *weak_object)
+{
+	EmpathyTpContactFactory *tp_factory = EMPATHY_TP_CONTACT_FACTORY (data);
+	EmpathyTpContactFactoryPriv *priv = tp_factory->priv;
+	const gchar *iface = NULL;
+	gboolean found = FALSE;
+	gint i = 0;
+
+	if (error != NULL) {
+		g_warning ("Could not get the connection's interfaces: %s", error->message);
+		return;
+	}
+
+	iface = interfaces[i];
+	while (iface != NULL && found == FALSE) {
+		found = strcmp (iface, EMP_IFACE_CONNECTION_INTERFACE_LOCATION) == 0;
+		iface = interfaces[++i];
+	}
+	priv->has_location_iface = found;
+
+	if (priv->has_location_iface) {
+		emp_cli_connection_interface_location_connect_to_location_updated (TP_PROXY (priv->connection),
+										   tp_contact_factory_location_updated_cb,
+										   NULL, NULL,
+										   G_OBJECT (tp_factory),
+										   NULL);
+	}
+}
+
+static void
 tp_contact_factory_get_property (GObject    *object,
 				 guint       param_id,
 				 GValue     *value,
@@ -1088,6 +1125,12 @@ tp_contact_factory_set_property (GObject      *object,
 	switch (param_id) {
 	case PROP_CONNECTION:
 		priv->connection = g_value_dup_object (value);
+		tp_cli_connection_call_get_interfaces (priv->connection,
+						       -1,
+						       tp_connection_get_interfaces_cb,
+						       object,
+						       NULL,
+						       NULL);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -1145,11 +1188,6 @@ tp_contact_factory_constructor (GType                  type,
 										  NULL, NULL,
 										  tp_factory,
 										  NULL);
-	emp_cli_connection_interface_location_connect_to_location_updated (TP_PROXY (priv->connection),
-									   tp_contact_factory_location_updated_cb,
-									   NULL, NULL,
-									   G_OBJECT (tp_factory),
-									   NULL);
 
 	/* FIXME: This should be moved to TpConnection */
 	tp_cli_connection_interface_avatars_call_get_avatar_requirements (priv->connection,
@@ -1260,6 +1298,7 @@ empathy_tp_contact_factory_init (EmpathyTpContactFactory *tp_factory)
 
 	tp_factory->priv = priv;
 	priv->can_request_ft = FALSE;
+	priv->has_location_iface = FALSE;
 }
 
 static GHashTable *factories = NULL;
