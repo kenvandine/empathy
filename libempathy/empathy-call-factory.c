@@ -133,20 +133,31 @@ empathy_call_factory_get (void)
 }
 
 void
-empathy_call_factory_new_call (EmpathyCallFactory *factory,
-  EmpathyContact *contact)
+empathy_call_factory_new_call_with_streams (EmpathyCallFactory *factory,
+    EmpathyContact *contact,
+    gboolean initial_audio,
+    gboolean initial_video)
 {
   EmpathyCallHandler *handler;
 
   g_return_if_fail (factory != NULL);
   g_return_if_fail (contact != NULL);
 
-  handler = empathy_call_handler_new_for_contact (contact);
+  handler = empathy_call_handler_new_for_contact_with_streams (contact,
+    initial_audio, initial_video);
 
   g_signal_emit (factory, signals[NEW_CALL_HANDLER], 0,
     handler, TRUE);
 
   g_object_unref (handler);
+}
+
+
+void
+empathy_call_factory_new_call (EmpathyCallFactory *factory,
+    EmpathyContact *contact)
+{
+  empathy_call_factory_new_call_with_streams (factory, contact, TRUE, FALSE);
 }
 
 void
