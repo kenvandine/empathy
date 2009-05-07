@@ -75,6 +75,7 @@ enum {
 	COL_NAME,
 	COL_ROOM,
 	COL_MEMBERS,
+	COL_MEMBERS_INT,
 	COL_TOOLTIP,
 	COL_COUNT
 };
@@ -253,6 +254,7 @@ new_chatroom_dialog_model_setup (EmpathyNewChatroomDialog *dialog)
 				    G_TYPE_STRING,       /* Name */
 				    G_TYPE_STRING,       /* Room */
 				    G_TYPE_STRING,       /* Member count */
+				    G_TYPE_INT,          /* Member count int */
 				    G_TYPE_STRING);      /* Tool tip */
 
 	dialog->model = GTK_TREE_MODEL (store);
@@ -295,12 +297,16 @@ new_chatroom_dialog_model_add_columns (EmpathyNewChatroomDialog *dialog)
 		                                           cell,
 		                                           "stock-id", COL_INVITE_ONLY,
 		                                           NULL);
+
+	gtk_tree_view_column_set_sort_column_id (column, COL_INVITE_ONLY);
 	gtk_tree_view_append_column (view, column);
 
 	column = gtk_tree_view_column_new_with_attributes (NULL,
 		                                           cell,
 		                                           "stock-id", COL_NEED_PASSWORD,
 		                                           NULL);
+
+	gtk_tree_view_column_set_sort_column_id (column, COL_NEED_PASSWORD);
 	gtk_tree_view_append_column (view, column);
 
 	cell = gtk_cell_renderer_text_new ();
@@ -315,6 +321,7 @@ new_chatroom_dialog_model_add_columns (EmpathyNewChatroomDialog *dialog)
 		                                           "text", COL_NAME,
 		                                           NULL);
 
+	gtk_tree_view_column_set_sort_column_id (column, COL_NAME);
 	gtk_tree_view_column_set_expand (column, TRUE);
 	gtk_tree_view_append_column (view, column);
 
@@ -329,6 +336,8 @@ new_chatroom_dialog_model_add_columns (EmpathyNewChatroomDialog *dialog)
 		                                           cell,
 		                                           "text", COL_MEMBERS,
 		                                           NULL);
+
+	gtk_tree_view_column_set_sort_column_id (column, COL_MEMBERS_INT);
 	gtk_tree_view_append_column (view, column);
 }
 
@@ -463,6 +472,7 @@ new_chatroom_dialog_new_room_cb (EmpathyTpRoomlist        *room_list,
 			    COL_NAME, empathy_chatroom_get_name (chatroom),
 			    COL_ROOM, empathy_chatroom_get_room (chatroom),
 			    COL_MEMBERS, members,
+			    COL_MEMBERS_INT, empathy_chatroom_get_members_count (chatroom),
 			    COL_TOOLTIP, tooltip,
 			    -1);
 
