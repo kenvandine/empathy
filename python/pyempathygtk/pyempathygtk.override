@@ -61,7 +61,7 @@ import gtk.Bin as PyGtkBin_Type
 import gtk.DrawingArea as PyGtkDrawingArea_Type
 import gtk.ComboBoxEntry as PyGtkComboBoxEntry_Type
 import gtk.Builder as PyGtkBuilder_Type
-import gst.GstBin as PyGstBin_Type
+import gst.Bin as PyGstBin_Type
 import empathy.Contact as PyEmpathyContact_Type
 import empathy.ContactList as PyEmpathyContactList_Type
 import empathy.TpChat as PyEmpathyTpChat_Type
