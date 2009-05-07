@@ -36,6 +36,14 @@
             <property name="label" translatable="yes">Video preview</property>
           </object>
         </child>
+        <child>
+          <object class="GtkAction" id="menufullscreen">
+            <property name="stock_id">gtk-fullscreen</property>
+            <property name="name">menufullscreen</property>
+            <property name="label" translatable="yes">Fullscreen</property>
+          </object>
+          <accelerator key="F11"/>
+        </child>
       </object>
     </child>
     <ui>
@@ -46,8 +54,12 @@
         </menu>
         <menu action="view">
           <menuitem action="show_preview"/>
+          <menuitem action="menufullscreen"/>
         </menu>
       </menubar>
+      <popup name="video-popup">
+          <menuitem name="menufullscreen" action="menufullscreen"/>
+      </popup>
     </ui>
   </object>
       <object class="GtkVBox" id="call_window_vbox">
