@@ -51,7 +51,9 @@ static guint signals[LAST_SIGNAL] = {0};
 enum {
   PROP_TP_CALL = 1,
   PROP_GST_BUS,
-  PROP_CONTACT
+  PROP_CONTACT,
+  PROP_INITIAL_AUDIO,
+  PROP_INITIAL_VIDEO
 };
 
 /* private structure */
@@ -61,6 +63,8 @@ typedef struct {
   EmpathyTpCall *call;
   EmpathyContact *contact;
   TfChannel *tfchannel;
+  gboolean initial_audio;
+  gboolean initial_video;
   FsElementAddedNotifier *fsnotifier;
 } EmpathyCallHandlerPriv;
 
@@ -147,6 +151,12 @@ empathy_call_handler_set_property (GObject *object,
       case PROP_TP_CALL:
         priv->call = g_value_dup_object (value);
         break;
+      case PROP_INITIAL_AUDIO:
+        priv->initial_audio = g_value_get_boolean (value);
+        break;
+      case PROP_INITIAL_VIDEO:
+        priv->initial_video = g_value_get_boolean (value);
+        break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -165,6 +175,12 @@ empathy_call_handler_get_property (GObject *object,
         break;
       case PROP_TP_CALL:
         g_value_set_object (value, priv->call);
+        break;
+      case PROP_INITIAL_AUDIO:
+        g_value_set_boolean (value, priv->initial_audio);
+        break;
+      case PROP_INITIAL_VIDEO:
+        g_value_set_boolean (value, priv->initial_video);
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -197,6 +213,20 @@ empathy_call_handler_class_init (EmpathyCallHandlerClass *klass)
     EMPATHY_TYPE_TP_CALL,
     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (object_class, PROP_TP_CALL, param_spec);
+
+  param_spec = g_param_spec_boolean ("initial-audio",
+    "initial-audio", "Whether the call should start with audio",
+    TRUE,
+    G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class, PROP_INITIAL_AUDIO,
+      param_spec);
+
+  param_spec = g_param_spec_boolean ("initial-video",
+    "initial-video", "Whether the call should start with video",
+    FALSE,
+    G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class, PROP_INITIAL_VIDEO,
+    param_spec);
 
   signals[CONFERENCE_ADDED] =
     g_signal_new ("conference-added", G_TYPE_FROM_CLASS (klass),
@@ -239,6 +269,17 @@ empathy_call_handler_new_for_contact (EmpathyContact *contact)
 {
   return EMPATHY_CALL_HANDLER (g_object_new (EMPATHY_TYPE_CALL_HANDLER,
     "contact", contact, NULL));
+}
+
+EmpathyCallHandler *
+empathy_call_handler_new_for_contact_with_streams (EmpathyContact *contact,
+    gboolean audio, gboolean video)
+{
+  return EMPATHY_CALL_HANDLER (g_object_new (EMPATHY_TYPE_CALL_HANDLER,
+    "contact", contact,
+    "initial-audio", audio,
+    "initial-video", video,
+    NULL));
 }
 
 EmpathyCallHandler *
@@ -457,7 +498,8 @@ empathy_call_handler_request_cb (EmpathyDispatchOperation *operation,
 
   empathy_call_handler_start_tpfs (self);
 
-  empathy_tp_call_to (priv->call, priv->contact);
+  empathy_tp_call_to (priv->call, priv->contact,
+    priv->initial_audio, priv->initial_video);
 
   empathy_dispatch_operation_claim (operation);
 }

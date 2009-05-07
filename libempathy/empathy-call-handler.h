@@ -64,6 +64,9 @@ GType empathy_call_handler_get_type (void);
 EmpathyCallHandler * empathy_call_handler_new_for_contact (
   EmpathyContact *contact);
 
+EmpathyCallHandler * empathy_call_handler_new_for_contact_with_streams (
+  EmpathyContact *contact, gboolean audio, gboolean video);
+
 EmpathyCallHandler * empathy_call_handler_new_for_channel (
   EmpathyTpCall *call);
 
