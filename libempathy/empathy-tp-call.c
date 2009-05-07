@@ -317,9 +317,13 @@ tp_call_update_status (EmpathyTpCall *call)
 }
 
 void
-empathy_tp_call_to (EmpathyTpCall *call, EmpathyContact *contact)
+empathy_tp_call_to (EmpathyTpCall *call, EmpathyContact *contact,
+  gboolean audio, gboolean video)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
+  EmpathyCapabilities capabilities = 0;
+
+  g_assert (audio || video);
 
   priv->contact = g_object_ref (contact);
   priv->is_incoming = FALSE;
@@ -327,7 +331,13 @@ empathy_tp_call_to (EmpathyTpCall *call, EmpathyContact *contact)
   g_object_notify (G_OBJECT (call), "is-incoming");
   g_object_notify (G_OBJECT (call), "contact");
   g_object_notify (G_OBJECT (call), "status");
-  tp_call_request_streams_for_capabilities (call, EMPATHY_CAPABILITIES_AUDIO);
+
+  if (video)
+    capabilities |= EMPATHY_CAPABILITIES_VIDEO;
+  if (audio)
+    capabilities |= EMPATHY_CAPABILITIES_AUDIO;
+
+  tp_call_request_streams_for_capabilities (call, capabilities);
 }
 
 static void
