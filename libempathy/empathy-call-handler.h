@@ -1,6 +1,6 @@
 /*
  * empathy-call-handler.h - Header for EmpathyCallHandler
- * Copyright (C) 2008 Collabora Ltd.
+ * Copyright (C) 2008-2009 Collabora Ltd.
  * @author Sjoerd Simons <sjoerd.simons@collabora.co.uk>
  *
  * This library is free software; you can redistribute it and/or
@@ -71,6 +71,7 @@ EmpathyCallHandler * empathy_call_handler_new_for_channel (
   EmpathyTpCall *call);
 
 void empathy_call_handler_start_call (EmpathyCallHandler *handler);
+void empathy_call_handler_stop_call (EmpathyCallHandler *handler);
 
 void empathy_call_handler_bus_message (EmpathyCallHandler *handler,
   GstBus *bus, GstMessage *message);

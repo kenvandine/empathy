@@ -1,6 +1,6 @@
 /*
  * empathy-call-handler.c - Source for EmpathyCallHandler
- * Copyright (C) 2008 Collabora Ltd.
+ * Copyright (C) 2008-2009 Collabora Ltd.
  * @author Sjoerd Simons <sjoerd.simons@collabora.co.uk>
  *
  * This library is free software; you can redistribute it and/or
@@ -577,3 +577,22 @@ empathy_call_handler_start_call (EmpathyCallHandler *handler)
   g_object_unref (dispatcher);
 }
 
+/**
+ * empathy_call_handler_stop_call:
+ * @handler: an #EmpathyCallHandler
+ *
+ * Closes the #EmpathyCallHandler's call and frees its resources.
+ */
+void
+empathy_call_handler_stop_call (EmpathyCallHandler *handler)
+{
+  EmpathyCallHandlerPriv *priv = GET_PRIV (handler);
+
+  if (priv->call != NULL)
+    {
+      empathy_tp_call_close (priv->call);
+      g_object_unref (priv->call);
+    }
+
+  priv->call = NULL;
+}
