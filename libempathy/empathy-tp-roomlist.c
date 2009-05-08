@@ -42,6 +42,7 @@ typedef struct {
 	TpChannel    *channel;
 	McAccount    *account;
 	gboolean      is_listing;
+	gboolean      start_requested;
 } EmpathyTpRoomlistPriv;
 
 enum {
@@ -236,6 +237,28 @@ tp_roomlist_invalidated_cb (TpChannel         *channel,
 }
 
 static void
+call_list_rooms_cb (TpChannel *proxy,
+		    const GError *error,
+		    gpointer user_data,
+		    GObject *weak_object)
+{
+	if (error != NULL) {
+		DEBUG ("Error listing rooms: %s", error->message);
+	}
+}
+
+static void
+stop_listing_cb (TpChannel *proxy,
+		 const GError *error,
+		 gpointer user_data,
+		 GObject *weak_object)
+{
+	if (error != NULL) {
+		DEBUG ("Error on stop listing: %s", error->message);
+	}
+}
+
+static void
 channel_ready_cb (TpChannel *channel,
 		  const GError *error,
 		  gpointer user_data)
@@ -269,6 +292,11 @@ channel_ready_cb (TpChannel *channel,
 							      NULL, NULL,
 							      G_OBJECT (list));
 
+	if (priv->start_requested == TRUE) {
+		tp_cli_channel_type_room_list_call_list_rooms (priv->channel, -1,
+			call_list_rooms_cb, NULL, NULL, NULL);
+		priv->start_requested = FALSE;
+	}
 }
 
 static void
@@ -434,6 +462,8 @@ empathy_tp_roomlist_init (EmpathyTpRoomlist *list)
 		EMPATHY_TYPE_TP_ROOMLIST, EmpathyTpRoomlistPriv);
 
 	list->priv = priv;
+	priv->start_requested = FALSE;
+	priv->is_listing = FALSE;
 }
 
 EmpathyTpRoomlist *
@@ -474,10 +504,12 @@ empathy_tp_roomlist_start (EmpathyTpRoomlist *list)
 	EmpathyTpRoomlistPriv *priv = GET_PRIV (list);
 
 	g_return_if_fail (EMPATHY_IS_TP_ROOMLIST (list));
-	g_return_if_fail (TP_IS_CHANNEL (priv->channel));
-
-	tp_cli_channel_type_room_list_call_list_rooms (priv->channel, -1,
-						       NULL, NULL, NULL, NULL);
+	if (priv->channel != NULL) {
+		tp_cli_channel_type_room_list_call_list_rooms (priv->channel, -1,
+			call_list_rooms_cb, NULL, NULL, NULL);
+	} else {
+		priv->start_requested = TRUE;
+	}
 }
 
 void
@@ -489,6 +521,6 @@ empathy_tp_roomlist_stop (EmpathyTpRoomlist *list)
 	g_return_if_fail (TP_IS_CHANNEL (priv->channel));
 
 	tp_cli_channel_type_room_list_call_stop_listing (priv->channel, -1,
-							 NULL, NULL, NULL, NULL);
+							 stop_listing_cb, NULL, NULL, NULL);
 }
 

@@ -388,6 +388,7 @@ new_chatroom_dialog_account_changed_cb (GtkComboBox             *combobox,
 	EmpathyAccountChooser *account_chooser;
 	McAccount             *account;
 	gboolean               listing = FALSE;
+	gboolean               expanded = FALSE;
 
 	if (dialog->room_list) {
 		g_object_unref (dialog->room_list);
@@ -410,6 +411,11 @@ new_chatroom_dialog_account_changed_cb (GtkComboBox             *combobox,
 		g_signal_connect (dialog->room_list, "notify::is-listing",
 				  G_CALLBACK (new_chatroom_dialog_listing_cb),
 				  dialog);
+
+		expanded = gtk_expander_get_expanded (GTK_EXPANDER (dialog->expander_browse));
+		if (expanded) {
+			new_chatroom_dialog_browse_start (dialog);
+		}
 
 		listing = empathy_tp_roomlist_is_listing (dialog->room_list);
 		if (listing) {
