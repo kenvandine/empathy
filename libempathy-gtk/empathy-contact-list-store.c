@@ -736,7 +736,8 @@ contact_list_store_setup (EmpathyContactListStore *store)
 					       G_TYPE_BOOLEAN,       /* Is active */
 					       G_TYPE_BOOLEAN,       /* Is online */
 					       G_TYPE_BOOLEAN,       /* Is separator */
-					       G_TYPE_BOOLEAN};      /* Can VoIP */
+					       G_TYPE_BOOLEAN,       /* Can make audio calls */
+					       G_TYPE_BOOLEAN};      /* Can make video calls */
 	
 	priv = GET_PRIV (store);
 
@@ -870,7 +871,12 @@ contact_list_store_add_contact (EmpathyContactListStore *store,
 				    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, contact,
 				    EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP, FALSE,
 				    EMPATHY_CONTACT_LIST_STORE_COL_IS_SEPARATOR, FALSE,
-				    EMPATHY_CONTACT_LIST_STORE_COL_CAN_VOIP, empathy_contact_can_voip (contact),
+				    EMPATHY_CONTACT_LIST_STORE_COL_CAN_AUDIO_CALL,
+				      empathy_contact_get_capabilities (contact) &
+				        EMPATHY_CAPABILITIES_AUDIO,
+				    EMPATHY_CONTACT_LIST_STORE_COL_CAN_VIDEO_CALL,
+				      empathy_contact_get_capabilities (contact) &
+				        EMPATHY_CAPABILITIES_VIDEO,
 				    -1);
 	}
 
@@ -887,7 +893,12 @@ contact_list_store_add_contact (EmpathyContactListStore *store,
 				    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, contact,
 				    EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP, FALSE,
 				    EMPATHY_CONTACT_LIST_STORE_COL_IS_SEPARATOR, FALSE,
-				    EMPATHY_CONTACT_LIST_STORE_COL_CAN_VOIP, empathy_contact_can_voip (contact),
+				    EMPATHY_CONTACT_LIST_STORE_COL_CAN_AUDIO_CALL,
+				      empathy_contact_get_capabilities (contact) &
+				        EMPATHY_CAPABILITIES_AUDIO,
+				    EMPATHY_CONTACT_LIST_STORE_COL_CAN_VIDEO_CALL,
+				      empathy_contact_get_capabilities (contact) &
+				        EMPATHY_CAPABILITIES_VIDEO,
 				    -1);
 		g_free (l->data);
 	}
@@ -1056,7 +1067,12 @@ contact_list_store_contact_update (EmpathyContactListStore *store,
 				    EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP, FALSE,
 				    EMPATHY_CONTACT_LIST_STORE_COL_IS_ONLINE, now_online,
 				    EMPATHY_CONTACT_LIST_STORE_COL_IS_SEPARATOR, FALSE,
-				    EMPATHY_CONTACT_LIST_STORE_COL_CAN_VOIP, empathy_contact_can_voip (contact),
+				    EMPATHY_CONTACT_LIST_STORE_COL_CAN_AUDIO_CALL,
+				      empathy_contact_get_capabilities (contact) &
+				        EMPATHY_CAPABILITIES_AUDIO,
+				    EMPATHY_CONTACT_LIST_STORE_COL_CAN_VIDEO_CALL,
+				      empathy_contact_get_capabilities (contact) &
+				        EMPATHY_CAPABILITIES_VIDEO,
 				    -1);
 	}
 

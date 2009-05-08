@@ -615,9 +615,10 @@ contact_list_view_row_activated (GtkTreeView       *view,
 }
 
 static void
-contact_list_view_voip_activated_cb (EmpathyCellRendererActivatable *cell,
-				     const gchar                    *path_string,
-				     EmpathyContactListView         *view)
+contact_list_start_voip_call (EmpathyCellRendererActivatable *cell,
+    const gchar                    *path_string,
+    EmpathyContactListView         *view,
+    gboolean with_video)
 {
 	EmpathyContactListViewPriv *priv = GET_PRIV (view);
 	GtkTreeModel               *model;
@@ -639,12 +640,29 @@ contact_list_view_voip_activated_cb (EmpathyCellRendererActivatable *cell,
 
 	if (contact) {
 		EmpathyCallFactory *factory;
-
 		factory = empathy_call_factory_get ();
-		empathy_call_factory_new_call (factory, contact);
-
+		empathy_call_factory_new_call_with_streams (factory, contact,
+			TRUE, with_video);
 		g_object_unref (contact);
 	}
+}
+
+static void
+contact_list_view_video_call_activated_cb (
+    EmpathyCellRendererActivatable *cell,
+    const gchar                    *path_string,
+    EmpathyContactListView         *view)
+{
+  contact_list_start_voip_call (cell, path_string, view, TRUE);
+}
+
+
+static void
+contact_list_view_audio_call_activated_cb (EmpathyCellRendererActivatable *cell,
+				     const gchar                    *path_string,
+				     EmpathyContactListView         *view)
+{
+  contact_list_start_voip_call (cell, path_string, view, FALSE);
 }
 
 static void
@@ -708,7 +726,8 @@ contact_list_view_pixbuf_cell_data_func (GtkTreeViewColumn     *tree_column,
 }
 
 static void
-contact_list_view_voip_cell_data_func (GtkTreeViewColumn      *tree_column,
+contact_list_view_audio_call_cell_data_func (
+				       GtkTreeViewColumn      *tree_column,
 				       GtkCellRenderer        *cell,
 				       GtkTreeModel           *model,
 				       GtkTreeIter            *iter,
@@ -721,7 +740,7 @@ contact_list_view_voip_cell_data_func (GtkTreeViewColumn      *tree_column,
 	gtk_tree_model_get (model, iter,
 			    EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP, &is_group,
 			    EMPATHY_CONTACT_LIST_STORE_COL_IS_ACTIVE, &is_active,
-			    EMPATHY_CONTACT_LIST_STORE_COL_CAN_VOIP, &can_voip,
+			    EMPATHY_CONTACT_LIST_STORE_COL_CAN_AUDIO_CALL, &can_voip,
 			    -1);
 
 	g_object_set (cell,
@@ -731,6 +750,33 @@ contact_list_view_voip_cell_data_func (GtkTreeViewColumn      *tree_column,
 
 	contact_list_view_cell_set_background (view, cell, is_group, is_active);
 }
+
+static void
+contact_list_view_video_call_cell_data_func (
+				       GtkTreeViewColumn      *tree_column,
+				       GtkCellRenderer        *cell,
+				       GtkTreeModel           *model,
+				       GtkTreeIter            *iter,
+				       EmpathyContactListView *view)
+{
+	gboolean is_group;
+	gboolean is_active;
+	gboolean can_voip;
+
+	gtk_tree_model_get (model, iter,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP, &is_group,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_ACTIVE, &is_active,
+			    EMPATHY_CONTACT_LIST_STORE_COL_CAN_VIDEO_CALL, &can_voip,
+			    -1);
+
+	g_object_set (cell,
+		      "visible", !is_group && can_voip,
+		      "icon-name", EMPATHY_IMAGE_VIDEO_CALL,
+		      NULL);
+
+	contact_list_view_cell_set_background (view, cell, is_group, is_active);
+}
+
 
 static void
 contact_list_view_avatar_cell_data_func (GtkTreeViewColumn     *tree_column,
@@ -948,12 +994,12 @@ contact_list_view_setup (EmpathyContactListView *view)
 	gtk_tree_view_column_add_attribute (col, cell,
 					    "is_group", EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP);
 
-	/* Voip Capability Icon */
+	/* Audio Call Icon */
 	cell = empathy_cell_renderer_activatable_new ();
 	gtk_tree_view_column_pack_start (col, cell, FALSE);
 	gtk_tree_view_column_set_cell_data_func (
 		col, cell,
-		(GtkTreeCellDataFunc) contact_list_view_voip_cell_data_func,
+		(GtkTreeCellDataFunc) contact_list_view_audio_call_cell_data_func,
 		view, NULL);
 
 	g_object_set (cell,
@@ -961,7 +1007,23 @@ contact_list_view_setup (EmpathyContactListView *view)
 		      NULL);
 
 	g_signal_connect (cell, "path-activated",
-			  G_CALLBACK (contact_list_view_voip_activated_cb),
+			  G_CALLBACK (contact_list_view_audio_call_activated_cb),
+			  view);
+
+	/* Video Call Icon */
+	cell = empathy_cell_renderer_activatable_new ();
+	gtk_tree_view_column_pack_start (col, cell, FALSE);
+	gtk_tree_view_column_set_cell_data_func (
+		col, cell,
+		(GtkTreeCellDataFunc) contact_list_view_video_call_cell_data_func,
+		view, NULL);
+
+	g_object_set (cell,
+		      "visible", FALSE,
+		      NULL);
+
+	g_signal_connect (cell, "path-activated",
+			  G_CALLBACK (contact_list_view_video_call_activated_cb),
 			  view);
 
 	/* Avatar */
