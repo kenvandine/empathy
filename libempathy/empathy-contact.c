@@ -1035,7 +1035,7 @@ empathy_avatar_save_to_file (EmpathyAvatar *self,
  * Example: a "city" key would have "Helsinki" as string GValue,
  *          a "latitude" would have 65.0 as double GValue.
  *
- * Returns: a #GHashTable of location values, use #g_hash_table_unref when it to free it
+ * Returns: a #GHashTable of location values
  */
 GHashTable *
 empathy_contact_get_location (EmpathyContact *contact)
@@ -1046,7 +1046,7 @@ empathy_contact_get_location (EmpathyContact *contact)
 
   priv = GET_PRIV (contact);
 
-  return g_hash_table_ref (priv->location);
+  return priv->location;
 }
 
 /**
