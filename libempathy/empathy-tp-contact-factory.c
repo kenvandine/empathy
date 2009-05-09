@@ -615,8 +615,8 @@ tp_contact_factory_add_contact (EmpathyTpContactFactory *tp_factory,
 	tp_contact_factory_got_capabilities (tp_factory, capabilities, error);
 	g_clear_error (&error);
 
-	if (tp_proxy_has_interface (TP_PROXY (priv->connection),
-		EMP_IFACE_CONNECTION_INTERFACE_LOCATION)) {
+	if (tp_proxy_has_interface_by_id (TP_PROXY (priv->connection),
+		EMP_IFACE_QUARK_CONNECTION_INTERFACE_LOCATION)) {
 		emp_cli_connection_interface_location_call_get_locations (TP_PROXY (priv->connection),
 									 -1,
 									 &handles,
