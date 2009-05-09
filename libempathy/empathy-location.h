@@ -25,6 +25,7 @@
 
 G_BEGIN_DECLS
 
+/* These keys come from the Telepathy-Spec 0.7.20 */
 #define EMPATHY_LOCATION_COUNTRY_CODE "countrycode"
 #define EMPATHY_LOCATION_COUNTRY "country"
 #define EMPATHY_LOCATION_REGION "region"
