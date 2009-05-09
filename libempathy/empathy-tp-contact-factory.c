@@ -315,21 +315,6 @@ tp_contact_factory_avatar_updated_cb (TpConnection *connection,
 }
 
 static void
-tp_contact_factory_update_location (EmpathyTpContactFactory *tp_factory,
-				    guint                    handle,
-				    GHashTable              *location)
-{
-	EmpathyContact      *contact;
-
-	contact = tp_contact_factory_find_by_handle (tp_factory, handle);
-	if (contact == NULL) {
-		return;
-	}
-
-	empathy_contact_set_location (contact, location);
-}
-
-static void
 tp_contact_factory_update_capabilities (EmpathyTpContactFactory *tp_factory,
 					guint                    handle,
 					const gchar             *channel_type,
@@ -424,12 +409,14 @@ tp_contact_factory_got_locations (TpProxy                 *tp_proxy,
 
 	g_hash_table_iter_init (&iter, locations);
 	while (g_hash_table_iter_next (&iter, &key, &value)) {
-		guint        handle = GPOINTER_TO_INT (key);
-		GHashTable  *location = value;
+		guint           handle = GPOINTER_TO_INT (key);
+		GHashTable     *location = value;
+		EmpathyContact *contact;
 
-		tp_contact_factory_update_location (tp_factory,
-						    handle,
-						    location);
+		contact = tp_contact_factory_find_by_handle (tp_factory, handle);
+		if (contact != NULL) {
+			empathy_contact_set_location (contact, location);
+		}
 	}
 }
 
