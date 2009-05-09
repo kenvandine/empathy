@@ -262,9 +262,7 @@ empathy_contact_init (EmpathyContact *contact)
 
   contact->priv = priv;
 
-  priv->location = g_hash_table_new_full (g_str_hash, g_str_equal,
-                       (GDestroyNotify) g_free,
-                       (GDestroyNotify) tp_g_value_slice_free);
+  priv->location = NULL;
 }
 
 static void
@@ -282,6 +280,9 @@ contact_finalize (GObject *object)
 
   if (priv->avatar)
       empathy_avatar_unref (priv->avatar);
+
+  if (priv->location != NULL)
+      g_hash_table_unref (priv->location);
 
   G_OBJECT_CLASS (empathy_contact_parent_class)->finalize (object);
 }
@@ -1034,7 +1035,7 @@ empathy_avatar_save_to_file (EmpathyAvatar *self,
  * Example: a "city" key would have "Helsinki" as string GValue,
  *          a "latitude" would have 65.0 as double GValue.
  *
- * Returns: a #GHashTable of location values
+ * Returns: a #GHashTable of location values, use #g_hash_table_unref when it to free it
  */
 GHashTable *
 empathy_contact_get_location (EmpathyContact *contact)
@@ -1070,7 +1071,8 @@ empathy_contact_set_location (EmpathyContact *contact,
 
   priv = GET_PRIV (contact);
 
-  g_hash_table_unref (priv->location);
+  if (priv->location != NULL)
+    g_hash_table_unref (priv->location);
 
   priv->location = g_hash_table_ref (location);
   g_object_notify (G_OBJECT (contact), "location");
