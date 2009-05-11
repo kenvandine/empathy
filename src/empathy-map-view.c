@@ -79,8 +79,6 @@ static void map_view_destroy_cb (GtkWidget *widget,
     EmpathyMapView *window);
 static gboolean map_view_contacts_foreach (GtkTreeModel *model,
     GtkTreePath *path, GtkTreeIter *iter, gpointer user_data);
-static gboolean map_view_contacts_foreach_disconnect (GtkTreeModel *model,
-    GtkTreePath *path, GtkTreeIter *iter, gpointer user_data);
 static void map_view_zoom_in_cb (GtkWidget *widget, EmpathyMapView *window);
 static void map_view_zoom_out_cb (GtkWidget *widget, EmpathyMapView *window);
 static void map_view_contact_location_notify (GObject *gobject,
@@ -151,36 +149,12 @@ empathy_map_view_show ()
   return window->window;
 }
 
-static gboolean
-map_view_contacts_foreach_disconnect (GtkTreeModel *model,
-                                      GtkTreePath *path,
-                                      GtkTreeIter *iter,
-                                      gpointer user_data)
-{
-  EmpathyContact *contact;
-  guint handle_id;
-
-  gtk_tree_model_get (model, iter, EMPATHY_CONTACT_LIST_STORE_COL_CONTACT,
-     &contact, -1);
-  if (!contact)
-    return FALSE;
-
-  handle_id = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (contact), "map-view-handle"));
-  if (handle_id > 0)
-    g_signal_handler_disconnect (contact, handle_id);
-
-  return FALSE;
-}
-
 static void
 map_view_destroy_cb (GtkWidget *widget,
                      EmpathyMapView *window)
 {
   GtkTreeModel *model;
 
-  /* Set up contact list. */
-  model = GTK_TREE_MODEL (window->list_store);
-  gtk_tree_model_foreach (model, map_view_contacts_foreach_disconnect, window);
   g_object_unref (window->list_store);
   g_free (window);
 }
@@ -260,7 +234,9 @@ map_view_marker_update (ChamplainMarker *marker,
   GValue *value;
   GHashTable *location = empathy_contact_get_location (contact);
 
-  if (g_hash_table_size (location) == 0)
+
+  if (location == NULL ||
+      g_hash_table_size (location) == 0)
   {
     clutter_actor_hide (CLUTTER_ACTOR (marker));
     return;
@@ -335,7 +311,7 @@ map_view_contacts_foreach (GtkTreeModel *model,
 
   gtk_tree_model_get (model, iter, EMPATHY_CONTACT_LIST_STORE_COL_CONTACT,
      &contact, -1);
-  if (!contact)
+  if (contact == NULL)
     return FALSE;
 
   marker = champlain_marker_new ();
