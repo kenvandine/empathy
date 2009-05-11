@@ -28,6 +28,8 @@
 #include <champlain/champlain.h>
 #include <champlain-gtk/champlain-gtk.h>
 #include <clutter-gtk/gtk-clutter-embed.h>
+#include <geoclue/geoclue-geocode.h>
+#include <telepathy-glib/util.h>
 
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-utils.h>
@@ -36,6 +38,7 @@
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-contact-factory.h>
+#include <libempathy/empathy-location.h>
 #include <libempathy/empathy-status-presets.h>
 
 #include <libempathy-gtk/empathy-contact-dialogs.h>
@@ -58,7 +61,7 @@
 #include "empathy-chatrooms-window.h"
 #include "empathy-event-manager.h"
 
-#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#define DEBUG_FLAG EMPATHY_DEBUG_LOCATION
 #include <libempathy/empathy-debug.h>
 
 typedef struct {
@@ -74,11 +77,13 @@ typedef struct {
 
 static void map_view_destroy_cb (GtkWidget *widget,
     EmpathyMapView *window);
-static void map_view_update_status (EmpathyMapView *window);
 static gboolean map_view_contacts_foreach (GtkTreeModel *model,
     GtkTreePath *path, GtkTreeIter *iter, gpointer user_data);
 static void map_view_zoom_in_cb (GtkWidget *widget, EmpathyMapView *window);
 static void map_view_zoom_out_cb (GtkWidget *widget, EmpathyMapView *window);
+static void map_view_contact_location_notify (GObject *gobject,
+    GParamSpec *arg1, gpointer user_data);
+static gchar * get_dup_string (GHashTable *location, gchar *key);
 
 // FIXME: Make it so that only one window can be shown
 GtkWidget *
@@ -134,8 +139,6 @@ empathy_map_view_show (EmpathyContactListStore *list_store)
   model = GTK_TREE_MODEL (window->list_store);
   gtk_tree_model_foreach (model, map_view_contacts_foreach, window);
 
-  map_view_update_status (window);
-
   empathy_window_present (GTK_WINDOW (window->window), TRUE);
   return window->window;
 }
@@ -148,11 +151,135 @@ map_view_destroy_cb (GtkWidget *widget,
   g_free (window);
 }
 
+#define GEOCODE_SERVICE "org.freedesktop.Geoclue.Providers.Yahoo"
+#define GEOCODE_PATH "/org/freedesktop/Geoclue/Providers/Yahoo"
 
 static void
-map_view_update_status (EmpathyMapView *window)
+map_view_geocode_cb (GeoclueGeocode *geocode,
+                     GeocluePositionFields fields,
+                     double latitude,
+                     double longitude,
+                     double altitude,
+                     GeoclueAccuracy *accuracy,
+                     GError *error,
+                     gpointer userdata)
 {
+  GValue *new_value;
+  gboolean found = FALSE;
+  GHashTable *location = empathy_contact_get_location (EMPATHY_CONTACT (userdata));
+  g_hash_table_ref (location);
 
+  if (error)
+  {
+      return;
+  }
+
+  if (fields & GEOCLUE_POSITION_FIELDS_LONGITUDE)
+    {
+      new_value = tp_g_value_slice_new (G_TYPE_DOUBLE);
+      g_value_set_double (new_value, longitude);
+      g_hash_table_replace (location, EMPATHY_LOCATION_LON, new_value);
+      DEBUG ("\t - Longitude: %f", longitude);
+    }
+  if (fields & GEOCLUE_POSITION_FIELDS_LATITUDE)
+    {
+      new_value = tp_g_value_slice_new (G_TYPE_DOUBLE);
+      g_value_set_double (new_value, latitude);
+      g_hash_table_replace (location, EMPATHY_LOCATION_LAT, new_value);
+      DEBUG ("\t - Latitude: %f", latitude);
+      found = TRUE;
+    }
+  if (fields & GEOCLUE_POSITION_FIELDS_ALTITUDE)
+    {
+      new_value = tp_g_value_slice_new (G_TYPE_DOUBLE);
+      g_value_set_double (new_value, altitude);
+      g_hash_table_replace (location, EMPATHY_LOCATION_ALT, new_value);
+      DEBUG ("\t - Altitude: %f", altitude);
+    }
+
+  //Don't change the accuracy as we used an address to get this position
+  if (found)
+    empathy_contact_set_location (EMPATHY_CONTACT (userdata), location);
+  g_hash_table_unref (location);
+}
+
+static gchar *
+get_dup_string (GHashTable *location, gchar *key)
+{
+  GValue *value;
+
+  value = g_hash_table_lookup (location, key);
+  if (value)
+  {
+      return g_value_dup_string (value);
+  }
+  return NULL;
+
+}
+
+static void
+map_view_marker_update (ChamplainMarker *marker,
+                        EmpathyContact *contact)
+{
+  gdouble lon, lat;
+  GValue *value;
+  GHashTable *location = empathy_contact_get_location (contact);
+
+  if (g_hash_table_size (location) == 0)
+  {
+    clutter_actor_hide (CLUTTER_ACTOR (marker));
+    return;
+  }
+
+  value = g_hash_table_lookup (location, EMPATHY_LOCATION_LAT);
+  if (value == NULL)
+    {
+      GeoclueGeocode * geocode = geoclue_geocode_new (GEOCODE_SERVICE,
+          GEOCODE_PATH);
+      gchar *str;
+
+      GHashTable *address = geoclue_address_details_new();
+      str = get_dup_string (location, EMPATHY_LOCATION_COUNTRY);
+      if (str != NULL)
+        g_hash_table_insert (address, g_strdup ("country"), str);
+
+      str = get_dup_string (location, EMPATHY_LOCATION_POSTAL_CODE);
+      if (str != NULL)
+        g_hash_table_insert (address, g_strdup ("postalcode"), str);
+
+      str = get_dup_string (location, EMPATHY_LOCATION_LOCALITY);
+      if (str != NULL)
+        g_hash_table_insert (address, g_strdup ("locality"), str);
+
+      str = get_dup_string (location, EMPATHY_LOCATION_STREET);
+      if (str != NULL)
+        g_hash_table_insert (address, g_strdup ("street"), str);
+
+      geoclue_geocode_address_to_position_async (geocode, address,
+          map_view_geocode_cb, contact);
+      clutter_actor_hide (CLUTTER_ACTOR (marker));
+      return;
+    }
+  lat = g_value_get_double (value);
+
+  value = g_hash_table_lookup (location, EMPATHY_LOCATION_LON);
+  if (value == NULL)
+    return;
+  lon = g_value_get_double (value);
+
+  clutter_actor_show (CLUTTER_ACTOR (marker));
+  champlain_marker_set_position (marker, lat, lon);
+}
+
+
+static void
+map_view_contact_location_notify (GObject *gobject,
+                                  GParamSpec *arg1,
+                                  gpointer user_data)
+{
+  ChamplainMarker *marker = CHAMPLAIN_MARKER (user_data);
+  EmpathyContact *contact = EMPATHY_CONTACT (gobject);
+  map_view_marker_update (marker, contact);
 }
 
 
@@ -166,6 +293,8 @@ map_view_contacts_foreach (GtkTreeModel *model,
   EmpathyContact *contact;
   ClutterActor *marker;
   ClutterActor *texture;
+  GHashTable *location;
+  GValue *value;
   GdkPixbuf *avatar;
 
   gtk_tree_model_get (model, iter, EMPATHY_CONTACT_LIST_STORE_COL_CONTACT,
@@ -174,8 +303,11 @@ map_view_contacts_foreach (GtkTreeModel *model,
     return FALSE;
 
   marker = champlain_marker_new ();
-  texture = clutter_texture_new ();
 
+  g_signal_connect (contact, "notify::location",
+      G_CALLBACK (map_view_contact_location_notify), marker);
+
+  texture = clutter_texture_new ();
   avatar = empathy_pixbuf_avatar_from_contact_scaled (contact, 32, 32);
 
   if (!avatar)
@@ -185,13 +317,9 @@ map_view_contacts_foreach (GtkTreeModel *model,
   clutter_actor_set_position (CLUTTER_ACTOR (texture), 5, 5);
 
   clutter_container_add (CLUTTER_CONTAINER (marker), texture, NULL);
-
-  GRand* rand = g_rand_new ();
-  gdouble lon = g_rand_double_range (rand, -170.0, 170.0);
-  gdouble lat = g_rand_double_range (rand, -70.0, 70.0);
-  g_print("%f, %f\n", lat, lon);
-  champlain_marker_set_position (CHAMPLAIN_MARKER (marker), lat, lon);
   clutter_actor_set_anchor_point (marker, 25, 50);
+
+  map_view_marker_update (CHAMPLAIN_MARKER (marker), contact);
 
   clutter_container_add (CLUTTER_CONTAINER (window->layer), marker, NULL);
 
