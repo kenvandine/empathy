@@ -1,5 +1,5 @@
 /*
- * empathy-call-window.c - Source for EmpathyCallWindow
+ * empathy-call-window-fullscreen.h - Header for EmpathyCallWindowFullscreen
  * Copyright (C) 2009 Collabora Ltd.
  *
  * This library is free software; you can redistribute it and/or
@@ -31,20 +31,13 @@ typedef struct _EmpathyCallWindowFullscreen EmpathyCallWindowFullscreen;
 typedef struct _EmpathyCallWindowFullscreenClass EmpathyCallWindowFullscreenClass;
 
 struct _EmpathyCallWindowFullscreenClass {
-  GtkWindowClass parent_class;
+  GObjectClass parent_class;
 };
 
 struct _EmpathyCallWindowFullscreen {
-  GtkWindow parent;
+  GObject parent;
   gboolean is_fullscreen;
-
   GtkWidget *leave_fullscreen_button;
-
-  /* Those fields represent the state of the parent empathy_call_window before 
-     it actually was in fullscreen mode. */
-  gboolean sidebar_was_visible;
-  gint original_width;
-  gint original_height;
 };
 
 GType empathy_call_window_fullscreen_get_type(void);
@@ -70,12 +63,10 @@ EmpathyCallWindowFullscreen *
 empathy_call_window_fullscreen_new (EmpathyCallWindow *parent);
 
 void empathy_call_window_fullscreen_set_fullscreen (EmpathyCallWindowFullscreen *fs,
-    gboolean sidebar_was_visible,
-    gint original_width,
-    gint original_height);
-void empathy_call_window_fullscreen_unset_fullscreen (EmpathyCallWindowFullscreen *fs);
+    gboolean set_fullscreen);
 void empathy_call_window_fullscreen_set_video_widget (EmpathyCallWindowFullscreen *fs,
     GtkWidget *video_widget);
+void empathy_call_window_fullscreen_show_popup (EmpathyCallWindowFullscreen *fs);
 
 G_END_DECLS
 

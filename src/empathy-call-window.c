@@ -97,6 +97,8 @@ struct _EmpathyCallWindowPriv
      it needs to be repacked. We keep a reference on it for easier access. */
   GtkWidget *vbox;
 
+  gulong video_output_motion_handler_id;
+
   gdouble volume;
   GtkAdjustment *audio_input_adj;
 
@@ -125,6 +127,13 @@ struct _EmpathyCallWindowPriv
   gboolean sending_video;
 
   EmpathyCallWindowFullscreen *fullscreen;
+  gboolean is_fullscreen;
+
+  /* Those fields represent the state of the window before it actually was in
+     fullscreen mode. */
+  gboolean sidebar_was_visible_before_fs;
+  gint original_width_before_fs;
+  gint original_height_before_fs;
 };
 
 #define GET_PRIV(o) \
@@ -174,6 +183,9 @@ static gboolean empathy_call_window_video_button_press_cb (GtkWidget *video_outp
 
 static gboolean empathy_call_window_key_press_cb (GtkWidget *video_output,
   GdkEventKey *event, EmpathyCallWindow *window);
+
+static gboolean empathy_call_window_video_output_motion_notify (GtkWidget *widget,
+  GdkEventMotion *event, EmpathyCallWindow *window);
 
 static void empathy_call_window_video_menu_popup (EmpathyCallWindow *window,
   guint button);
@@ -533,7 +545,7 @@ empathy_call_window_init (EmpathyCallWindow *self)
   priv->pipeline = gst_pipeline_new (NULL);
 
   priv->content_hbox = gtk_hbox_new (FALSE, CONTENT_HBOX_SPACING);
-  gtk_container_set_border_width (GTK_CONTAINER (priv->content_hbox), 
+  gtk_container_set_border_width (GTK_CONTAINER (priv->content_hbox),
                                   CONTENT_HBOX_BORDER_WIDTH);
   gtk_paned_pack1 (GTK_PANED (priv->pane), priv->content_hbox, TRUE, FALSE);
 
@@ -804,6 +816,13 @@ empathy_call_window_finalize (GObject *object)
 {
   EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (object);
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
+
+  if (priv->video_output_motion_handler_id != 0)
+    {
+      g_signal_handler_disconnect (G_OBJECT (priv->video_output),
+          priv->video_output_motion_handler_id);
+      priv->video_output_motion_handler_id = 0;
+    }
 
   /* free any data held directly by the object here */
   g_mutex_free (priv->lock);
@@ -1241,7 +1260,7 @@ show_controls (EmpathyCallWindow *window, gboolean set_fullscreen)
     }
   else
     {
-      if (priv->fullscreen->sidebar_was_visible)
+      if (priv->sidebar_was_visible_before_fs)
         gtk_widget_show (priv->sidebar);
 
       gtk_widget_show (menu);
@@ -1249,10 +1268,9 @@ show_controls (EmpathyCallWindow *window, gboolean set_fullscreen)
       gtk_widget_show (priv->statusbar);
       gtk_widget_show (priv->toolbar);
 
-      gtk_window_resize (GTK_WINDOW (window),
-                         priv->fullscreen->original_width,
-                         priv->fullscreen->original_height);
-    }  
+      gtk_window_resize (GTK_WINDOW (window), priv->original_width_before_fs,
+          priv->original_height_before_fs);
+    }
 }
 
 static void
@@ -1271,7 +1289,7 @@ show_borders (EmpathyCallWindow *window, gboolean set_fullscreen)
   gtk_box_set_child_packing (GTK_BOX (priv->content_hbox),
       priv->vbox, TRUE, TRUE,
       set_fullscreen ? 0 : CONTENT_HBOX_CHILDREN_PACKING_PADDING,
-      GTK_PACK_START);   
+      GTK_PACK_START);
 }
 
 static gboolean
@@ -1289,19 +1307,35 @@ empathy_call_window_state_event_cb (GtkWidget *widget,
           gint original_width = GTK_WIDGET (window)->allocation.width;
           gint original_height = GTK_WIDGET (window)->allocation.height;
 
-          g_object_get (priv->sidebar, "visible",
-                    &sidebar_was_visible, NULL);
+          g_object_get (priv->sidebar, "visible", &sidebar_was_visible, NULL);
 
-          empathy_call_window_fullscreen_set_fullscreen (priv->fullscreen, 
-              sidebar_was_visible, original_width, original_height);
+          priv->sidebar_was_visible_before_fs = sidebar_was_visible;
+          priv->original_width_before_fs = original_width;
+          priv->original_height_before_fs = original_height;
+
+          if (priv->video_output_motion_handler_id == 0 &&
+                priv->video_output != NULL)
+            {
+              priv->video_output_motion_handler_id = g_signal_connect (
+                  G_OBJECT (priv->video_output), "motion-notify-event",
+                  G_CALLBACK (empathy_call_window_video_output_motion_notify), window);
+            }
         }
       else
         {
-          empathy_call_window_fullscreen_unset_fullscreen(priv->fullscreen);
+          if (priv->video_output_motion_handler_id != 0)
+            {
+              g_signal_handler_disconnect (G_OBJECT (priv->video_output),
+                  priv->video_output_motion_handler_id);
+              priv->video_output_motion_handler_id = 0;
+            }
         }
 
+      empathy_call_window_fullscreen_set_fullscreen (priv->fullscreen,
+          set_fullscreen);
       show_controls (window, set_fullscreen);
       show_borders (window, set_fullscreen);
+      priv->is_fullscreen = set_fullscreen;
   }
 
   return FALSE;
@@ -1463,7 +1497,7 @@ empathy_call_window_fullscreen_toggle (EmpathyCallWindow *window)
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (window);
 
-  if (priv->fullscreen->is_fullscreen)
+  if (priv->is_fullscreen)
     gtk_window_unfullscreen (GTK_WINDOW (window));
   else
     gtk_window_fullscreen (GTK_WINDOW (window));
@@ -1487,8 +1521,8 @@ empathy_call_window_key_press_cb (GtkWidget *video_output,
   GdkEventKey *event, EmpathyCallWindow *window)
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (window);
-  
-  if (priv->fullscreen->is_fullscreen && event->keyval == GDK_Escape)
+
+  if (priv->is_fullscreen && event->keyval == GDK_Escape)
     {
       /* Since we are in fullscreen mode, toggling will bring us back to
          normal mode. */
@@ -1496,6 +1530,21 @@ empathy_call_window_key_press_cb (GtkWidget *video_output,
       return TRUE;
     }
 
+  return FALSE;
+}
+
+static gboolean
+empathy_call_window_video_output_motion_notify (GtkWidget *widget,
+    GdkEventMotion *event, EmpathyCallWindow *window)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+
+  if (priv->is_fullscreen)
+    {
+      empathy_call_window_fullscreen_show_popup (priv->fullscreen);
+      return TRUE;
+    }
+  
   return FALSE;
 }
 
