@@ -88,6 +88,7 @@ struct _EmpathyCallWindowPriv
   GtkWidget *toolbar;
   GtkWidget *pane;
   GtkAction *send_video;
+  GtkAction *menu_fullscreen;
 
   /* We keep a reference on the hbox which contains the main content so we can
      easilly repack everything when toggling fullscreen */
@@ -524,6 +525,7 @@ empathy_call_window_init (EmpathyCallWindow *self)
     "toolbar", &priv->toolbar,
     "send_video", &priv->send_video,
     "ui_manager", &priv->ui_manager,
+    "menufullscreen", &priv->menu_fullscreen,
     NULL);
 
   empathy_builder_connect (gui, self,
@@ -1335,6 +1337,8 @@ empathy_call_window_state_event_cb (GtkWidget *widget,
           set_fullscreen);
       show_controls (window, set_fullscreen);
       show_borders (window, set_fullscreen);
+      gtk_action_set_stock_id(priv->menu_fullscreen,
+          (set_fullscreen ? "gtk-leave-fullscreen" : "gtk-fullscreen"));
       priv->is_fullscreen = set_fullscreen;
   }
 

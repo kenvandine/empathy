@@ -40,7 +40,6 @@
           <object class="GtkAction" id="menufullscreen">
             <property name="stock_id">gtk-fullscreen</property>
             <property name="name">menufullscreen</property>
-            <property name="label" translatable="yes">Fullscreen</property>
           </object>
           <accelerator key="F11"/>
         </child>

@@ -12,7 +12,7 @@
     <signal name="motion_notify_event" handler="empathy_call_window_fullscreen_motion_notify_cb"/>
     <child>
       <object class="GtkButton" id="leave_fullscreen_button">
-        <property name="label" translatable="yes">gtk-fullscreen</property>
+        <property name="label" translatable="yes">gtk-leave-fullscreen</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
