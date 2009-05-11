@@ -56,6 +56,7 @@
 #include "empathy-preferences.h"
 #include "empathy-about-dialog.h"
 #include "empathy-new-chatroom-dialog.h"
+#include "empathy-map-view.h"
 #include "empathy-chatrooms-window.h"
 #include "empathy-event-manager.h"
 #include "empathy-ft-manager.h"
@@ -714,6 +715,15 @@ main_window_view_show_offline_cb (GtkToggleAction   *action,
 	//empathy_sound_set_enabled (TRUE);
 }
 
+#if HAVE_LIBCHAMPLAIN
+static void
+main_window_view_show_map_cb (GtkCheckMenuItem  *item,
+			      EmpathyMainWindow *window)
+{
+	empathy_map_view_show (window->list_store);
+}
+#endif
+
 static void
 main_window_favorite_chatroom_join (EmpathyChatroom *chatroom)
 {
@@ -1097,6 +1107,7 @@ empathy_main_window_show (void)
 	GtkWidget                *sw;
 	GtkToggleAction          *show_offline_widget;
 	GtkWidget                *ebox;
+	GtkWidget                *show_map_widget;
 	GtkToolItem              *item;
 	gboolean                  show_offline;
 	gboolean                  show_avatars;
@@ -1121,6 +1132,7 @@ empathy_main_window_show (void)
 				       "ui_manager", &window->ui_manager,
 				       "view_show_offline", &show_offline_widget,
 				       "view_history", &window->view_history,
+				       "view_show_map", &show_map_widget,
 				       "room_join_favorites", &window->room_join_favorites,
 				       "presence_toolbar", &window->presence_toolbar,
 				       "roster_scrolledwindow", &sw,
@@ -1139,6 +1151,9 @@ empathy_main_window_show (void)
 			      "chat_add_contact", "activate", main_window_chat_add_contact_cb,
 			      "view_show_ft_manager", "activate", main_window_view_show_ft_manager,
 			      "view_show_offline", "toggled", main_window_view_show_offline_cb,
+#if HAVE_LIBCHAMPLAIN
+			      "view_show_map", "activate", main_window_view_show_map_cb,
+#endif
 			      "edit", "activate", main_window_edit_cb,
 			      "edit_accounts", "activate", main_window_edit_accounts_cb,
 			      "edit_personal_information", "activate", main_window_edit_personal_information_cb,
@@ -1152,6 +1167,10 @@ empathy_main_window_show (void)
 
 	g_object_ref (window->ui_manager);
 	g_object_unref (gui);
+
+#if !HAVE_LIBCHAMPLAIN
+	gtk_widget_hide (show_map_widget);
+#endif
 
 	window->mc = empathy_mission_control_dup_singleton ();
 	window->account_manager = empathy_account_manager_dup_singleton ();

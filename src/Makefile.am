@@ -73,6 +73,14 @@ ui_DATA = 					\
 	empathy-preferences.ui			\
 	empathy-status-icon.ui
 
+if HAVE_LIBCHAMPLAIN
+empathy_SOURCES += 				\
+	empathy-map-view.c empathy-map-view.h
+
+ui_DATA += 					\
+	empathy-map-view.ui
+endif
+
 dist_man_MANS =			\
 	empathy.1
 

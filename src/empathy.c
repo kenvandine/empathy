@@ -31,6 +31,10 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 
+#if HAVE_LIBCHAMPLAIN
+#include <clutter-gtk/gtk-clutter-embed.h>
+#endif
+
 #include <libebook/e-book.h>
 #include <libnotify/notify.h>
 
@@ -465,6 +469,10 @@ main (int argc, char *argv[])
 	g_setenv ("PULSE_PROP_media.role", "phone", TRUE);
 
 	gst_init (&argc, &argv);
+
+#if HAVE_LIBCHAMPLAIN
+	gtk_clutter_init(&argc, &argv);
+#endif
 
 	gtk_window_set_default_icon_name ("empathy");
 	textdomain (GETTEXT_PACKAGE);

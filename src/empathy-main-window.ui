@@ -48,6 +48,12 @@
           <accelerator key="H" modifiers="GDK_CONTROL_MASK"/>
         </child>
         <child>
+          <object class="GtkAction" id="view_show_map">
+            <property name="name">view_show_map</property>
+            <property name="label" translatable="yes">Show Contacts on a Map</property>
+          </object>
+        </child>
+        <child>
           <object class="GtkAction" id="chat_quit">
             <property name="stock_id">gtk-quit</property>
             <property name="name">chat_quit</property>
@@ -162,6 +168,7 @@
           <separator/>
           <menuitem action="view_history"/>
           <menuitem action="view_show_ft_manager"/>
+          <menuitem action="view_show_map"/>
         </menu>
         <menu action="room">
           <menuitem action="room_join_new"/>
