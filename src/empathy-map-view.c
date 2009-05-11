@@ -123,6 +123,8 @@ empathy_map_view_show ()
 
   list_iface = EMPATHY_CONTACT_LIST (empathy_contact_manager_dup_singleton ());
   list_store = empathy_contact_list_store_new (list_iface);
+  empathy_contact_list_store_set_show_groups (list_store, FALSE);
+  empathy_contact_list_store_set_show_avatars (list_store, TRUE);
   g_object_unref (list_iface);
 
   window->list_store = list_store;
@@ -321,7 +323,6 @@ map_view_contacts_foreach (GtkTreeModel *model,
   g_object_set_data (G_OBJECT (contact), "map-view-handle",
       GINT_TO_POINTER (handle_id));
 
-  clutter_container_add (CLUTTER_CONTAINER (marker), texture, NULL);
   clutter_actor_set_anchor_point (marker, 16, 16);
 
   avatar = empathy_pixbuf_avatar_from_contact_scaled (contact, 32, 32);
