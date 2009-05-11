@@ -98,10 +98,12 @@ typedef struct
   GtkWidget *table_contact;
   GtkWidget *vbox_avatar;
 
-#if HAVE_LIBCHAMPLAIN
   /* Location */
   GtkWidget *vbox_location;
+  GtkWidget *subvbox_location;
+  GtkWidget *table_location;
   GtkWidget *label_location;
+#if HAVE_LIBCHAMPLAIN
   GtkWidget *viewport_map;
   GtkWidget *map_view_embed;
   ClutterActor *map_view;
@@ -178,9 +180,7 @@ static void contact_widget_details_setup (EmpathyContactWidget *information);
 static void contact_widget_details_update (EmpathyContactWidget *information);
 static void contact_widget_client_setup (EmpathyContactWidget *information);
 static void contact_widget_client_update (EmpathyContactWidget *information);
-#if HAVE_LIBCHAMPLAIN
 static void contact_widget_location_update (EmpathyContactWidget *information);
-#endif
 
 enum
 {
@@ -223,9 +223,10 @@ empathy_contact_widget_new (EmpathyContact *contact,
        "label_status", &information->label_status,
        "table_contact", &information->table_contact,
        "vbox_avatar", &information->vbox_avatar,
-#if HAVE_LIBCHAMPLAIN
        "vbox_location", &information->vbox_location,
+       "subvbox_location", &information->subvbox_location,
        "label_location", &information->label_location,
+#if HAVE_LIBCHAMPLAIN
        "viewport_map", &information->viewport_map,
 #endif
        "vbox_groups", &information->vbox_groups,
@@ -247,6 +248,7 @@ empathy_contact_widget_new (EmpathyContact *contact,
       "entry_group", "activate", contact_widget_entry_group_activate_cb,
       "button_group", "clicked", contact_widget_button_group_clicked_cb,
       NULL);
+  information->table_location = NULL;
 
   g_object_set_data (G_OBJECT (information->vbox_contact_widget),
       "EmpathyContactWidget",
@@ -404,9 +406,7 @@ contact_widget_set_contact (EmpathyContactWidget *information,
   contact_widget_groups_update (information);
   contact_widget_details_update (information);
   contact_widget_client_update (information);
-#if HAVE_LIBCHAMPLAIN
   contact_widget_location_update (information);
-#endif
 }
 
 static gboolean
@@ -1232,17 +1232,20 @@ contact_widget_client_update (EmpathyContactWidget *information)
   /* FIXME: Needs new telepathy spec */
 }
 
-#if HAVE_LIBCHAMPLAIN
 static void
 contact_widget_location_update (EmpathyContactWidget *information)
 {
   GHashTable *location;
   GValue *value;
   gdouble lat, lon;
-  ClutterActor *marker;
-  ChamplainLayer *layer;
 
   location = empathy_contact_get_location (information->contact);
+  if (location == NULL)
+    {
+      gtk_widget_hide (information->vbox_location);
+      return;
+    }
+
   value = g_hash_table_lookup (location, EMPATHY_LOCATION_LAT);
   if (value == NULL)
     {
@@ -1284,9 +1287,72 @@ contact_widget_location_update (EmpathyContactWidget *information)
         gtk_label_set_markup (GTK_LABEL (information->label_location), _("<b>Location</b>"));
     }
 
+  if (information->flags & EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP ||
+      information->flags & EMPATHY_CONTACT_WIDGET_SHOW_LOCATION)
+    {
+      GtkWidget *label;
+      guint row = 0;
+      GHashTableIter iter;
+      gpointer key, value;
+
+      if (information->table_location != NULL)
+        {
+          gtk_widget_destroy (information->table_location);
+        }
+
+      information->table_location = gtk_table_new (1, 2, FALSE);
+      gtk_box_pack_start (GTK_BOX (information->subvbox_location),
+          information->table_location, FALSE, FALSE, 5);
+
+      g_hash_table_iter_init (&iter, location);
+      while (g_hash_table_iter_next (&iter, &key, &value))
+        {
+          const gchar *skey;
+          GValue *gvalue;
+          char *svalue = NULL;
+
+          skey = (const gchar *) key;
+          gvalue = (GValue*) value;
+
+          label = gtk_label_new (_(skey));
+          gtk_table_attach_defaults (GTK_TABLE (information->table_location),
+              label, 0, 1, row, row + 1);
+          gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
+          gtk_widget_show (label);
+
+          if (G_VALUE_TYPE (gvalue) == G_TYPE_DOUBLE)
+            {
+              gdouble dvalue;
+              dvalue = g_value_get_double (gvalue);
+              svalue = g_strdup_printf ("%f", dvalue);
+            }
+          else if (G_VALUE_TYPE (gvalue) == G_TYPE_STRING)
+            {
+              svalue = g_value_dup_string (gvalue);
+            }
+
+          if (svalue != NULL)
+            {
+              label = gtk_label_new (svalue);
+              gtk_table_attach_defaults (GTK_TABLE (information->table_location),
+                  label, 1, 2, row, row + 1);
+              gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
+              gtk_widget_show (label);
+            }
+
+          g_free (svalue);
+          row++;
+        }
+
+      gtk_widget_show (information->table_location);
+    }
+
   if (/* information->flags & EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP || */
       information->flags & EMPATHY_CONTACT_WIDGET_SHOW_LOCATION)
     {
+      ClutterActor *marker;
+      ChamplainLayer *layer;
+
       information->map_view = champlain_view_new (CHAMPLAIN_VIEW_MODE_KINETIC);
       information->map_view_embed = champlain_view_embed_new (
           CHAMPLAIN_VIEW (information->map_view));
@@ -1305,8 +1371,7 @@ contact_widget_location_update (EmpathyContactWidget *information)
       clutter_container_add (CLUTTER_CONTAINER (layer), marker, NULL);
 
       champlain_view_center_on (CHAMPLAIN_VIEW(information->map_view), lat, lon);
-      gtk_widget_show_all (information->vbox_location);
     }
 
+    gtk_widget_show (information->vbox_location);
 }
-#endif

@@ -183,12 +183,24 @@
             <property name="visible">True</property>
             <property name="left_padding">12</property>
             <child>
-              <object class="GtkViewport" id="viewport_map">
-                <property name="height_request">150</property>
+              <object class="GtkVBox" id="subvbox_location">
                 <property name="visible">True</property>
-                <property name="resize_mode">queue</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">5</property>
                 <child>
                   <placeholder/>
+                </child>
+                <child>
+                  <object class="GtkViewport" id="viewport_map">
+                    <property name="height_request">150</property>
+                    <property name="resize_mode">queue</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
               </object>
             </child>
