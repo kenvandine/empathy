@@ -57,8 +57,7 @@ GType empathy_call_window_get_type(void);
   (G_TYPE_INSTANCE_GET_CLASS ((obj), EMPATHY_TYPE_CALL_WINDOW, \
     EmpathyCallWindowClass))
 
-EmpathyCallWindow *
-empathy_call_window_new (EmpathyCallHandler *handler);
+EmpathyCallWindow *empathy_call_window_new (EmpathyCallHandler *handler);
 
 G_END_DECLS
 

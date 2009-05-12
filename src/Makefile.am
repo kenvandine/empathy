@@ -28,6 +28,7 @@ empathy_SOURCES =							\
 	empathy-about-dialog.c empathy-about-dialog.h			\
 	empathy-accounts-dialog.c empathy-accounts-dialog.h		\
 	empathy-call-window.c empathy-call-window.h			\
+	empathy-call-window-fullscreen.c empathy-call-window-fullscreen.h			\
 	empathy-chatrooms-window.c empathy-chatrooms-window.h		\
 	empathy-chat-window.c empathy-chat-window.h			\
 	empathy-event-manager.c empathy-event-manager.h			\
@@ -51,6 +52,7 @@ uidir = $(datadir)/empathy
 ui_DATA = 					\
 	empathy-accounts-dialog.ui		\
 	empathy-call-window.ui			\
+	empathy-call-window-fullscreen.ui			\
 	empathy-chatrooms-window.ui		\
 	empathy-chat-window.ui			\
 	empathy-ft-manager.ui			\

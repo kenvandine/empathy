@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy toplevel-contextual -->
+  <object class="GtkWindow" id="leave_fullscreen_window">
+    <property name="type">popup</property>
+    <property name="resizable">False</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="skip_pager_hint">True</property>
+    <property name="decorated">False</property>
+    <property name="deletable">False</property>
+    <signal name="motion_notify_event" handler="empathy_call_window_fullscreen_motion_notify_cb"/>
+    <child>
+      <object class="GtkButton" id="leave_fullscreen_button">
+        <property name="label" translatable="yes">gtk-leave-fullscreen</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_stock">True</property>
+      </object>
+    </child>
+  </object>
+</interface>

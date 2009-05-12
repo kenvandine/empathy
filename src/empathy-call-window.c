@@ -24,6 +24,7 @@
 
 #include <math.h>
 
+#include <gdk/gdkkeysyms.h>
 #include <gst/gst.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -39,9 +40,14 @@
 
 #include "empathy-call-window.h"
 
+#include "empathy-call-window-fullscreen.h"
 #include "empathy-sidebar.h"
 
 #define BUTTON_ID "empathy-call-dtmf-button-id"
+
+#define CONTENT_HBOX_BORDER_WIDTH 6
+#define CONTENT_HBOX_SPACING 3
+#define CONTENT_HBOX_CHILDREN_PACKING_PADDING 3
 
 G_DEFINE_TYPE(EmpathyCallWindow, empathy_call_window, GTK_TYPE_WINDOW)
 
@@ -82,6 +88,17 @@ struct _EmpathyCallWindowPriv
   GtkWidget *toolbar;
   GtkWidget *pane;
   GtkAction *send_video;
+  GtkAction *menu_fullscreen;
+
+  /* We keep a reference on the hbox which contains the main content so we can
+     easilly repack everything when toggling fullscreen */
+  GtkWidget *content_hbox;
+
+  /* This vbox is contained in the content_hbox. When toggling fullscreen,
+     it needs to be repacked. We keep a reference on it for easier access. */
+  GtkWidget *vbox;
+
+  gulong video_output_motion_handler_id;
 
   gdouble volume;
   GtkAdjustment *audio_input_adj;
@@ -109,6 +126,15 @@ struct _EmpathyCallWindowPriv
   GMutex *lock;
   gboolean call_started;
   gboolean sending_video;
+
+  EmpathyCallWindowFullscreen *fullscreen;
+  gboolean is_fullscreen;
+
+  /* Those fields represent the state of the window before it actually was in
+     fullscreen mode. */
+  gboolean sidebar_was_visible_before_fs;
+  gint original_width_before_fs;
+  gint original_height_before_fs;
 };
 
 #define GET_PRIV(o) \
@@ -119,7 +145,10 @@ static void empathy_call_window_realized_cb (GtkWidget *widget,
   EmpathyCallWindow *window);
 
 static gboolean empathy_call_window_delete_cb (GtkWidget *widget,
-  GdkEvent*event, EmpathyCallWindow *window);
+  GdkEvent *event, EmpathyCallWindow *window);
+
+static gboolean empathy_call_window_state_event_cb (GtkWidget *widget,
+  GdkEventWindowState *event, EmpathyCallWindow *window);
 
 static void empathy_call_window_sidebar_toggled_cb (GtkToggleButton *toggle,
   EmpathyCallWindow *window);
@@ -139,8 +168,28 @@ static void empathy_call_window_mic_toggled_cb (
 static void empathy_call_window_sidebar_hidden_cb (EmpathySidebar *sidebar,
   EmpathyCallWindow *window);
 
+static void empathy_call_window_sidebar_shown_cb (EmpathySidebar *sidebar,
+  EmpathyCallWindow *window);
+
 static void empathy_call_window_hangup_cb (gpointer object,
   EmpathyCallWindow *window);
+
+static void empathy_call_window_fullscreen_cb (gpointer object,
+  EmpathyCallWindow *window);
+
+static void empathy_call_window_fullscreen_toggle (EmpathyCallWindow *window);
+
+static gboolean empathy_call_window_video_button_press_cb (GtkWidget *video_output,
+  GdkEventButton *event, EmpathyCallWindow *window);
+
+static gboolean empathy_call_window_key_press_cb (GtkWidget *video_output,
+  GdkEventKey *event, EmpathyCallWindow *window);
+
+static gboolean empathy_call_window_video_output_motion_notify (GtkWidget *widget,
+  GdkEventMotion *event, EmpathyCallWindow *window);
+
+static void empathy_call_window_video_menu_popup (EmpathyCallWindow *window,
+  guint button);
 
 static void empathy_call_window_status_message (EmpathyCallWindow *window,
   gchar *message);
@@ -459,8 +508,8 @@ empathy_call_window_init (EmpathyCallWindow *self)
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
   GtkBuilder *gui;
-  GtkWidget *vbox, *top_vbox;
-  GtkWidget *hbox, *h;
+  GtkWidget *top_vbox;
+  GtkWidget *h;
   GtkWidget *arrow;
   GtkWidget *page;
   GstBus *bus;
@@ -476,6 +525,7 @@ empathy_call_window_init (EmpathyCallWindow *self)
     "toolbar", &priv->toolbar,
     "send_video", &priv->send_video,
     "ui_manager", &priv->ui_manager,
+    "menufullscreen", &priv->menu_fullscreen,
     NULL);
 
   empathy_builder_connect (gui, self,
@@ -485,6 +535,7 @@ empathy_call_window_init (EmpathyCallWindow *self)
     "camera", "toggled", empathy_call_window_camera_toggled_cb,
     "send_video", "toggled", empathy_call_window_send_video_toggled_cb,
     "show_preview", "toggled", empathy_call_window_show_preview_toggled_cb,
+    "menufullscreen", "activate", empathy_call_window_fullscreen_cb,
     NULL);
 
   priv->lock = g_mutex_new ();
@@ -495,27 +546,34 @@ empathy_call_window_init (EmpathyCallWindow *self)
 
   priv->pipeline = gst_pipeline_new (NULL);
 
-  hbox = gtk_hbox_new (FALSE, 3);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox), 6);
-  gtk_paned_pack1 (GTK_PANED (priv->pane), hbox, TRUE, FALSE);
+  priv->content_hbox = gtk_hbox_new (FALSE, CONTENT_HBOX_SPACING);
+  gtk_container_set_border_width (GTK_CONTAINER (priv->content_hbox),
+                                  CONTENT_HBOX_BORDER_WIDTH);
+  gtk_paned_pack1 (GTK_PANED (priv->pane), priv->content_hbox, TRUE, FALSE);
 
   bus = gst_pipeline_get_bus (GST_PIPELINE (priv->pipeline));
 
   gst_bus_add_watch (bus, empathy_call_window_bus_message, self);
 
   priv->video_output = empathy_video_widget_new (bus);
-  gtk_box_pack_start (GTK_BOX (hbox), priv->video_output, TRUE, TRUE, 3);
+  gtk_box_pack_start (GTK_BOX (priv->content_hbox), priv->video_output,
+                      TRUE, TRUE, CONTENT_HBOX_CHILDREN_PACKING_PADDING);
+  gtk_widget_add_events (priv->video_output,
+      GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK);
+  g_signal_connect (G_OBJECT (priv->video_output), "button-press-event",
+      G_CALLBACK (empathy_call_window_video_button_press_cb), self);
 
   priv->video_tee = gst_element_factory_make ("tee", NULL);
   gst_object_ref (priv->video_tee);
   gst_object_sink (priv->video_tee);
 
-  vbox = gtk_vbox_new (FALSE, 3);
-  gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 3);
+  priv->vbox = gtk_vbox_new (FALSE, 3);
+  gtk_box_pack_start (GTK_BOX (priv->content_hbox), priv->vbox,
+                      FALSE, FALSE, CONTENT_HBOX_CHILDREN_PACKING_PADDING);
 
   priv->video_preview = empathy_video_widget_new_with_size (bus, 160, 120);
   g_object_set (priv->video_preview, "sync", FALSE, "async", TRUE, NULL);
-  gtk_box_pack_start (GTK_BOX (vbox), priv->video_preview, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (priv->vbox), priv->video_preview, FALSE, FALSE, 0);
 
   priv->video_input = empathy_video_src_new ();
   gst_object_ref (priv->video_input);
@@ -539,13 +597,14 @@ empathy_call_window_init (EmpathyCallWindow *self)
   gtk_button_set_image (GTK_BUTTON (priv->sidebar_button), arrow);
 
   h = gtk_hbox_new (FALSE, 3);
-  gtk_box_pack_end (GTK_BOX (vbox), h, FALSE, FALSE, 3);
+  gtk_box_pack_end (GTK_BOX (priv->vbox), h, FALSE, FALSE, 3);
   gtk_box_pack_end (GTK_BOX (h), priv->sidebar_button, FALSE, FALSE, 3);
 
   priv->sidebar = empathy_sidebar_new ();
   g_signal_connect (G_OBJECT (priv->sidebar),
-    "hide", G_CALLBACK (empathy_call_window_sidebar_hidden_cb),
-    self);
+    "hide", G_CALLBACK (empathy_call_window_sidebar_hidden_cb), self);
+  g_signal_connect (G_OBJECT (priv->sidebar),
+    "show", G_CALLBACK (empathy_call_window_sidebar_shown_cb), self);
   gtk_paned_pack2 (GTK_PANED (priv->pane), priv->sidebar, FALSE, FALSE);
 
   priv->dtmf_panel = empathy_call_window_create_dtmf (self);
@@ -566,11 +625,22 @@ empathy_call_window_init (EmpathyCallWindow *self)
 
   gtk_widget_hide (priv->sidebar);
 
+  priv->fullscreen = empathy_call_window_fullscreen_new (self);
+  empathy_call_window_fullscreen_set_video_widget (priv->fullscreen, priv->video_output);
+  g_signal_connect (G_OBJECT (priv->fullscreen->leave_fullscreen_button),
+      "clicked", G_CALLBACK (empathy_call_window_fullscreen_cb), self);
+
   g_signal_connect (G_OBJECT (self), "realize",
     G_CALLBACK (empathy_call_window_realized_cb), self);
 
   g_signal_connect (G_OBJECT (self), "delete-event",
     G_CALLBACK (empathy_call_window_delete_cb), self);
+
+  g_signal_connect (G_OBJECT (self), "window-state-event",
+    G_CALLBACK (empathy_call_window_state_event_cb), self);
+
+  g_signal_connect (G_OBJECT (self), "key-press-event",
+      G_CALLBACK (empathy_call_window_key_press_cb), self);
 
   empathy_call_window_status_message (self, _("Connecting..."));
 
@@ -578,6 +648,7 @@ empathy_call_window_init (EmpathyCallWindow *self)
 
   g_object_ref (priv->ui_manager);
   g_object_unref (gui);
+  g_free (filename);
 }
 
 static void
@@ -747,6 +818,13 @@ empathy_call_window_finalize (GObject *object)
 {
   EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (object);
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
+
+  if (priv->video_output_motion_handler_id != 0)
+    {
+      g_signal_handler_disconnect (G_OBJECT (priv->video_output),
+          priv->video_output_motion_handler_id);
+      priv->video_output_motion_handler_id = 0;
+    }
 
   /* free any data held directly by the object here */
   g_mutex_free (priv->lock);
@@ -1166,6 +1244,108 @@ empathy_call_window_delete_cb (GtkWidget *widget, GdkEvent*event,
 }
 
 static void
+show_controls (EmpathyCallWindow *window, gboolean set_fullscreen)
+{
+  GtkWidget *menu;
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+
+  menu = gtk_ui_manager_get_widget (priv->ui_manager,
+            "/menubar1");
+
+  if (set_fullscreen)
+    {
+      gtk_widget_hide (priv->sidebar);
+      gtk_widget_hide (menu);
+      gtk_widget_hide (priv->vbox);
+      gtk_widget_hide (priv->statusbar);
+      gtk_widget_hide (priv->toolbar);
+    }
+  else
+    {
+      if (priv->sidebar_was_visible_before_fs)
+        gtk_widget_show (priv->sidebar);
+
+      gtk_widget_show (menu);
+      gtk_widget_show (priv->vbox);
+      gtk_widget_show (priv->statusbar);
+      gtk_widget_show (priv->toolbar);
+
+      gtk_window_resize (GTK_WINDOW (window), priv->original_width_before_fs,
+          priv->original_height_before_fs);
+    }
+}
+
+static void
+show_borders (EmpathyCallWindow *window, gboolean set_fullscreen)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+
+  gtk_container_set_border_width (GTK_CONTAINER (priv->content_hbox),
+      set_fullscreen ? 0 : CONTENT_HBOX_BORDER_WIDTH);
+  gtk_box_set_spacing (GTK_BOX (priv->content_hbox),
+      set_fullscreen ? 0 : CONTENT_HBOX_SPACING);
+  gtk_box_set_child_packing (GTK_BOX (priv->content_hbox),
+      priv->video_output, TRUE, TRUE,
+      set_fullscreen ? 0 : CONTENT_HBOX_CHILDREN_PACKING_PADDING,
+      GTK_PACK_START);
+  gtk_box_set_child_packing (GTK_BOX (priv->content_hbox),
+      priv->vbox, TRUE, TRUE,
+      set_fullscreen ? 0 : CONTENT_HBOX_CHILDREN_PACKING_PADDING,
+      GTK_PACK_START);
+}
+
+static gboolean
+empathy_call_window_state_event_cb (GtkWidget *widget,
+  GdkEventWindowState *event, EmpathyCallWindow *window)
+{
+  if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
+    {
+      EmpathyCallWindowPriv *priv = GET_PRIV (window);
+      gboolean set_fullscreen = event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN;
+
+      if (set_fullscreen)
+        {
+          gboolean sidebar_was_visible;
+          gint original_width = GTK_WIDGET (window)->allocation.width;
+          gint original_height = GTK_WIDGET (window)->allocation.height;
+
+          g_object_get (priv->sidebar, "visible", &sidebar_was_visible, NULL);
+
+          priv->sidebar_was_visible_before_fs = sidebar_was_visible;
+          priv->original_width_before_fs = original_width;
+          priv->original_height_before_fs = original_height;
+
+          if (priv->video_output_motion_handler_id == 0 &&
+                priv->video_output != NULL)
+            {
+              priv->video_output_motion_handler_id = g_signal_connect (
+                  G_OBJECT (priv->video_output), "motion-notify-event",
+                  G_CALLBACK (empathy_call_window_video_output_motion_notify), window);
+            }
+        }
+      else
+        {
+          if (priv->video_output_motion_handler_id != 0)
+            {
+              g_signal_handler_disconnect (G_OBJECT (priv->video_output),
+                  priv->video_output_motion_handler_id);
+              priv->video_output_motion_handler_id = 0;
+            }
+        }
+
+      empathy_call_window_fullscreen_set_fullscreen (priv->fullscreen,
+          set_fullscreen);
+      show_controls (window, set_fullscreen);
+      show_borders (window, set_fullscreen);
+      gtk_action_set_stock_id(priv->menu_fullscreen,
+          (set_fullscreen ? "gtk-leave-fullscreen" : "gtk-fullscreen"));
+      priv->is_fullscreen = set_fullscreen;
+  }
+
+  return FALSE;
+}
+
+static void
 empathy_call_window_sidebar_toggled_cb (GtkToggleButton *toggle,
   EmpathyCallWindow *window)
 {
@@ -1290,6 +1470,16 @@ empathy_call_window_sidebar_hidden_cb (EmpathySidebar *sidebar,
 }
 
 static void
+empathy_call_window_sidebar_shown_cb (EmpathySidebar *sidebar,
+  EmpathyCallWindow *window)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->sidebar_button),
+    TRUE);
+}
+
+static void
 empathy_call_window_hangup_cb (gpointer object,
                                EmpathyCallWindow *window)
 {
@@ -1297,6 +1487,83 @@ empathy_call_window_hangup_cb (gpointer object,
 
   gst_element_set_state (priv->pipeline, GST_STATE_NULL);
   gtk_widget_destroy (GTK_WIDGET (window));
+}
+
+static void
+empathy_call_window_fullscreen_cb (gpointer object,
+                                   EmpathyCallWindow *window)
+{
+  empathy_call_window_fullscreen_toggle (window);
+}
+
+static void
+empathy_call_window_fullscreen_toggle (EmpathyCallWindow *window)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+
+  if (priv->is_fullscreen)
+    gtk_window_unfullscreen (GTK_WINDOW (window));
+  else
+    gtk_window_fullscreen (GTK_WINDOW (window));
+}
+
+static gboolean
+empathy_call_window_video_button_press_cb (GtkWidget *video_output,
+  GdkEventButton *event, EmpathyCallWindow *window)
+{
+  if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+    {
+      empathy_call_window_video_menu_popup (window, event->button);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+empathy_call_window_key_press_cb (GtkWidget *video_output,
+  GdkEventKey *event, EmpathyCallWindow *window)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+
+  if (priv->is_fullscreen && event->keyval == GDK_Escape)
+    {
+      /* Since we are in fullscreen mode, toggling will bring us back to
+         normal mode. */
+      empathy_call_window_fullscreen_toggle (window);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+empathy_call_window_video_output_motion_notify (GtkWidget *widget,
+    GdkEventMotion *event, EmpathyCallWindow *window)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+
+  if (priv->is_fullscreen)
+    {
+      empathy_call_window_fullscreen_show_popup (priv->fullscreen);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+empathy_call_window_video_menu_popup (EmpathyCallWindow *window,
+  guint button)
+{
+  GtkWidget *menu;
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+
+  menu = gtk_ui_manager_get_widget (priv->ui_manager,
+            "/video-popup");
+  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
+      button, gtk_get_current_event_time ());
+  gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
 }
 
 static void
