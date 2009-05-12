@@ -190,9 +190,7 @@ empathy_contact_information_dialog_show (EmpathyContact *contact,
 
 	/* Contact info widget */
 	contact_widget = empathy_contact_widget_new (contact,
-#if HAVE_LIBCHAMPLAIN
 		EMPATHY_CONTACT_WIDGET_SHOW_LOCATION |
-#endif
 		EMPATHY_CONTACT_WIDGET_EDIT_NONE);
 	gtk_container_set_border_width (GTK_CONTAINER (contact_widget), 8);
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),

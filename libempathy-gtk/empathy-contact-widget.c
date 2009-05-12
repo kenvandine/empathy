@@ -1347,6 +1347,7 @@ contact_widget_location_update (EmpathyContactWidget *information)
       gtk_widget_show (information->table_location);
     }
 
+#if HAVE_LIBCHAMPLAIN
   if (/* information->flags & EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP || */
       information->flags & EMPATHY_CONTACT_WIDGET_SHOW_LOCATION)
     {
@@ -1373,6 +1374,7 @@ contact_widget_location_update (EmpathyContactWidget *information)
 
       champlain_view_center_on (CHAMPLAIN_VIEW(information->map_view), lat, lon);
     }
+#endif
 
     gtk_widget_show (information->vbox_location);
 }
