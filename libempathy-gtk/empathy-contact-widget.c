@@ -1373,6 +1373,7 @@ contact_widget_location_update (EmpathyContactWidget *information)
       clutter_container_add (CLUTTER_CONTAINER (layer), marker, NULL);
 
       champlain_view_center_on (CHAMPLAIN_VIEW(information->map_view), lat, lon);
+      gtk_widget_show_all (information->viewport_map);
     }
 #endif
 
