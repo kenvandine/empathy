@@ -214,8 +214,8 @@ get_dup_string (GHashTable *location, gchar *key)
 }
 
 static void
-map_view_marker_update (ChamplainMarker *marker,
-                        EmpathyContact *contact)
+map_view_marker_update_position (ChamplainMarker *marker,
+                                 EmpathyContact *contact)
 {
   gdouble lon, lat;
   GValue *value;
@@ -279,7 +279,7 @@ map_view_contact_location_notify (GObject *gobject,
 {
   ChamplainMarker *marker = CHAMPLAIN_MARKER (user_data);
   EmpathyContact *contact = EMPATHY_CONTACT (gobject);
-  map_view_marker_update (marker, contact);
+  map_view_marker_update_position (marker, contact);
 }
 
 
@@ -296,7 +296,6 @@ map_view_contacts_foreach (GtkTreeModel *model,
   GHashTable *location;
   GValue *value;
   GdkPixbuf *avatar;
-  guint handle_id;
   const gchar *name;
 
   gtk_tree_model_get (model, iter, EMPATHY_CONTACT_LIST_STORE_COL_CONTACT,
@@ -305,13 +304,6 @@ map_view_contacts_foreach (GtkTreeModel *model,
     return FALSE;
 
   marker = champlain_marker_new ();
-
-  handle_id = g_signal_connect (contact, "notify::location",
-      G_CALLBACK (map_view_contact_location_notify), marker);
-  g_object_set_data (G_OBJECT (contact), "map-view-handle",
-      GINT_TO_POINTER (handle_id));
-
-  clutter_actor_set_anchor_point (marker, 16, 16);
 
   avatar = empathy_pixbuf_avatar_from_contact_scaled (contact, 32, 32);
   if (avatar)
@@ -326,9 +318,12 @@ map_view_contacts_foreach (GtkTreeModel *model,
   name = empathy_contact_get_name (contact);
   champlain_marker_set_text (CHAMPLAIN_MARKER (marker), name);
 
-  map_view_marker_update (CHAMPLAIN_MARKER (marker), contact);
+  map_view_marker_update_position (CHAMPLAIN_MARKER (marker), contact);
 
   clutter_container_add (CLUTTER_CONTAINER (window->layer), marker, NULL);
+
+  g_signal_connect (contact, "notify::location",
+      G_CALLBACK (map_view_contact_location_notify), marker);
 
   g_object_unref (contact);
   return FALSE;
