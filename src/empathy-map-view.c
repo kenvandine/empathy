@@ -28,38 +28,22 @@
 #include <champlain/champlain.h>
 #include <champlain-gtk/champlain-gtk.h>
 #include <clutter-gtk/gtk-clutter-embed.h>
+#if HAVE_GEOCLUE
 #include <geoclue/geoclue-geocode.h>
+#endif
 #include <telepathy-glib/util.h>
 
 #include <libempathy/empathy-contact.h>
-#include <libempathy/empathy-utils.h>
-#include <libempathy/empathy-chatroom-manager.h>
-#include <libempathy/empathy-chatroom.h>
-#include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-contact-manager.h>
-#include <libempathy/empathy-contact-factory.h>
+#include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-location.h>
-#include <libempathy/empathy-status-presets.h>
 
-#include <libempathy-gtk/empathy-contact-dialogs.h>
 #include <libempathy-gtk/empathy-contact-list-store.h>
 #include <libempathy-gtk/empathy-contact-list-view.h>
 #include <libempathy-gtk/empathy-presence-chooser.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
-#include <libempathy-gtk/empathy-geometry.h>
-#include <libempathy-gtk/empathy-conf.h>
-#include <libempathy-gtk/empathy-log-window.h>
-#include <libempathy-gtk/empathy-new-message-dialog.h>
-#include <libempathy-gtk/empathy-gtk-enum-types.h>
 
-#include "empathy-accounts-dialog.h"
 #include "empathy-map-view.h"
-#include "ephy-spinner.h"
-#include "empathy-preferences.h"
-#include "empathy-about-dialog.h"
-#include "empathy-new-chatroom-dialog.h"
-#include "empathy-chatrooms-window.h"
-#include "empathy-event-manager.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_LOCATION
 #include <libempathy/empathy-debug.h>
@@ -161,6 +145,7 @@ map_view_destroy_cb (GtkWidget *widget,
   g_free (window);
 }
 
+#if HAVE_GEOCLUE
 #define GEOCODE_SERVICE "org.freedesktop.Geoclue.Providers.Yahoo"
 #define GEOCODE_PATH "/org/freedesktop/Geoclue/Providers/Yahoo"
 
@@ -212,7 +197,7 @@ map_view_geocode_cb (GeoclueGeocode *geocode,
     empathy_contact_set_location (EMPATHY_CONTACT (userdata), location);
   g_hash_table_unref (location);
 }
-
+#endif
 
 static gchar *
 get_dup_string (GHashTable *location, gchar *key)
@@ -247,6 +232,7 @@ map_view_marker_update (ChamplainMarker *marker,
   value = g_hash_table_lookup (location, EMPATHY_LOCATION_LAT);
   if (value == NULL)
     {
+#if HAVE_GEOCLUE
       GeoclueGeocode * geocode = geoclue_geocode_new (GEOCODE_SERVICE,
           GEOCODE_PATH);
       gchar *str;
@@ -270,6 +256,7 @@ map_view_marker_update (ChamplainMarker *marker,
 
       geoclue_geocode_address_to_position_async (geocode, address,
           map_view_geocode_cb, contact);
+#endif
       clutter_actor_hide (CLUTTER_ACTOR (marker));
       return;
     }
