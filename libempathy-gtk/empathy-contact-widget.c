@@ -1353,21 +1353,22 @@ contact_widget_location_update (EmpathyContactWidget *information)
       ClutterActor *marker;
       ChamplainLayer *layer;
 
-      information->map_view = champlain_view_new (CHAMPLAIN_VIEW_MODE_KINETIC);
+      information->map_view = champlain_view_new ();
       information->map_view_embed = champlain_view_embed_new (
           CHAMPLAIN_VIEW (information->map_view));
 
       gtk_container_add (GTK_CONTAINER (information->viewport_map),
           information->map_view_embed);
       g_object_set (G_OBJECT (information->map_view), "show-license", FALSE,
+          "scroll-mode", CHAMPLAIN_SCROLL_MODE_KINETIC,
           NULL);
 
       layer = champlain_layer_new ();
       champlain_view_add_layer (CHAMPLAIN_VIEW (information->map_view), layer);
 
-      marker = champlain_marker_new_with_label (
+      marker = champlain_marker_new_with_text (
           empathy_contact_get_name (information->contact), NULL, NULL, NULL);
-      champlain_marker_set_position (CHAMPLAIN_MARKER (marker), lat, lon);
+      champlain_base_marker_set_position (CHAMPLAIN_BASE_MARKER (marker), lat, lon);
       clutter_container_add (CLUTTER_CONTAINER (layer), marker, NULL);
 
       champlain_view_center_on (CHAMPLAIN_VIEW(information->map_view), lat, lon);

@@ -114,9 +114,9 @@ empathy_map_view_show ()
   window->list_store = list_store;
 
   /* Set up map view */
-  window->map_view = CHAMPLAIN_VIEW (champlain_view_new (
-      CHAMPLAIN_VIEW_MODE_KINETIC));
-  g_object_set (G_OBJECT (window->map_view), "zoom-level", 1, NULL);
+  window->map_view = CHAMPLAIN_VIEW (champlain_view_new ());
+  g_object_set (G_OBJECT (window->map_view), "zoom-level", 1,
+     "scroll-mode", CHAMPLAIN_SCROLL_MODE_KINETIC, NULL);
   champlain_view_center_on (window->map_view, 36, 0);
 
   embed = champlain_view_embed_new (window->map_view);
@@ -125,7 +125,7 @@ empathy_map_view_show ()
   gtk_widget_show_all (embed);
 
   window->layer = champlain_layer_new ();
-  champlain_view_add_layer (CHAMPLAIN_VIEW (window->map_view), window->layer);
+  champlain_view_add_layer (window->map_view, window->layer);
 
   /* Set up contact list. */
   model = GTK_TREE_MODEL (window->list_store);
@@ -268,7 +268,7 @@ map_view_marker_update (ChamplainMarker *marker,
   lon = g_value_get_double (value);
 
   clutter_actor_show (CLUTTER_ACTOR (marker));
-  champlain_marker_set_position (marker, lat, lon);
+  champlain_base_marker_set_position (CHAMPLAIN_BASE_MARKER (marker), lat, lon);
 }
 
 
@@ -297,6 +297,7 @@ map_view_contacts_foreach (GtkTreeModel *model,
   GValue *value;
   GdkPixbuf *avatar;
   guint handle_id;
+  const gchar *name;
 
   gtk_tree_model_get (model, iter, EMPATHY_CONTACT_LIST_STORE_COL_CONTACT,
      &contact, -1);
@@ -317,9 +318,13 @@ map_view_contacts_foreach (GtkTreeModel *model,
     {
       texture = clutter_texture_new ();
       gtk_clutter_texture_set_from_pixbuf (CLUTTER_TEXTURE (texture), avatar);
-      clutter_actor_set_position (CLUTTER_ACTOR (texture), 5, 5);
-      clutter_container_add (CLUTTER_CONTAINER (marker), texture, NULL);
+      champlain_marker_set_image (CHAMPLAIN_MARKER (marker), texture);
     }
+  else
+    champlain_marker_set_image (CHAMPLAIN_MARKER (marker), NULL);
+
+  name = empathy_contact_get_name (contact);
+  champlain_marker_set_text (CHAMPLAIN_MARKER (marker), name);
 
   map_view_marker_update (CHAMPLAIN_MARKER (marker), contact);
 

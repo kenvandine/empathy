@@ -36,8 +36,8 @@ ISO_CODES_REQUIRED=0.35
 LIBNOTIFY_REQUIRED=0.4.4
 LIBCANBERRA_GTK_REQUIRED=0.4
 GEOCLUE_REQUIRED=0.11
-LIBCHAMPLAIN_REQUIRED=0.2.6
-LIBCHAMPLAIN_GTK_REQUIRED=0.2.6
+LIBCHAMPLAIN_REQUIRED=0.3.0
+LIBCHAMPLAIN_GTK_REQUIRED=0.3.0
 CLUTTER_GTK_REQUIRED=0.8.2
 
 # Use --enable-maintainer-mode to disabled deprecated symbols
@@ -204,8 +204,8 @@ AC_ARG_ENABLE(map,
 if test "x$enable_map" != "xno"; then
    PKG_CHECK_MODULES(LIBCHAMPLAIN,
    [
-      champlain-0.2 >= $LIBCHAMPLAIN_REQUIRED,
-      champlain-gtk-0.2 >= $LIBCHAMPLAIN_GTK_REQUIRED
+      champlain-0.3 >= $LIBCHAMPLAIN_REQUIRED,
+      champlain-gtk-0.3 >= $LIBCHAMPLAIN_GTK_REQUIRED
       clutter-gtk-0.8 >= $CLUTTER_GTK_REQUIRED
    ], have_libchamplain="yes", have_libchamplain="no")
 
