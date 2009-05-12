@@ -28,7 +28,8 @@
 G_BEGIN_DECLS
 
 typedef struct _EmpathyCallWindowFullscreen EmpathyCallWindowFullscreen;
-typedef struct _EmpathyCallWindowFullscreenClass EmpathyCallWindowFullscreenClass;
+typedef struct _EmpathyCallWindowFullscreenClass
+    EmpathyCallWindowFullscreenClass;
 
 struct _EmpathyCallWindowFullscreenClass {
   GObjectClass parent_class;
@@ -59,14 +60,17 @@ GType empathy_call_window_fullscreen_get_type(void);
   (G_TYPE_INSTANCE_GET_CLASS ((obj), EMPATHY_TYPE_CALL_WINDOW_FULLSCREEN, \
     EmpathyCallWindowFullscreenClass))
 
-EmpathyCallWindowFullscreen *
-empathy_call_window_fullscreen_new (EmpathyCallWindow *parent);
+EmpathyCallWindowFullscreen *empathy_call_window_fullscreen_new (
+    EmpathyCallWindow *parent);
 
-void empathy_call_window_fullscreen_set_fullscreen (EmpathyCallWindowFullscreen *fs,
+void empathy_call_window_fullscreen_set_fullscreen (
+    EmpathyCallWindowFullscreen *fs,
     gboolean set_fullscreen);
-void empathy_call_window_fullscreen_set_video_widget (EmpathyCallWindowFullscreen *fs,
+void empathy_call_window_fullscreen_set_video_widget (
+    EmpathyCallWindowFullscreen *fs,
     GtkWidget *video_widget);
-void empathy_call_window_fullscreen_show_popup (EmpathyCallWindowFullscreen *fs);
+void empathy_call_window_fullscreen_show_popup (
+    EmpathyCallWindowFullscreen *fs);
 
 G_END_DECLS
 

@@ -1548,7 +1548,7 @@ empathy_call_window_video_output_motion_notify (GtkWidget *widget,
       empathy_call_window_fullscreen_show_popup (priv->fullscreen);
       return TRUE;
     }
-  
+
   return FALSE;
 }
 
@@ -1562,8 +1562,8 @@ empathy_call_window_video_menu_popup (EmpathyCallWindow *window,
   menu = gtk_ui_manager_get_widget (priv->ui_manager,
             "/video-popup");
   gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
-			button, gtk_get_current_event_time ());
-	gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
+      button, gtk_get_current_event_time ());
+  gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
 }
 
 static void
