@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Collabora Ltd.
+ * Copyright (C) 2008, 2009 Collabora Ltd.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -56,18 +56,23 @@ typedef struct {
   GtkWidget *zoom_out;
   ChamplainView *map_view;
   ChamplainLayer *layer;
-
 } EmpathyMapView;
 
 static void map_view_destroy_cb (GtkWidget *widget,
     EmpathyMapView *window);
 static gboolean map_view_contacts_foreach (GtkTreeModel *model,
-    GtkTreePath *path, GtkTreeIter *iter, gpointer user_data);
-static void map_view_zoom_in_cb (GtkWidget *widget, EmpathyMapView *window);
-static void map_view_zoom_out_cb (GtkWidget *widget, EmpathyMapView *window);
+    GtkTreePath *path,
+    GtkTreeIter *iter,
+    gpointer user_data);
+static void map_view_zoom_in_cb (GtkWidget *widget,
+    EmpathyMapView *window);
+static void map_view_zoom_out_cb (GtkWidget *widget,
+    EmpathyMapView *window);
 static void map_view_contact_location_notify (GObject *gobject,
-    GParamSpec *arg1, gpointer user_data);
-static gchar * get_dup_string (GHashTable *location, gchar *key);
+    GParamSpec *arg1,
+    gpointer user_data);
+static gchar * get_dup_string (GHashTable *location,
+    gchar *key);
 
 // FIXME: Make it so that only one window can be shown
 GtkWidget *
@@ -137,7 +142,7 @@ empathy_map_view_show ()
 
 static void
 map_view_destroy_cb (GtkWidget *widget,
-                     EmpathyMapView *window)
+    EmpathyMapView *window)
 {
   GtkTreeModel *model;
 
@@ -151,23 +156,26 @@ map_view_destroy_cb (GtkWidget *widget,
 
 static void
 map_view_geocode_cb (GeoclueGeocode *geocode,
-                     GeocluePositionFields fields,
-                     double latitude,
-                     double longitude,
-                     double altitude,
-                     GeoclueAccuracy *accuracy,
-                     GError *error,
-                     gpointer userdata)
+    GeocluePositionFields fields,
+    double latitude,
+    double longitude,
+    double altitude,
+    GeoclueAccuracy *accuracy,
+    GError *error,
+    gpointer userdata)
 {
   GValue *new_value;
   gboolean found = FALSE;
-  GHashTable *location = empathy_contact_get_location (EMPATHY_CONTACT (userdata));
+  GHashTable *location;
+
+  location = empathy_contact_get_location (EMPATHY_CONTACT (userdata));
   g_hash_table_ref (location);
 
-  if (error)
-  {
+  if (error != NULL)
+    {
+      DEBUG ("Error geocoding location : %s", error->message);
       return;
-  }
+    }
 
   if (fields & GEOCLUE_POSITION_FIELDS_LONGITUDE)
     {
@@ -193,35 +201,34 @@ map_view_geocode_cb (GeoclueGeocode *geocode,
     }
 
   //Don't change the accuracy as we used an address to get this position
-  if (found)
+  if (found == TRUE)
     empathy_contact_set_location (EMPATHY_CONTACT (userdata), location);
   g_hash_table_unref (location);
 }
 #endif
 
 static gchar *
-get_dup_string (GHashTable *location, gchar *key)
+get_dup_string (GHashTable *location,
+    gchar *key)
 {
   GValue *value;
 
   value = g_hash_table_lookup (location, key);
-  if (value)
-  {
-      return g_value_dup_string (value);
-  }
-  return NULL;
+  if (value != NULL)
+    return g_value_dup_string (value);
 
+  return NULL;
 }
 
 static void
 map_view_marker_update_position (ChamplainMarker *marker,
-                                 EmpathyContact *contact)
+    EmpathyContact *contact)
 {
   gdouble lon, lat;
   GValue *value;
-  GHashTable *location = empathy_contact_get_location (contact);
+  GHashTable *location;
 
-
+  location = empathy_contact_get_location (contact);
   if (location == NULL ||
       g_hash_table_size (location) == 0)
   {
@@ -233,11 +240,13 @@ map_view_marker_update_position (ChamplainMarker *marker,
   if (value == NULL)
     {
 #if HAVE_GEOCLUE
-      GeoclueGeocode * geocode = geoclue_geocode_new (GEOCODE_SERVICE,
-          GEOCODE_PATH);
+      GeoclueGeocode *geocode;
       gchar *str;
+      GHashTable *address;
 
-      GHashTable *address = geoclue_address_details_new();
+      geocode = geoclue_geocode_new (GEOCODE_SERVICE, GEOCODE_PATH);
+      address = geoclue_address_details_new();
+
       str = get_dup_string (location, EMPATHY_LOCATION_COUNTRY);
       if (str != NULL)
         g_hash_table_insert (address, g_strdup ("country"), str);
@@ -271,23 +280,21 @@ map_view_marker_update_position (ChamplainMarker *marker,
   champlain_base_marker_set_position (CHAMPLAIN_BASE_MARKER (marker), lat, lon);
 }
 
-
 static void
 map_view_contact_location_notify (GObject *gobject,
-                                  GParamSpec *arg1,
-                                  gpointer user_data)
+    GParamSpec *arg1,
+    gpointer user_data)
 {
   ChamplainMarker *marker = CHAMPLAIN_MARKER (user_data);
   EmpathyContact *contact = EMPATHY_CONTACT (gobject);
   map_view_marker_update_position (marker, contact);
 }
 
-
 static gboolean
 map_view_contacts_foreach (GtkTreeModel *model,
-                           GtkTreePath *path,
-                           GtkTreeIter *iter,
-                           gpointer user_data)
+    GtkTreePath *path,
+    GtkTreeIter *iter,
+    gpointer user_data)
 {
   EmpathyMapView *window = (EmpathyMapView*) user_data;
   EmpathyContact *contact;
@@ -306,7 +313,7 @@ map_view_contacts_foreach (GtkTreeModel *model,
   marker = champlain_marker_new ();
 
   avatar = empathy_pixbuf_avatar_from_contact_scaled (contact, 32, 32);
-  if (avatar)
+  if (avatar != NULL)
     {
       texture = clutter_texture_new ();
       gtk_clutter_texture_set_from_pixbuf (CLUTTER_TEXTURE (texture), avatar);
@@ -329,18 +336,16 @@ map_view_contacts_foreach (GtkTreeModel *model,
   return FALSE;
 }
 
-
 static void
 map_view_zoom_in_cb (GtkWidget *widget,
-                     EmpathyMapView *window)
+    EmpathyMapView *window)
 {
   champlain_view_zoom_in (window->map_view);
 }
 
-
 static void
 map_view_zoom_out_cb (GtkWidget *widget,
-                      EmpathyMapView *window)
+    EmpathyMapView *window)
 {
   champlain_view_zoom_out (window->map_view);
 }
