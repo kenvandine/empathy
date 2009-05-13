@@ -236,7 +236,7 @@
                         <property name="left_padding">12</property>
                         <child>
                           <object class="GtkCheckButton" id="checkbutton_use_hash">
-                            <property name="label" translatable="yes">Use chec_ksum to validate file transfers</property>
+                            <property name="label" translatable="yes">Use chec_ksum to validate file transfers, if possible</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
