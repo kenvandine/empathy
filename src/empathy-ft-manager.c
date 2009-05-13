@@ -98,6 +98,9 @@ G_DEFINE_TYPE (EmpathyFTManager, empathy_ft_manager, G_TYPE_OBJECT);
 
 static EmpathyFTManager *manager_singleton = NULL;
 
+static void ft_handler_hashing_started_cb (EmpathyFTHandler *handler,
+    EmpathyFTManager *manager);
+
 static gchar *
 ft_manager_format_interval (guint interval)
 {
@@ -482,6 +485,11 @@ ft_handler_transfer_done_cb (EmpathyFTHandler *handler,
   g_free (message);
   g_free (first_line);
   g_free (second_line);
+
+  if (empathy_ft_handler_is_incoming (handler) &&
+      empathy_ft_handler_get_use_hash (handler))
+      g_signal_connect (handler, "hashing-started",
+          G_CALLBACK (ft_handler_hashing_started_cb), manager);
 }
 
 static void
@@ -560,8 +568,9 @@ ft_handler_hashing_done_cb (EmpathyFTHandler *handler,
   g_free (first_line);
   g_free (second_line);
 
-  g_signal_connect (handler, "transfer-started",
-      G_CALLBACK (ft_handler_transfer_started_cb), manager);
+  if (!empathy_ft_handler_is_incoming (handler))
+    g_signal_connect (handler, "transfer-started",
+        G_CALLBACK (ft_handler_transfer_started_cb), manager);
 }
 
 static void
@@ -618,24 +627,26 @@ ft_manager_start_transfer (EmpathyFTManager *manager,
                            EmpathyFTHandler *handler)
 {
   EmpathyFTManagerPriv *priv;
-  gboolean is_incoming;
+  gboolean is_outgoing;
 
   priv = GET_PRIV (manager);
 
-  is_incoming = empathy_ft_handler_is_incoming (handler);
+  is_outgoing = !empathy_ft_handler_is_incoming (handler);
 
-  DEBUG ("Start transfer, is incoming %d", is_incoming);
+  DEBUG ("Start transfer, is outgoing %s",
+      is_outgoing ? "True" : "False");
 
   /* now connect the signals */
   g_signal_connect (handler, "transfer-error",
       G_CALLBACK (ft_handler_transfer_error_cb), manager);
 
-  if (is_incoming) {
-    g_signal_connect (handler, "transfer-started",
-        G_CALLBACK (ft_handler_transfer_started_cb), manager);
-  } else {
+  if (is_outgoing && empathy_ft_handler_get_use_hash (handler)) {
     g_signal_connect (handler, "hashing-started",
         G_CALLBACK (ft_handler_hashing_started_cb), manager);
+  } else {
+    /* either incoming or outgoing without hash */
+    g_signal_connect (handler, "transfer-started",
+        G_CALLBACK (ft_handler_transfer_started_cb), manager);
   }
 
   empathy_ft_handler_start_transfer (handler);
