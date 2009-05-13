@@ -392,7 +392,7 @@ check_hash_incoming (EmpathyFTHandler *handler)
   HashingData *hash_data;
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
 
-  if (priv->content_hash != NULL)
+  if (!EMP_STR_EMPTY (priv->content_hash))
     {
       hash_data = g_slice_new0 (HashingData);
       hash_data->total_bytes = priv->total_bytes;
@@ -996,6 +996,9 @@ empathy_ft_handler_new_outgoing (EmpathyContact *contact,
   CallbacksData *data;
   EmpathyFTHandlerPriv *priv;
 
+  DEBUG ("New handler outgoing, use hash %s",
+         use_hash ? "True" : "False");
+
   g_return_if_fail (EMPATHY_IS_CONTACT (contact));
   g_return_if_fail (G_IS_FILE (source));
 
@@ -1090,6 +1093,9 @@ empathy_ft_handler_incoming_set_destination (EmpathyFTHandler *handler,
                                              GFile *destination,
                                              gboolean use_hash)
 {
+  DEBUG ("Set incoming destination, use hash %s",
+         use_hash ? "True" : "False");
+
   g_return_if_fail (EMPATHY_IS_FT_HANDLER (handler));
   g_return_if_fail (G_IS_FILE (destination));
 
@@ -1143,6 +1149,18 @@ empathy_ft_handler_get_gfile (EmpathyFTHandler *handler)
   priv = GET_PRIV (handler);
 
   return priv->gfile;
+}
+
+gboolean
+empathy_ft_handler_get_use_hash (EmpathyFTHandler *handler)
+{
+  EmpathyFTHandlerPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_FT_HANDLER (handler), FALSE);
+
+  priv = GET_PRIV (handler);
+
+  return priv->use_hash;
 }
 
 gboolean
