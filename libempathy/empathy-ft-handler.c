@@ -61,7 +61,6 @@ enum {
 
 typedef struct {
   GInputStream *stream;
-  gboolean done_reading;
   GError *error;
   guchar *buffer;
   GChecksum *checksum;
@@ -109,6 +108,9 @@ typedef struct {
 } EmpathyFTHandlerPriv;
 
 static guint signals[LAST_SIGNAL] = { 0 };
+
+static gboolean do_hash_job_incoming (GIOSchedulerJob *job,
+    GCancellable *cancellable, gpointer user_data);
 
 /* GObject implementations */
 static void
@@ -360,6 +362,51 @@ hash_data_free (HashingData *data)
   g_slice_free (HashingData, data);
 }
 
+static GChecksumType
+tp_file_hash_to_g_checksum (TpFileHashType type)
+{
+  GChecksumType retval;
+
+  switch (type)
+    {
+      case TP_FILE_HASH_TYPE_MD5:
+        retval = G_CHECKSUM_MD5;
+        break;
+      case TP_FILE_HASH_TYPE_SHA1:
+        retval = G_CHECKSUM_SHA1;
+        break;
+      case TP_FILE_HASH_TYPE_SHA256:
+        retval = G_CHECKSUM_SHA256;
+        break;
+      default:
+        g_assert_not_reached ();
+        break;
+    }
+
+  return retval;
+}
+
+static void
+check_hash_incoming (EmpathyFTHandler *handler)
+{
+  HashingData *hash_data;
+  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
+
+  if (priv->content_hash != NULL)
+    {
+      hash_data = g_slice_new0 (HashingData);
+      hash_data->total_bytes = priv->total_bytes;
+      hash_data->handler = g_object_ref (handler);
+      hash_data->checksum = g_checksum_new
+        (tp_file_hash_to_g_checksum (priv->content_hash_type));
+
+      g_signal_emit (handler, signals[HASHING_STARTED], 0);
+
+      g_io_scheduler_push_job (do_hash_job_incoming, hash_data, NULL,
+                               G_PRIORITY_DEFAULT, priv->cancellable);
+    }
+}
+
 static void
 emit_error_signal (EmpathyFTHandler *handler,
                    const GError *error)
@@ -392,6 +439,11 @@ ft_transfer_operation_callback (EmpathyTpFile *tp_file,
       g_signal_emit (handler, signals[TRANSFER_DONE], 0, tp_file);
 
       empathy_tp_file_close (tp_file);
+
+      if (empathy_ft_handler_is_incoming (handler) && priv->use_hash)
+        {
+          check_hash_incoming (handler);
+        }
     }
 }
 
@@ -600,15 +652,29 @@ hash_job_done (gpointer user_data)
       goto cleanup;
     }
 
-  /* set the checksum in the request */
-
   DEBUG ("Got file hash %s", g_checksum_get_string (hash_data->checksum));
 
-  /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.ContentHash */
-  value = tp_g_value_slice_new (G_TYPE_STRING);
-  g_value_set_string (value, g_checksum_get_string (hash_data->checksum));
-  g_hash_table_insert (priv->request,
-      TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentHash", value);
+  if (empathy_ft_handler_is_incoming (handler))
+    {
+      if (g_strcmp0 (g_checksum_get_string (hash_data->checksum),
+                     priv->content_hash))
+        {
+          hash_data->error = g_error_new_literal (EMPATHY_FT_ERROR_QUARK,
+              EMPATHY_FT_ERROR_HASH_MISMATCH,
+              _("The hash of the received file and the sent one do not match"));
+          goto cleanup;
+        }
+    }
+  else
+    {
+      /* set the checksum in the request...
+       * org.freedesktop.Telepathy.Channel.Type.FileTransfer.ContentHash
+       */
+      value = tp_g_value_slice_new (G_TYPE_STRING);
+      g_value_set_string (value, g_checksum_get_string (hash_data->checksum));
+      g_hash_table_insert (priv->request,
+          TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentHash", value);      
+    }
 
 cleanup:
 
@@ -620,8 +686,9 @@ cleanup:
     {
       g_signal_emit (handler, signals[HASHING_DONE], 0);
 
-      /* the request is complete now, push it to the dispatcher */
-      ft_handler_push_to_dispatcher (handler);
+      if (!empathy_ft_handler_is_incoming (handler))
+        /* the request is complete now, push it to the dispatcher */
+        ft_handler_push_to_dispatcher (handler);
     }
 
   hash_data_free (hash_data);
@@ -690,6 +757,31 @@ out:
   return FALSE;
 }
 
+static gboolean
+do_hash_job_incoming (GIOSchedulerJob *job,
+                      GCancellable *cancellable,
+                      gpointer user_data)
+{
+  HashingData *hash_data = user_data;
+  EmpathyFTHandler *handler = hash_data->handler;
+  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
+  GError *error = NULL;
+
+  /* need to get the stream first */
+  hash_data->stream =
+    G_INPUT_STREAM (g_file_read (priv->gfile, cancellable, &error));
+
+  if (error)
+    {
+      hash_data->error = error;
+      g_io_scheduler_job_send_to_mainloop_async (job, hash_job_done,
+          hash_data, NULL);
+      return FALSE;
+    }
+
+  return do_hash_job (job, cancellable, user_data);
+}
+
 static void
 ft_handler_read_async_cb (GObject *source,
                           GAsyncResult *res,
@@ -715,7 +807,6 @@ ft_handler_read_async_cb (GObject *source,
 
   hash_data = g_slice_new0 (HashingData);
   hash_data->stream = G_INPUT_STREAM (stream);
-  hash_data->done_reading = FALSE;
   hash_data->total_bytes = priv->total_bytes;
   hash_data->handler = g_object_ref (handler);
   /* FIXME: should look at the CM capabilities before setting the
