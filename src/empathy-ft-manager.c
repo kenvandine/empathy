@@ -81,6 +81,7 @@ typedef struct {
   GtkWidget *treeview;
   GtkWidget *open_button;
   GtkWidget *abort_button;
+  GtkWidget *clear_button;
 
   guint save_geometry_id;
 } EmpathyFTManagerPriv;
@@ -129,7 +130,9 @@ ft_manager_update_buttons (EmpathyFTManager *manager)
   EmpathyFTHandler *handler;
   gboolean open_enabled = FALSE;
   gboolean abort_enabled = FALSE;
+  gboolean clear_enabled = FALSE;
   gboolean is_completed, is_cancelled;
+  GHashTableIter hash_iter;
   EmpathyFTManagerPriv *priv = GET_PRIV (manager);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
@@ -150,8 +153,23 @@ ft_manager_update_buttons (EmpathyFTManager *manager)
       g_object_unref (handler);
     }
 
+  g_hash_table_iter_init (&hash_iter, priv->ft_handler_to_row_ref);
+
+  while (g_hash_table_iter_next (&hash_iter, (gpointer *) &handler, NULL))
+    {
+      if (empathy_ft_handler_is_completed (handler) ||
+          empathy_ft_handler_is_cancelled (handler))
+          clear_enabled = TRUE;
+
+      if (clear_enabled)
+        break;
+    }
+
   gtk_widget_set_sensitive (priv->open_button, open_enabled);
   gtk_widget_set_sensitive (priv->abort_button, abort_enabled);
+
+  if (clear_enabled)
+    gtk_widget_set_sensitive (priv->clear_button, TRUE);
 }
 
 static void
@@ -731,6 +749,9 @@ ft_manager_clear (EmpathyFTManager *manager)
   /* Remove completed and cancelled transfers */
   g_hash_table_foreach_remove (priv->ft_handler_to_row_ref,
       remove_finished_transfer_foreach, manager);
+
+  /* set the clear button back to insensitive */
+  gtk_widget_set_sensitive (priv->clear_button, FALSE);
 }
 
 static void
@@ -885,6 +906,7 @@ ft_manager_build_ui (EmpathyFTManager *manager)
   gui = empathy_builder_get_file (filename,
       "ft_manager_dialog", &priv->window,
       "ft_list", &priv->treeview,
+      "clear_button", &priv->clear_button,
       "open_button", &priv->open_button,
       "abort_button", &priv->abort_button,
       NULL);
@@ -981,6 +1003,11 @@ ft_manager_build_ui (EmpathyFTManager *manager)
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
   gtk_tree_view_column_set_attributes (column, renderer,
       "text", COL_REMAINING, NULL);
+
+  /* clear button should be sensitive only if there are completed/cancelled
+   * handlers in the store.
+   */
+  gtk_widget_set_sensitive (priv->clear_button, FALSE);
 }
 
 /* GObject method overrides */
