@@ -64,7 +64,7 @@ void empathy_ft_factory_claim_channel (EmpathyFTFactory *factory,
   EmpathyDispatchOperation *operation);
 void empathy_ft_factory_set_destination_for_incoming_handler
   (EmpathyFTFactory *factory, EmpathyFTHandler *handler,
-   GFile *destination);
+   GFile *destination, gboolean use_hash);
 
 G_END_DECLS
 

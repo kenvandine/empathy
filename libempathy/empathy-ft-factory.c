@@ -169,13 +169,14 @@ void
 empathy_ft_factory_set_destination_for_incoming_handler
                                                  (EmpathyFTFactory *factory,
                                                   EmpathyFTHandler *handler,
-                                                  GFile *destination)
+                                                  GFile *destination,
+                                                  gboolean use_hash)
 {
   g_return_if_fail (EMPATHY_IS_FT_FACTORY (factory));
   g_return_if_fail (EMPATHY_IS_FT_HANDLER (handler));
   g_return_if_fail (G_IS_FILE (destination));
 
-  empathy_ft_handler_incoming_set_destination (handler, destination);
+  empathy_ft_handler_incoming_set_destination (handler, destination, use_hash);
 
   g_signal_emit (factory, signals[NEW_FT_HANDLER], 0, handler, FALSE);
 }

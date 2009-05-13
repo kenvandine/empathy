@@ -1481,13 +1481,19 @@ file_manager_receive_file_response_cb (GtkDialog *dialog,
 {
 	EmpathyFTFactory *factory;
 	GFile *file;
+	gboolean use_hash;
 
 	if (response == GTK_RESPONSE_OK) {
 		factory = empathy_ft_factory_dup_singleton ();
 		file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
 
+		use_hash = empathy_conf_get_bool
+			(empathy_conf_get (),
+			 EMPATHY_PREFS_FILE_TRANSFER_USE_HASH,
+			 &use_hash);
+
 		empathy_ft_factory_set_destination_for_incoming_handler
-			(factory, handler, file);
+			(factory, handler, file, use_hash);
 
 		g_object_unref (factory);
 		g_object_unref (file);
