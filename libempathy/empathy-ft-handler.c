@@ -659,10 +659,20 @@ hash_job_done (gpointer user_data)
       if (g_strcmp0 (g_checksum_get_string (hash_data->checksum),
                      priv->content_hash))
         {
+          DEBUG ("Hash mismatch when checking incoming handler: "
+                 "received %s, calculated %s", priv->content_hash,
+                 g_checksum_get_string (hash_data->checksum));
+
           hash_data->error = g_error_new_literal (EMPATHY_FT_ERROR_QUARK,
               EMPATHY_FT_ERROR_HASH_MISMATCH,
               _("The hash of the received file and the sent one do not match"));
           goto cleanup;
+        }
+      else
+        {
+          DEBUG ("Hash verification matched, received %s, calculated %s",
+                 priv->content_hash,
+                 g_checksum_get_string (hash_data->checksum));
         }
     }
   else
@@ -766,6 +776,8 @@ do_hash_job_incoming (GIOSchedulerJob *job,
   EmpathyFTHandler *handler = hash_data->handler;
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
   GError *error = NULL;
+
+  DEBUG ("checking integrity for incoming handler");
 
   /* need to get the stream first */
   hash_data->stream =
