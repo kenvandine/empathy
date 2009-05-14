@@ -747,8 +747,13 @@ ft_manager_add_handler_to_list (EmpathyFTManager *manager,
       return;
     }
 
-  /* update the row with the initial values */
-  if (empathy_ft_handler_is_incoming (handler)) {
+  /* update the row with the initial values.
+   * the only case where we postpone this is in case we're managing
+   * an outgoing+hashing transfer, as the hashing started signal will
+   * take care of updating the information.
+   */
+  if (empathy_ft_handler_is_incoming (handler) ||
+      !empathy_ft_handler_get_use_hash (handler)) {
     first_line = ft_manager_format_contact_info (handler);
     second_line = _("Waiting for the other participant's response");
     message = g_strdup_printf ("%s\n%s", first_line, second_line);
@@ -758,7 +763,6 @@ ft_manager_add_handler_to_list (EmpathyFTManager *manager,
     g_free (first_line);
     g_free (message);
   }
-
 
   /* hook up the signals and start the transfer */
   ft_manager_start_transfer (manager, handler);
