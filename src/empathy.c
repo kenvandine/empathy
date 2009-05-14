@@ -417,10 +417,7 @@ new_ft_handler_cb (EmpathyFTFactory *factory,
 		   EmpathyFTHandler *handler,
 		   gpointer user_data)
 {
-	EmpathyFTManager *ft_manager;
-
-	ft_manager = empathy_ft_manager_dup_singleton ();
-	empathy_ft_manager_add_handler (ft_manager, handler);
+	empathy_ft_manager_add_handler (handler);
 
 	g_object_unref (handler);
 }
@@ -446,7 +443,6 @@ main (int argc, char *argv[])
 	EmpathyDispatcher *dispatcher;
 	EmpathyLogManager *log_manager;
 	EmpathyChatroomManager *chatroom_manager;
-	EmpathyFTManager  *ft_manager;
 	EmpathyCallFactory *call_factory;
 	EmpathyFTFactory  *ft_factory;
 	GtkWidget         *window;
@@ -595,8 +591,6 @@ main (int argc, char *argv[])
 
 	chatroom_manager = empathy_chatroom_manager_dup_singleton (NULL);
 	empathy_chatroom_manager_observe (chatroom_manager, dispatcher);
-
-	ft_manager = empathy_ft_manager_dup_singleton ();
 
 	notify_init (_(PACKAGE_NAME));
 	/* Create the call factory */

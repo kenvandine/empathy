@@ -61,12 +61,10 @@ struct _EmpathyFTManagerClass {
 GType empathy_ft_manager_get_type (void);
 
 /* public methods */
-EmpathyFTManager *empathy_ft_manager_dup_singleton (void);
-void empathy_ft_manager_add_handler (EmpathyFTManager *ft_manager,
-    EmpathyFTHandler *handler);
-void empathy_ft_manager_display_error (EmpathyFTManager *ft_manager,
-    EmpathyFTHandler *handler, const GError *error);
-void empathy_ft_manager_show (EmpathyFTManager *manager);
+void empathy_ft_manager_add_handler (EmpathyFTHandler *handler);
+void empathy_ft_manager_display_error (EmpathyFTHandler *handler,
+  const GError *error);
+void empathy_ft_manager_show (void);
 
 G_END_DECLS
 

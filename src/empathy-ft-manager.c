@@ -868,6 +868,8 @@ ft_manager_delete_event_cb (GtkWidget *widget,
 {
   EmpathyFTManagerPriv *priv = GET_PRIV (manager);
 
+  DEBUG ("%p", manager);
+
   /* remove all the completed/cancelled/errored transfers */
   ft_manager_clear (manager);
 
@@ -876,7 +878,7 @@ ft_manager_delete_event_cb (GtkWidget *widget,
       /* There is still FTs on flight, just hide the window */
       DEBUG ("Hiding window");
       gtk_widget_hide (widget);
-      return TRUE;
+      return TRUE;      
     }
 
   return FALSE;
@@ -886,6 +888,8 @@ static void
 ft_manager_destroy_cb (GtkWidget *widget,
                        EmpathyFTManager *manager)
 {
+  DEBUG ("%p", manager);
+
   g_object_unref (manager);
 }
 
@@ -1017,7 +1021,7 @@ empathy_ft_manager_finalize (GObject *object)
 {
   EmpathyFTManagerPriv *priv = GET_PRIV (object);
 
-  DEBUG ("%p", object);
+  DEBUG ("FT Manager %p", object);
 
   g_hash_table_destroy (priv->ft_handler_to_row_ref);
 
@@ -1053,7 +1057,7 @@ empathy_ft_manager_constructor (GType type,
 
   if (manager_singleton)
     {
-      retval = g_object_ref (manager_singleton);
+      retval = G_OBJECT (manager_singleton);
     }
   else
     {
@@ -1080,55 +1084,48 @@ empathy_ft_manager_class_init (EmpathyFTManagerClass *klass)
 
 /* public methods */
 
-/**
- * empathy_ft_manager_dup_singleton:
- *
- * Returns a reference to the #EmpathyFTManager singleton object.
- *
- * Returns: a #EmpathyFTManager
- */
-EmpathyFTManager *
-empathy_ft_manager_dup_singleton (void)
-{
-  return g_object_new (EMPATHY_TYPE_FT_MANAGER, NULL);
-}
-
 void
-empathy_ft_manager_add_handler (EmpathyFTManager *manager,
-                                EmpathyFTHandler *handler)
+empathy_ft_manager_add_handler (EmpathyFTHandler *handler)
 {
-  EmpathyFTManagerPriv *priv = GET_PRIV (manager);
+  EmpathyFTManager *manager;
+  EmpathyFTManagerPriv *priv;
 
   DEBUG ("Adding handler");
 
-  g_return_if_fail (EMPATHY_IS_FT_MANAGER (manager));
   g_return_if_fail (EMPATHY_IS_FT_HANDLER (handler));
+
+  manager = g_object_new (EMPATHY_TYPE_FT_MANAGER, NULL);
+  priv = GET_PRIV (manager);
 
   ft_manager_add_handler_to_list (manager, handler, NULL);
   gtk_window_present (GTK_WINDOW (priv->window));
 }
 
 void
-empathy_ft_manager_display_error (EmpathyFTManager *manager,
-                                  EmpathyFTHandler *handler,
+empathy_ft_manager_display_error (EmpathyFTHandler *handler,
                                   const GError *error)
 {
-  EmpathyFTManagerPriv *priv = GET_PRIV (manager);
+  EmpathyFTManager *manager;
+  EmpathyFTManagerPriv *priv;
 
-  g_return_if_fail (EMPATHY_IS_FT_MANAGER (manager));
   g_return_if_fail (EMPATHY_IS_FT_HANDLER (handler));
   g_return_if_fail (error != NULL);
+
+  manager = g_object_new (EMPATHY_TYPE_FT_MANAGER, NULL);
+  priv = GET_PRIV (manager);
 
   ft_manager_add_handler_to_list (manager, handler, error);
   gtk_window_present (GTK_WINDOW (priv->window));
 }
 
 void
-empathy_ft_manager_show (EmpathyFTManager *manager)
+empathy_ft_manager_show (void)
 {
-  EmpathyFTManagerPriv *priv = GET_PRIV (manager);
+  EmpathyFTManager *manager;
+  EmpathyFTManagerPriv *priv;
 
-  g_return_if_fail (EMPATHY_IS_FT_MANAGER (manager));
+  manager = g_object_new (EMPATHY_TYPE_FT_MANAGER, NULL);
+  priv = GET_PRIV (manager);
 
   gtk_window_present (GTK_WINDOW (priv->window));
 }

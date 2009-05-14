@@ -695,12 +695,7 @@ static void
 main_window_view_show_ft_manager (GtkAction         *action,
 				  EmpathyMainWindow *window)
 {
-	EmpathyFTManager *manager;
-
-	manager = empathy_ft_manager_dup_singleton ();
-	empathy_ft_manager_show (manager);
-
-	g_object_unref (manager);
+	empathy_ft_manager_show ();
 }
 
 static void
