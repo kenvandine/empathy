@@ -913,6 +913,9 @@ out:
     }
   else
     {
+      if (!g_cancellable_is_cancelled (priv->cancellable))
+        g_cancellable_cancel (priv->cancellable);
+
       cb_data->callback (NULL, error, cb_data->user_data);
       g_error_free (error);
       g_object_unref (cb_data->handler);
@@ -934,6 +937,9 @@ contact_factory_contact_cb (EmpathyTpContactFactory *factory,
 
   if (error != NULL)
     {
+      if (!g_cancellable_is_cancelled (priv->cancellable))
+        g_cancellable_cancel (priv->cancellable);
+
       cb_data->callback (NULL, (GError *) error, cb_data->user_data);
       g_object_unref (handler);
       return;
@@ -959,6 +965,9 @@ channel_get_all_properties_cb (TpProxy *proxy,
 
   if (error != NULL)
     {
+      if (!g_cancellable_is_cancelled (priv->cancellable))
+        g_cancellable_cancel (priv->cancellable);
+
       cb_data->callback (NULL, (GError *) error, cb_data->user_data);
       g_object_unref (handler);
       return;

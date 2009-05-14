@@ -407,17 +407,27 @@ show_version_cb (const char *option_name,
 static void
 new_incoming_transfer_cb (EmpathyFTFactory *factory,
 			  EmpathyFTHandler *handler,
+                          GError *error,
 			  gpointer user_data)
 {
-	empathy_receive_file_with_file_chooser (handler);
+	if (error) {
+		empathy_ft_manager_display_error (handler, error);
+	} else {
+		empathy_receive_file_with_file_chooser (handler);
+	}
 }
 
 static void
 new_ft_handler_cb (EmpathyFTFactory *factory,
 		   EmpathyFTHandler *handler,
+                   GError *error,
 		   gpointer user_data)
 {
-	empathy_ft_manager_add_handler (handler);
+	if (error) {
+		empathy_ft_manager_display_error (handler, error);
+	} else {
+		empathy_ft_manager_add_handler (handler);
+	}
 
 	g_object_unref (handler);
 }

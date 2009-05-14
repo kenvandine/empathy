@@ -73,17 +73,16 @@ empathy_ft_factory_class_init (EmpathyFTFactoryClass *klass)
       G_TYPE_FROM_CLASS (klass),
       G_SIGNAL_RUN_LAST, 0,
       NULL, NULL,
-      _empathy_marshal_VOID__OBJECT_BOOLEAN,
-      G_TYPE_NONE,
-      2, EMPATHY_TYPE_FT_HANDLER, G_TYPE_BOOLEAN);
+      _empathy_marshal_VOID__OBJECT_POINTER,
+      G_TYPE_NONE, 2, EMPATHY_TYPE_FT_HANDLER, G_TYPE_POINTER);
 
   signals[NEW_INCOMING_TRANSFER] =
     g_signal_new ("new-incoming-transfer",
       G_TYPE_FROM_CLASS (klass),
       G_SIGNAL_RUN_LAST, 0,
       NULL, NULL,
-      g_cclosure_marshal_VOID__OBJECT,
-      G_TYPE_NONE, 1, EMPATHY_TYPE_FT_HANDLER);
+      _empathy_marshal_VOID__OBJECT_POINTER,
+      G_TYPE_NONE, 2, EMPATHY_TYPE_FT_HANDLER, G_TYPE_POINTER);
 }
 
 static void
@@ -99,13 +98,7 @@ ft_handler_outgoing_ready_cb (EmpathyFTHandler *handler,
 {
   EmpathyFTFactory *factory = user_data;
 
-  if (error != NULL)
-    {
-      /* TODO: error handling */
-      return;
-    }
-
-  g_signal_emit (factory, signals[NEW_FT_HANDLER], 0, handler, TRUE);
+  g_signal_emit (factory, signals[NEW_FT_HANDLER], 0, handler, error);
 }
 
 static void
@@ -115,13 +108,7 @@ ft_handler_incoming_ready_cb (EmpathyFTHandler *handler,
 {
   EmpathyFTFactory *factory = user_data;
 
-  if (error != NULL)
-    {
-      /* TODO: error handling */      
-      return;
-    }
-
-  g_signal_emit (factory, signals[NEW_INCOMING_TRANSFER], 0, handler);
+  g_signal_emit (factory, signals[NEW_INCOMING_TRANSFER], 0, handler, error);
 }
 
 /* public methods */
