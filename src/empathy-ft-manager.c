@@ -461,17 +461,14 @@ ft_handler_transfer_error_cb (EmpathyFTHandler *handler,
 }
 
 static void
-ft_handler_transfer_done_cb (EmpathyFTHandler *handler,
-                             EmpathyTpFile *tp_file,
-                             EmpathyFTManager *manager)
+do_real_transfer_done (EmpathyFTManager *manager,
+                       EmpathyFTHandler *handler)
 {
   const char *contact_name;
   const char *filename;
   char *first_line, *second_line, *message;
   gboolean incoming;
   GtkTreeRowReference *row_ref;
-
-  DEBUG ("Transfer done");
 
   row_ref = ft_manager_get_row_from_handler (manager, handler);
   g_return_if_fail (row_ref != NULL);
@@ -504,10 +501,26 @@ ft_handler_transfer_done_cb (EmpathyFTHandler *handler,
   g_free (first_line);
   g_free (second_line);
 
+}
+
+static void
+ft_handler_transfer_done_cb (EmpathyFTHandler *handler,
+                             EmpathyTpFile *tp_file,
+                             EmpathyFTManager *manager)
+{
+  DEBUG ("Transfer done");
+
   if (empathy_ft_handler_is_incoming (handler) &&
       empathy_ft_handler_get_use_hash (handler))
+    {
+      /* connect to the signal and return early */
       g_signal_connect (handler, "hashing-started",
           G_CALLBACK (ft_handler_hashing_started_cb), manager);
+
+      return;
+    }
+
+  do_real_transfer_done (manager, handler);
 }
 
 static void
@@ -572,10 +585,16 @@ ft_handler_hashing_done_cb (EmpathyFTHandler *handler,
 
   DEBUG ("Hashing done");
 
+  /* update the message */
+  if (empathy_ft_handler_is_incoming (handler))
+    {
+      do_real_transfer_done (manager, handler);
+      return;
+    }
+
   row_ref = ft_manager_get_row_from_handler (manager, handler);
   g_return_if_fail (row_ref != NULL);
 
-  /* update the message */
   first_line = ft_manager_format_contact_info (handler);
   second_line = g_strdup (_("Waiting for the other participant's response"));
   message = g_strdup_printf ("%s\n%s", first_line, second_line);
@@ -586,9 +605,8 @@ ft_handler_hashing_done_cb (EmpathyFTHandler *handler,
   g_free (first_line);
   g_free (second_line);
 
-  if (!empathy_ft_handler_is_incoming (handler))
-    g_signal_connect (handler, "transfer-started",
-        G_CALLBACK (ft_handler_transfer_started_cb), manager);
+  g_signal_connect (handler, "transfer-started",
+      G_CALLBACK (ft_handler_transfer_started_cb), manager);
 }
 
 static void
@@ -603,8 +621,13 @@ ft_handler_hashing_progress_cb (EmpathyFTHandler *handler,
   row_ref = ft_manager_get_row_from_handler (manager, handler);
   g_return_if_fail (row_ref != NULL);
 
-  first_line =  g_strdup_printf (_("Hashing \"%s\""),
-      empathy_ft_handler_get_filename (handler));
+  if (empathy_ft_handler_is_incoming (handler))
+      first_line = g_strdup_printf (_("Checking integrity of \"%s\""),
+          empathy_ft_handler_get_filename (handler));
+  else
+      first_line =  g_strdup_printf (_("Hashing \"%s\""),
+          empathy_ft_handler_get_filename (handler));
+
   second_line = ft_manager_format_progress_bytes_and_percentage
     (current_bytes, total_bytes, -1, NULL);
 
@@ -632,8 +655,12 @@ ft_handler_hashing_started_cb (EmpathyFTHandler *handler,
   row_ref = ft_manager_get_row_from_handler (manager, handler);
   g_return_if_fail (row_ref != NULL);
 
-  message =  g_strdup_printf (_("Hashing \"%s\""),
-      empathy_ft_handler_get_filename (handler));
+  if (empathy_ft_handler_is_incoming (handler))
+      message = g_strdup_printf (_("Checking integrity of \"%s\""),
+          empathy_ft_handler_get_filename (handler));
+  else
+      message =  g_strdup_printf (_("Hashing \"%s\""),
+          empathy_ft_handler_get_filename (handler));
 
   ft_manager_update_handler_message (manager, row_ref, message);
 
