@@ -572,7 +572,7 @@ static void
 event_manager_tube_dispatch_ability_cb (GObject *object,
    GParamSpec *spec, gpointer user_data)
 {
-  EventManagerApproval *approval = (EventManagerApproval *)user_data;
+  EventManagerApproval *approval = (EventManagerApproval *) user_data;
   EmpathyTubeDispatchAbility dispatchability;
 
   dispatchability =
@@ -593,7 +593,7 @@ event_manager_tube_got_contact_cb (EmpathyTpContactFactory *factory,
                                    gpointer user_data,
                                    GObject *object)
 {
-  EventManagerApproval *approval = (EventManagerApproval *)user_data;
+  EventManagerApproval *approval = (EventManagerApproval *) user_data;
   EmpathyTubeDispatchAbility dispatchability;
 
   if (error != NULL)
@@ -1053,7 +1053,7 @@ empathy_event_manager_get_top_event (EmpathyEventManager *manager)
 void
 empathy_event_activate (EmpathyEvent *event_public)
 {
-  EventPriv *event = (EventPriv*) event_public;
+  EventPriv *event = (EventPriv *) event_public;
 
   g_return_if_fail (event_public != NULL);
 
