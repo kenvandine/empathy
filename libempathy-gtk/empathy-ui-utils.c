@@ -1496,6 +1496,9 @@ file_manager_receive_file_response_cb (GtkDialog *dialog,
 		g_object_unref (factory);
 		g_object_unref (file);
 	} else {
+		/* unref the handler, as we dismissed the file chooser,
+		 * and refused the transfer.
+		 */
 		g_object_unref (handler);
 	}
 
