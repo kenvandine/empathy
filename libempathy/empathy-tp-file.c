@@ -136,10 +136,10 @@ tp_file_get_state_cb (TpProxy *proxy,
 
 static void
 tp_file_invalidated_cb (TpProxy       *proxy,
-			guint          domain,
-			gint           code,
-			gchar         *message,
-			EmpathyTpFile *tp_file)
+                        guint          domain,
+                        gint           code,
+                        gchar         *message,
+                        EmpathyTpFile *tp_file)
 {
   EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
 
@@ -523,22 +523,32 @@ file_replace_async_cb (GObject *source,
 }
 
 static void
+channel_closed_cb (TpChannel *proxy,
+                   const GError *error,
+                   gpointer user_data,
+                   GObject *weak_object)
+{
+  EmpathyTpFile *tp_file = EMPATHY_TP_FILE (weak_object);
+  EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
+  gboolean *cancel = user_data;
+
+  DEBUG ("Channel is closed");
+
+  if (priv->cancellable != NULL &&
+      !g_cancellable_is_cancelled (priv->cancellable) && *cancel)
+    g_cancellable_cancel (priv->cancellable);  
+}
+
+static void
 close_channel_internal (EmpathyTpFile *tp_file,
                         gboolean cancel)
 {
-  EmpathyTpFilePriv *priv;
-
-  g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
-  
-  priv = GET_PRIV (tp_file);
+  EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
 
   DEBUG ("Closing channel..");
-  tp_cli_channel_call_close (priv->channel, -1,
-    NULL, NULL, NULL, NULL);
 
-  if (priv->cancellable != NULL &&
-      !g_cancellable_is_cancelled (priv->cancellable) && cancel)
-    g_cancellable_cancel (priv->cancellable);
+  tp_cli_channel_call_close (priv->channel, -1,
+    channel_closed_cb, &cancel, NULL, G_OBJECT (tp_file));
 }
 
 /* GObject methods */
