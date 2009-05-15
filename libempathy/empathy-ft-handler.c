@@ -1003,6 +1003,8 @@ channel_get_all_properties_cb (TpProxy *proxy,
   empathy_tp_contact_factory_get_from_handle (c_factory, c_handle,
       contact_factory_contact_cb, cb_data, callbacks_data_free,
       G_OBJECT (handler));
+
+  g_object_unref (c_factory);
 }
 
 /* public methods */
