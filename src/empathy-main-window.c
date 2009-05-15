@@ -133,7 +133,7 @@ main_window_flash_foreach (GtkTreeModel *model,
 			   GtkTreeIter  *iter,
 			   gpointer      user_data)
 {
-	FlashForeachData *data = (FlashForeachData*) user_data;
+	FlashForeachData *data = (FlashForeachData *) user_data;
 	EmpathyContact   *contact;
 	const gchar      *icon_name;
 	GtkTreePath      *parent_path = NULL;
