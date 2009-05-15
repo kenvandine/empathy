@@ -464,6 +464,21 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/empathy/file_transfer/use_hash</key>
+      <applyto>/apps/empathy/file_transfer/use_hash</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>Whether Empathy should use checksum for transfers</short>
+        <long>
+        Whether Empathy should use checksum to validate file transfers,
+        if the connection manager supports it.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/empathy/location/publish</key>
       <applyto>/apps/empathy/location/publish</applyto>
       <owner>empathy</owner>
@@ -533,5 +548,5 @@
       </locale>
     </schema>
 
-  </schemalist>
+  </schemalist>  
 </gconfschemafile>
