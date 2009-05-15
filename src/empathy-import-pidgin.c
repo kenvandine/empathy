@@ -294,7 +294,7 @@ empathy_import_pidgin_load (void)
     }
 
 OUT:
-  xmlFreeDoc(doc);
+  xmlFreeDoc (doc);
   xmlFreeParserCtxt (ctxt);
 
 FILENAME:
