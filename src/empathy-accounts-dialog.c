@@ -232,11 +232,11 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 		dialog->settings_widget =
 			empathy_account_widget_irc_new (account);
 	}
-	else if (!tp_strdiff(config_ui, "icq")) {
+	else if (!tp_strdiff (config_ui, "icq")) {
 		dialog->settings_widget =
 			empathy_account_widget_icq_new (account);
 	}
-	else if (!tp_strdiff(config_ui, "aim")) {
+	else if (!tp_strdiff (config_ui, "aim")) {
 		dialog->settings_widget =
 			empathy_account_widget_aim_new (account);
 	}
@@ -358,7 +358,7 @@ accounts_dialog_enable_toggled_cb (GtkCellRendererToggle *cell_renderer,
 	mc_account_set_enabled (account, !enabled);
 
 	DEBUG ("%s account %s", enabled ? "Disabled" : "Enable",
-		mc_account_get_display_name(account));
+		mc_account_get_display_name (account));
 
 	g_object_unref (account);
 }
