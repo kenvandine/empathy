@@ -16,7 +16,7 @@
  * License along with this program; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
- * 
+ *
  * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
 
@@ -312,7 +312,7 @@ create_salut_account (void)
 /* The code that handles single-instance and startup notification is
  * copied from gedit.
  *
- * Copyright (C) 2005 - Paolo Maggi 
+ * Copyright (C) 2005 - Paolo Maggi
  */
 static void
 on_bacon_message_received (const char *message,
@@ -427,7 +427,7 @@ main (int argc, char *argv[])
 	MissionControl    *mc;
 	EmpathyIdle       *idle;
 	gboolean           autoconnect = TRUE;
-	gboolean           no_connect = FALSE; 
+	gboolean           no_connect = FALSE;
 	gboolean           hide_contact_list = FALSE;
 	gboolean           accounts_dialog = FALSE;
 	GError            *error = NULL;
