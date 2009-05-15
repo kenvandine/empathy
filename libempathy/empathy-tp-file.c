@@ -124,7 +124,7 @@ tp_file_get_state_cb (TpProxy *proxy,
 {
   EmpathyTpFilePriv *priv = GET_PRIV (weak_object);
 
-  if (error)
+  if (error != NULL)
     {
       /* set a default value for the state */
       priv->state = TP_FILE_TRANSFER_STATE_NONE;
@@ -164,10 +164,10 @@ ft_operation_close_clean (EmpathyTpFile *tp_file)
 
   if (priv->is_closed)
     return;
-  else
-    priv->is_closed = TRUE;
 
-  if (priv->op_callback)
+  priv->is_closed = TRUE;
+
+  if (priv->op_callback != NULL)
     priv->op_callback (tp_file, NULL, priv->op_user_data);
 }
 
@@ -181,14 +181,14 @@ ft_operation_close_with_error (EmpathyTpFile *tp_file,
 
   if (priv->is_closed)
     return;
-  else
-    priv->is_closed = TRUE;
+
+  priv->is_closed = TRUE;
 
   /* close the channel if it's not cancelled already */
   if (priv->state != TP_FILE_TRANSFER_STATE_CANCELLED)
     empathy_tp_file_cancel (tp_file);
 
-  if (priv->op_callback)
+  if (priv->op_callback != NULL)
     priv->op_callback (tp_file, error, priv->op_user_data);
 }
 
@@ -264,7 +264,7 @@ tp_file_start_transfer (EmpathyTpFile *tp_file)
   priv->start_time = empathy_time_get_current ();
 
   /* notify we're starting a transfer */
-  if (priv->progress_callback)
+  if (priv->progress_callback != NULL)
     priv->progress_callback (tp_file, 0, priv->progress_user_data);
 
   if (priv->incoming)
@@ -392,7 +392,7 @@ tp_file_transferred_bytes_changed_cb (TpChannel *proxy,
     return;
 
   /* notify clients */
-  if (priv->progress_callback)
+  if (priv->progress_callback != NULL)
     priv->progress_callback (EMPATHY_TP_FILE (weak_object),
         count, priv->progress_user_data);
 }
@@ -410,9 +410,9 @@ ft_operation_provide_or_accept_file_cb (TpChannel *proxy,
 
   g_cancellable_set_error_if_cancelled (priv->cancellable, &myerr);
 
-  if (error)
+  if (error != NULL)
     {
-      if (myerr)
+      if (myerr != NULL)
         {
           /* if we were both cancelled and failed when calling the method,
           * report the method error.
@@ -422,7 +422,7 @@ ft_operation_provide_or_accept_file_cb (TpChannel *proxy,
         }
     }
 
-  if (myerr)
+  if (myerr != NULL)
     {
       DEBUG ("Error: %s", error->message);
       ft_operation_close_with_error (tp_file, myerr);
@@ -575,7 +575,7 @@ do_dispose (GObject *object)
 
   priv->dispose_run = TRUE;
 
-  if (priv->channel)
+  if (priv->channel != NULL)
     {
       g_signal_handlers_disconnect_by_func (priv->channel,
           tp_file_invalidated_cb, object);
@@ -583,13 +583,13 @@ do_dispose (GObject *object)
       priv->channel = NULL;
     }
 
-  if (priv->in_stream)
+  if (priv->in_stream != NULL)
     g_object_unref (priv->in_stream);
 
-  if (priv->out_stream)
+  if (priv->out_stream != NULL)
     g_object_unref (priv->out_stream);
 
-  if (priv->cancellable)
+  if (priv->cancellable != NULL)
     g_object_unref (priv->cancellable);
 
   G_OBJECT_CLASS (empathy_tp_file_parent_class)->dispose (object);

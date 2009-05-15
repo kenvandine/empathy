@@ -48,7 +48,7 @@ do_constructor (GType type,
 {
 	GObject *retval;
 
-	if (factory_singleton) {
+	if (factory_singleton != NULL) {
 		retval = g_object_ref (factory_singleton);
 	} else {
 		retval = G_OBJECT_CLASS (empathy_ft_factory_parent_class)->constructor

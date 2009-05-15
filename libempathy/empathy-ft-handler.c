@@ -177,23 +177,23 @@ do_dispose (GObject *object)
 
   priv->dispose_run = TRUE;
 
-  if (priv->contact) {
+  if (priv->contact != NULL) {
     g_object_unref (priv->contact);
     priv->contact = NULL;
   }
 
-  if (priv->gfile) {
+  if (priv->gfile != NULL) {
     g_object_unref (priv->gfile);
     priv->gfile = NULL;
   }
 
-  if (priv->tpfile) {
+  if (priv->tpfile != NULL) {
     empathy_tp_file_close (priv->tpfile);
     g_object_unref (priv->tpfile);
     priv->tpfile = NULL;
   }
 
-  if (priv->cancellable) {
+  if (priv->cancellable != NULL) {
     g_object_unref (priv->cancellable);
     priv->cancellable = NULL;
   }
@@ -753,7 +753,7 @@ again:
   }
 
 out:
-  if (error)
+  if (error != NULL)
     hash_data->error = error;
 
   g_io_scheduler_job_send_to_mainloop_async (job, hash_job_done,
@@ -778,7 +778,7 @@ do_hash_job_incoming (GIOSchedulerJob *job,
   hash_data->stream =
     G_INPUT_STREAM (g_file_read (priv->gfile, cancellable, &error));
 
-  if (error)
+  if (error != NULL)
     {
       hash_data->error = error;
       g_io_scheduler_job_send_to_mainloop_async (job, hash_job_done,
@@ -868,7 +868,7 @@ callbacks_data_free (gpointer user_data)
 {
   CallbacksData *data = user_data;
 
-  if (data->handler)
+  if (data->handler != NULL)
     g_object_unref (data->handler);
 
   g_slice_free (CallbacksData, data);
