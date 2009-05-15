@@ -165,7 +165,7 @@ ft_manager_state_change_reason_to_string (TpFileTransferStateChangeReason reason
       case TP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE:
         return _("No reason was specified");
       case TP_FILE_TRANSFER_STATE_CHANGE_REASON_REQUESTED:
-        return _("The change in state was requested");      
+        return _("The change in state was requested");
       case TP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_STOPPED:
         return _("You canceled the file transfer");
       case TP_FILE_TRANSFER_STATE_CHANGE_REASON_REMOTE_STOPPED:
@@ -307,7 +307,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
   if (remaining < 0)
     {
       if (state == TP_FILE_TRANSFER_STATE_OPEN)
-        remaining_str = g_strdup (C_("remaining time", "Stalled"));      
+        remaining_str = g_strdup (C_("remaining time", "Stalled"));
       else if (state != TP_FILE_TRANSFER_STATE_COMPLETED &&
                state != TP_FILE_TRANSFER_STATE_CANCELLED)
         remaining_str = g_strdup (C_("remaining time", "Unknown"));
