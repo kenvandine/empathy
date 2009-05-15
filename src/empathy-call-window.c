@@ -1173,7 +1173,7 @@ empathy_call_window_bus_message (GstBus *bus, GstMessage *message,
         break;
       case GST_MESSAGE_ERROR:
         {
-          GError *error;
+          GError *error = NULL;
           gchar *debug;
 
           gst_message_parse_error (message, &error, &debug);
