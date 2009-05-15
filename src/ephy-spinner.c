@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright © 2000 Eazel, Inc.
  * Copyright © 2002-2004 Marco Pesenti Gritti
  * Copyright © 2004, 2006 Christian Persch
@@ -20,7 +20,7 @@
  * Author: Andy Hertzfeld <andy@eazel.com>
  *
  * Ephy port by Marco Pesenti Gritti <marco@it.gnome.org>
- * 
+ *
  * $Id: ephy-spinner.c 2114 2006-12-25 12:15:00Z mr $
  */
 
@@ -455,7 +455,7 @@ ephy_spinner_cache_init (EphySpinnerCache *cache)
 static void
 ephy_spinner_cache_finalize (GObject *object)
 {
-	EphySpinnerCache *cache = EPHY_SPINNER_CACHE (object); 
+	EphySpinnerCache *cache = EPHY_SPINNER_CACHE (object);
 	EphySpinnerCachePrivate *priv = cache->priv;
 
 	g_hash_table_destroy (priv->hash);
