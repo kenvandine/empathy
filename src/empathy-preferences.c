@@ -422,7 +422,7 @@ preferences_languages_add (EmpathyPreferences *preferences)
 
 	codes = empathy_spell_get_language_codes ();
 
-	empathy_conf_set_bool (empathy_conf_get(),
+	empathy_conf_set_bool (empathy_conf_get (),
 			       EMPATHY_PREFS_CHAT_SPELL_CHECKER_ENABLED,
 			       codes != NULL);
 	if (!codes) {
