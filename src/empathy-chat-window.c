@@ -17,7 +17,7 @@
  * License along with this program; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
- * 
+ *
  * Authors: Mikael Hallendal <micke@imendio.com>
  *          Richard Hult <richard@imendio.com>
  *          Martyn Russell <martyn@imendio.com>
@@ -1362,7 +1362,7 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 	priv->chatroom_manager = empathy_chatroom_manager_dup_singleton (NULL);
 
 	priv->notebook = gtk_notebook_new ();
- 	gtk_notebook_set_group (GTK_NOTEBOOK (priv->notebook), "EmpathyChatWindow"); 
+ 	gtk_notebook_set_group (GTK_NOTEBOOK (priv->notebook), "EmpathyChatWindow");
 	gtk_box_pack_start (GTK_BOX (chat_vbox), priv->notebook, TRUE, TRUE, 0);
 	gtk_widget_show (priv->notebook);
 
@@ -1539,7 +1539,7 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 	}
 
 	child = GTK_WIDGET (chat);
-	label = chat_window_create_label (window, chat); 
+	label = chat_window_create_label (window, chat);
 	gtk_widget_show (child);
 
 	g_signal_connect (chat, "notify::name",
@@ -1557,7 +1557,7 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 	gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (priv->notebook), child, TRUE);
 	gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (priv->notebook), child, TRUE);
 	gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (priv->notebook), child,
-					    TRUE, TRUE, GTK_PACK_START); 
+					    TRUE, TRUE, GTK_PACK_START);
 
 	DEBUG ("Chat added (%d references)", G_OBJECT (chat)->ref_count);
 }
@@ -1713,6 +1713,6 @@ empathy_chat_window_present_chat (EmpathyChat *chat)
 	empathy_chat_window_switch_to_chat (window, chat);
 	empathy_window_present (GTK_WINDOW (priv->dialog), TRUE);
 
- 	gtk_widget_grab_focus (chat->input_text_view); 
+ 	gtk_widget_grab_focus (chat->input_text_view);
 }
 
