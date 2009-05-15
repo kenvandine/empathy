@@ -553,6 +553,8 @@ ft_handler_transfer_progress_cb (EmpathyFTHandler *handler,
     ft_manager_update_handler_time (manager, row_ref, remaining_time);
 
   g_free (message);
+  g_free (first_line);
+  g_free (second_line);
 }
 
 static void
