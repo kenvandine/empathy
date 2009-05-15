@@ -417,6 +417,7 @@ empathy_smiley_menu_new (EmpathySmileyManager *manager,
 
 		item = gtk_image_menu_item_new_with_label ("");
 		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+		gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item), TRUE);
 
 		gtk_menu_attach (GTK_MENU (menu), item,
 				 x, x + 1, y, y + 1);
