@@ -34,15 +34,18 @@ G_BEGIN_DECLS
 
 #define EMPATHY_TYPE_FT_HANDLER empathy_ft_handler_get_type()
 #define EMPATHY_FT_HANDLER(obj) \
-  (G_TYPE_CHECK_INSTANCE_CAST ((obj), EMPATHY_TYPE_FT_HANDLER, EmpathyFTHandler))
+  (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
+   EMPATHY_TYPE_FT_HANDLER, EmpathyFTHandler))
 #define EMPATHY_FT_HANDLER_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_CAST ((klass), EMPATHY_TYPE_FT_HANDLER, EmpathyFTHandlerClass))
+  (G_TYPE_CHECK_CLASS_CAST ((klass), \
+   EMPATHY_TYPE_FT_HANDLER, EmpathyFTHandlerClass))
 #define EMPATHY_IS_FT_HANDLER(obj) \
   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EMPATHY_TYPE_FT_HANDLER))
 #define EMPATHY_IS_FT_HANDLER_CLASS(klass) \
   (G_TYPE_CHECK_CLASS_TYPE ((klass), EMPATHY_TYPE_FT_HANDLER))
 #define EMPATHY_FT_HANDLER_GET_CLASS(obj) \
-  (G_TYPE_INSTANCE_GET_CLASS ((obj), EMPATHY_TYPE_FT_HANDLER, EmpathyFTHandlerClass))
+  (G_TYPE_INSTANCE_GET_CLASS ((obj), \
+   EMPATHY_TYPE_FT_HANDLER, EmpathyFTHandlerClass))
 
 typedef struct {
   GObject parent;
@@ -54,20 +57,24 @@ typedef struct {
 } EmpathyFTHandlerClass;
 
 typedef void (* EmpathyFTHandlerReadyCallback) (EmpathyFTHandler *handler,
-                                                GError *error,
-                                                gpointer user_data);
+    GError *error,
+    gpointer user_data);
 
 GType empathy_ft_handler_get_type (void);
 
 /* public methods */
 void empathy_ft_handler_new_outgoing (EmpathyContact *contact,
-    GFile *source, gboolean use_hash, EmpathyFTHandlerReadyCallback callback,
+    GFile *source,
+    gboolean use_hash,
+    EmpathyFTHandlerReadyCallback callback,
     gpointer user_data);
 
 void empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
-    EmpathyFTHandlerReadyCallback callback, gpointer user_data);
+    EmpathyFTHandlerReadyCallback callback,
+    gpointer user_data);
 void empathy_ft_handler_incoming_set_destination (EmpathyFTHandler *handler,
-    GFile *destination, gboolean use_hash);
+    GFile *destination,
+    gboolean use_hash);
 
 void empathy_ft_handler_start_transfer (EmpathyFTHandler *handler);
 void empathy_ft_handler_cancel_transfer (EmpathyFTHandler *handler);

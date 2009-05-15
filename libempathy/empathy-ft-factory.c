@@ -43,8 +43,8 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 static GObject *
 do_constructor (GType type,
-                guint n_props,
-                GObjectConstructParam *props)
+    guint n_props,
+    GObjectConstructParam *props)
 {
 	GObject *retval;
 
@@ -93,8 +93,8 @@ empathy_ft_factory_init (EmpathyFTFactory *self)
 
 static void
 ft_handler_outgoing_ready_cb (EmpathyFTHandler *handler,
-                              GError *error,
-                              gpointer user_data)
+    GError *error,
+    gpointer user_data)
 {
   EmpathyFTFactory *factory = user_data;
 
@@ -103,8 +103,8 @@ ft_handler_outgoing_ready_cb (EmpathyFTHandler *handler,
 
 static void
 ft_handler_incoming_ready_cb (EmpathyFTHandler *handler,
-                              GError *error,
-                              gpointer user_data)
+    GError *error,
+    gpointer user_data)
 {
   EmpathyFTFactory *factory = user_data;
 
@@ -121,9 +121,9 @@ empathy_ft_factory_dup_singleton (void)
 
 void
 empathy_ft_factory_new_transfer_outgoing (EmpathyFTFactory *factory,
-                                          EmpathyContact *contact,
-                                          GFile *source,
-                                          gboolean use_hash)
+    EmpathyContact *contact,
+    GFile *source,
+    gboolean use_hash)
 {
   g_return_if_fail (EMPATHY_IS_FT_FACTORY (factory));
   g_return_if_fail (EMPATHY_IS_CONTACT (contact));
@@ -135,7 +135,7 @@ empathy_ft_factory_new_transfer_outgoing (EmpathyFTFactory *factory,
 
 void
 empathy_ft_factory_claim_channel (EmpathyFTFactory *factory,
-                                  EmpathyDispatchOperation *operation)
+    EmpathyDispatchOperation *operation)
 {
   EmpathyTpFile *tp_file;
 
@@ -153,11 +153,11 @@ empathy_ft_factory_claim_channel (EmpathyFTFactory *factory,
 }
 
 void
-empathy_ft_factory_set_destination_for_incoming_handler
-                                                 (EmpathyFTFactory *factory,
-                                                  EmpathyFTHandler *handler,
-                                                  GFile *destination,
-                                                  gboolean use_hash)
+empathy_ft_factory_set_destination_for_incoming_handler (
+    EmpathyFTFactory *factory,
+    EmpathyFTHandler *handler,
+    GFile *destination,
+    gboolean use_hash)
 {
   g_return_if_fail (EMPATHY_IS_FT_FACTORY (factory));
   g_return_if_fail (EMPATHY_IS_FT_HANDLER (handler));

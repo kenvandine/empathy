@@ -117,10 +117,10 @@ G_DEFINE_TYPE (EmpathyTpFile, empathy_tp_file, G_TYPE_OBJECT);
 
 static void
 tp_file_get_state_cb (TpProxy *proxy,
-                      const GValue *value,
-                      const GError *error,
-                      gpointer user_data,
-                      GObject *weak_object)
+    const GValue *value,
+    const GError *error,
+    gpointer user_data,
+    GObject *weak_object)
 {
   EmpathyTpFilePriv *priv = GET_PRIV (weak_object);
 
@@ -136,10 +136,10 @@ tp_file_get_state_cb (TpProxy *proxy,
 
 static void
 tp_file_invalidated_cb (TpProxy       *proxy,
-                        guint          domain,
-                        gint           code,
-                        gchar         *message,
-                        EmpathyTpFile *tp_file)
+    guint          domain,
+    gint           code,
+    gchar         *message,
+    EmpathyTpFile *tp_file)
 {
   EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
 
@@ -173,7 +173,7 @@ ft_operation_close_clean (EmpathyTpFile *tp_file)
 
 static void
 ft_operation_close_with_error (EmpathyTpFile *tp_file,
-                               GError *error)
+    GError *error)
 {
   EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
 
@@ -194,8 +194,8 @@ ft_operation_close_with_error (EmpathyTpFile *tp_file,
 
 static void
 splice_stream_ready_cb (GObject *source,
-                        GAsyncResult *res,
-                        gpointer user_data)
+    GAsyncResult *res,
+    gpointer user_data)
 {
   EmpathyTpFile *tp_file;
   GError *error = NULL;
@@ -338,10 +338,10 @@ error_from_state_change_reason (TpFileTransferStateChangeReason reason)
 
 static void
 tp_file_state_changed_cb (TpChannel *proxy,
-                          guint state,
-                          guint reason,
-                          gpointer user_data,
-                          GObject *weak_object)
+    guint state,
+    guint reason,
+    gpointer user_data,
+    GObject *weak_object)
 {
   EmpathyTpFilePriv *priv = GET_PRIV (weak_object);
   GError *error;
@@ -381,9 +381,9 @@ tp_file_state_changed_cb (TpChannel *proxy,
 
 static void
 tp_file_transferred_bytes_changed_cb (TpChannel *proxy,
-                                      guint64 count,
-                                      gpointer user_data,
-                                      GObject *weak_object)
+    guint64 count,
+    gpointer user_data,
+    GObject *weak_object)
 {
   EmpathyTpFilePriv *priv = GET_PRIV (weak_object);
 
@@ -399,10 +399,10 @@ tp_file_transferred_bytes_changed_cb (TpChannel *proxy,
 
 static void
 ft_operation_provide_or_accept_file_cb (TpChannel *proxy,
-                                        const GValue *address,
-                                        const GError *error,
-                                        gpointer user_data,
-                                        GObject *weak_object)
+    const GValue *address,
+    const GError *error,
+    gpointer user_data,
+    GObject *weak_object)
 {
   EmpathyTpFile *tp_file = EMPATHY_TP_FILE (weak_object);
   GError *myerr = NULL;
@@ -457,8 +457,8 @@ ft_operation_provide_or_accept_file_cb (TpChannel *proxy,
 
 static void
 file_read_async_cb (GObject *source,
-                    GAsyncResult *res,
-                    gpointer user_data)
+    GAsyncResult *res,
+    gpointer user_data)
 {
   GValue nothing = { 0 };
   EmpathyTpFile *tp_file = user_data;
@@ -485,13 +485,14 @@ file_read_async_cb (GObject *source,
   tp_cli_channel_type_file_transfer_call_provide_file (
       priv->channel, -1,
       TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
-      &nothing, ft_operation_provide_or_accept_file_cb, NULL, NULL, G_OBJECT (tp_file));
+      &nothing, ft_operation_provide_or_accept_file_cb,
+      NULL, NULL, G_OBJECT (tp_file));
 }
 
 static void
 file_replace_async_cb (GObject *source,
-                       GAsyncResult *res,
-                       gpointer user_data)
+    GAsyncResult *res,
+    gpointer user_data)
 {
   GValue nothing = { 0 };
   EmpathyTpFile *tp_file = user_data;
@@ -524,9 +525,9 @@ file_replace_async_cb (GObject *source,
 
 static void
 channel_closed_cb (TpChannel *proxy,
-                   const GError *error,
-                   gpointer user_data,
-                   GObject *weak_object)
+    const GError *error,
+    gpointer user_data,
+    GObject *weak_object)
 {
   EmpathyTpFile *tp_file = EMPATHY_TP_FILE (weak_object);
   EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
@@ -541,7 +542,7 @@ channel_closed_cb (TpChannel *proxy,
 
 static void
 close_channel_internal (EmpathyTpFile *tp_file,
-                        gboolean cancel)
+    gboolean cancel)
 {
   EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
 
@@ -612,9 +613,9 @@ do_finalize (GObject *object)
 
 static void
 do_get_property (GObject *object,
-                 guint param_id,
-                 GValue *value,
-                 GParamSpec *pspec)
+    guint param_id,
+    GValue *value,
+    GParamSpec *pspec)
 {
   EmpathyTpFilePriv *priv = GET_PRIV (object);
 
@@ -634,9 +635,9 @@ do_get_property (GObject *object,
 
 static void
 do_set_property (GObject *object,
-                 guint param_id,
-                 const GValue *value,
-                 GParamSpec *pspec)
+    guint param_id,
+    const GValue *value,
+    GParamSpec *pspec)
 {
   EmpathyTpFilePriv *priv = GET_PRIV (object);
   switch (param_id)
@@ -655,8 +656,8 @@ do_set_property (GObject *object,
 
 static GObject *
 do_constructor (GType type,
-                guint n_props,
-                GObjectConstructParam *props)
+    guint n_props,
+    GObjectConstructParam *props)
 {
   GObject *file_obj;
   EmpathyTpFile *tp_file;
@@ -735,7 +736,8 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
  * Return value: a new #EmpathyTpFile
  */
 EmpathyTpFile *
-empathy_tp_file_new (TpChannel *channel, gboolean incoming)
+empathy_tp_file_new (TpChannel *channel,
+    gboolean incoming)
 {
   EmpathyTpFile *tp_file;
 
@@ -750,13 +752,13 @@ empathy_tp_file_new (TpChannel *channel, gboolean incoming)
 
 void
 empathy_tp_file_accept (EmpathyTpFile *tp_file,
-                        guint64 offset,
-                        GFile *gfile,
-                        GCancellable *cancellable,
-                        EmpathyTpFileProgressCallback progress_callback,
-                        gpointer progress_user_data,
-                        EmpathyTpFileOperationCallback op_callback,
-                        gpointer op_user_data)
+    guint64 offset,
+    GFile *gfile,
+    GCancellable *cancellable,
+    EmpathyTpFileProgressCallback progress_callback,
+    gpointer progress_user_data,
+    EmpathyTpFileOperationCallback op_callback,
+    gpointer op_user_data)
 {
   EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
 
@@ -777,12 +779,12 @@ empathy_tp_file_accept (EmpathyTpFile *tp_file,
 
 void
 empathy_tp_file_offer (EmpathyTpFile *tp_file,
-                       GFile *gfile,
-                       GCancellable *cancellable,
-                       EmpathyTpFileProgressCallback progress_callback,
-                       gpointer progress_user_data,
-                       EmpathyTpFileOperationCallback op_callback,
-                       gpointer op_user_data)
+    GFile *gfile,
+    GCancellable *cancellable,
+    EmpathyTpFileProgressCallback progress_callback,
+    gpointer progress_user_data,
+    EmpathyTpFileOperationCallback op_callback,
+    gpointer op_user_data)
 {
   EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
 

@@ -35,15 +35,18 @@ G_BEGIN_DECLS
 
 #define EMPATHY_TYPE_FT_FACTORY empathy_ft_factory_get_type()
 #define EMPATHY_FT_FACTORY(obj) \
-  (G_TYPE_CHECK_INSTANCE_CAST ((obj), EMPATHY_TYPE_FT_FACTORY, EmpathyFTFactory))
+  (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
+   EMPATHY_TYPE_FT_FACTORY, EmpathyFTFactory))
 #define EMPATHY_FT_FACTORY_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_CAST ((klass), EMPATHY_TYPE_FT_FACTORY, EmpathyFTFactoryClass))
+  (G_TYPE_CHECK_CLASS_CAST ((klass), \
+   EMPATHY_TYPE_FT_FACTORY, EmpathyFTFactoryClass))
 #define EMPATHY_IS_FT_FACTORY(obj) \
   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EMPATHY_TYPE_FT_FACTORY))
 #define EMPATHY_IS_FT_FACTORY_CLASS(klass) \
   (G_TYPE_CHECK_CLASS_TYPE ((klass), EMPATHY_TYPE_FT_FACTORY))
 #define EMPATHY_FT_FACTORY_GET_CLASS(obj) \
-  (G_TYPE_INSTANCE_GET_CLASS ((obj), EMPATHY_TYPE_FT_FACTORY, EmpathyFTFactoryClass))
+  (G_TYPE_INSTANCE_GET_CLASS ((obj), \
+   EMPATHY_TYPE_FT_FACTORY, EmpathyFTFactoryClass))
 
 typedef struct {
   GObject parent;
@@ -59,12 +62,16 @@ GType empathy_ft_factory_get_type (void);
 /* public methods */
 EmpathyFTFactory* empathy_ft_factory_dup_singleton (void);
 void empathy_ft_factory_new_transfer_outgoing (EmpathyFTFactory *factory,
-  EmpathyContact *contact, GFile *source, gboolean use_hash);
+    EmpathyContact *contact,
+    GFile *source,
+    gboolean use_hash);
 void empathy_ft_factory_claim_channel (EmpathyFTFactory *factory,
-  EmpathyDispatchOperation *operation);
-void empathy_ft_factory_set_destination_for_incoming_handler
-  (EmpathyFTFactory *factory, EmpathyFTHandler *handler,
-   GFile *destination, gboolean use_hash);
+    EmpathyDispatchOperation *operation);
+void empathy_ft_factory_set_destination_for_incoming_handler (
+    EmpathyFTFactory *factory,
+    EmpathyFTHandler *handler,
+    GFile *destination,
+    gboolean use_hash);
 
 G_END_DECLS
 

@@ -115,9 +115,9 @@ static gboolean do_hash_job_incoming (GIOSchedulerJob *job,
 /* GObject implementations */
 static void
 do_get_property (GObject *object,
-                 guint property_id,
-                 GValue *value,
-                 GParamSpec *pspec)
+    guint property_id,
+    GValue *value,
+    GParamSpec *pspec)
 {
   EmpathyFTHandlerPriv *priv = GET_PRIV (object);
 
@@ -142,9 +142,9 @@ do_get_property (GObject *object,
 
 static void
 do_set_property (GObject *object,
-                 guint property_id, 
-                 const GValue *value,
-                 GParamSpec *pspec)
+    guint property_id, 
+    const GValue *value,
+    GParamSpec *pspec)
 {
   EmpathyFTHandlerPriv *priv = GET_PRIV (object);
 
@@ -409,7 +409,7 @@ check_hash_incoming (EmpathyFTHandler *handler)
 
 static void
 emit_error_signal (EmpathyFTHandler *handler,
-                   const GError *error)
+    const GError *error)
 {
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
 
@@ -421,8 +421,8 @@ emit_error_signal (EmpathyFTHandler *handler,
 
 static void
 ft_transfer_operation_callback (EmpathyTpFile *tp_file,
-                                const GError *error,
-                                gpointer user_data)
+    const GError *error,
+    gpointer user_data)
 {
   EmpathyFTHandler *handler = user_data;
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
@@ -449,7 +449,7 @@ ft_transfer_operation_callback (EmpathyTpFile *tp_file,
 
 static void
 update_remaining_time_and_speed (EmpathyFTHandler *handler,
-                                 guint64 transferred_bytes)
+    guint64 transferred_bytes)
 {
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
   time_t elapsed_time, current_time;
@@ -476,8 +476,8 @@ update_remaining_time_and_speed (EmpathyFTHandler *handler,
 
 static void
 ft_transfer_progress_callback (EmpathyTpFile *tp_file,
-                               guint64 transferred_bytes,
-                               gpointer user_data)
+    guint64 transferred_bytes,
+    gpointer user_data)
 {
   EmpathyFTHandler *handler = user_data;
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
@@ -503,8 +503,8 @@ ft_transfer_progress_callback (EmpathyTpFile *tp_file,
 
 static void
 ft_handler_create_channel_cb (EmpathyDispatchOperation *operation,
-                              const GError *error,
-                              gpointer user_data)
+    const GError *error,
+    gpointer user_data)
 {
   EmpathyFTHandler *handler = user_data;
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
@@ -665,7 +665,8 @@ hash_job_done (gpointer user_data)
 
           error = g_error_new_literal (EMPATHY_FT_ERROR_QUARK,
               EMPATHY_FT_ERROR_HASH_MISMATCH,
-              _("The hash of the received file and the sent one do not match"));
+              _("The hash of the received file and the "
+                "sent one do not match"));
           goto cleanup;
         }
       else
@@ -720,8 +721,8 @@ emit_hashing_progress (gpointer user_data)
 
 static gboolean
 do_hash_job (GIOSchedulerJob *job,
-             GCancellable *cancellable,
-             gpointer user_data)
+    GCancellable *cancellable,
+    gpointer user_data)
 {
   HashingData *hash_data = user_data;
   gssize bytes_read;
@@ -770,8 +771,8 @@ out:
 
 static gboolean
 do_hash_job_incoming (GIOSchedulerJob *job,
-                      GCancellable *cancellable,
-                      gpointer user_data)
+    GCancellable *cancellable,
+    gpointer user_data)
 {
   HashingData *hash_data = user_data;
   EmpathyFTHandler *handler = hash_data->handler;
@@ -797,8 +798,8 @@ do_hash_job_incoming (GIOSchedulerJob *job,
 
 static void
 ft_handler_read_async_cb (GObject *source,
-                          GAsyncResult *res,
-                          gpointer user_data)
+    GAsyncResult *res,
+    gpointer user_data)
 {
   GFileInputStream *stream;
   GError *error = NULL;
@@ -883,8 +884,8 @@ callbacks_data_free (gpointer user_data)
 
 static void
 ft_handler_gfile_ready_cb (GObject *source,
-                           GAsyncResult *res,
-                           CallbacksData *cb_data)
+    GAsyncResult *res,
+    CallbacksData *cb_data)
 {
   GFileInfo *info;
   GError *error = NULL;
@@ -928,10 +929,10 @@ out:
 
 static void 
 contact_factory_contact_cb (EmpathyTpContactFactory *factory,
-                            EmpathyContact *contact,
-                            const GError *error,
-                            gpointer user_data,
-                            GObject *weak_object)
+    EmpathyContact *contact,
+    const GError *error,
+    gpointer user_data,
+    GObject *weak_object)
 {
   CallbacksData *cb_data = user_data;
   EmpathyFTHandler *handler = EMPATHY_FT_HANDLER (weak_object);
@@ -954,10 +955,10 @@ contact_factory_contact_cb (EmpathyTpContactFactory *factory,
 
 static void
 channel_get_all_properties_cb (TpProxy *proxy,
-                               GHashTable *properties,
-                               const GError *error,
-                               gpointer user_data,
-                               GObject *weak_object)
+    GHashTable *properties,
+    const GError *error,
+    gpointer user_data,
+    GObject *weak_object)
 {
   CallbacksData *cb_data = user_data;
   EmpathyFTHandler *handler = EMPATHY_FT_HANDLER (weak_object);
@@ -1008,10 +1009,10 @@ channel_get_all_properties_cb (TpProxy *proxy,
 
 void
 empathy_ft_handler_new_outgoing (EmpathyContact *contact,
-                                 GFile *source,
-                                 gboolean use_hash,
-                                 EmpathyFTHandlerReadyCallback callback,
-                                 gpointer user_data)
+    GFile *source,
+    gboolean use_hash,
+    EmpathyFTHandlerReadyCallback callback,
+    gpointer user_data)
 {
   EmpathyFTHandler *handler;
   CallbacksData *data;
@@ -1045,8 +1046,8 @@ empathy_ft_handler_new_outgoing (EmpathyContact *contact,
 
 void
 empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
-                                 EmpathyFTHandlerReadyCallback callback,
-                                 gpointer user_data)
+    EmpathyFTHandlerReadyCallback callback,
+    gpointer user_data)
 {
   EmpathyFTHandler *handler;
   TpChannel *channel;
@@ -1111,8 +1112,8 @@ empathy_ft_handler_cancel_transfer (EmpathyFTHandler *handler)
 
 void
 empathy_ft_handler_incoming_set_destination (EmpathyFTHandler *handler,
-                                             GFile *destination,
-                                             gboolean use_hash)
+    GFile *destination,
+    gboolean use_hash)
 {
   DEBUG ("Set incoming destination, use hash %s",
          use_hash ? "True" : "False");

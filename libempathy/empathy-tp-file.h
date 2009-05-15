@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  * Copyright (C) 2007-2009 Collabora Ltd.
  * Copyright (C) 2007 Marco Barisione <marco@barisione.org>
@@ -34,12 +33,17 @@ G_BEGIN_DECLS
 
 #define EMPATHY_TP_FILE_UNKNOWN_SIZE G_MAXUINT64
 
-#define EMPATHY_TYPE_TP_FILE         (empathy_tp_file_get_type ())
-#define EMPATHY_TP_FILE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EMPATHY_TYPE_TP_FILE, EmpathyTpFile))
-#define EMPATHY_TP_FILE_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EMPATHY_TYPE_TP_FILE, EmpathyTpFileClass))
-#define EMPATHY_IS_TP_FILE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EMPATHY_TYPE_TP_FILE))
-#define EMPATHY_IS_TP_FILE_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EMPATHY_TYPE_TP_FILE))
-#define EMPATHY_TP_FILE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EMPATHY_TYPE_TP_FILE, EmpathyTpFileClass))
+#define EMPATHY_TYPE_TP_FILE (empathy_tp_file_get_type ())
+#define EMPATHY_TP_FILE(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), \
+    EMPATHY_TYPE_TP_FILE, EmpathyTpFile))
+#define EMPATHY_TP_FILE_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), \
+    EMPATHY_TYPE_TP_FILE, EmpathyTpFileClass))
+#define EMPATHY_IS_TP_FILE(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), \
+    EMPATHY_TYPE_TP_FILE))
+#define EMPATHY_IS_TP_FILE_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), \
+    EMPATHY_TYPE_TP_FILE))
+#define EMPATHY_TP_FILE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), \
+    EMPATHY_TYPE_TP_FILE, EmpathyTpFileClass))
 
 typedef struct _EmpathyTpFile EmpathyTpFile;
 typedef struct _EmpathyTpFileClass EmpathyTpFileClass;
@@ -69,24 +73,25 @@ GType empathy_tp_file_get_type (void) G_GNUC_CONST;
 
 /* public methods */
 
-EmpathyTpFile * empathy_tp_file_new (TpChannel *channel, gboolean incoming);
+EmpathyTpFile * empathy_tp_file_new (TpChannel *channel,
+    gboolean incoming);
 
 void empathy_tp_file_accept (EmpathyTpFile *tp_file,
-  guint64 offset,
-  GFile *gfile,
-  GCancellable *cancellable,
-  EmpathyTpFileProgressCallback progress_callback,
-  gpointer progress_user_data,
-  EmpathyTpFileOperationCallback op_callback,
-  gpointer op_user_data);
+    guint64 offset,
+    GFile *gfile,
+    GCancellable *cancellable,
+    EmpathyTpFileProgressCallback progress_callback,
+    gpointer progress_user_data,
+    EmpathyTpFileOperationCallback op_callback,
+    gpointer op_user_data);
 
 void empathy_tp_file_offer (EmpathyTpFile *tp_file,
-  GFile *gfile,
-  GCancellable *cancellable,
-  EmpathyTpFileProgressCallback progress_callback,
-  gpointer progress_user_data,
-  EmpathyTpFileOperationCallback op_callback,
-  gpointer op_user_data);
+    GFile *gfile,
+    GCancellable *cancellable,
+    EmpathyTpFileProgressCallback progress_callback,
+    gpointer progress_user_data,
+    EmpathyTpFileOperationCallback op_callback,
+    gpointer op_user_data);
 
 void empathy_tp_file_cancel (EmpathyTpFile *tp_file);
 void empathy_tp_file_close (EmpathyTpFile *tp_file);
