@@ -17,7 +17,7 @@
  * License along with this program; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
- * 
+ *
  * Authors: Martyn Russell <martyn@imendio.com>
  *          Xavier Claessens <xclaesse@gmail.com>
  */
@@ -217,9 +217,9 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 	profile = mc_account_get_profile (account);
 	config_ui = mc_profile_get_configuration_ui (profile);
 	if (!tp_strdiff (config_ui, "jabber")) {
-		dialog->settings_widget = 
+		dialog->settings_widget =
 			empathy_account_widget_jabber_new (account);
-	} 
+	}
 	else if (!tp_strdiff (config_ui, "msn")) {
 		dialog ->settings_widget =
 			empathy_account_widget_msn_new (account);
@@ -253,7 +253,7 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 			empathy_account_widget_groupwise_new (account);
 	}
 	else {
-		dialog->settings_widget = 
+		dialog->settings_widget =
 			empathy_account_widget_generic_new (account);
 	}
 
@@ -469,7 +469,7 @@ accounts_dialog_model_pixbuf_data_func (GtkTreeViewColumn    *tree_column,
 
 	if (pixbuf) {
 		if (status == TP_CONNECTION_STATUS_DISCONNECTED ||
-		    (status == TP_CONNECTION_STATUS_CONNECTING && 
+		    (status == TP_CONNECTION_STATUS_CONNECTING &&
 		     !dialog->connecting_show)) {
 			GdkPixbuf *modded_pixbuf;
 
@@ -954,10 +954,10 @@ accounts_dialog_button_remove_clicked_cb (GtkWidget            *button,
 		   "they will still be available."));
 
 	gtk_dialog_add_button (GTK_DIALOG (message_dialog),
-			       GTK_STOCK_CANCEL, 
+			       GTK_STOCK_CANCEL,
 			       GTK_RESPONSE_NO);
 	gtk_dialog_add_button (GTK_DIALOG (message_dialog),
-			       GTK_STOCK_REMOVE, 
+			       GTK_STOCK_REMOVE,
 			       GTK_RESPONSE_YES);
 
 	gtk_widget_show (message_dialog);
