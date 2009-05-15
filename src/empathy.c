@@ -229,7 +229,7 @@ create_salut_account (void)
 	GError     *error = NULL;
 
 	/* Check if we already created a salut account */
-	empathy_conf_get_bool (empathy_conf_get(),
+	empathy_conf_get_bool (empathy_conf_get (),
 			       EMPATHY_PREFS_SALUT_ACCOUNT_CREATED,
 			       &salut_created);
 	if (salut_created) {
@@ -462,7 +462,7 @@ main (int argc, char *argv[])
 
 	empathy_gtk_init ();
 	g_set_application_name (_(PACKAGE_NAME));
-	g_setenv("PULSE_PROP_media.role", "phone", TRUE);
+	g_setenv ("PULSE_PROP_media.role", "phone", TRUE);
 
 	gst_init (&argc, &argv);
 
@@ -533,7 +533,7 @@ main (int argc, char *argv[])
 				 use_nm_notify_cb, idle);
 
 	/* Autoconnect */
-	empathy_conf_get_bool (empathy_conf_get(),
+	empathy_conf_get_bool (empathy_conf_get (),
 			       EMPATHY_PREFS_AUTOCONNECT,
 			       &autoconnect);
 	if (autoconnect && ! no_connect &&
