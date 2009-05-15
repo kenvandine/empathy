@@ -18,6 +18,8 @@ python /usr/share/pygobject/2.0/codegen/h2def.py	\
 	empathy-debug.h				\
 	empathy-dispatcher.h			\
 	empathy-dispatch-operation.h		\
+	empathy-ft-factory.h			\
+	empathy-ft-handler.h			\
 	empathy-idle.h				\
 	empathy-irc-network.h			\
 	empathy-irc-network-manager.h		\

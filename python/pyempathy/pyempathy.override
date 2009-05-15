@@ -14,6 +14,8 @@ headers
 #include "empathy-debug.h"
 #include "empathy-dispatcher.h"
 #include "empathy-enum-types.h"
+#include "empathy-ft-factory.h"
+#include "empathy-ft-handler.h"
 #include "empathy-idle.h"
 #include "empathy-irc-network.h"
 #include "empathy-irc-network-manager.h"

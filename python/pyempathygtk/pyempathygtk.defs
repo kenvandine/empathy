@@ -1992,6 +1992,14 @@
   )
 )
 
+(define-function receive_file_with_file_chooser
+  (c-name "empathy_receive_file_with_file_chooser")
+  (return-type "none")
+  (parameters
+    '("EmpathyFTHandler*" "handler")
+  )
+)
+
 (define-function sound_play
   (c-name "empathy_sound_play")
   (return-type "none")
