@@ -3,7 +3,7 @@
  * Copyright (C) 2007 The Free Software Foundation
  * Copyright (C) 2008 Marco Barisione <marco@barisione.org>
  *
- * Based on evince code (shell/ev-sidebar.h) by: 
+ * Based on evince code (shell/ev-sidebar.h) by:
  * 	- Jonathan Blandford <jrb@alum.mit.edu>
  *
  * Base on eog code (src/eog-sidebar.c) by:
@@ -53,10 +53,10 @@ struct _EmpathySidebarClass
 {
   GtkVBoxClass base_class;
 
-  void (* page_added)   (EmpathySidebar *sidebar, 
+  void (* page_added)   (EmpathySidebar *sidebar,
                          GtkWidget *main_widget);
 
-  void (* page_removed) (EmpathySidebar *sidebar, 
+  void (* page_removed) (EmpathySidebar *sidebar,
                          GtkWidget *main_widget);
 };
 

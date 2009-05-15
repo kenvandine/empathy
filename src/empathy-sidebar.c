@@ -3,7 +3,7 @@
  * Copyright (C) 2007 The Free Software Foundation
  * Copyright (C) 2008 Marco Barisione <marco@barisione.org>
  *
- * Based on evince code (shell/ev-sidebar.c) by: 
+ * Based on evince code (shell/ev-sidebar.c) by:
  * 	- Jonathan Blandford <jrb@alum.mit.edu>
  *
  * Base on eog code (src/eog-sidebar.c) by:
@@ -102,7 +102,7 @@ empathy_sidebar_select_page (EmpathySidebar *sidebar,
   gint index;
 
   gtk_tree_model_get (sidebar->priv->page_model, iter,
-      PAGE_COLUMN_TITLE, &title, 
+      PAGE_COLUMN_TITLE, &title,
       PAGE_COLUMN_NOTEBOOK_INDEX, &index,
       -1);
 
@@ -397,7 +397,7 @@ empathy_sidebar_init (EmpathySidebar *sidebar)
   gtk_widget_show (hbox);
 
   sidebar->priv->select_button = gtk_toggle_button_new ();
-  gtk_button_set_relief (GTK_BUTTON (sidebar->priv->select_button), 
+  gtk_button_set_relief (GTK_BUTTON (sidebar->priv->select_button),
       GTK_RELIEF_NONE);
 
   g_signal_connect (sidebar->priv->select_button, "button_press_event",
@@ -514,7 +514,7 @@ empathy_sidebar_add_page (EmpathySidebar *sidebar,
       -1);
 
   gtk_list_store_move_before (GTK_LIST_STORE(sidebar->priv->page_model),
-      &iter, 
+      &iter,
       NULL);
 
   /* Set the first item added as active */
@@ -571,15 +571,15 @@ empathy_sidebar_remove_page (EmpathySidebar *sidebar,
 
   if (valid)
     {
-      gtk_notebook_remove_page (GTK_NOTEBOOK (sidebar->priv->notebook), 
+      gtk_notebook_remove_page (GTK_NOTEBOOK (sidebar->priv->notebook),
           index);
 
       gtk_container_remove (GTK_CONTAINER (sidebar->priv->menu), menu_item);
 
-      gtk_list_store_remove (GTK_LIST_STORE (sidebar->priv->page_model), 
+      gtk_list_store_remove (GTK_LIST_STORE (sidebar->priv->page_model),
           &iter);
 
-      g_signal_emit (G_OBJECT (sidebar), 
+      g_signal_emit (G_OBJECT (sidebar),
           signals[SIGNAL_PAGE_REMOVED], 0, main_widget);
     }
 }
