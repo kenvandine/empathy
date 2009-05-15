@@ -396,10 +396,10 @@ empathy_import_dialog_show (GtkWindow *parent,
 
       return;
     }
-  
+
   /* We have accounts, let's display the window with them */
   dialog = g_slice_new0 (EmpathyImportDialog);
-  dialog->accounts = accounts;  
+  dialog->accounts = accounts;
 
   filename = empathy_file_lookup ("empathy-import-dialog.ui", "src");
   gui = empathy_builder_get_file (filename,
