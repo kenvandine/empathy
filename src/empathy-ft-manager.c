@@ -271,7 +271,7 @@ remove_finished_transfer_foreach (gpointer key,
   return FALSE;
 }
 
-static char *
+static gchar *
 ft_manager_format_progress_bytes_and_percentage (guint64 current,
                                                  guint64 total,
                                                  gdouble speed,
@@ -307,7 +307,7 @@ ft_manager_format_progress_bytes_and_percentage (guint64 current,
   return retval;
 }
 
-static char *
+static gchar *
 ft_manager_format_contact_info (EmpathyFTHandler *handler)
 {
   gboolean incoming;
@@ -331,7 +331,7 @@ ft_manager_format_contact_info (EmpathyFTHandler *handler)
   return retval;
 }
 
-static char *
+static gchar *
 ft_manager_format_error_message (EmpathyFTHandler *handler,
                                  const GError *error)
 {
