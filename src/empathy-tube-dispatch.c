@@ -149,7 +149,7 @@ empathy_tube_dispatch_constructed (GObject *object)
   const gchar *channel_type;
   TpTubeType type;
 
-  priv->dbus = tp_dbus_daemon_new (tp_get_bus());
+  priv->dbus = tp_dbus_daemon_new (tp_get_bus ());
 
   channel = empathy_dispatch_operation_get_channel (priv->operation);
   properties = tp_channel_borrow_immutable_properties (channel);

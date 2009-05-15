@@ -44,11 +44,11 @@ struct _EmpathyTubeDispatch {
     GObject parent;
 };
 
-GType empathy_tube_dispatch_get_type(void);
+GType empathy_tube_dispatch_get_type (void);
 
 /* TYPE MACROS */
 #define EMPATHY_TYPE_TUBE_DISPATCH \
-  (empathy_tube_dispatch_get_type())
+  (empathy_tube_dispatch_get_type ())
 #define EMPATHY_TUBE_DISPATCH(obj) \
   (G_TYPE_CHECK_INSTANCE_CAST((obj), EMPATHY_TYPE_TUBE_DISPATCH, \
     EmpathyTubeDispatch))
