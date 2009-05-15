@@ -154,7 +154,7 @@ empathy_chatrooms_window_show (GtkWindow *parent)
 	empathy_account_chooser_set_filter (EMPATHY_ACCOUNT_CHOOSER (window->account_chooser),
 					    empathy_account_chooser_filter_is_connected,
 					    NULL);
-	g_object_set (window->account_chooser, 
+	g_object_set (window->account_chooser,
 		      "has-all-option", TRUE,
 		      NULL);
 	empathy_account_chooser_set_account (EMPATHY_ACCOUNT_CHOOSER (window->account_chooser), NULL);
@@ -222,7 +222,7 @@ chatrooms_window_model_setup (EmpathyChatroomsWindow *window)
 
 	gtk_tree_view_set_model (view, GTK_TREE_MODEL (store));
 
-	/* Selection */ 
+	/* Selection */
 	selection = gtk_tree_view_get_selection (view);
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
 
@@ -273,8 +273,8 @@ chatrooms_window_model_add_columns (EmpathyChatroomsWindow *window)
 
 	/* Room */
 	cell = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes (_("Room"), cell, 
-							   "text", COL_ROOM, 
+	column = gtk_tree_view_column_new_with_attributes (_("Room"), cell,
+							   "text", COL_ROOM,
 							   NULL);
 	count = gtk_tree_view_append_column (view, column);
 	gtk_tree_view_column_set_sort_column_id (column, count - 1);
@@ -293,7 +293,7 @@ chatrooms_window_model_add_columns (EmpathyChatroomsWindow *window)
 			  window);
 
 	/* Sort model */
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model), 0, 
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model), 0,
 					      GTK_SORT_ASCENDING);
 }
 
@@ -323,7 +323,7 @@ chatrooms_window_model_refresh_data (EmpathyChatroomsWindow *window,
 	chatrooms = empathy_chatroom_manager_get_chatrooms (window->manager, account);
 
 	/* Sort out columns, we only show the server column for
-	 * selected protocol types, such as Jabber. 
+	 * selected protocol types, such as Jabber.
 	 */
 	if (account) {
 		column = gtk_tree_view_get_column (view, window->room_column);
