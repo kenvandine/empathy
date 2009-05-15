@@ -877,6 +877,8 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
       factory = empathy_tp_contact_factory_dup_singleton (connection);
       empathy_tp_contact_factory_get_from_handle (factory, handle,
         event_manager_ft_got_contact_cb, approval, NULL, G_OBJECT (manager));
+
+      g_object_unref (factory);
     }
   else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAM_TUBE) ||
       !tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_DBUS_TUBE))
