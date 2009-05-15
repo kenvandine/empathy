@@ -668,7 +668,7 @@ preferences_widget_sync_string (const gchar *key, GtkWidget *widget)
 				enum_class = G_ENUM_CLASS (g_type_class_peek (type));
 				enum_value = g_enum_get_value_by_nick (enum_class, value);
 				
-				if (enum_value) { 
+				if (enum_value) {
 					list = gtk_radio_button_get_group (GTK_RADIO_BUTTON (widget));
 					toggle_widget = g_slist_nth_data (list, enum_value->value);
 					gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle_widget), TRUE);
@@ -1003,7 +1003,7 @@ preferences_radio_button_toggled_cb (GtkWidget *button,
 		enum_value = g_enum_get_value (enum_class, g_slist_index (group, button));
 		
 		if (!enum_value) {
-			g_warning ("No GEnumValue for EmpathyContactListSort with GtkRadioButton index:%d", 
+			g_warning ("No GEnumValue for EmpathyContactListSort with GtkRadioButton index:%d",
 				   g_slist_index (group, button));
 			return;
 		}
