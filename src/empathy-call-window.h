@@ -38,11 +38,11 @@ struct _EmpathyCallWindow {
     GtkWindow parent;
 };
 
-GType empathy_call_window_get_type(void);
+GType empathy_call_window_get_type (void);
 
 /* TYPE MACROS */
 #define EMPATHY_TYPE_CALL_WINDOW \
-  (empathy_call_window_get_type())
+  (empathy_call_window_get_type ())
 #define EMPATHY_CALL_WINDOW(obj) \
   (G_TYPE_CHECK_INSTANCE_CAST((obj), EMPATHY_TYPE_CALL_WINDOW, \
     EmpathyCallWindow))
