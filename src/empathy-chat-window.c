@@ -954,8 +954,8 @@ chat_window_new_message_cb (EmpathyChat       *chat,
 		return;
 	}
 
-	/* If empathy_chat_is_room() returns TRUE, that means it's a named MUC.
-	 * If empathy_chat_get_remote_contact() returns NULL, that means it's
+	/* If empathy_chat_is_room () returns TRUE, that means it's a named MUC.
+	 * If empathy_chat_get_remote_contact () returns NULL, that means it's
 	 * an unamed MUC (msn-like).
 	 * In case of a MUC, we set urgency only if the message contains our
 	 * alias. */
@@ -1213,7 +1213,7 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		/* We should return TRUE to remove the data when doing
 		 * GDK_ACTION_MOVE, but we don't here otherwise it has
 		 * weird consequences, and we handle that internally
-		 * anyway with add_chat() and remove_chat().
+		 * anyway with add_chat () and remove_chat ().
 		 */
 		gtk_drag_finish (context, TRUE, FALSE, time);
 	}
@@ -1223,7 +1223,7 @@ chat_window_drag_data_received (GtkWidget        *widget,
 
 		DEBUG ("DND tab");
 
-		chat = (void*) selection->data;
+		chat = (void *) selection->data;
 		old_window = chat_window_find_chat (*chat);
 
 		if (old_window) {
@@ -1244,7 +1244,7 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		/* We should return TRUE to remove the data when doing
 		 * GDK_ACTION_MOVE, but we don't here otherwise it has
 		 * weird consequences, and we handle that internally
-		 * anyway with add_chat() and remove_chat().
+		 * anyway with add_chat () and remove_chat ().
 		 */
 		gtk_drag_finish (context, TRUE, FALSE, time);
 	} else {
