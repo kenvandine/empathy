@@ -45,6 +45,16 @@ G_BEGIN_DECLS
 #define EMPATHY_TP_FILE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), \
     EMPATHY_TYPE_TP_FILE, EmpathyTpFileClass))
 
+#define EMPATHY_FT_ERROR_QUARK g_quark_from_static_string ("EmpathyFTError")
+
+typedef enum {
+	EMPATHY_FT_ERROR_FAILED,
+	EMPATHY_FT_ERROR_HASH_MISMATCH,
+	EMPATHY_FT_ERROR_TP_ERROR,
+	EMPATHY_FT_ERROR_SOCKET,
+	EMPATHY_FT_ERROR_NOT_SUPPORTED
+} EmpathyFTErrorEnum;
+
 typedef struct _EmpathyTpFile EmpathyTpFile;
 typedef struct _EmpathyTpFileClass EmpathyTpFileClass;
 
