@@ -17,7 +17,7 @@
  * License along with this program; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
- * 
+ *
  * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
 
@@ -165,7 +165,7 @@ main_window_flash_foreach (GtkTreeModel *model,
 
 	/* To make sure the parent is shown correctly, we emit
 	 * the row-changed signal on the parent so it prompts
-	 * it to be refreshed by the filter func. 
+	 * it to be refreshed by the filter func.
 	 */
 	if (gtk_tree_model_iter_parent (model, &parent_iter, iter)) {
 		parent_path = gtk_tree_model_get_path (model, &parent_iter);
@@ -1053,7 +1053,7 @@ main_window_notify_sort_criterium_cb (EmpathyConf       *conf,
 		g_free (str);
 
 		if (enum_value) {
-			empathy_contact_list_store_set_sort_criterium (window->list_store, 
+			empathy_contact_list_store_set_sort_criterium (window->list_store,
 								       enum_value->value);
 		}
 	}
