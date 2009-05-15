@@ -996,8 +996,6 @@ channel_get_all_properties_cb (TpProxy *proxy,
   priv->description = g_value_dup_string (
       g_hash_table_lookup (properties, "Description"));
 
-  g_hash_table_destroy (properties);
-
   c_factory = empathy_tp_contact_factory_dup_singleton
       (tp_channel_borrow_connection (TP_CHANNEL (proxy)));
   c_handle = tp_channel_get_handle (TP_CHANNEL (proxy), NULL);
