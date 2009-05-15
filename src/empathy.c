@@ -133,7 +133,14 @@ dispatch_cb (EmpathyDispatcher *dispatcher,
 		EmpathyFTFactory *factory;
 
 		factory = empathy_ft_factory_dup_singleton ();
-		empathy_ft_factory_claim_channel (factory, operation);
+
+		/* if the operation is not incoming, don't claim it,
+		 * as it might have been triggered by another client, and
+		 * we are observing it.
+		 */
+		if (empathy_dispatch_operation_is_incoming (operation)) {
+			empathy_ft_factory_claim_channel (factory, operation);
+		}
 	}
 }
 
