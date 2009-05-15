@@ -41,11 +41,11 @@ struct _EmpathyCallWindowFullscreen {
   GtkWidget *leave_fullscreen_button;
 };
 
-GType empathy_call_window_fullscreen_get_type(void);
+GType empathy_call_window_fullscreen_get_type (void);
 
 /* TYPE MACROS */
 #define EMPATHY_TYPE_CALL_WINDOW_FULLSCREEN \
-  (empathy_call_window_fullscreen_get_type())
+  (empathy_call_window_fullscreen_get_type ())
 #define EMPATHY_CALL_WINDOW_FULLSCREEN(obj) \
   (G_TYPE_CHECK_INSTANCE_CAST((obj), EMPATHY_TYPE_CALL_WINDOW_FULLSCREEN, \
     EmpathyCallWindowFullscreen))
