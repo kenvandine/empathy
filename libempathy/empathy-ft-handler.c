@@ -726,7 +726,7 @@ do_hash_job (GIOSchedulerJob *job,
 
 again:
   if (hash_data->buffer == NULL)
-    hash_data->buffer = g_malloc0 (BUFFER_SIZE);
+    hash_data->buffer = g_slice_alloc0 (BUFFER_SIZE);
 
   bytes_read = g_input_stream_read (hash_data->stream, hash_data->buffer,
                                     BUFFER_SIZE, cancellable, &error);
@@ -742,7 +742,7 @@ again:
       g_io_scheduler_job_send_to_mainloop_async (job, emit_hashing_progress,
           hash_data, NULL);
 
-      g_free (hash_data->buffer);
+      g_slice_free (guchar, hash_data->buffer);
       hash_data->buffer = NULL;
 
       goto again;
