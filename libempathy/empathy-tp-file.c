@@ -375,6 +375,7 @@ tp_file_state_changed_cb (TpChannel *proxy,
     {
       error = error_from_state_change_reason (priv->state_change_reason);
       ft_operation_close_with_error (EMPATHY_TP_FILE (weak_object), error);
+      g_clear_error (&error);
     }
 }
 

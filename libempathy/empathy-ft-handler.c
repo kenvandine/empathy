@@ -663,7 +663,7 @@ hash_job_done (gpointer user_data)
                  "received %s, calculated %s", priv->content_hash,
                  g_checksum_get_string (hash_data->checksum));
 
-          hash_data->error = g_error_new_literal (EMPATHY_FT_ERROR_QUARK,
+          error = g_error_new_literal (EMPATHY_FT_ERROR_QUARK,
               EMPATHY_FT_ERROR_HASH_MISMATCH,
               _("The hash of the received file and the sent one do not match"));
           goto cleanup;
@@ -691,6 +691,7 @@ cleanup:
   if (error != NULL)
     {
       emit_error_signal (handler, error);
+      g_clear_error (&error);
     }
   else
     {
@@ -852,6 +853,7 @@ ft_handler_complete_request (EmpathyFTHandler *handler)
           _("File transfer not supported by remote contact"));
 
       emit_error_signal (handler, myerr);
+      g_clear_error (&myerr);
 
       return;
     }
