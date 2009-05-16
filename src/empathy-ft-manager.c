@@ -46,18 +46,6 @@
 
 #include "empathy-ft-manager.h"
 
-
-/**
- * SECTION:empathy-ft-manager
- * @short_description: File transfer dialog
- * @see_also: #EmpathyTpFile, empathy_dispatcher_send_file()
- * @include: libempthy-gtk/empathy-ft-manager.h
- *
- * The #EmpathyFTManager object represents the file transfer dialog,
- * it can show multiple file transfers at the same time (added
- * with empathy_ft_manager_add_tp_file()).
- */
-
 enum
 {
   COL_PERCENT,
@@ -67,11 +55,6 @@ enum
   COL_FT_OBJECT
 };
 
-/**
- * EmpathyFTManagerPriv:
- *
- * Private fields of the #EmpathyFTManager class.
- */
 typedef struct {
   GtkTreeModel *model;
   GHashTable *ft_handler_to_row_ref;
