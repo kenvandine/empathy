@@ -28,6 +28,23 @@
 #include "empathy-marshal.h"
 #include "empathy-utils.h"
 
+/**
+ * SECTION:empathy-ft-factory
+ * @title:EmpathyFTFactory
+ * @short_description: creates #EmpathyFTHandler objects
+ * @include: libempathy/empathy-ft-factory.h
+ *
+ * #EmpathyFTFactory takes care of the creation of the #EmpathyFTHandler
+ * objects used for file transfer. As the creation of the handlers is
+ * async, a client will have to connect to the ::new-ft-handler signal
+ * to receive the handler.
+ * In case of an incoming file transfer, the handler will need the destination
+ * file before being useful; as this is usually decided by the user (e.g. with
+ * a file selector), a ::new-incoming-transfer is emitted by the factory when
+ * a destination file is needed, which can be set later with
+ * empathy_ft_factory_set_destination_for_incoming_handler().
+ */
+
 G_DEFINE_TYPE (EmpathyFTFactory, empathy_ft_factory, G_TYPE_OBJECT);
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyFTFactory)
@@ -68,6 +85,17 @@ empathy_ft_factory_class_init (EmpathyFTFactoryClass *klass)
 
   object_class->constructor = do_constructor;
 
+  /**
+   * EmpathyFTFactory::new-ft-handler
+   * @factory: the object which received the signal
+   * @handler: the handler made available by the factory
+   * @error: a #GError or %NULL
+   *
+   * The signal is emitted when a new #EmpathyFTHandler is available.
+   * Note that @handler is never %NULL even if @error is set, as you might want
+   * to display the error in an UI; in that case, the handler won't support
+   * any transfer.
+   */
   signals[NEW_FT_HANDLER] =
     g_signal_new ("new-ft-handler",
       G_TYPE_FROM_CLASS (klass),
@@ -76,6 +104,21 @@ empathy_ft_factory_class_init (EmpathyFTFactoryClass *klass)
       _empathy_marshal_VOID__OBJECT_POINTER,
       G_TYPE_NONE, 2, EMPATHY_TYPE_FT_HANDLER, G_TYPE_POINTER);
 
+  /**
+   * EmpathyFTFactory::new-incoming-transfer
+   * @factory: the object which received the signal
+   * @handler: the incoming handler being constructed
+   * @error: a #GError or %NULL
+   *
+   * The signal is emitted when a new incoming #EmpathyFTHandler is being
+   * constructed, and needs a destination #GFile to be useful.
+   * Clients that connect to this signal will have to call
+   * empathy_ft_factory_set_destination_for_incoming_handler() when they
+   * have a #GFile.
+   * Note that @handler is never %NULL even if @error is set, as you might want
+   * to display the error in an UI; in that case, the handler won't support
+   * any transfer.
+   */
   signals[NEW_INCOMING_TRANSFER] =
     g_signal_new ("new-incoming-transfer",
       G_TYPE_FROM_CLASS (klass),
@@ -113,12 +156,33 @@ ft_handler_incoming_ready_cb (EmpathyFTHandler *handler,
 
 /* public methods */
 
+/**
+ * empathy_ft_factory_dup_singleton:
+ *
+ * Gives the caller a reference to the #EmpathyFTFactory singleton,
+ * (creating it if necessary).
+ *
+ * Return value: an #EmpathyFTFactory object
+ */
 EmpathyFTFactory*
 empathy_ft_factory_dup_singleton (void)
 {
   return g_object_new (EMPATHY_TYPE_FT_FACTORY, NULL);
 }
 
+/**
+ * empathy_ft_factory_new_transfer_outgoing:
+ * @factory: an #EmpathyFTFactory
+ * @contact: the #EmpathyContact destination of the transfer
+ * @source: the #GFile to be transferred to @contact
+ * @use_hash: whether the handler should try to use checksum to validate
+ * the transfer
+ *
+ * Trigger the creation of an #EmpathyFTHandler object to send @source to
+ * the specified @contact. Note that it's not guaranteed that setting
+ * @use_hash to TRUE will trigger checksumming, as that is not supported
+ * by all the underlying connection managers.
+ */
 void
 empathy_ft_factory_new_transfer_outgoing (EmpathyFTFactory *factory,
     EmpathyContact *contact,
@@ -133,6 +197,14 @@ empathy_ft_factory_new_transfer_outgoing (EmpathyFTFactory *factory,
       ft_handler_outgoing_ready_cb, factory);
 }
 
+/**
+ * empathy_ft_factory_claim_channel:
+ * @factory: an #EmpathyFTFactory
+ * @operation: the #EmpathyDispatchOperation wrapping the channel
+ *
+ * Let the @factory claim the channel, starting the creation of a new
+ * incoming #EmpathyFTHandler.
+ */
 void
 empathy_ft_factory_claim_channel (EmpathyFTFactory *factory,
     EmpathyDispatchOperation *operation)
@@ -152,6 +224,17 @@ empathy_ft_factory_claim_channel (EmpathyFTFactory *factory,
   empathy_dispatch_operation_claim (operation);
 }
 
+/**
+ * empathy_ft_factory_set_destination_for_incoming_handler:
+ * @factory: an #EmpathyFTFactory
+ * @handler: the #EmpathyFTHandler to set the destination of
+ * @destination: the #GFile destination of the transfer
+ * @use_hash: whether the handler should try to use checksum to validate
+ * the transfer
+ *
+ * Sets @destination as destination file for the transfer. After the call of
+ * this method, the ::new-ft-handler will be emitted for the incoming handler.
+ */
 void
 empathy_ft_factory_set_destination_for_incoming_handler (
     EmpathyFTFactory *factory,
