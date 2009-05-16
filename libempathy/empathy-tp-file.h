@@ -31,8 +31,6 @@
 
 G_BEGIN_DECLS
 
-#define EMPATHY_TP_FILE_UNKNOWN_SIZE G_MAXUINT64
-
 #define EMPATHY_TYPE_TP_FILE (empathy_tp_file_get_type ())
 #define EMPATHY_TP_FILE(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), \
     EMPATHY_TYPE_TP_FILE, EmpathyTpFile))
