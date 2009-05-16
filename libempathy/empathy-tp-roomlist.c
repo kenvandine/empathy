@@ -458,7 +458,7 @@ empathy_tp_roomlist_class_init (EmpathyTpRoomlistClass *klass)
 	signals[ERROR] =
 		g_signal_new ("error",
 			      G_TYPE_FROM_CLASS (klass),
-			      G_SIGNAL_RUN_LAST,
+			      G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
 			      0,
 			      NULL, NULL,
 			      g_cclosure_marshal_VOID__POINTER,
