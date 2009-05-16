@@ -30,6 +30,7 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <glib/gprintf.h>
 
 #include <libmissioncontrol/mission-control.h>
 #include <libmissioncontrol/mc-account.h>
@@ -97,6 +98,12 @@ static void     new_chatroom_dialog_new_room_cb                     (EmpathyTpRo
 								     EmpathyNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_listing_cb                      (EmpathyTpRoomlist        *room_list,
 								     gpointer                  unused,
+								     EmpathyNewChatroomDialog *dialog);
+static void     start_listing_error_cb                              (EmpathyTpRoomlist        *room_list,
+								     GError                   *error,
+								     EmpathyNewChatroomDialog *dialog);
+static void     stop_listing_error_cb                               (EmpathyTpRoomlist        *room_list,
+								     GError                   *error,
 								     EmpathyNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_model_clear                     (EmpathyNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_model_row_activated_cb          (GtkTreeView             *tree_view,
@@ -411,6 +418,12 @@ new_chatroom_dialog_account_changed_cb (GtkComboBox             *combobox,
 		g_signal_connect (dialog->room_list, "notify::is-listing",
 				  G_CALLBACK (new_chatroom_dialog_listing_cb),
 				  dialog);
+		g_signal_connect (dialog->room_list, "error::start",
+				  G_CALLBACK (start_listing_error_cb),
+				  dialog);
+		g_signal_connect (dialog->room_list, "error::stop",
+				  G_CALLBACK (stop_listing_error_cb),
+				  dialog);
 
 		expanded = gtk_expander_get_expanded (GTK_EXPANDER (dialog->expander_browse));
 		if (expanded) {
@@ -484,6 +497,22 @@ new_chatroom_dialog_new_room_cb (EmpathyTpRoomlist        *room_list,
 
 	g_free (members);
 	g_free (tooltip);
+}
+
+static void
+start_listing_error_cb (EmpathyTpRoomlist        *room_list,
+			GError                   *error,
+			EmpathyNewChatroomDialog *dialog)
+{
+	g_printf("Error when starting listing of chatrooms.");
+}
+
+static void
+stop_listing_error_cb (EmpathyTpRoomlist        *room_list,
+		       GError                   *error,
+		       EmpathyNewChatroomDialog *dialog)
+{
+	g_printf("Error when stopping listing of chatrooms.");
 }
 
 static void
