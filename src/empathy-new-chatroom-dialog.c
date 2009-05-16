@@ -433,6 +433,8 @@ new_chatroom_dialog_account_changed_cb (GtkComboBox             *combobox,
 
 		expanded = gtk_expander_get_expanded (GTK_EXPANDER (dialog->expander_browse));
 		if (expanded) {
+			gtk_widget_hide (dialog->viewport_error);
+			gtk_widget_set_sensitive (dialog->treeview, TRUE);
 			new_chatroom_dialog_browse_start (dialog);
 		}
 
@@ -519,6 +521,7 @@ start_listing_error_cb (EmpathyTpRoomlist        *room_list,
 {
 	gtk_label_set_text (GTK_LABEL (dialog->label_error_message), "Could not start room listing");
 	gtk_widget_show_all (dialog->viewport_error);
+	gtk_widget_set_sensitive (dialog->treeview, FALSE);
 }
 
 static void
@@ -528,6 +531,7 @@ stop_listing_error_cb (EmpathyTpRoomlist        *room_list,
 {
 	gtk_label_set_text (GTK_LABEL (dialog->label_error_message), "Could not stop room listing");
 	gtk_widget_show_all (dialog->viewport_error);
+	gtk_widget_set_sensitive (dialog->treeview, FALSE);
 }
 
 static void
@@ -666,6 +670,8 @@ new_chatroom_dialog_expander_browse_activate_cb (GtkWidget               *widget
 		new_chatroom_dialog_browse_stop (dialog);
 		gtk_window_set_resizable (GTK_WINDOW (dialog->window), FALSE);
 	} else {
+		gtk_widget_hide (dialog->viewport_error);
+		gtk_widget_set_sensitive (dialog->treeview, TRUE);
 		new_chatroom_dialog_browse_start (dialog);
 		gtk_window_set_resizable (GTK_WINDOW (dialog->window), TRUE);
 	}
