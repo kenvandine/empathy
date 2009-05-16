@@ -248,5 +248,5 @@ empathy_ft_factory_set_destination_for_incoming_handler (
 
   empathy_ft_handler_incoming_set_destination (handler, destination, use_hash);
 
-  g_signal_emit (factory, signals[NEW_FT_HANDLER], 0, handler, FALSE);
+  g_signal_emit (factory, signals[NEW_FT_HANDLER], 0, handler, NULL);
 }
