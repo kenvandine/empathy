@@ -35,6 +35,39 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_FT
 #include "empathy-debug.h"
 
+/**
+ * SECTION:empathy-ft-handler
+ * @title: EmpathyFTHandler
+ * @short_description: an object representing a File Transfer
+ * @include: libempathy/empathy-ft-handler
+ *
+ * #EmpathyFTHandler is the object which represents a File Transfer with all
+ * its properties.
+ * The creation of an #EmpathyFTHandler is done with
+ * empathy_ft_handler_new_outgoing() or empathy_ft_handler_new_incoming(),
+ * even though clients should not need to call them directly, as
+ * #EmpathyFTFactory does it for them. Remember that for the file transfer
+ * to work with an incoming handler,
+ * empathy_ft_handler_incoming_set_destination() should be called after
+ * empathy_ft_handler_new_incoming(). #EmpathyFTFactory does this
+ * automatically.
+ * It's important to note that, as the creation of the handlers is async, once
+ * an handler is created, it already has all the interesting properties set,
+ * like filename, total bytes, content type and so on, making it useful
+ * to be displayed in an UI.
+ * The transfer API works like a state machine; it has three signals,
+ * ::transfer-started, ::transfer-progress, ::transfer-done, which will be
+ * emitted in the relevant phases.
+ * In addition, if the handler is created with checksumming enabled,
+ * other three signals (::hashing-started, ::hashing-progress, ::hashing-done)
+ * will be emitted before or after the transfer, depending on the direction
+ * (respectively outgoing and incoming) of the handler.
+ * At any time between the call to empathy_ft_handler_start_transfer() and
+ * the last signal, a ::transfer-error can be emitted, indicating that an 
+ * error has happened in the operation. The message of the error is localized
+ * to use in an UI.
+ */
+
 G_DEFINE_TYPE (EmpathyFTHandler, empathy_ft_handler, G_TYPE_OBJECT)
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyFTHandler)
@@ -243,30 +276,59 @@ empathy_ft_handler_class_init (EmpathyFTHandlerClass *klass)
   object_class->finalize = do_finalize;
 
   /* properties */
+
+  /**
+   * EmpathyFTHandler:contact:
+   *
+   * The remote #EmpathyContact for the transfer
+   */
   param_spec = g_param_spec_object ("contact",
     "contact", "The remote contact",
     EMPATHY_TYPE_CONTACT,
     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
   g_object_class_install_property (object_class, PROP_CONTACT, param_spec);
 
+  /**
+   * EmpathyFTHandler:gfile:
+   *
+   * The #GFile object where the transfer actually happens
+   */
   param_spec = g_param_spec_object ("gfile",
     "gfile", "The GFile we're handling",
     G_TYPE_FILE,
     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (object_class, PROP_G_FILE, param_spec);
 
+  /**
+   * EmpathyFTHandler:tp-file:
+   *
+   * The underlying #EmpathyTpFile managing the transfer
+   */
   param_spec = g_param_spec_object ("tp-file",
     "tp-file", "The file's channel wrapper",
     EMPATHY_TYPE_TP_FILE,
     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
   g_object_class_install_property (object_class, PROP_TP_FILE, param_spec);
 
+  /**
+   * EmpathyFTHandler:use-hash:
+   *
+   * %TRUE if checksumming is enabled for the handler, %FALSE otherwise
+   */
   param_spec = g_param_spec_boolean ("use-hash",
     "use-hash", "Whether we should use checksum when sending or receiving",
     FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (object_class, PROP_USE_HASH, param_spec);
 
   /* signals */
+
+  /**
+   * EmpathyFTHandler::transfer-started
+   * @handler: the object which has received the signal
+   * @tp_file: the #EmpathyTpFile for which the transfer has started
+   *
+   * This signal is emitted when the actual transfer starts.
+   */
   signals[TRANSFER_STARTED] =
     g_signal_new ("transfer-started", G_TYPE_FROM_CLASS (klass),
         G_SIGNAL_RUN_LAST, 0, NULL, NULL,
@@ -274,6 +336,14 @@ empathy_ft_handler_class_init (EmpathyFTHandlerClass *klass)
         G_TYPE_NONE,
         1, EMPATHY_TYPE_TP_FILE);
 
+  /**
+   * EmpathyFTHandler::transfer-done
+   * @handler: the object which has received the signal
+   * @tp_file: the #EmpathyTpFile for which the transfer has started
+   *
+   * This signal will be emitted when the actual transfer is completed
+   * successfully.
+   */
   signals[TRANSFER_DONE] =
     g_signal_new ("transfer-done", G_TYPE_FROM_CLASS (klass),
         G_SIGNAL_RUN_LAST, 0, NULL, NULL,
@@ -281,6 +351,17 @@ empathy_ft_handler_class_init (EmpathyFTHandlerClass *klass)
         G_TYPE_NONE,
         1, EMPATHY_TYPE_TP_FILE);
 
+  /**
+   * EmpathyFTHandler::transfer-error
+   * @handler: the object which has received the signal
+   * @error: a #GError
+   *
+   * This signal can be emitted anytime between the call to
+   * empathy_ft_handler_start_transfer() and the last expected signal
+   * (::transfer-done or ::hashing-done), and it's guaranteed to be the last
+   * signal coming from the handler, meaning that no other operation will
+   * take place after this signal.
+   */
   signals[TRANSFER_ERROR] =
     g_signal_new ("transfer-error", G_TYPE_FROM_CLASS (klass),
         G_SIGNAL_RUN_LAST, 0, NULL, NULL,
@@ -288,6 +369,18 @@ empathy_ft_handler_class_init (EmpathyFTHandlerClass *klass)
         G_TYPE_NONE,
         1, G_TYPE_POINTER);
 
+  /**
+   * EmpathyFTHandler::transfer-progress
+   * @handler: the object which has received the signal
+   * @current_bytes: the bytes currently transferred
+   * @total_bytes: the total bytes of the handler
+   * @remaining_time: the number of seconds remaining for the transfer
+   * to be completed
+   * @speed: the current speed of the transfer (in KB/s)
+   *
+   * This signal is emitted to notify clients of the progress of the 
+   * transfer.
+   */
   signals[TRANSFER_PROGRESS] =
     g_signal_new ("transfer-progress", G_TYPE_FROM_CLASS (klass),
         G_SIGNAL_RUN_LAST, 0, NULL, NULL,
@@ -295,12 +388,31 @@ empathy_ft_handler_class_init (EmpathyFTHandlerClass *klass)
         G_TYPE_NONE,
         4, G_TYPE_UINT64, G_TYPE_UINT64, G_TYPE_UINT, G_TYPE_DOUBLE);
 
+  /**
+   * EmpathyFTHandler::hashing-started
+   * @handler: the object which has received the signal
+   *
+   * This signal is emitted when the hashing operation of the handler
+   * is started. Note that this only happens if the handler is created
+   * with checksum enabled and, even if the option is set, is not
+   * guaranteed to happen for incoming handlers, as the CM might not
+   * support sending/receiving the file hash.
+   */
   signals[HASHING_STARTED] =
     g_signal_new ("hashing-started", G_TYPE_FROM_CLASS (klass),
         G_SIGNAL_RUN_LAST, 0, NULL, NULL,
         g_cclosure_marshal_VOID__VOID,
         G_TYPE_NONE, 0);
 
+  /**
+   * EmpathyFTHandler::hashing-progress
+   * @handler: the object which has received the signal
+   * @current_bytes: the bytes currently hashed
+   * @total_bytes: the total bytes of the handler
+   *
+   * This signal is emitted to notify clients of the progress of the 
+   * hashing operation. 
+   */
   signals[HASHING_PROGRESS] =
     g_signal_new ("hashing-progress", G_TYPE_FROM_CLASS (klass),
         G_SIGNAL_RUN_LAST, 0, NULL, NULL,
@@ -308,6 +420,13 @@ empathy_ft_handler_class_init (EmpathyFTHandlerClass *klass)
         G_TYPE_NONE,
         2, G_TYPE_UINT64, G_TYPE_UINT64);
 
+  /**
+   * EmpathyFTHandler::hashing-done
+   * @handler: the object which has received the signal
+   *
+   * This signal is emitted when the hashing operation of the handler
+   * is completed.
+   */
   signals[HASHING_DONE] =
     g_signal_new ("hashing-done", G_TYPE_FROM_CLASS (klass),
         G_SIGNAL_RUN_LAST, 0, NULL, NULL,
@@ -1001,6 +1120,16 @@ channel_get_all_properties_cb (TpProxy *proxy,
 
 /* public methods */
 
+/**
+ * empathy_ft_handler_new_outgoing:
+ * @contact: the #EmpathyContact to send @source to
+ * @source: the #GFile to send
+ * @use_hash: whether the handler should send a checksum of the file
+ * @callback: callback to be called when the handler has been created
+ * @user_data: user data to be passed to @callback
+ *
+ * Triggers the creation of a new #EmpathyFTHandler for an outgoing transfer.
+ */
 void
 empathy_ft_handler_new_outgoing (EmpathyContact *contact,
     GFile *source,
@@ -1038,6 +1167,17 @@ empathy_ft_handler_new_outgoing (EmpathyContact *contact,
       NULL, (GAsyncReadyCallback) ft_handler_gfile_ready_cb, data);
 }
 
+/**
+ * empathy_ft_handler_new_incoming:
+ * @tp_file: the #EmpathyTpFile wrapping the incoming channel
+ * @callback: callback to be called when the handler has been created
+ * @user_data: user data to be passed to @callback
+ *
+ * Triggers the creation of a new #EmpathyFTHandler for an incoming transfer.
+ * Note that for the handler to be useful, you will have to set a destination
+ * file with empathy_ft_handler_incoming_set_destination() after the handler
+ * is ready.
+ */
 void
 empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
     EmpathyFTHandlerReadyCallback callback,
@@ -1064,6 +1204,13 @@ empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
       channel_get_all_properties_cb, data, NULL, G_OBJECT (handler));
 }
 
+/**
+ * empathy_ft_handler_start_transfer:
+ * @handler: an #EmpathyFTHandler
+ *
+ * Starts the transfer machinery. After this call, the transfer and hashing
+ * signals will be emitted by the handler.
+ */
 void
 empathy_ft_handler_start_transfer (EmpathyFTHandler *handler)
 {
@@ -1086,6 +1233,14 @@ empathy_ft_handler_start_transfer (EmpathyFTHandler *handler)
     }
 }
 
+/**
+ * empathy_ft_handler_cancel_transfer:
+ * @handler: an #EmpathyFTHandler
+ *
+ * Cancels an ongoing handler operation. Note that this doesn't destroy
+ * the object, which will keep all the properties, altough it won't be able
+ * to do any more I/O.
+ */
 void
 empathy_ft_handler_cancel_transfer (EmpathyFTHandler *handler)
 {
@@ -1104,6 +1259,17 @@ empathy_ft_handler_cancel_transfer (EmpathyFTHandler *handler)
     empathy_tp_file_cancel (priv->tpfile);
 }
 
+/**
+ * empathy_ft_handler_incoming_set_destination:
+ * @handler: an #EmpathyFTHandler
+ * @destination: the #GFile where the transfer should be saved
+ * @use_hash: whether the handler should, after the transfer, try to
+ * validate it with checksum.
+ *
+ * Sets the destination of the incoming handler to be @destination.
+ * Note that calling this method is mandatory before starting the transfer
+ * for incoming handlers.
+ */
 void
 empathy_ft_handler_incoming_set_destination (EmpathyFTHandler *handler,
     GFile *destination,
@@ -1119,6 +1285,14 @@ empathy_ft_handler_incoming_set_destination (EmpathyFTHandler *handler,
       "use-hash", use_hash, NULL);
 }
 
+/**
+ * empathy_ft_handler_get_filename:
+ * @handler: an #EmpathyFTHandler
+ *
+ * Returns the name of the file being transferred.
+ *
+ * Return value: the name of the file being transferred
+ */
 const char *
 empathy_ft_handler_get_filename (EmpathyFTHandler *handler)
 {
@@ -1131,6 +1305,14 @@ empathy_ft_handler_get_filename (EmpathyFTHandler *handler)
   return priv->filename;
 }
 
+/**
+ * empathy_ft_handler_get_content_type:
+ * @handler: an #EmpathyFTHandler
+ *
+ * Returns the content type of the file being transferred.
+ *
+ * Return value: the content type of the file being transferred
+ */
 const char *
 empathy_ft_handler_get_content_type (EmpathyFTHandler *handler)
 {
@@ -1143,6 +1325,14 @@ empathy_ft_handler_get_content_type (EmpathyFTHandler *handler)
   return priv->content_type;
 }
 
+/**
+ * empathy_ft_handler_get_contact:
+ * @handler: an #EmpathyFTHandler
+ *
+ * Returns the remote #EmpathyContact at the other side of the transfer.
+ *
+ * Return value: the remote #EmpathyContact for @handler
+ */
 EmpathyContact *
 empathy_ft_handler_get_contact (EmpathyFTHandler *handler)
 {
@@ -1155,6 +1345,14 @@ empathy_ft_handler_get_contact (EmpathyFTHandler *handler)
   return priv->contact;
 }
 
+/**
+ * empathy_ft_handler_get_gfile:
+ * @handler: an #EmpathyFTHandler
+ *
+ * Returns the #GFile where the transfer is being read/saved.
+ *
+ * Return value: the #GFile where the transfer is being read/saved
+ */
 GFile *
 empathy_ft_handler_get_gfile (EmpathyFTHandler *handler)
 {
@@ -1167,6 +1365,15 @@ empathy_ft_handler_get_gfile (EmpathyFTHandler *handler)
   return priv->gfile;
 }
 
+/**
+ * empathy_ft_handler_get_use_hash:
+ * @handler: an #EmpathyFTHandler
+ *
+ * Returns whether @handler has checksumming enabled.
+ *
+ * Return value: %TRUE if the handler has checksumming enabled,
+ * %FALSE otherwise.
+ */
 gboolean
 empathy_ft_handler_get_use_hash (EmpathyFTHandler *handler)
 {
@@ -1179,6 +1386,14 @@ empathy_ft_handler_get_use_hash (EmpathyFTHandler *handler)
   return priv->use_hash;
 }
 
+/**
+ * empathy_ft_handler_is_incoming:
+ * @handler: an #EmpathyFTHandler
+ *
+ * Returns whether @handler is incoming or outgoing.
+ *
+ * Return value: %TRUE if the handler is incoming, %FALSE otherwise.
+ */
 gboolean
 empathy_ft_handler_is_incoming (EmpathyFTHandler *handler)
 {
@@ -1194,6 +1409,14 @@ empathy_ft_handler_is_incoming (EmpathyFTHandler *handler)
   return empathy_tp_file_is_incoming (priv->tpfile);  
 }
 
+/**
+ * empathy_ft_handler_get_transferred_bytes:
+ * @handler: an #EmpathyFTHandler
+ *
+ * Returns the number of bytes already transferred by the handler.
+ *
+ * Return value: the number of bytes already transferred by the handler.
+ */
 guint64
 empathy_ft_handler_get_transferred_bytes (EmpathyFTHandler *handler)
 {
@@ -1206,6 +1429,15 @@ empathy_ft_handler_get_transferred_bytes (EmpathyFTHandler *handler)
   return priv->transferred_bytes;
 }
 
+/**
+ * empathy_ft_handler_get_total_bytes:
+ * @handler: an #EmpathyFTHandler
+ *
+ * Returns the total size of the file being transferred by the handler.
+ *
+ * Return value: a number of bytes indicating the total size of the file being
+ * transferred by the handler.
+ */
 guint64
 empathy_ft_handler_get_total_bytes (EmpathyFTHandler *handler)
 {
@@ -1218,6 +1450,15 @@ empathy_ft_handler_get_total_bytes (EmpathyFTHandler *handler)
   return priv->total_bytes;
 }
 
+/**
+ * empathy_ft_handler_is_completed:
+ * @handler: an #EmpathyFTHandler
+ *
+ * Returns whether the transfer for @handler has been completed succesfully.
+ *
+ * Return value: %TRUE if the handler has been transferred correctly, %FALSE
+ * otherwise
+ */
 gboolean
 empathy_ft_handler_is_completed (EmpathyFTHandler *handler)
 {
@@ -1230,6 +1471,16 @@ empathy_ft_handler_is_completed (EmpathyFTHandler *handler)
   return priv->is_completed;
 }
 
+/**
+ * empathy_ft_handler_is_cancelled:
+ * @handler: an #EmpathyFTHandler
+ *
+ * Returns whether the transfer for @handler has been cancelled or has stopped
+ * due to an error.
+ *
+ * Return value: %TRUE if the transfer for @handler has been cancelled 
+ * or has stopped due to an error, %FALSE otherwise.
+ */
 gboolean
 empathy_ft_handler_is_cancelled (EmpathyFTHandler *handler)
 {

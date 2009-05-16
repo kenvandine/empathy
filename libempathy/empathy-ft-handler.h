@@ -56,6 +56,12 @@ typedef struct {
   GObjectClass parent_class;
 } EmpathyFTHandlerClass;
 
+/**
+ * EmpathyFTHandlerReadyCallback:
+ * @handler: the handler which is now ready
+ * @error: a #GError if the operation failed, or %NULL
+ * @user_data: user data passed to the callback
+ */
 typedef void (* EmpathyFTHandlerReadyCallback) (EmpathyFTHandler *handler,
     GError *error,
     gpointer user_data);
