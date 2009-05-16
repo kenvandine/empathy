@@ -297,7 +297,7 @@ channel_ready_cb (TpChannel *channel,
 
 	if (priv->start_requested == TRUE) {
 		tp_cli_channel_type_room_list_call_list_rooms (priv->channel, -1,
-			call_list_rooms_cb, NULL, NULL, NULL);
+			call_list_rooms_cb, list, NULL, NULL);
 		priv->start_requested = FALSE;
 	}
 }
