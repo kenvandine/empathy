@@ -54,20 +54,9 @@
  * @include: libempathy/empathy-tp-file.h
  *
  * #EmpathyTpFile is an object which represents a Telepathy file channel.
- */
-
-/**
- * EmpathyTpFile:
- * @parent: parent object
- *
- * Object which represents a Telepathy file channel.
- */
-
-/**
- * EMPATHY_TP_FILE_UNKNOWN_SIZE:
- *
- * Value used for the "size" or "estimated-size" properties when the size of
- * the transferred file is unknown.
+ * Usually, clients do not need to deal with #EmpathyTpFile objects directly,
+ * and are supposed to use #EmpathyFTHandler and #EmpathyFTFactory for
+ * transferring files using libempathy.
  */
 
 /* EmpathyTpFile object */
@@ -702,6 +691,12 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
   object_class->set_property = do_set_property;
 
   /* Construct-only properties */
+
+  /**
+   * EmpathyTpFile:channel:
+   *
+   * The #TpChannel requested for the file transfer.
+   */
   g_object_class_install_property (object_class,
       PROP_CHANNEL,
       g_param_spec_object ("channel",
@@ -711,6 +706,11 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
           G_PARAM_READWRITE |
           G_PARAM_CONSTRUCT_ONLY));
 
+  /**
+   * EmpathyTpFile:incoming:
+   *
+   * %TRUE if the transfer is incoming, %FALSE if it's outgoing.
+   */
   g_object_class_install_property (object_class,
       PROP_INCOMING,
       g_param_spec_boolean ("incoming",
@@ -728,10 +728,11 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
 /**
  * empathy_tp_file_new:
  * @channel: a #TpChannel
+ * @incoming: whether the file transfer is incoming or not
  *
- * Creates a new #EmpathyTpFile wrapping @channel, or return a new ref to an
- * existing #EmpathyTpFile for that channel. The returned #EmpathyTpFile
- * should be unrefed with g_object_unref() when finished with.
+ * Creates a new #EmpathyTpFile wrapping @channel, with the direction
+ * specified by @incoming. The returned #EmpathyTpFile should be unrefed
+ * with g_object_unref() when finished with.
  *
  * Return value: a new #EmpathyTpFile
  */
@@ -750,6 +751,25 @@ empathy_tp_file_new (TpChannel *channel,
   return tp_file;
 }
 
+/**
+ * empathy_tp_file_accept:
+ * @tp_file: an incoming #EmpathyTpFile
+ * @offset: the offset of @gfile where we should start writing
+ * @gfile: the destination #GFile for the transfer
+ * @cancellable: a #GCancellable
+ * @progress_callback: function to callback with progress information
+ * @progress_user_data: user_data to pass to @progress_callback
+ * @op_callback: function to callback when the transfer ends
+ * @op_user_data: user_data to pass to @op_callback
+ *
+ * Accepts an incoming file transfer, saving the result into @gfile.
+ * The callback @op_callback will be called both when the transfer is
+ * successful and in case of an error. Note that cancelling @cancellable,
+ * closes the socket of the file operation in progress, but doesn't
+ * guarantee that the transfer channel will be closed as well. Thus,
+ * empathy_tp_file_cancel() or empathy_tp_file_close() should be used to
+ * actually cancel an ongoing #EmpathyTpFile.
+ */
 void
 empathy_tp_file_accept (EmpathyTpFile *tp_file,
     guint64 offset,
@@ -777,6 +797,25 @@ empathy_tp_file_accept (EmpathyTpFile *tp_file,
       G_PRIORITY_DEFAULT, cancellable, file_replace_async_cb, tp_file);
 }
 
+
+/**
+ * empathy_tp_file_offer:
+ * @tp_file: an outgoing #EmpathyTpFile
+ * @gfile: the source #GFile for the transfer
+ * @cancellable: a #GCancellable
+ * @progress_callback: function to callback with progress information
+ * @progress_user_data: user_data to pass to @progress_callback
+ * @op_callback: function to callback when the transfer ends
+ * @op_user_data: user_data to pass to @op_callback
+ *
+ * Offers an outgoing file transfer, reading data from @gfile.
+ * The callback @op_callback will be called both when the transfer is
+ * successful and in case of an error. Note that cancelling @cancellable,
+ * closes the socket of the file operation in progress, but doesn't
+ * guarantee that the transfer channel will be closed as well. Thus,
+ * empathy_tp_file_cancel() or empathy_tp_file_close() should be used to
+ * actually cancel an ongoing #EmpathyTpFile.
+ */
 void
 empathy_tp_file_offer (EmpathyTpFile *tp_file,
     GFile *gfile,
@@ -822,6 +861,13 @@ empathy_tp_file_is_incoming (EmpathyTpFile *tp_file)
   return priv->incoming;
 }
 
+/**
+ * empathy_tp_file_cancel:
+ * @tp_file: an #EmpathyTpFile
+ *
+ * Cancels an ongoing #EmpathyTpFile, first closing the channel and then
+ * cancelling any I/O operation and closing the socket.
+ */
 void
 empathy_tp_file_cancel (EmpathyTpFile *tp_file)
 {
@@ -830,6 +876,13 @@ empathy_tp_file_cancel (EmpathyTpFile *tp_file)
   close_channel_internal (tp_file, TRUE);
 }
 
+/**
+ * empathy_tp_file_close:
+ * @tp_file: an #EmpathyTpFile
+ *
+ * Closes the channel for an ongoing #EmpathyTpFile. It's safe to call this
+ * method after the transfer has ended.
+ */
 void
 empathy_tp_file_close (EmpathyTpFile *tp_file)
 {

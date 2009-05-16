@@ -67,11 +67,23 @@ struct _EmpathyTpFileClass {
 
 /* prototypes for operation callbacks */
 
+/**
+ * EmpathyTpFileProgressCallback:
+ * @tp_file: the #EmpathyTpFile being transferred
+ * @current_bytes: the bytes currently transferred by the operation
+ * @user_data: user data passed to the callback
+ **/
 typedef void (* EmpathyTpFileProgressCallback)
     (EmpathyTpFile *tp_file,
      guint64 current_bytes,
      gpointer user_data);
 
+/**
+ * EmpathyTpFileOperationCallback:
+ * @tp_file: the #EmpathyTpFile that has been transferred
+ * @error: a #GError if the operation didn't succeed, %NULL otherwise
+ * @user_data: user data passed to the callback
+ **/
 typedef void (* EmpathyTpFileOperationCallback)
     (EmpathyTpFile *tp_file,
      const GError *error,
