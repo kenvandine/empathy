@@ -118,9 +118,9 @@
                   <object class="GtkVBox" id="vbox1">
                     <property name="visible">True</property>
                     <property name="orientation">vertical</property>
+                    <property name="spacing">2</property>
                     <child>
-                      <object class="GtkViewport" id="viewport1">
-                        <property name="visible">True</property>
+                      <object class="GtkViewport" id="viewport_error">
                         <property name="resize_mode">queue</property>
                         <child>
                           <object class="GtkHBox" id="hbox1">
@@ -129,6 +129,7 @@
                               <object class="GtkImage" id="image1">
                                 <property name="visible">True</property>
                                 <property name="stock">gtk-dialog-error</property>
+                                <property name="icon-size">1</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -138,7 +139,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="label">
+                              <object class="GtkLabel" id="label_error_message">
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
                                 <property name="xpad">10</property>
@@ -149,7 +150,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkButton" id="button1">
+                              <object class="GtkButton" id="button_close_error">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -158,6 +159,7 @@
                                   <object class="GtkImage" id="image2">
                                     <property name="visible">True</property>
                                     <property name="stock">gtk-close</property>
+                                    <property name="icon-size">1</property>
                                   </object>
                                 </child>
                               </object>
