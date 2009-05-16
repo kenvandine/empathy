@@ -47,8 +47,6 @@
 
 G_DEFINE_TYPE (EmpathyFTFactory, empathy_ft_factory, G_TYPE_OBJECT);
 
-#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyFTFactory)
-
 enum {
   NEW_FT_HANDLER,
   NEW_INCOMING_TRANSFER,
