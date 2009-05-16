@@ -67,7 +67,8 @@ typedef struct {
 	GtkWidget         *treeview;
 	GtkTreeModel      *model;
 	GtkWidget         *button_join;
-	GtkWidget         *button_close;
+	GtkWidget         *label_error_message;
+	GtkWidget         *viewport_error;
 } EmpathyNewChatroomDialog;
 
 enum {
@@ -124,6 +125,8 @@ static void     new_chatroom_dialog_expander_browse_activate_cb     (GtkWidget  
 static gboolean new_chatroom_dialog_entry_server_focus_out_cb       (GtkWidget               *widget,
 								     GdkEventFocus           *event,
 								     EmpathyNewChatroomDialog *dialog);
+static void	new_chatroom_dialog_button_close_error_clicked_cb   (GtkButton                *button,
+								     EmpathyNewChatroomDialog *dialog);
 
 static EmpathyNewChatroomDialog *dialog_p = NULL;
 
@@ -154,6 +157,8 @@ empathy_new_chatroom_dialog_show (GtkWindow *parent)
 				       "treeview", &dialog->treeview,
 				       "button_join", &dialog->button_join,
 				       "expander_browse", &dialog->expander_browse,
+				       "label_error_message", &dialog->label_error_message,
+				       "viewport_error", &dialog->viewport_error,
 				       NULL);
 	g_free (filename);
 
@@ -165,6 +170,7 @@ empathy_new_chatroom_dialog_show (GtkWindow *parent)
 			      "entry_server", "focus-out-event", new_chatroom_dialog_entry_server_focus_out_cb,
 			      "entry_room", "changed", new_chatroom_dialog_entry_changed_cb,
 			      "expander_browse", "activate", new_chatroom_dialog_expander_browse_activate_cb,
+			      "button_close_error", "clicked", new_chatroom_dialog_button_close_error_clicked_cb,
 			      NULL);
 
 	g_object_unref (gui);
@@ -442,6 +448,13 @@ new_chatroom_dialog_account_changed_cb (GtkComboBox             *combobox,
 }
 
 static void
+new_chatroom_dialog_button_close_error_clicked_cb   (GtkButton                *button,
+						     EmpathyNewChatroomDialog *dialog)
+{
+	gtk_widget_hide (dialog->viewport_error);
+}
+
+static void
 new_chatroom_dialog_roomlist_destroy_cb (EmpathyTpRoomlist        *room_list,
 					 EmpathyNewChatroomDialog *dialog)
 {
@@ -504,7 +517,8 @@ start_listing_error_cb (EmpathyTpRoomlist        *room_list,
 			GError                   *error,
 			EmpathyNewChatroomDialog *dialog)
 {
-	g_printf("Error when starting listing of chatrooms.");
+	gtk_label_set_text (GTK_LABEL (dialog->label_error_message), "Could not start room listing");
+	gtk_widget_show_all (dialog->viewport_error);
 }
 
 static void
@@ -512,7 +526,8 @@ stop_listing_error_cb (EmpathyTpRoomlist        *room_list,
 		       GError                   *error,
 		       EmpathyNewChatroomDialog *dialog)
 {
-	g_printf("Error when stopping listing of chatrooms.");
+	gtk_label_set_text (GTK_LABEL (dialog->label_error_message), "Could not stop room listing");
+	gtk_widget_show_all (dialog->viewport_error);
 }
 
 static void
