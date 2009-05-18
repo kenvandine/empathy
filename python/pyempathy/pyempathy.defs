@@ -599,6 +599,17 @@
   )
 )
 
+(define-method new_call_with_streams
+  (of-object "EmpathyCallFactory")
+  (c-name "empathy_call_factory_new_call_with_streams")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+    '("gboolean" "initial_audio")
+    '("gboolean" "initial_video")
+  )
+)
+
 (define-method claim_channel
   (of-object "EmpathyCallFactory")
   (c-name "empathy_call_factory_claim_channel")
@@ -622,6 +633,16 @@
   (return-type "EmpathyCallHandler*")
   (parameters
     '("EmpathyContact*" "contact")
+  )
+)
+
+(define-function call_handler_new_for_contact_with_streams
+  (c-name "empathy_call_handler_new_for_contact_with_streams")
+  (return-type "EmpathyCallHandler*")
+  (parameters
+    '("EmpathyContact*" "contact")
+    '("gboolean" "audio")
+    '("gboolean" "video")
   )
 )
 
@@ -2069,6 +2090,8 @@
   (return-type "none")
   (parameters
     '("EmpathyContact*" "contact")
+    '("gboolean" "audio")
+    '("gboolean" "video")
   )
 )
 

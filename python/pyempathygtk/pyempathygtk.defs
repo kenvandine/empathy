@@ -181,7 +181,8 @@
     '("is-active" "EMPATHY_CONTACT_LIST_STORE_COL_IS_ACTIVE")
     '("is-online" "EMPATHY_CONTACT_LIST_STORE_COL_IS_ONLINE")
     '("is-separator" "EMPATHY_CONTACT_LIST_STORE_COL_IS_SEPARATOR")
-    '("can-voip" "EMPATHY_CONTACT_LIST_STORE_COL_CAN_VOIP")
+    '("can-audio-call" "EMPATHY_CONTACT_LIST_STORE_COL_CAN_AUDIO_CALL")
+    '("can-video-call" "EMPATHY_CONTACT_LIST_STORE_COL_CAN_VIDEO_CALL")
     '("count" "EMPATHY_CONTACT_LIST_STORE_COL_COUNT")
   )
 )
@@ -1188,9 +1189,15 @@
   (return-type "GtkWidget*")
 )
 
-(define-method call_menu_item_new
+(define-method audio_call_menu_item_new
   (of-object "EmpathyContact")
-  (c-name "empathy_contact_call_menu_item_new")
+  (c-name "empathy_contact_audio_call_menu_item_new")
+  (return-type "GtkWidget*")
+)
+
+(define-method video_call_menu_item_new
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_video_call_menu_item_new")
   (return-type "GtkWidget*")
 )
 
