@@ -8,6 +8,7 @@ import datetime
 from string import Template
 from optparse import OptionParser
 
+last_tag_patern = 'EMPATHY_2_26*'
 username = 'xclaesse'
 upload_server = 'master.gnome.org'
 template = '''\
@@ -66,6 +67,10 @@ class Project:
 			version_dir = self.package_version[:second]
 		self.package_dl_url = 'http://download.gnome.org/sources/%s/%s/' % (self.package_name.lower(), 
 										    version_dir)
+		tags_str = self.exec_cmd('git tag -l %s' % (last_tag_patern))
+		tags = tags_str.splitlines()
+		self.last_tag = tags[len(tags)-1]
+
 	def exec_cmd(self,cmd):
 		return os.popen(cmd).read()
 
@@ -128,51 +133,36 @@ class Project:
 		t = Template(template)
 		return t.substitute(locals())
 	
-	def get_last_tag(self):
-		tags_str = self.exec_cmd('git tag')
-		tags = tags_str.splitlines()
+	def get_translations(self):
+		self.translations = ''
+		files_str = self.exec_cmd("ls po/*.po")
+		files = files_str.splitlines()
+		for f in files:
+			lang = f[3:len(f)-3]
+			commit_str = self.exec_cmd("git log %s..  %s" % (self.last_tag, f))
+			if commit_str == '':
+				continue
 
-		return tags[len(tags)-1]
+			authors = ''
+			for line in commit_str.splitlines():
+				if line.startswith('Author:'):
+	        			p1 = line.find(' ')
+        				p2 = line.find('<')
+        				author = line[p1:p2].strip()
 
-	def parse_commit(self, ref, author, date, message):
-		p1 = message.rfind('(')
-		p2 = message.rfind (')')
-		if len(message) - p2 <= 2 and \
-		   message[p1+1:].find('#') == -1:
-			author = message[p1+1:p2]
-			message = message[:p1]
+					if authors.find(author) != -1:
+						continue
+        				if authors != '':
+        					authors += ", "
+        				authors += author
 
-		msg = message.lower()
-		if msg.find('translation') != -1 and \
-		   (msg.find('added') != -1 or \
-		    msg.find('updated') != -1):
-			self.translations += ' - ' + message + ' (' + author + ').\n' 
-		elif message.find('#') != -1:
-			p1 = message.find('#')
-			while p1 != -1:
-				bug = Bug()
-				p2 = p1 + 1
-				while p2 < len (message) and \
-				      message[p2].isdigit():
-					p2 = p2 + 1
-				bug.number = message[p1+1:p2]
-				bug.author = author
-				self.bug_commits.append(bug)
-				p1 = message.find('#', p2)
-		else:
-			self.commits += ' - ' + message + ' (' + author + ').\n'
+			self.translations += "Updated %s Translation (%s)\n" % (lang, authors)
 
-	def query_bug_commits(self):
-		bugs = ''
-		for bug in self.bug_commits:
-			bugs += bug.number + ','
-
-		# Bugzilla query to use
-		query = 'http://bugzilla.gnome.org/buglist.cgi?ctype=csv' \
-			'&bug_status=RESOLVED,CLOSED,VERIFIED' \
-			'&resolution=FIXED' \
-			'&bug_id=' + bugs.replace(',', '%2c')
-
+	def get_bugs(self):
+		query = 'http://bugzilla.gnome.org/buglist.cgi?' \
+			'ctype=csv&product=empathy&' \
+			'bug_status=RESOLVED,CLOSED,VERIFIED&resolution=FIXED&' \
+			'chfieldfrom=%s&chfieldto=Now' % ('2009-04-13')
 		f = urllib.urlopen(query)
 		s = f.read()
 		f.close()
@@ -191,78 +181,21 @@ class Project:
 				col_description = i
 			i = i + 1
 
+		self.bugs = ''
 		for row in reader:
 			bug_number = row[col_bug_id]
 			description = row[col_description]
-
-			for bug in self.bug_commits:
-				if bug.number == bug_number:
-					self.bugs += ' - Fixed #%s, %s (%s)\n' % (bug.number, description, bug.author)
-					break
-
-	def get_commits(self):
-		self.commits = ''
-		self.translations = ''
-		self.bugs = ''
-		self.bug_commits = []
-		last_tag = self.get_last_tag()
-		ref = None
-
-		changes = self.exec_cmd ("git log " + last_tag + "..")
-        	for line in changes.splitlines(1):
-        		if line.startswith('commit'):
-				if ref != None:
-					self.parse_commit (ref, author, date, message)
-				p1 = line.find(' ')
-				ref = line[p1:].strip()
-				author = ''
-				date = ''
-				message = ''
-        		elif line.startswith('Author:'):
-        			p1 = line.find(' ')
-        			p2 = line.find('<')
-        			author = line[p1:p2].strip()
-        		elif line.startswith('Date:'):
-        			p1 = line.find(' ')
-        			date = line[p1:].strip()
-        		elif line.startswith('    git-svn-id:'):
-        			continue
-        		elif line.startswith('    Signed-off-by:'):
-        			continue
-        		elif line.startswith('    From:'):
-        			continue
-        		elif line.startswith('Merge:'):
-        			continue
-        		else:
-				msg = line.strip()
-				if msg == '':
-					continue
-				if message != '':
-					message += '\n'
-				message += msg
-
-		if len (self.bug_commits) > 0:
-			self.query_bug_commits ()
+			self.bugs += ' - Fixed #%s, %s\n' % (bug_number, description)
 
 	def make_tag(self):
 		new_tag = self.package_name.upper() + '_' +\
 			  self.package_version.replace('.', '_')
-
-		info = self.exec_cmd('git svn info | grep URL')
-		url1 = info[info.find(" "):].strip()
-		
-		end = url1.find("empathy")
-		end = url1.find("/", end)
-		url2 = url1[:end] + '/tags/' + new_tag
-
-		self.exec_cmd('svn copy %s %s -m "Tagged for release %s."' % (url1, url2, self.package_version))
 		self.exec_cmd('git tag -m "Tagged for release %s." %s' % ( self.package_version, new_tag))
 
 	def generate_news(self):
-		self.get_commits()
+		self.get_translations()
+		self.get_bugs()
 		news = 'NEW in '+ self.package_version + '\n==============\n'
-		if self.commits != '':
-			news += self.commits + '\n'
 		if self.bugs != '':
 			news += 'Bugs fixed:\n' + self.bugs + '\n'
 		if self.translations != '':
