@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Authors: Dafydd Harrie <dafydd.harries@collabora.co.uk>
  *          Xavier Claessens <xclaesse@gmail.com>
  */
@@ -367,15 +367,15 @@ empathy_smiley_manager_get_all (EmpathySmileyManager *manager)
 typedef struct {
 	EmpathySmileyManager *manager;
 	EmpathySmiley        *smiley;
-	EmpathySmileyMenuFunc func;    
-	gpointer              user_data;         
+	EmpathySmileyMenuFunc func;
+	gpointer              user_data;
 } ActivateData;
 
 static void
 smiley_menu_data_free (gpointer  user_data,
 		       GClosure *closure)
 {
-	ActivateData *data = (ActivateData*) user_data;
+	ActivateData *data = (ActivateData *) user_data;
 
 	g_object_unref (data->manager);
 	g_slice_free (ActivateData, data);
@@ -385,7 +385,7 @@ static void
 smiley_menu_activate_cb (GtkMenuItem *menuitem,
 			 gpointer     user_data)
 {
-	ActivateData *data = (ActivateData*) user_data;
+	ActivateData *data = (ActivateData *) user_data;
 
 	data->func (data->manager, data->smiley, data->user_data);
 }
