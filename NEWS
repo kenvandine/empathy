@@ -1,3 +1,61 @@
+NEW in 2.27.1
+==============
+Bugs fixed:
+ - Fixed #582641, crash in Empathy Instant Messenger: Making a call to a googl...
+ - Fixed #501519, Empathy API need documentation
+ - Fixed #504277, Empathy won't use 2nd and further protocols a connection manager provides
+ - Fixed #530119, display remote caller in the call window
+ - Fixed #539506, First message in conversation has no timestamp
+ - Fixed #544678, Can't change account photo/avatar
+ - Fixed #548704, "Add" button requires further action but lacks an ellipsis
+ - Fixed #549366, Should use SimplePresence
+ - Fixed #549641, Should use Contacts
+ - Fixed #561033, Work on the documentation
+ - Fixed #566905, avatar button is too tiny
+ - Fixed #568403, Add header file in documentation
+ - Fixed #568562, ghelp link broken in documentation
+ - Fixed #570346, EmpathyTpChat should use the Group SelfHandle if present
+ - Fixed #570545, Huge memory leak after opening some contacts discussion windows
+ - Fixed #574626, No obvious way to display FT manager
+ - Fixed #575090, Notifications of new messages stop working after closing the chat window
+ - Fixed #575415, Should switch from libglade to GtkBuilder
+ - Fixed #575442, "Call" string needs context for translation
+ - Fixed #575817, empathy_tp_tube_new_stream_tube should allow NULL as parameters
+ - Fixed #576384, "accept incoming call" dialog brings roster to current workspace
+ - Fixed #576394, "Send Video" button and "Call -> Send video" menu entry are not synced
+ - Fixed #577026, Sending slash-prefixed messages on IRC is a security risk.
+ - Fixed #577427, Port to latest tp-glib API
+ - Fixed #578356, Asserts when reconnecting to a chat room.
+ - Fixed #578399, Change to supplying spelling suggestions in submenu
+ - Fixed #579139, memleak in log_store_empathy_get_messages_for_file
+ - Fixed #579148, Improves the Join New room UI by adding columns, changing the UI
+ - Fixed #579553, Serveral memory leaks in empathy.
+ - Fixed #579735, add empathy_tp_tube_call_when_ready ()
+ - Fixed #579780, Several functions should be _dup_foo instead of _get_foo
+ - Fixed #579800, adding or removing an IRC account causes a dialog to pop up
+ - Fixed #579971, Try to access to a NULL GtkEntry when adding a new contact
+ - Fixed #580097, Dispaly transfer speed, and make remaining time more dynamic
+ - Fixed #580203, Theoretical race connecting to Received.
+ - Fixed #580771, Video playback should have a fullscreen mode
+ - Fixed #582751, No menu icon = no smiley
+ - Fixed #563222, Wrong "time remaining" estimation when sending a file
+ - Fixed #579484, New "join chatroom" dialog doesn't get list of rooms when room list is expanded
+ - Fixed #579485, "Join Room" dialog should allow sorting the list of rooms
+ - Fixed #571664, [1/3] Empathy should support Geolocation
+
+Translations:
+Updated ar Translation (Khaled Hosny)
+Updated be Translation (Ihar Hrachyshka)
+Updated bg Translation (Alexander Shopov)
+Updated de Translation (Mario Blättermann)
+Updated es Translation (Jorge Gonzalez, Jorge Gonzalez Gonzalez)
+Updated gl Translation (Frco. Javier Rial, Ignacio Casal Quinteiro)
+Updated it Translation (Milo Casagrande)
+Updated kn Translation (Shankar Prasad)
+Updated nl Translation (Wouter Bolsterlee)
+Updated th Translation (Theppitak Karoonboonyanan)
+Updated zh_CN Translation (Aron Xu)
+
 NEW in 2.26.0
 ==============
  - Fix various VoIP bugs
