@@ -15,8 +15,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
  *
  * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
@@ -65,7 +65,7 @@ theme_irc_append_message (EmpathyChatTextView *view,
 	name = empathy_contact_get_name (contact);
 
 	if (empathy_message_get_tptype (message) == TP_CHANNEL_TEXT_MESSAGE_TYPE_ACTION) {
-		tmp = g_strdup_printf (" * %s %s", 
+		tmp = g_strdup_printf (" * %s %s",
 				       empathy_contact_get_name (contact),
 				       empathy_message_get_body (message));
 		empathy_chat_text_view_append_body (view, tmp,
