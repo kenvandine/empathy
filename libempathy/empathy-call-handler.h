@@ -46,7 +46,7 @@ GType empathy_call_handler_get_type (void);
 
 /* TYPE MACROS */
 #define EMPATHY_TYPE_CALL_HANDLER \
-  (empathy_call_handler_get_type())
+  (empathy_call_handler_get_type ())
 #define EMPATHY_CALL_HANDLER(obj) \
   (G_TYPE_CHECK_INSTANCE_CAST((obj), EMPATHY_TYPE_CALL_HANDLER, \
     EmpathyCallHandler))
