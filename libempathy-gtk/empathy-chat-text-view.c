@@ -15,9 +15,9 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
- * 
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ *
  * Authors: Mikael Hallendal <micke@imendio.com>
  *          Richard Hult <richard@imendio.com>
  *          Martyn Russell <martyn@imendio.com>
@@ -113,7 +113,7 @@ chat_text_view_url_event_cb (GtkTextTag          *tag,
 							    &start,
 							    &end,
 							    FALSE);
-			    
+
 			    empathy_url_show (GTK_WIDGET (view), str);
 			    g_free (str);
 		    }
@@ -591,7 +591,7 @@ empathy_chat_text_view_class_init (EmpathyChatTextViewClass *klass)
 	object_class->set_property = chat_text_view_set_property;
 
 	widget_class->size_allocate = chat_text_view_size_allocate;
-	widget_class->drag_motion = chat_text_view_drag_motion; 
+	widget_class->drag_motion = chat_text_view_drag_motion;
 
 	g_object_class_install_property (object_class,
 					 PROP_LAST_CONTACT,
@@ -688,7 +688,7 @@ chat_text_view_scroll_down (EmpathyChatView *view)
 	if (priv->scroll_time) {
 		g_timer_reset (priv->scroll_time);
 	} else {
-		priv->scroll_time = g_timer_new();
+		priv->scroll_time = g_timer_new ();
 	}
 	if (!priv->scroll_timeout) {
 		priv->scroll_timeout = g_timeout_add (SCROLL_DELAY,
@@ -894,7 +894,7 @@ chat_text_view_find_previous (EmpathyChatView *view,
 		if (!new_search && !priv->find_wrapped) {
 			priv->find_wrapped = TRUE;
 			result = chat_text_view_find_previous (view,
-								 search_criteria, 
+								 search_criteria,
 								 FALSE);
 			priv->find_wrapped = FALSE;
 		}
@@ -1008,8 +1008,8 @@ chat_text_view_find_next (EmpathyChatView *view,
 		/* Here we wrap around. */
 		if (!new_search && !priv->find_wrapped) {
 			priv->find_wrapped = TRUE;
-			result = chat_text_view_find_next (view, 
-							     search_criteria, 
+			result = chat_text_view_find_next (view,
+							     search_criteria,
 							     FALSE);
 			priv->find_wrapped = FALSE;
 		}
