@@ -317,7 +317,7 @@ empathy_contact_widget_set_account_filter (
   if (chooser)
       empathy_account_chooser_set_filter (chooser, filter, user_data);
 }
-  
+
 static void
 contact_widget_destroy_cb (GtkWidget *widget,
                            EmpathyContactWidget *information)
@@ -331,7 +331,7 @@ contact_widget_destroy_cb (GtkWidget *widget,
   if (information->manager)
     {
       g_object_unref (information->manager);
-    }   
+    }
 
   g_slice_free (EmpathyContactWidget, information);
 }
@@ -393,7 +393,7 @@ contact_widget_id_changed_cb (GtkEntry *entry,
                               EmpathyContactWidget *self)
 {
   if (self->widget_id_timeout != 0)
-    {   
+    {
       g_source_remove (self->widget_id_timeout);
     }
 
@@ -465,7 +465,7 @@ save_avatar_menu_activate_cb (GtkWidget *widget,
           GtkWidget *dialog;
 
           dialog = gtk_message_dialog_new (NULL, 0,
-              GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, 
+              GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
               _("Unable to save avatar"));
 
           gtk_message_dialog_format_secondary_text (
@@ -519,7 +519,7 @@ popup_avatar_menu (EmpathyContactWidget *information,
     }
 
   gtk_menu_attach_to_widget (GTK_MENU (menu), parent, NULL);
-  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 
+  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
       button, event_time);
 }
 
