@@ -41,7 +41,7 @@ GType empathy_audio_src_get_type (void);
 
 /* TYPE MACROS */
 #define EMPATHY_TYPE_GST_AUDIO_SRC \
-  (empathy_audio_src_get_type())
+  (empathy_audio_src_get_type ())
 #define EMPATHY_GST_AUDIO_SRC(obj) \
   (G_TYPE_CHECK_INSTANCE_CAST((obj), EMPATHY_TYPE_GST_AUDIO_SRC, \
     EmpathyGstAudioSrc))
