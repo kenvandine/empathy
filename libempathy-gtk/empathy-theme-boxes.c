@@ -15,8 +15,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
  *
  * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
@@ -259,7 +259,7 @@ theme_boxes_maybe_append_header (EmpathyThemeBoxes *theme,
 
 	/* Add the message receive time */
 	time = empathy_message_get_timestamp (msg);
-	tmp = empathy_time_to_string_local (time, 
+	tmp = empathy_time_to_string_local (time,
 					   EMPATHY_TIME_FORMAT_DISPLAY_SHORT);
 	str = g_strdup_printf ("<i>%s</i>", tmp);
 	label2 = g_object_new (GTK_TYPE_LABEL,
@@ -330,7 +330,7 @@ theme_boxes_append_message (EmpathyChatTextView *view,
 	    TP_CHANNEL_TEXT_MESSAGE_TYPE_ACTION) {
 		gchar *body;
 
-		body = g_strdup_printf (" * %s %s", 
+		body = g_strdup_printf (" * %s %s",
 					empathy_contact_get_name (sender),
 					empathy_message_get_body (message));
 		empathy_chat_text_view_append_body (EMPATHY_CHAT_TEXT_VIEW (view),
