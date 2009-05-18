@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Authors: Cosimo Cecchi <cosimo.cecchi@collabora.co.uk>
  */
 
@@ -53,8 +53,8 @@ GType empathy_contact_monitor_get_type (void);
 void
 empathy_contact_monitor_set_iface (EmpathyContactMonitor *self,
                                    EmpathyContactList *iface);
-				   
-EmpathyContactMonitor * 
+
+EmpathyContactMonitor *
 empathy_contact_monitor_new_for_iface (EmpathyContactList *iface);
 
 G_END_DECLS
