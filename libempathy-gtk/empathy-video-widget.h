@@ -42,7 +42,7 @@ GType empathy_video_widget_get_type (void);
 
 /* TYPE MACROS */
 #define EMPATHY_TYPE_VIDEO_WIDGET \
-  (empathy_video_widget_get_type())
+  (empathy_video_widget_get_type ())
 #define EMPATHY_VIDEO_WIDGET(obj) \
   (G_TYPE_CHECK_INSTANCE_CAST((obj), EMPATHY_TYPE_VIDEO_WIDGET, \
     EmpathyVideoWidget))
