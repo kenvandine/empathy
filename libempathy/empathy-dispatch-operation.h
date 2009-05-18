@@ -57,7 +57,7 @@ GType empathy_dispatch_operation_get_type (void);
 
 /* TYPE MACROS */
 #define EMPATHY_TYPE_DISPATCH_OPERATION \
-  (empathy_dispatch_operation_get_type())
+  (empathy_dispatch_operation_get_type ())
 #define EMPATHY_DISPATCH_OPERATION(obj) \
   (G_TYPE_CHECK_INSTANCE_CAST((obj), EMPATHY_TYPE_DISPATCH_OPERATION, \
     EmpathyDispatchOperation))
