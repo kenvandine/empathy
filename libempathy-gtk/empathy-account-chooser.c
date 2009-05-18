@@ -15,9 +15,9 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
- * 
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ *
  * Authors: Martyn Russell <martyn@imendio.com>
  *          Xavier Claessens <xclaesse@gmail.com>
  */
@@ -401,22 +401,22 @@ empathy_account_chooser_set_has_all_option (EmpathyAccountChooser *chooser,
 	 */
 
 	if (has_all_option) {
-		gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (chooser), 
+		gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (chooser),
 						      (GtkTreeViewRowSeparatorFunc)
 						      account_chooser_separator_func,
-						      chooser, 
+						      chooser,
 						      NULL);
 
 		gtk_list_store_prepend (store, &iter);
-		gtk_list_store_set (store, &iter, 
+		gtk_list_store_set (store, &iter,
 				    COL_ACCOUNT_TEXT, NULL,
 				    COL_ACCOUNT_ENABLED, TRUE,
 				    COL_ACCOUNT_POINTER, NULL,
 				    -1);
 
 		gtk_list_store_prepend (store, &iter);
-		gtk_list_store_set (store, &iter, 
-				    COL_ACCOUNT_TEXT, _("All"), 
+		gtk_list_store_set (store, &iter,
+				    COL_ACCOUNT_TEXT, _("All"),
 				    COL_ACCOUNT_ENABLED, TRUE,
 				    COL_ACCOUNT_POINTER, NULL,
 				    -1);
@@ -427,10 +427,10 @@ empathy_account_chooser_set_has_all_option (EmpathyAccountChooser *chooser,
 			}
 		}
 
-		gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (chooser), 
+		gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (chooser),
 						      (GtkTreeViewRowSeparatorFunc)
 						      NULL,
-						      NULL, 
+						      NULL,
 						      NULL);
 	}
 

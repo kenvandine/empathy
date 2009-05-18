@@ -15,9 +15,9 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
- * 
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ *
  * Authors: Martyn Russell <martyn@imendio.com>
  *          Xavier Claessens <xclaesse@gmail.com>
  */
@@ -68,7 +68,7 @@ void           empathy_account_chooser_set_has_all_option (EmpathyAccountChooser
 void           empathy_account_chooser_set_filter         (EmpathyAccountChooser *chooser,
 							   EmpathyAccountChooserFilterFunc filter,
 							   gpointer               user_data);
-gboolean       empathy_account_chooser_filter_is_connected(McAccount             *account,
+gboolean       empathy_account_chooser_filter_is_connected (McAccount             *account,
 							   gpointer               user_data);
 
 G_END_DECLS
