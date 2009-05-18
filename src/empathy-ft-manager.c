@@ -491,15 +491,19 @@ ft_handler_transfer_done_cb (EmpathyFTHandler *handler,
                              EmpathyTpFile *tp_file,
                              EmpathyFTManager *manager)
 {
-  DEBUG ("Transfer done");
-
   if (empathy_ft_handler_is_incoming (handler) &&
       empathy_ft_handler_get_use_hash (handler))
     {
-      /* connect to the signal */
+      DEBUG ("Transfer done, waiting for hashing-started");
+
+      /* connect to the signal and return early */
       g_signal_connect (handler, "hashing-started",
           G_CALLBACK (ft_handler_hashing_started_cb), manager);
+
+      return;
     }
+
+  DEBUG ("Transfer done, no hashing");
 
   do_real_transfer_done (manager, handler);
 }

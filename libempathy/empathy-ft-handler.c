@@ -1277,14 +1277,25 @@ empathy_ft_handler_incoming_set_destination (EmpathyFTHandler *handler,
     GFile *destination,
     gboolean use_hash)
 {
+  EmpathyFTHandlerPriv *priv;
+
   DEBUG ("Set incoming destination, use hash %s",
          use_hash ? "True" : "False");
 
   g_return_if_fail (EMPATHY_IS_FT_HANDLER (handler));
   g_return_if_fail (G_IS_FILE (destination));
 
+  priv = GET_PRIV (handler);
+
   g_object_set (handler, "gfile", destination,
       "use-hash", use_hash, NULL);
+
+  /* check if hash is really supported. if it isn't, set use_hash to FALSE
+   * anyway, so that clients won't be expecting us to checksum.
+   */
+  if (EMP_STR_EMPTY (priv->content_hash) ||
+      priv->content_hash_type == TP_FILE_HASH_TYPE_NONE)
+    priv->use_hash = FALSE;
 }
 
 /**
