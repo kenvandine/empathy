@@ -117,6 +117,8 @@ typedef struct {
   GCancellable *cancellable;
   gboolean use_hash;
 
+  EmpathyDispatcher *dispatcher;
+
   /* request for the new transfer */
   GHashTable *request;
 
@@ -235,6 +237,12 @@ do_dispose (GObject *object)
     {
       g_hash_table_unref (priv->request);
       priv->request = NULL;
+    }
+
+  if (priv->dispatcher != NULL)
+    {
+      g_object_unref (priv->dispatcher);
+      priv->dispatcher = NULL;
     }
   
   G_OBJECT_CLASS (empathy_ft_handler_parent_class)->dispose (object);
@@ -442,6 +450,7 @@ empathy_ft_handler_init (EmpathyFTHandler *self)
 
   self->priv = priv;
   priv->cancellable = g_cancellable_new ();
+  priv->dispatcher = empathy_dispatcher_dup_singleton ();
 }
 
 /* private functions */
@@ -659,46 +668,16 @@ ft_handler_create_channel_cb (EmpathyDispatchOperation *operation,
 static void
 ft_handler_push_to_dispatcher (EmpathyFTHandler *handler)
 {
-  EmpathyDispatcher *dispatcher;
   TpConnection *connection;
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
 
   DEBUG ("Pushing request to the dispatcher");
 
-  dispatcher = empathy_dispatcher_dup_singleton ();
   connection = empathy_contact_get_connection (priv->contact);
 
   /* I want to own a reference to the request, and destroy it later */
-  empathy_dispatcher_create_channel (dispatcher, connection,
+  empathy_dispatcher_create_channel (priv->dispatcher, connection,
       g_hash_table_ref (priv->request), ft_handler_create_channel_cb, handler);
-
-  g_object_unref (dispatcher);
-}
-
-static gboolean
-ft_handler_check_if_allowed (EmpathyFTHandler *handler)
-{
-  EmpathyDispatcher *dispatcher;
-  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
-  TpConnection *connection;
-  GStrv allowed;
-  gboolean res = TRUE;
-
-  dispatcher = empathy_dispatcher_dup_singleton ();
-  connection = empathy_contact_get_connection (priv->contact);
-
-  allowed = empathy_dispatcher_find_channel_class (dispatcher, connection,
-      TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, TP_HANDLE_TYPE_CONTACT);
-
-  if (!tp_strv_contains ((const gchar * const *) allowed,
-      TP_IFACE_CHANNEL ".TargetHandle"))
-    res = FALSE;
-
-  DEBUG ("check if FT allowed: %s", res ? "True" : "False");
-
-  g_object_unref (dispatcher);
-
-  return res;
 }
 
 static void
@@ -954,13 +933,21 @@ ft_handler_read_async_cb (GObject *source,
 }
 
 static void
-ft_handler_complete_request (EmpathyFTHandler *handler)
-{ 
+find_channel_class_cb (GStrv channel_class,
+    gpointer user_data)
+{
+  EmpathyFTHandler *handler = user_data;
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
+  gboolean allowed = TRUE;
   GError *myerr = NULL;
 
-  /* check if FT is allowed before firing up the I/O machinery */
-  if (!ft_handler_check_if_allowed (handler))
+  if (!tp_strv_contains ((const gchar * const *) channel_class,
+      TP_IFACE_CHANNEL ".TargetHandle"))
+    allowed = FALSE;
+
+  DEBUG ("check if FT allowed: %s", allowed ? "True" : "False");
+
+  if (!allowed)
     {
       g_set_error_literal (&myerr, EMPATHY_FT_ERROR_QUARK,
           EMPATHY_FT_ERROR_NOT_SUPPORTED,
@@ -982,6 +969,20 @@ ft_handler_complete_request (EmpathyFTHandler *handler)
   else
     /* push directly the handler to the dispatcher */
     ft_handler_push_to_dispatcher (handler);
+}
+
+static void
+ft_handler_complete_request (EmpathyFTHandler *handler)
+{ 
+  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
+  TpConnection *connection;
+
+  /* check if FT is allowed before firing up the I/O machinery */
+  connection = empathy_contact_get_connection (priv->contact);
+
+  empathy_dispatcher_find_channel_class_async (priv->dispatcher, connection,
+      TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, TP_HANDLE_TYPE_CONTACT,
+      find_channel_class_cb, handler);
 }
 
 static void
