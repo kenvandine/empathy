@@ -256,7 +256,7 @@ irc_network_dialog_network_update_buttons (EmpathyIrcNetworkDialog *dialog)
 
     can_remove = TRUE;
     can_move_up = selected > 0;
-    can_move_down = 
+    can_move_down =
       selected < gtk_tree_model_iter_n_children (model, NULL) - 1;
 
     gtk_tree_path_free (path);
@@ -515,7 +515,7 @@ empathy_irc_network_dialog_show (EmpathyIrcNetwork *network,
       1, 10, 0);
   renderer = gtk_cell_renderer_spin_new ();
   g_object_set (renderer,
-      "editable", TRUE, 
+      "editable", TRUE,
       "adjustment", adjustment,
       NULL);
   g_signal_connect (renderer, "edited",
