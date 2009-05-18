@@ -14,8 +14,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
  */
 
 #ifndef __EMPATHY_CONF_H__
@@ -78,7 +78,7 @@ struct _EmpathyConfClass {
 #define EMPATHY_PREFS_IMPORT_ASKED                 EMPATHY_PREFS_PATH "/import_asked"
 #define EMPATHY_PREFS_FILE_TRANSFER_DEFAULT_FOLDER EMPATHY_PREFS_PATH "/file_transfer/default_folder"
 
-typedef void (*EmpathyConfNotifyFunc) (EmpathyConf  *conf, 
+typedef void (*EmpathyConfNotifyFunc) (EmpathyConf  *conf,
 				      const gchar *key,
 				      gpointer     user_data);
 
