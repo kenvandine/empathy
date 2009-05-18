@@ -94,7 +94,7 @@ enum {
 
 typedef struct {
   GInputStream *stream;
-  GError *error;
+  GError *error /* comment to make the style checker happy */;
   guchar *buffer;
   GChecksum *checksum;
   gssize total_read;
