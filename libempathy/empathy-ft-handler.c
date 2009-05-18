@@ -595,7 +595,7 @@ update_remaining_time_and_speed (EmpathyFTHandler *handler,
     {
       transferred = transferred_bytes - last_transferred_bytes;
       speed = (gdouble) transferred / (gdouble) elapsed_time;
-      remaining_time = (priv->total_bytes - transferred) / speed;
+      remaining_time = (priv->total_bytes - priv->transferred_bytes) / speed;
       priv->speed = speed;
       priv->remaining_time = remaining_time;
       priv->last_update_time = current_time;
