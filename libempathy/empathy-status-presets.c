@@ -14,8 +14,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
  *
  * Author: Martyn Russell <martyn@imendio.com>
  */
@@ -104,7 +104,7 @@ status_presets_file_parse (const gchar *filename)
 
 	if (!empathy_xml_validate (doc, STATUS_PRESETS_DTD_FILENAME)) {
 		g_warning ("Failed to validate file:'%s'", filename);
-		xmlFreeDoc(doc);
+		xmlFreeDoc (doc);
 		xmlFreeParserCtxt (ctxt);
 		return;
 	}
@@ -215,7 +215,7 @@ status_presets_file_save (void)
 		xmlNodePtr  subnode;
 		xmlChar    *state;
 
-		state = (gchar*) empathy_presence_to_str (default_preset->state);
+		state = (gchar *) empathy_presence_to_str (default_preset->state);
 
 		subnode = xmlNewTextChild (root, NULL, "default",
 					   default_preset->status);
@@ -228,7 +228,7 @@ status_presets_file_save (void)
 		xmlChar      *state;
 
 		sp = l->data;
-		state = (gchar*) empathy_presence_to_str (sp->state);
+		state = (gchar *) empathy_presence_to_str (sp->state);
 
 		count[sp->state]++;
 		if (count[sp->state] > STATUS_PRESETS_MAX_EACH) {
