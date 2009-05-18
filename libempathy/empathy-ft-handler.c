@@ -18,7 +18,7 @@
  *
  * Author: Cosimo Cecchi <cosimo.cecchi@collabora.co.uk>
  */
- 
+
 /* empathy-ft-handler.c */
 
 #include <glib.h>
@@ -63,7 +63,7 @@
  * will be emitted before or after the transfer, depending on the direction
  * (respectively outgoing and incoming) of the handler.
  * At any time between the call to empathy_ft_handler_start_transfer() and
- * the last signal, a ::transfer-error can be emitted, indicating that an 
+ * the last signal, a ::transfer-error can be emitted, indicating that an
  * error has happened in the operation. The message of the error is localized
  * to use in an UI.
  */
@@ -177,7 +177,7 @@ do_get_property (GObject *object,
 
 static void
 do_set_property (GObject *object,
-    guint property_id, 
+    guint property_id,
     const GValue *value,
     GParamSpec *pspec)
 {
@@ -244,7 +244,7 @@ do_dispose (GObject *object)
       g_object_unref (priv->dispatcher);
       priv->dispatcher = NULL;
     }
-  
+
   G_OBJECT_CLASS (empathy_ft_handler_parent_class)->dispose (object);
 }
 
@@ -386,7 +386,7 @@ empathy_ft_handler_class_init (EmpathyFTHandlerClass *klass)
    * to be completed
    * @speed: the current speed of the transfer (in KB/s)
    *
-   * This signal is emitted to notify clients of the progress of the 
+   * This signal is emitted to notify clients of the progress of the
    * transfer.
    */
   signals[TRANSFER_PROGRESS] =
@@ -418,8 +418,8 @@ empathy_ft_handler_class_init (EmpathyFTHandlerClass *klass)
    * @current_bytes: the bytes currently hashed
    * @total_bytes: the total bytes of the handler
    *
-   * This signal is emitted to notify clients of the progress of the 
-   * hashing operation. 
+   * This signal is emitted to notify clients of the progress of the
+   * hashing operation.
    */
   signals[HASHING_PROGRESS] =
     g_signal_new ("hashing-progress", G_TYPE_FROM_CLASS (klass),
@@ -561,7 +561,7 @@ ft_transfer_operation_callback (EmpathyTpFile *tp_file,
     {
       emit_error_signal (handler, error);
     }
-  else 
+  else
     {
       priv->is_completed = TRUE;
       g_signal_emit (handler, signals[TRANSFER_DONE], 0, tp_file);
@@ -777,7 +777,7 @@ hash_job_done (gpointer user_data)
       value = tp_g_value_slice_new_string
           (g_checksum_get_string (hash_data->checksum));
       g_hash_table_insert (priv->request,
-          TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentHash", value);      
+          TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentHash", value);
     }
 
 cleanup:
@@ -973,7 +973,7 @@ find_channel_class_cb (GStrv channel_class,
 
 static void
 ft_handler_complete_request (EmpathyFTHandler *handler)
-{ 
+{
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
   TpConnection *connection;
 
@@ -1041,7 +1041,7 @@ out:
   callbacks_data_free (cb_data);
 }
 
-static void 
+static void
 contact_factory_contact_cb (EmpathyTpContactFactory *factory,
     EmpathyContact *contact,
     const GError *error,
@@ -1420,7 +1420,7 @@ empathy_ft_handler_is_incoming (EmpathyFTHandler *handler)
   if (priv->tpfile == NULL)
     return FALSE;
 
-  return empathy_tp_file_is_incoming (priv->tpfile);  
+  return empathy_tp_file_is_incoming (priv->tpfile);
 }
 
 /**
@@ -1492,7 +1492,7 @@ empathy_ft_handler_is_completed (EmpathyFTHandler *handler)
  * Returns whether the transfer for @handler has been cancelled or has stopped
  * due to an error.
  *
- * Return value: %TRUE if the transfer for @handler has been cancelled 
+ * Return value: %TRUE if the transfer for @handler has been cancelled
  * or has stopped due to an error, %FALSE otherwise.
  */
 gboolean

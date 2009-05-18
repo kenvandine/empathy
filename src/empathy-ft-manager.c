@@ -281,7 +281,7 @@ ft_manager_format_progress_bytes_and_percentage (guint64 current,
 
   if (percentage != NULL)
     {
-      if (total != 0) 
+      if (total != 0)
         *percentage = current * 100 / total;
       else
         *percentage = -1;
@@ -896,7 +896,7 @@ ft_manager_delete_event_cb (GtkWidget *widget,
       /* There is still FTs on flight, just hide the window */
       DEBUG ("Hiding window");
       gtk_widget_hide (widget);
-      return TRUE;      
+      return TRUE;
     }
 
   return FALSE;

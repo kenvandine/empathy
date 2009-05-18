@@ -290,7 +290,7 @@ static GError *
 error_from_state_change_reason (TpFileTransferStateChangeReason reason)
 {
   const char *string;
-  GError *retval;
+  GError *retval = NULL;
 
   string = NULL;
 
@@ -333,7 +333,7 @@ tp_file_state_changed_cb (TpChannel *proxy,
     GObject *weak_object)
 {
   EmpathyTpFilePriv *priv = GET_PRIV (weak_object);
-  GError *error;
+  GError *error = NULL;
 
   if (state == priv->state)
     return;
@@ -526,7 +526,7 @@ channel_closed_cb (TpChannel *proxy,
 
   if (priv->cancellable != NULL &&
       !g_cancellable_is_cancelled (priv->cancellable) && cancel)
-    g_cancellable_cancel (priv->cancellable);  
+    g_cancellable_cancel (priv->cancellable);
 }
 
 static void
@@ -655,7 +655,7 @@ do_constructor (GType type,
 
   file_obj = G_OBJECT_CLASS (empathy_tp_file_parent_class)->constructor (type,
       n_props, props);
-  
+
   tp_file = EMPATHY_TP_FILE (file_obj);
   priv = GET_PRIV (tp_file);
 
@@ -856,7 +856,7 @@ empathy_tp_file_is_incoming (EmpathyTpFile *tp_file)
   EmpathyTpFilePriv *priv;
 
   g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), FALSE);
-  
+
   priv = GET_PRIV (tp_file);
 
   return priv->incoming;

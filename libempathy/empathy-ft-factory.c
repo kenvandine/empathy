@@ -18,7 +18,7 @@
  *
  * Author: Cosimo Cecchi <cosimo.cecchi@collabora.co.uk>
  */
- 
+
 /* empathy-ft-factory.c */
 
 #include <glib.h>
@@ -162,7 +162,7 @@ ft_handler_incoming_ready_cb (EmpathyFTHandler *handler,
  *
  * Return value: an #EmpathyFTFactory object
  */
-EmpathyFTFactory*
+EmpathyFTFactory *
 empathy_ft_factory_dup_singleton (void)
 {
   return g_object_new (EMPATHY_TYPE_FT_FACTORY, NULL);

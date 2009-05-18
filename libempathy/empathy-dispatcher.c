@@ -758,7 +758,7 @@ dispatcher_connection_got_all (TpProxy *proxy,
 
       if (requests)
         g_list_free (requests);
- 
+
       g_hash_table_remove (priv->outstanding_classes_requests, proxy);
     }
 }
@@ -1469,7 +1469,7 @@ empathy_dispatcher_find_channel_class_async (EmpathyDispatcher *dispatcher,
   g_return_if_fail (TP_IS_CONNECTION (connection));
   g_return_if_fail (channel_type != NULL);
   g_return_if_fail (handle_type != 0);
-  
+
   /* append another request for this connection */
   request = g_slice_new0 (FindChannelRequest);
   request->dispatcher = dispatcher;
