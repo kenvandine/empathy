@@ -15,8 +15,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
  *
  * Authors: Mikael Hallendal <micke@imendio.com>
  *          Martyn Russell <martyn@imendio.com>
@@ -488,7 +488,7 @@ contact_list_view_drag_data_get (GtkWidget        *widget,
 	switch (info) {
 	case DND_DRAG_TYPE_CONTACT_ID:
 		gtk_selection_data_set (selection, drag_atoms_source[info], 8,
-					(guchar*)str, strlen (str) + 1);
+					(guchar *) str, strlen (str) + 1);
 		break;
 	}
 
@@ -1181,7 +1181,7 @@ empathy_contact_list_view_init (EmpathyContactListView *view)
 	/* Get saved group states. */
 	empathy_contact_groups_get_all ();
 
-	gtk_tree_view_set_row_separator_func (GTK_TREE_VIEW (view), 
+	gtk_tree_view_set_row_separator_func (GTK_TREE_VIEW (view),
 					      empathy_contact_list_store_row_separator_func,
 					      NULL, NULL);
 
@@ -1275,8 +1275,8 @@ empathy_contact_list_view_get_selected_group (EmpathyContactListView *view)
 }
 
 static gboolean
-contact_list_view_remove_dialog_show (GtkWindow   *parent, 
-				      const gchar *message, 
+contact_list_view_remove_dialog_show (GtkWindow   *parent,
+				      const gchar *message,
 				      const gchar *secondary_text)
 {
 	GtkWidget *dialog;
@@ -1291,9 +1291,9 @@ contact_list_view_remove_dialog_show (GtkWindow   *parent,
 				NULL);
 	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
 						  "%s", secondary_text);
-	 
+
 	gtk_widget_show (dialog);
-	 
+
 	res = gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
 
@@ -1387,7 +1387,7 @@ contact_list_view_remove_activate_cb (GtkMenuItem            *menuitem,
 	contact = empathy_contact_list_view_dup_selected (view);
 
 	if (contact) {
-		gchar     *text; 
+		gchar     *text;
 		GtkWindow *parent;
 
 		parent = empathy_get_toplevel_window (GTK_WIDGET (view));
@@ -1397,7 +1397,7 @@ contact_list_view_remove_activate_cb (GtkMenuItem            *menuitem,
 			EmpathyContactList *list;
 
 			list = empathy_contact_list_store_get_list_iface (priv->store);
-			empathy_contact_list_remove (list, contact, 
+			empathy_contact_list_remove (list, contact,
 				_("Sorry, I don't want you in my contact list anymore."));
 		}
 
