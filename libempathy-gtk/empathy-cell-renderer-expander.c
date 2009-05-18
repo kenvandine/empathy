@@ -14,9 +14,9 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
- * 
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ *
  * Authors: Kristian Rietveld <kris@imendio.com>
  */
 
@@ -253,7 +253,7 @@ empathy_cell_renderer_expander_get_size (GtkCellRenderer *cell,
 	EmpathyCellRendererExpander     *expander;
 	EmpathyCellRendererExpanderPriv *priv;
 
-	expander = (EmpathyCellRendererExpander*) cell;
+	expander = (EmpathyCellRendererExpander *) cell;
 	priv = GET_PRIV (expander);
 
 	if (cell_area) {
@@ -295,7 +295,7 @@ empathy_cell_renderer_expander_render (GtkCellRenderer      *cell,
 	GtkExpanderStyle                expander_style;
 	gint                            x_offset, y_offset;
 
-	expander = (EmpathyCellRendererExpander*) cell;
+	expander = (EmpathyCellRendererExpander *) cell;
 	priv = GET_PRIV (expander);
 
 	if (priv->animation_node) {
