@@ -5,6 +5,7 @@ import re
 import urllib
 import csv
 import datetime
+import time
 from string import Template
 from optparse import OptionParser
 
@@ -159,10 +160,18 @@ class Project:
 			self.translations += "Updated %s Translation (%s)\n" % (lang, authors)
 
 	def get_bugs(self):
+		commit_str = self.exec_cmd('git show %s' % (self.last_tag))
+		for line in commit_str.splitlines():
+			if line.startswith('Date:'):
+				time_str = line[5:line.rfind('+')].strip()
+				t = time.strptime(time_str)
+				last_tag_date = time.strftime('%Y-%m-%d', t)
+				break
+
 		query = 'http://bugzilla.gnome.org/buglist.cgi?' \
 			'ctype=csv&product=empathy&' \
 			'bug_status=RESOLVED,CLOSED,VERIFIED&resolution=FIXED&' \
-			'chfieldfrom=%s&chfieldto=Now' % ('2009-04-13')
+			'chfieldfrom=%s&chfieldto=Now' % (last_tag_date)
 		f = urllib.urlopen(query)
 		s = f.read()
 		f.close()
