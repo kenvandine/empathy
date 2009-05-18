@@ -202,7 +202,7 @@ contact_selector_constructor (GType type,
   GtkCellLayout *cell_layout;
   GtkCellRenderer *renderer;
 
-  object = G_OBJECT_CLASS (empathy_contact_selector_parent_class)->constructor 
+  object = G_OBJECT_CLASS (empathy_contact_selector_parent_class)->constructor
     (type, n_construct_params, construct_params);
   priv = GET_PRIV (object);
   contact_selector = EMPATHY_CONTACT_SELECTOR (object);
@@ -422,7 +422,7 @@ contact_selector_filter_visible_func (GtkTreeModel *model,
 
   if (contact != NULL)
     {
-      visible = data->func(contact, data->user_data);
+      visible = data->func (contact, data->user_data);
 
       g_object_unref (contact);
     }
