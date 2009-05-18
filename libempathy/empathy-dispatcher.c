@@ -52,6 +52,7 @@ typedef struct
   MissionControl *mc;
   /* connection to connection data mapping */
   GHashTable *connections;
+  GHashTable *outstanding_classes_requests;
   gpointer token;
   GSList *tubes;
 
@@ -109,6 +110,15 @@ typedef struct
   /* List of requestable channel classes */
   GPtrArray *requestable_channels;
 } ConnectionData;
+
+typedef struct
+{
+  EmpathyDispatcher *dispatcher;
+  char *channel_type;
+  guint handle_type;
+  EmpathyDispatcherFindChannelClassCb *callback;
+  gpointer user_data;
+} FindChannelRequest;
 
 static DispatchData *
 new_dispatch_data (TpChannel *channel,
@@ -217,6 +227,14 @@ free_connection_data (ConnectionData *cd)
             g_ptr_array_index (cd->requestable_channels, i));
       g_ptr_array_free (cd->requestable_channels, TRUE);
     }
+}
+
+static void
+free_find_channel_request (FindChannelRequest *r)
+{
+  g_object_unref (r->dispatcher);
+  g_free (r->channel_type);
+  g_slice_free (FindChannelRequest, r);
 }
 
 static void
@@ -712,12 +730,32 @@ dispatcher_connection_got_all (TpProxy *proxy,
   else
     {
       ConnectionData *cd;
+      GList *requests, *l;
+      FindChannelRequest *request;
+      GStrv retval;
 
       cd = g_hash_table_lookup (priv->connections, proxy);
       g_assert (cd != NULL);
 
       cd->requestable_channels = g_boxed_copy (
         TP_ARRAY_TYPE_REQUESTABLE_CHANNEL_CLASS_LIST, requestable_channels);
+
+      requests = g_hash_table_lookup (priv->outstanding_classes_requests,
+          proxy);
+
+      for (l = requests; l != NULL; l = l->next)
+        {
+          request = l->data;
+
+          retval = empathy_dispatcher_find_channel_class (dispatcher,
+              TP_CONNECTION (proxy), request->channel_type,
+              request->handle_type);
+          request->callback (retval, request->user_data);
+
+          free_find_channel_request (request);
+        }
+ 
+      g_hash_table_remove (priv->outstanding_classes_requests, proxy);
     }
 }
 
@@ -861,6 +899,7 @@ dispatcher_finalize (GObject *object)
   GList *l;
   GHashTableIter iter;
   gpointer connection;
+  GList *list;
 
   g_signal_handlers_disconnect_by_func (priv->account_manager,
       dispatcher_new_connection_cb, object);
@@ -880,10 +919,17 @@ dispatcher_finalize (GObject *object)
           dispatcher_connection_invalidated_cb, object);
     }
 
+  g_hash_table_iter_init (&iter, priv->outstanding_classes_requests);
+  while (g_hash_table_iter_next (&iter, &connection, (gpointer *) &list))
+    {
+      g_list_foreach (list, (GFunc) free_find_channel_request, NULL);
+    }
+
   g_object_unref (priv->account_manager);
   g_object_unref (priv->mc);
 
   g_hash_table_destroy (priv->connections);
+  g_hash_table_destroy (priv->outstanding_classes_requests);
 }
 
 static void
@@ -945,6 +991,9 @@ empathy_dispatcher_init (EmpathyDispatcher *dispatcher)
 
   priv->connections = g_hash_table_new_full (g_direct_hash, g_direct_equal,
     g_object_unref, (GDestroyNotify) free_connection_data);
+
+  priv->outstanding_classes_requests = g_hash_table_new_full (g_direct_hash,
+    g_direct_equal, g_object_unref, NULL);
 
   priv->channels = NULL;
 
@@ -1373,3 +1422,51 @@ empathy_dispatcher_find_channel_class (EmpathyDispatcher *dispatcher,
   return NULL;
 }
 
+void
+empathy_dispatcher_find_channel_class_async (EmpathyDispatcher *dispatcher,
+                                             TpConnection *connection,
+                                             const gchar *channel_type,
+                                             guint handle_type,
+                                             EmpathyDispatcherFindChannelClassCb callback,
+                                             gpointer user_data)
+{
+  GStrv retval;
+  EmpathyDispatcherPriv *priv;
+  GList *requests;
+  FindChannelRequest *request;
+
+  g_return_if_fail (EMPATHY_IS_DISPATCHER (dispatcher));
+  g_return_if_fail (TP_IS_CONNECTION (connection));
+  g_return_if_fail (channel_type != NULL);
+  g_return_if_fail (handle_type != 0);
+
+  /* own a reference to the object, so that clients can unref the singleton
+   * while waiting for the cb
+   */
+  priv = GET_PRIV (g_object_ref (dispatcher));
+  retval = empathy_dispatcher_find_channel_class (dispatcher, connection,
+      channel_type, handle_type);
+
+  if (retval != NULL)
+    {
+      g_object_unref (dispatcher);
+      callback (retval, user_data);
+      return;
+    }
+
+  requests = g_hash_table_lookup (priv->outstanding_classes_requests,
+      connection);
+
+  /* append another request for this connection */
+  request = g_slice_new0 (FindChannelRequest);
+  request->dispatcher = dispatcher;
+  request->channel_type = g_strdup (channel_type);
+  request->handle_type = handle_type;
+  request->callback = callback;
+  request->user_data = user_data;
+
+  requests = g_list_prepend (requests, request);
+  
+  g_hash_table_insert (priv->outstanding_classes_requests,
+      connection, requests);
+}

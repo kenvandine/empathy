@@ -58,6 +58,8 @@ struct _EmpathyDispatcherClass
 typedef void (EmpathyDispatcherRequestCb) (
   EmpathyDispatchOperation *dispatch,  const GError *error,
   gpointer user_data);
+typedef void (EmpathyDispatcherFindChannelClassCb) (
+  GStrv channel_class, gpointer user_data);
 
 GType empathy_dispatcher_get_type (void) G_GNUC_CONST;
 
@@ -85,6 +87,10 @@ void empathy_dispatcher_join_muc (TpConnection *connection,
 
 GStrv empathy_dispatcher_find_channel_class (EmpathyDispatcher *dispatcher,
   TpConnection *connection, const gchar *channel_type, guint handle_type);
+
+void empathy_dispatcher_find_channel_class_async (EmpathyDispatcher *dispatcher,
+  TpConnection *connection, const gchar *channel_type, guint handle_type,
+  EmpathyDispatcherFindChannelClassCb callback, gpointer user_data);
 
 /* Get the dispatcher singleton */
 EmpathyDispatcher *    empathy_dispatcher_dup_singleton (void);
