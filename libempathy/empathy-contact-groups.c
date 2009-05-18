@@ -14,8 +14,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
  *
  * Authors: Martyn Russell <martyn@imendio.com>
  */
@@ -101,7 +101,7 @@ contact_groups_file_parse (const gchar *filename)
 
 	if (!empathy_xml_validate (doc, CONTACT_GROUPS_DTD_FILENAME)) {
 		g_warning ("Failed to validate file:'%s'", filename);
-		xmlFreeDoc(doc);
+		xmlFreeDoc (doc);
 		xmlFreeParserCtxt (ctxt);
 		return;
 	}
@@ -152,7 +152,7 @@ contact_groups_file_parse (const gchar *filename)
 
 	DEBUG ("Parsed %d contact groups", g_list_length (groups));
 
-	xmlFreeDoc(doc);
+	xmlFreeDoc (doc);
 	xmlFreeParserCtxt (ctxt);
 }
 
