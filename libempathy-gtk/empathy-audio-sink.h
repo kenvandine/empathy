@@ -41,7 +41,7 @@ GType empathy_audio_sink_get_type (void);
 
 /* TYPE MACROS */
 #define EMPATHY_TYPE_GST_AUDIO_SINK \
-  (empathy_audio_sink_get_type())
+  (empathy_audio_sink_get_type ())
 #define EMPATHY_GST_AUDIO_SINK(obj) \
   (G_TYPE_CHECK_INSTANCE_CAST((obj), EMPATHY_TYPE_GST_AUDIO_SINK, \
     EmpathyGstAudioSink))
