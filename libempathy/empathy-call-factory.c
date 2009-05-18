@@ -104,7 +104,7 @@ empathy_call_factory_class_init (
 
   object_class->constructor = empathy_call_factory_constructor;
   object_class->dispose = empathy_call_factory_dispose;
-  object_class->finalize = empathy_call_factory_finalize;  
+  object_class->finalize = empathy_call_factory_finalize;
 
   signals[NEW_CALL_HANDLER] =
     g_signal_new ("new-call-handler",

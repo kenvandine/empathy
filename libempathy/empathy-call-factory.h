@@ -44,7 +44,7 @@ GType empathy_call_factory_get_type (void);
 
 /* TYPE MACROS */
 #define EMPATHY_TYPE_CALL_FACTORY \
-  (empathy_call_factory_get_type())
+  (empathy_call_factory_get_type ())
 #define EMPATHY_CALL_FACTORY(obj) \
   (G_TYPE_CHECK_INSTANCE_CAST((obj), EMPATHY_TYPE_CALL_FACTORY, \
     EmpathyCallFactory))
