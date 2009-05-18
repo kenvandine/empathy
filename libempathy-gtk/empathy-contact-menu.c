@@ -147,7 +147,7 @@ empathy_contact_audio_call_menu_item_activated (GtkMenuItem *item,
 	EmpathyCallFactory *factory;
 
 	factory = empathy_call_factory_get ();
-	empathy_call_factory_new_call (factory, contact);
+	empathy_call_factory_new_call_with_streams (factory, contact, TRUE, FALSE);
 }
 
 GtkWidget *
