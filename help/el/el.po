@@ -3,37 +3,38 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: empathy-help.HEAD.el\n"
-"POT-Creation-Date: 2009-01-17 07:11+0000\n"
-"PO-Revision-Date: 2009-01-17 23:14+0200\n"
-"Last-Translator: Marios Zindilis <m.zindilis@dmajor.org>\n"
+"POT-Creation-Date: 2009-04-16 20:27+0000\n"
+"PO-Revision-Date: 2009-05-18 16:09+0200\n"
+"Last-Translator: Giannis Katsampirhs <juankatsampirhs@gmail.com>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: KBabel 1.11.4\n"
+"X-Poedit-Language: Greek\n"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: C/empathy.xml:215(None)
+#: C/empathy.xml:237(None)
 msgid "@@image: 'figures/empathy-main-window.png'; md5=38259a866f38ff1f754828e46d2b0e5c"
 msgstr "@@image: 'figures/empathy-main-window.png'; md5=38259a866f38ff1f754828e46d2b0e5c"
 
-#. When image changes, this message will be marked fuzzy or untranslated for you.
-#. It doesn't matter what you translate it to: it's not used at all.
-#: C/empathy.xml:306(None)
-msgid "@@image: 'figures/empathy-new-account.png'; md5=6c1e0d8c709125d387e975e5738b8c0f"
-msgstr "@@image: 'figures/empathy-new-account.png'; md5=6c1e0d8c709125d387e975e5738b8c0f"
+#: C/empathy.xml:27(title)
+#| msgid "<application>Empathy</application> Manual V2.0"
+msgid "<application>Empathy</application> Manual V2.1"
+msgstr "Εγχειρίδιο του <application>Empathy</application> V2.1"
 
-#: C/empathy.xml:25(title)
-msgid "<application>Empathy</application> Manual V2.0"
-msgstr "Εγχειρίδιο του <application>Empathy</application>, έκδοση 2.0"
+#: C/empathy.xml:30(year)
+msgid "2008, 2009"
+msgstr "2008, 2009"
 
-#: C/empathy.xml:28(year)
-msgid "2008"
-msgstr "2008"
-
-#: C/empathy.xml:29(holder) C/empathy.xml:35(publishername) C/empathy.xml:46(orgname) C/empathy.xml:54(orgname) C/empathy.xml:83(para)
+#: C/empathy.xml:31(holder)
+#: C/empathy.xml:37(publishername)
+#: C/empathy.xml:48(orgname)
+#: C/empathy.xml:56(orgname)
+#: C/empathy.xml:87(para)
+#: C/empathy.xml:101(para)
 msgid "Ubuntu Documentation Project"
 msgstr "Έργο τεκμηρίωσης του GNOME"
 
@@ -61,433 +62,917 @@ msgstr "ΣΕ ΚΑΜΙΑ ΠΕΡΙΠΤΩΣΗ ΚΑΙ ΥΠΟ ΚΑΜΙΑ ΝΟΜΙΚΗ
 msgid "DOCUMENT AND MODIFIED VERSIONS OF THE DOCUMENT ARE PROVIDED UNDER THE TERMS OF THE GNU FREE DOCUMENTATION LICENSE WITH THE FURTHER UNDERSTANDING THAT: <placeholder-1/>"
 msgstr "ΤΟ ΈΓΓΡΑΦΟ ΚΑΙ ΤΡΟΠΟΠΟΙΗΜΕΝΕΣ ΕΚΔΟΣΕΙΣ ΑΥΤΟΥ ΠΑΡΕΧΟΝΤΑΙ ΥΠΟ ΤΟΥΣ ΟΡΟΥΣ ΤΗΣ ΑΔΕΙΑΣ GNU FREE DOCUMENTATION ΜΕ ΤΗΝ ΠΕΡΑΙΤΕΡΩ ΔΙΕΥΚΡΙΝΙΣΗ ΟΤΙ: <placeholder-1/>"
 
-#: C/empathy.xml:43(firstname)
+#: C/empathy.xml:45(firstname)
 msgid "Milo"
 msgstr "Milo"
 
-#: C/empathy.xml:44(surname)
+#: C/empathy.xml:46(surname)
 msgid "Casagrande"
 msgstr "Casagrande"
 
-#: C/empathy.xml:47(email)
-msgid "milo_casagrande@yahoo.it"
-msgstr "milo_casagrande@yahoo.it"
+#: C/empathy.xml:49(email)
+msgid "milo@ubuntu.com"
+msgstr "milo@ubuntu.com"
 
-#: C/empathy.xml:51(firstname)
+#: C/empathy.xml:53(firstname)
 msgid "Seth"
 msgstr "Seth"
 
-#: C/empathy.xml:52(surname)
+#: C/empathy.xml:54(surname)
 msgid "Dudenhofer"
 msgstr "Dudenhofer"
 
-#: C/empathy.xml:55(email)
+#: C/empathy.xml:57(email)
 msgid "sdudenhofer@gmail.com"
 msgstr "sdudenhofer@gmail.com"
 
-#: C/empathy.xml:74(revnumber)
+#: C/empathy.xml:81(revnumber)
+#| msgid "Empathy Manual V2.0"
+msgid "Empathy Manual V2.1"
+msgstr "Εγχειρίδιο του Empathy V2.1"
+
+#: C/empathy.xml:82(date)
+msgid "January 2009"
+msgstr "Ιανουάριος 2009"
+
+#: C/empathy.xml:84(para)
+#: C/empathy.xml:95(para)
+#| msgid "Milo Casagrande <email>milo_casagrande@yahoo.it</email>"
+msgid "Milo Casagrande <email>milo@ubuntu.com</email>"
+msgstr "Milo Casagrande <email>milo@ubuntu.com</email>"
+
+#: C/empathy.xml:92(revnumber)
 msgid "Empathy Manual V2.0"
 msgstr "Εγχειρίδιο του Empathy, εκδοση 2.0"
 
-#: C/empathy.xml:75(date)
+#: C/empathy.xml:93(date)
 msgid "April 2008"
 msgstr "Απρίλιος 2008"
 
-#: C/empathy.xml:77(para)
-msgid "Milo Casagrande <email>milo_casagrande@yahoo.it</email>"
-msgstr "Milo Casagrande <email>milo_casagrande@yahoo.it</email>"
-
-#: C/empathy.xml:80(para)
+#: C/empathy.xml:98(para)
 msgid "Seth Dudenhofer <email>sdudenhofer@gmail.com</email>"
 msgstr "Seth Dudenhofer <email>sdudenhofer@gmail.com</email>"
 
-#: C/empathy.xml:88(releaseinfo)
-msgid "This manual describes version 2.24 of Empathy."
-msgstr "Αυτό το εγχειρίδιο περιγράφει την έκδοση 2.24 του Empathy."
+#: C/empathy.xml:106(releaseinfo)
+#| msgid "This manual describes version 2.24 of Empathy."
+msgid "This manual describes version 2.26 of Empathy."
+msgstr "Το εγχειρίδιο αυτό περιγράφει την έκδοση 2.26 του Empathy."
 
-#: C/empathy.xml:92(title)
+#: C/empathy.xml:110(title)
 msgid "Feedback"
 msgstr "Ανάδραση"
 
-#: C/empathy.xml:93(para)
-msgid "To report a bug or make a suggestion regarding the <application>Empathy</application> application or this manual, follow the directions in the <ulink url=\"ghelp:gnome-feedback\" type=\"help\">GNOME Feedback Page</ulink>."
-msgstr "Για να αναφέρετε ένα σφάλμα ή να κάνετε μια πρόταση σχετικά με την εφαρμογή <application>Ιάγνος</application> ή αυτή την τεκμηρίωση, ακολουθήστε τις οδηγίες στη <ulink url=\"ghelp:gnome-feedback\" type=\"help\">Σελίδα ανάδρασης του GNOME</ulink>."
+#: C/empathy.xml:111(para)
+#| msgid ""
+#| "To report a bug or make a suggestion regarding the <application>Empathy</"
+#| "application> application or this manual, follow the directions in the "
+#| "<ulink url=\"ghelp:gnome-feedback\" type=\"help\">GNOME Feedback Page</"
+#| "ulink>."
+msgid "To report a bug or make a suggestion regarding the <application>Empathy</application> application or this manual, follow the directions in the <ulink url=\"ghelp:user-guide?feedback\" type=\"help\">GNOME Feedback Page</ulink>."
+msgstr "Για να αναφέρετε ένα σφάλμα ή να κάνετε μια πρόταση σχετικά με την εφαρμογή <application>Empathy</application> ή αυτή την τεκμηρίωση, ακολουθήστε τις οδηγίες στη <ulink url=\"ghelp:gnome-feedback\" type=\"help\">Σελίδα ανάδρασης του GNOME</ulink>."
 
-#: C/empathy.xml:101(para)
+#: C/empathy.xml:118(para)
 msgid "Empathy is an application for instant messaging."
 msgstr "Το Empathy είναι μια εφαρμογή για ανταλλαγή άμεσων μηνυμάτων."
 
-#: C/empathy.xml:109(primary) C/empathy.xml:0(application) C/empathy.xml:0(application)
+#: C/empathy.xml:126(primary)
+#: C/empathy.xml:0(application)
 msgid "Empathy"
 msgstr "Empathy"
 
-#: C/empathy.xml:112(primary)
+#: C/empathy.xml:129(primary)
 msgid "empathy"
 msgstr "empathy"
 
-#: C/empathy.xml:113(secondary)
+#: C/empathy.xml:130(secondary)
 msgid "istant messaging"
 msgstr "ανταλλαγή άμεσων μηνυμάτων"
 
-#: C/empathy.xml:117(title)
+#: C/empathy.xml:134(title)
 msgid "Introduction"
 msgstr "Εισαγωγή"
 
-#: C/empathy.xml:118(para)
+#: C/empathy.xml:135(para)
 msgid "<application>Empathy</application> is a multi-protocol instant messaging program for the GNOME Desktop. With <application>Empathy</application> you can keep in touch with all of your friends through lots of supported instant messaging services."
 msgstr "Το <application>Empathy</application> είναι μια εφαρμογή ανταλλαγής άμεσων μηνυμάτων σε πολλαπλά πρωτόκολλα, για την επιφάνεια εργασίας GNOME. Με το <application>Empathy</application> μπορείτε να είστε σε επικοινωνία με όλους τους φίλους σας μέσα από πολλές υποστηριζόμενες υπηρεσίες μηνυμάτων."
 
-#: C/empathy.xml:128(acronym)
+#: C/empathy.xml:145(acronym)
 msgid "AIM"
 msgstr "AIM"
 
-#: C/empathy.xml:132(para)
+#: C/empathy.xml:149(para)
 msgid "Google Talk"
 msgstr "Google Talk"
 
-#: C/empathy.xml:137(para)
+#: C/empathy.xml:154(para)
+#: C/empathy.xml:1089(title)
 msgid "ICQ"
 msgstr "ICQ"
 
-#: C/empathy.xml:143(acronym)
+#: C/empathy.xml:160(acronym)
 msgid "IRC"
 msgstr "IRC"
 
-#: C/empathy.xml:147(para)
-msgid "Jabber"
-msgstr "Jabber"
+#: C/empathy.xml:164(para)
+msgid "Jabber (or <acronym>XMPP</acronym>)"
+msgstr "Jabber (ή <acronym>XMPP</acronym>)"
 
-#: C/empathy.xml:153(acronym)
+#: C/empathy.xml:170(acronym)
 msgid "MSN"
 msgstr "MSN"
 
-#: C/empathy.xml:157(para) C/empathy.xml:440(para)
+#: C/empathy.xml:174(para)
+#: C/empathy.xml:441(para)
+#: C/empathy.xml:1049(title)
 msgid "Salut"
 msgstr "Salut"
 
-#: C/empathy.xml:163(acronym)
+#: C/empathy.xml:180(acronym)
 msgid "SIP"
 msgstr "SIP"
 
-#: C/empathy.xml:167(para)
+#: C/empathy.xml:184(para)
+#: C/empathy.xml:919(title)
 msgid "Yahoo"
 msgstr "Yahoo"
 
-#: C/empathy.xml:123(para)
+#: C/empathy.xml:189(para)
+msgid "And many others..."
+msgstr "Και άλλοι πολλοί..."
+
+#: C/empathy.xml:140(para)
 msgid "<application>Empathy</application> supports the following services: <placeholder-1/>"
 msgstr "Το <application>Empathy</application> υποστηρίζει τις ακόλουθες υπηρεσίες: <placeholder-1/>"
 
-#: C/empathy.xml:176(title)
+#: C/empathy.xml:198(title)
 msgid "Getting Started"
 msgstr "Ξεκίνημα"
 
-#: C/empathy.xml:179(title)
+#: C/empathy.xml:201(title)
 msgid "Starting Empathy"
 msgstr "Εκκίνηση του Empathy"
 
-#: C/empathy.xml:180(para)
+#: C/empathy.xml:202(para)
 msgid "You can start <application>Empathy</application> in the following ways:"
 msgstr "Μπορείτε να ξεκινήσετε το <application>Empathy</application> με τους εξής τρόπους:"
 
-#: C/empathy.xml:184(term)
+#: C/empathy.xml:206(term)
 msgid "<guimenu>Applications</guimenu> menu"
 msgstr "Μενού <guimenu>Εφαρμογές</guimenu>"
 
-#: C/empathy.xml:186(para)
+#: C/empathy.xml:208(para)
 msgid "Choose <menuchoice><guisubmenu>Internet</guisubmenu><guimenuitem>Empathy Instant Messenger</guimenuitem></menuchoice>."
 msgstr "Επιλέξτε <menuchoice><guisubmenu>Διαδίκτυο</guisubmenu><guimenuitem>Αποστολέας άμεσων μηνυμάτων Empathy</guimenuitem></menuchoice>."
 
-#: C/empathy.xml:195(term)
+#: C/empathy.xml:217(term)
 msgid "Command line"
 msgstr "Γραμμή εντολής"
 
-#: C/empathy.xml:197(para)
+#: C/empathy.xml:219(para)
 msgid "Type <command>empathy</command> and then press <keycap>Enter</keycap>."
 msgstr "Πληκτρολογήστε <command>empathy</command> και μετά πατήστε το <keycap>Enter</keycap>."
 
-#: C/empathy.xml:206(title)
+#: C/empathy.xml:228(title)
 msgid "When You Start Empathy"
 msgstr "Μόλις εκκινήσετε το Empathy"
 
-#: C/empathy.xml:211(title)
+#: C/empathy.xml:233(title)
 msgid "<application>Empathy</application> Main Window"
 msgstr "Βασικό παράθυρο του <application>Empathy</application>"
 
-#: C/empathy.xml:218(phrase)
+#: C/empathy.xml:240(phrase)
 msgid "Shows <placeholder-1/> main window. Contains the titlebar, the menubar, contact list, status icon and status arrow button list."
 msgstr "Εμφανίζει το βασικό παράθυρο <placeholder-1/>. Περιέχει τη μπάρα τίτλου, το μπάρα μενού, τη λίστα επαφών, το εικονίδιο κατάστασης και το βελάκι της αναδιπλούμενης λίστας καταστάσεων."
 
-#: C/empathy.xml:207(para)
+#: C/empathy.xml:229(para)
 msgid "When you start <application>Empathy</application> the following window is shown. <placeholder-1/>"
 msgstr "Όταν εκκινείτε το <application>Empathy</application> εμφανίζεται το ακόλουθο παράθυρο. <placeholder-1/>"
 
-#: C/empathy.xml:233(title)
+#: C/empathy.xml:255(title)
 msgid "<application>Empathy</application> Main Components"
 msgstr "Βασικά συστατικά του <application>Empathy</application>"
 
-#: C/empathy.xml:240(para)
+#: C/empathy.xml:262(para)
 msgid "Component"
 msgstr "Συστατικό"
 
-#: C/empathy.xml:243(para)
+#: C/empathy.xml:265(para)
 msgid "Description"
 msgstr "Περιγραφή"
 
-#: C/empathy.xml:250(para)
+#: C/empathy.xml:272(para)
 msgid "Menubar"
 msgstr "Μπάρα μενού"
 
-#: C/empathy.xml:253(para)
+#: C/empathy.xml:275(para)
 msgid "Contains menus used to perform actions in <application>Empathy</application>."
 msgstr "Περιέχει τα μενού που χρησιμοποιούνται για τις ενέργειες στο <application>Empathy</application>."
 
-#: C/empathy.xml:260(para)
+#: C/empathy.xml:282(para)
 msgid "Status Drop-Down List"
 msgstr "Αναδιπλούμενη λίστα κατάστασης"
 
-#: C/empathy.xml:263(para)
-msgid "Allows to update the user's status."
-msgstr "Επιτρέπει την ενημέρωση της κατάστασης του χρήστη."
+#: C/empathy.xml:285(para)
+#| msgid "Allows to update the user's status."
+msgid "Allows to update the status."
+msgstr "Επιτρέπει την ενημέρωση της κατάστασης."
 
-#: C/empathy.xml:270(para)
+#: C/empathy.xml:292(para)
 msgid "Account Button"
 msgstr "Κουμπί λογαριασμού"
 
-#: C/empathy.xml:273(para)
+#: C/empathy.xml:295(para)
 msgid "Opens the <guilabel>Accounts</guilabel> dialog."
 msgstr "Ανοίγει το διάλογο <guilabel>Λογαριασμοί</guilabel>."
 
-#: C/empathy.xml:280(para)
+#: C/empathy.xml:302(para)
 msgid "Contact List"
 msgstr "Λίστα επαφών"
 
-#: C/empathy.xml:283(para)
+#: C/empathy.xml:305(para)
 msgid "Shows all the available contacts and their associated status."
 msgstr "Εμφανίζει τις διαθέσιμες επαφές και την κατάστασή τους."
 
-#: C/empathy.xml:229(para)
+#: C/empathy.xml:251(para)
 msgid "<xref linkend=\"empathy-TBL-1\"/> describes the components of <application>Empathy</application>'s main window. <table frame=\"topbot\" id=\"empathy-TBL-1\"><placeholder-1/><tgroup cols=\"2\" colsep=\"0\" rowsep=\"0\"><colspec colname=\"colspec0\" colwidth=\"29.39*\"/><colspec colname=\"colspec1\" colwidth=\"70.61*\"/><placeholder-2/><placeholder-3/></tgroup></table>"
 msgstr "<xref linkend=\"empathy-TBL-1\"/> περιγράφει τα συστατικά του βασικού παραθύρου του <application>Empathy</application>. <table frame=\"topbot\" id=\"empathy-TBL-1\"><placeholder-1/><tgroup cols=\"2\" colsep=\"0\" rowsep=\"0\"><colspec colname=\"colspec0\" colwidth=\"29.39*\"/><colspec colname=\"colspec1\" colwidth=\"70.61*\"/><placeholder-2/><placeholder-3/></tgroup></table>"
 
-#: C/empathy.xml:296(title)
-msgid "When You Start Empathy for the First Time"
-msgstr "Πρώτη εκκίνηση του Empathy"
-
-#: C/empathy.xml:302(title)
-msgid "<application>Empathy</application> Accounts Dialog"
-msgstr "Διάλογος λογαριασμών του <application>Empathy</application>"
-
-#: C/empathy.xml:309(phrase)
-msgid "Shows <placeholder-1/> account creation dialog."
-msgstr "Δείχνει το διάλογο δημιουργίας λογαριασμού <placeholder-1/>."
-
-#: C/empathy.xml:297(para)
-msgid "When you start <application>Empathy</application> for the first time and you don't have configured any account yet, the following dialog is shown. <placeholder-1/>"
-msgstr "Όταν εκκινήσετε το <application>Empathy</application> για πρώτη φορά και δεν έχετε ακόμα ρυθμίσει κάποιο λογαριασμό, εμφανίζεται ο ακόλουθος διάλογος. <placeholder-1/>"
-
-#: C/empathy.xml:318(para)
-msgid "From here, you can configure and create your accounts. See <xref linkend=\"empathy-accounts\"/> for more information."
-msgstr "Από εδώ μπορείτε να δημιουργήσετε και να ρυθμίσετε τους λογαριασμούς σας. Δείτε το <xref linkend=\"empathy-accounts\"/> για περισσότερες πληροφορίες."
-
-#: C/empathy.xml:327(title)
+#: C/empathy.xml:319(title)
 msgid "Accounts"
 msgstr "Λογαριασμοί"
 
-#: C/empathy.xml:328(para)
+#: C/empathy.xml:320(para)
 msgid "To use <application>Empathy</application> you need at least one account of the supported services."
 msgstr "Για να χρησιμοποιήσετε το <application>Empathy</application> χρειάζεστε έναν τουλάχιστον λογαριασμό από τις υποστηριζόμενες υπηρεσίες."
 
-#: C/empathy.xml:331(para)
+#: C/empathy.xml:323(para)
 msgid "If you don't already have an account and you don't have your <emphasis>user name</emphasis> and <emphasis>password</emphasis>, you need to register a new account (see <xref linkend=\"empathy-register-account\"/>)."
 msgstr "Αν δεν έχετε ήδη κάποιο λογαριασμό και δεν έχετε <emphasis>όνομα χρήστη</emphasis> και <emphasis>συνθηματικό</emphasis>, πρέπει να εγγράψετε ένα νέο λογαριασμό (δείτε το <xref linkend=\"empathy-register-account\"/>)."
 
-#: C/empathy.xml:336(para)
-msgid "In order to talk with other users (called <emphasis>contatcs</emphasis>), you need to use the same service they are using. If, for example, one contact is using the <emphasis role=\"strong\">Jabber</emphasis> service, you need to have an account registerd with that service."
-msgstr "Για να συνομιλήσετε με άλλους χρήστες (που ονομάζονται <emphasis>επαφές</emphasis>), πρέπει να χρησιμοποιείτε την ίδια υπηρεσία που χρησιμοποιούν. Αν, για παράδειγμα, μια επαφή χρησιμοποιεί την υπηρεσία <emphasis>Jabber</emphasis>, τότε θα πρέπει να έχετε ένα εγγεγραμμένο λογαριασμό σε εκείνη την υπηρεσία."
+#: C/empathy.xml:328(para)
+#| msgid ""
+#| "In order to talk with other users (called <emphasis>contatcs</emphasis>), "
+#| "you need to use the same service they are using. If, for example, one "
+#| "contact is using the <emphasis role=\"strong\">Jabber</emphasis> service, "
+#| "you need to have an account registerd with that service."
+msgid "In order to talk with other users, also called <emphasis>contacts</emphasis>, you need to use the same service they are using. If, for example, one contact is using the <emphasis role=\"strong\">Jabber</emphasis> service, you need to have an account registered with that service."
+msgstr "Για να συνομιλήσετε με άλλους χρήστες, δηλαδή με άλλες <emphasis>επαφές</emphasis>, πρέπει να χρησιμοποιήσετε την ίδια υπηρεσία που χρησιμοποιούν κι αυτοί. Αν, για παράδειγμα, μία επαφή χρησιμοποιεί την υπηρεσία <emphasis role=\"strong\">Jabber</emphasis>, πρέπει να έχετε ένα λογαριασμό που να έχει καταχωρηθεί με την υπηρεσία αυτή."
 
-#: C/empathy.xml:343(para)
+#: C/empathy.xml:335(para)
 msgid "<application>Empathy</application> can handle as many accounts on any supported services as you want and you can have them all open at the same time."
 msgstr "Το <application>Empathy</application> μπορεί να χειριστεί όσους λογαριασμούς σε όσες υπηρεσίες θέλετε και μπορείτε να τους έχετε όλους ταυτόχρονα ανοικτούς."
 
-#: C/empathy.xml:349(title)
+#: C/empathy.xml:341(title)
 msgid "Registering an Account"
 msgstr "Δημιουργία λογαριασμού"
 
-#: C/empathy.xml:350(para)
+#: C/empathy.xml:342(para)
 msgid "You can freely register an account on any of the following services. Follow the instructions reported on each website on how to register your new account. At the end of the registration process you should have a <emphasis>user name</emphasis> (or an <emphasis>account ID</emphasis>) and a <emphasis>password</emphasis> that you will use to create the account in <application>Empathy</application>."
 msgstr "Μπορείτε να δημιουργήσετε δωρεάν ένα λογαριασμό σε οποιαδήποτε από τις ακόλουθες υπηρεσίες. Ακολουθήστε τις οδηγίες που περιγράφονται σε κάθε ιστότοπο για τον τρόπο δημιουργίας του λογαριασμού σας. Στο τέλος της διαδικασίας εγγραφής θα πρέπει να έχετε ένα <emphasis>όνομα χρήστη</emphasis> (ή μια <emphasis>ταυτότητα - ID</emphasis>) και ένα <emphasis>συνθηματικό</emphasis> που θα χρησιμοποιήσετε για να δημιουργήσετε ένα λογαριασμό στο <application>Empathy</application>."
 
 #. Translators: try to find a localized version of the
 #. 	    registration service website
-#: C/empathy.xml:368(para)
+#: C/empathy.xml:360(para)
 msgid "The <ulink type=\"http\" url=\"http://dashboard.aim.com/aim\">AIM</ulink> service."
 msgstr "Η υπηρεσία <ulink type=\"http\" url=\"http://dashboard.aim.com/aim\">AIM</ulink>."
 
 #. Translators: try to find a localized version of the
 #. 	    registration service website
-#: C/empathy.xml:375(para)
+#: C/empathy.xml:367(para)
 msgid "The <ulink type=\"http\" url=\"http://www.google.com/talk/\">Google Talk</ulink> service."
 msgstr "Η υπηρεσία <ulink type=\"http\" url=\"http://www.google.com/talk/\">Google Talk</ulink>."
 
 #. Translators: try to find a localized version of the
 #. 	    registration service website
-#: C/empathy.xml:383(para)
+#: C/empathy.xml:375(para)
 msgid "The <ulink type=\"http\" url=\"https://www.icq.com/register/\">ICQ</ulink> service."
 msgstr "Η υπηρεσία <ulink type=\"http\" url=\"https://www.icq.com/register/\">ICQ</ulink>."
 
 #. Translators: try to find a localized version of the
 #. 	    registration service website
-#: C/empathy.xml:390(para)
+#: C/empathy.xml:382(para)
 msgid "The <ulink type=\"http\" url=\"https://accountservices.passport.net\">MSN</ulink> service."
 msgstr "Η υπηρεσία <ulink type=\"http\" url=\"https://accountservices.passport.net\">MSN</ulink>."
 
 #. Translators: try to find a localized version of the
 #. 	    registration service website
-#: C/empathy.xml:397(para)
+#: C/empathy.xml:389(para)
 msgid "The <ulink type=\"http\" url=\"https://login.yahoo.com/config/login\">Yahoo</ulink> service."
 msgstr "Η υπηρεσία <ulink type=\"http\" url=\"https://login.yahoo.com/config/login\">Yahoo</ulink>."
 
-#: C/empathy.xml:359(para)
+#: C/empathy.xml:351(para)
 msgid "Click on the name of the service to visit its website: <placeholder-1/>"
 msgstr "Πατήστε στο όνομα της υπηρεσίας για να επισκεφθείτε τον ιστότοπό της."
 
-#: C/empathy.xml:403(para)
+#: C/empathy.xml:395(para)
 msgid "For registering a <acronym>SIP</acronym> account, you can use one of the following service:"
 msgstr "Για να δημιουργήσετε ένα λογαριασμό <acronym>SIP</acronym>, μπορείτε να χρησιμοποιήσετε μία από τις ακόλουθες υπηρεσίες:"
 
 #. Translators: try to find a localized version of the
 #. 	    registration service website
-#: C/empathy.xml:412(para)
-msgid "The <ulink type=\"http\" url=\"http://www.ekiga.net/user/reg/\">Ekiga</ulink> service."
-msgstr "Η υπηρεσία <ulink type=\"http\" url=\"http://www.ekiga.net/user/reg/\">Ekiga</ulink>."
+#: C/empathy.xml:404(para)
+#| msgid ""
+#| "The <ulink type=\"http\" url=\"http://www.ekiga.net/user/reg/\">Ekiga</"
+#| "ulink> service."
+msgid "The <ulink type=\"http\" url=\"https://www.ekiga.net/index.php?page=register\">Ekiga</ulink> service."
+msgstr "Η υπηρεσία <ulink type=\"http\" url=\"https://www.ekiga.net/index.php?page=register\">Ekiga</ulink>."
 
 #. Translators: try to find a localized version of the
 #. 	    registration service website
-#: C/empathy.xml:419(para)
+#: C/empathy.xml:411(para)
 msgid "The <ulink type=\"http\" url=\"http://account2.freeworlddialup.com/index.php?section_id=94\"><acronym>FWD</acronym></ulink> (Free World Dialup) service."
 msgstr "Η υπηρεσία <ulink type=\"http\" url=\"http://account2.freeworlddialup.com/index.php?section_id=94\"><acronym>FWD</acronym></ulink> (Free World Dialup)."
 
 #. Translators: try to find a localized version of the
 #. 	    registration service website
-#: C/empathy.xml:427(para)
+#: C/empathy.xml:419(para)
 msgid "The <ulink type=\"http\" url=\"https://signup.sipphone.com/new-users/app?class=NewUser;proc=start\">Sipphone</ulink> service."
 msgstr "Η υπηρεσία <ulink type=\"http\" url=\"https://signup.sipphone.com/new-users/app?class=NewUser;proc=start\">Sipphone</ulink>."
 
+#: C/empathy.xml:425(para)
+msgid "For registering a <emphasis role=\"strong\">Jabber</emphasis> account, you can use the automatic account creation of <application>Empathy</application>. Not all Jabber service providers support the automatic creation of accounts, one service provider known to work with <application>Empathy</application> is <ulink type=\"http\" url=\"http://www.jabber.org/web/Jabber.org\">jabber.org</ulink>."
+msgstr "Για να καταχωρήσετε ένα λογαριασμό <emphasis role=\"strong\">Jabber</emphasis>, μπορείτε να χρησιμοποιήσετε την αυτόματη δημιουργία λογαριασμού του <application>Empathy</application>. Δεν υποστηρίζουν όλες οι υπηρεσίες Jabber την αυτόματη δημιουργία λογαριασμών, ένας παροχέας της υπηρεσίας που είναι γνωστό ότι λειτουργεί με το <application>Empathy</application> είναι ο <ulink type=\"http\" url=\"http://www.jabber.org/web/Jabber.org\">jabber.org</ulink>."
+
 #: C/empathy.xml:433(para)
-msgid "You can use one of the following services if you already have a <emphasis role=\"strong\">Jabber</emphasis> account:"
-msgstr "Μπορείτε να επιλέξετε μια από τις ακόλουθες υπηρεσίες αν έχετε ήδη έναν λογαριασμό <emphasis>Jabber</emphasis>:"
+#| msgid ""
+#| "For registering a <acronym>SIP</acronym> account, you can use one of the "
+#| "following service:"
+msgid "If you already have a <emphasis role=\"strong\">Jabber</emphasis> account, you can use one of the following services:"
+msgstr "Αν έχετε ήδη ένα λογαριασμό <emphasis role=\"strong\">Jabber</emphasis>, μπορείτε να χρησιμοποιήσετε μία από τις ακόλουθες υπηρεσίες:"
 
-#: C/empathy.xml:449(title)
-msgid "Creating an Account"
-msgstr "Δημιουργία λογαριασμού"
+#: C/empathy.xml:450(title)
+#| msgid ""
+#| "Contains menus used to perform actions in <application>Empathy</"
+#| "application>."
+msgid "Adding your Account to <application>Empathy</application>"
+msgstr "Προσθήκη του λογαριασμού σας στο <application>Empathy</application>"
 
-#: C/empathy.xml:454(para) C/empathy.xml:500(para) C/empathy.xml:522(para)
-msgid "From the <link linkend=\"empathy-FIG-mainwindow\">main window </link> (<guilabel>Contact List</guilabel>) click on the account button to open the <guilabel>Accounts</guilabel> dialog."
-msgstr "Από το <link linkend=\"empathy-FIG-mainwindow\">βασικό παράθυρο</link> (<guilabel>Λίστα επαφών</guilabel>) πατήστε το κουμπίθ λογαριασμοί για να ανοίξετε το διάλογο <guilabel>Λογαριασμοί</guilabel>."
-
-#: C/empathy.xml:462(para)
-msgid "Click on the <guibutton>Add</guibutton> button."
-msgstr "Πατήστε στο <guibutton>Δημιουργία</guibutton>."
+#: C/empathy.xml:455(para)
+#: C/empathy.xml:533(para)
+#: C/empathy.xml:585(para)
+#: C/empathy.xml:618(para)
+#: C/empathy.xml:648(para)
+#: C/empathy.xml:671(para)
+#| msgid ""
+#| "From the <link linkend=\"empathy-FIG-mainwindow\">main window </link> "
+#| "(<guilabel>Contact List</guilabel>) click on the account button to open "
+#| "the <guilabel>Accounts</guilabel> dialog."
+msgid "From the <link linkend=\"empathy-FIG-mainwindow\">main window </link> (<guilabel>Contact List</guilabel>) click on the account button or press <keycap>F4</keycap> to open the <guilabel>Accounts</guilabel> dialog."
+msgstr "Από το <link linkend=\"empathy-FIG-mainwindow\">κύριο παράθυρο </link> (<guilabel>Λίστα επαφών</guilabel>) κάντε κλικ στο κουμπί του λογαριασμού ή πιέστε το πλήκτρο <keycap>F4</keycap> για να ανοίξετε το παράθυρο διαλόγου <guilabel>Λογαριασμοί</guilabel>."
 
 #: C/empathy.xml:467(para)
-msgid "From the <guilabel>Type</guilabel> drop-down list choose the service you wish to create an account for, then click on the <guibutton>Create</guibutton> button."
-msgstr "Από την αναδιπλούμενη λίστα <guilabel>Τύπος</guilabel> επιλέξτε την υπηρεσία στην οποία θέλετε να δημιουργήσετε ένα λογαριασμό, μετά πατήστε στο <guibutton>Δημιουργία</guibutton>."
+#: C/empathy.xml:484(para)
+#| msgid ""
+#| "From the <guilabel>Type</guilabel> drop-down list choose the service you "
+#| "wish to create an account for, then click on the <guibutton>Create</"
+#| "guibutton> button."
+msgid "From the <guilabel>Type</guilabel> drop-down list choose the service you wish to add an account for, then click on the <guibutton>Create</guibutton> button."
+msgstr "Από την αναδιπλούμενη λίστα <guilabel>Τύπος</guilabel> επιλέξτε την υπηρεσία για την οποία επιθυμείτε να δημιουργήσετε ένα λογαριασμό, ύστερα κάντε κλικ στο κουμπί <guibutton>Δημιουργία</guibutton>."
 
-#: C/empathy.xml:474(para)
-msgid "Fill the required fields with your <emphasis>user name</emphasis> and <emphasis>password</emphasis>."
-msgstr "Συμπληρώστε τα απαραίτητα πεδία με τον <emphasis>όνομα χρήστη</emphasis> και το <emphasis>συνθηματικό</emphasis> σας."
+#: C/empathy.xml:463(para)
+#| msgid ""
+#| "When you start <application>Empathy</application> the following window is "
+#| "shown. <placeholder-1/>"
+msgid "If it is the first time you launch <application>Empathy</application>: <placeholder-1/>"
+msgstr "Είναι η πρώτη φορά που εκκινείτε την εφαρμογή <application>Empathy</application>: <placeholder-1/>"
 
-#: C/empathy.xml:480(para)
-msgid "To enable the new account, select the <guilabel>Enabled</guilabel> check-box next to the name of the account."
-msgstr "Για να ενεργοποιήσετε το νέο λογαριασμό, επιλέξτε το κουτάκι  <guilabel>Ενεργοποιημένο</guilabel> πλάι στο όνομα του λογαριασμού."
+#: C/empathy.xml:479(para)
+#| msgid "Click on the <guibutton>Add</guibutton> button."
+msgid "Click on the <guilabel>Add</guilabel> button."
+msgstr "Κάντε κλικ στο κουμπί <guilabel>Προσθήκη</guilabel>."
 
-#: C/empathy.xml:450(para)
-msgid "To create an account, proceed as follow: <placeholder-1/>"
-msgstr "Για να δημιουργήσετε ένα λογαριασμό, προχωρήστε ως εξής: <placeholder-1/>"
+#: C/empathy.xml:475(para)
+msgid "Otherwise: <placeholder-1/>"
+msgstr "Ειδάλλως: <placeholder-1/>"
 
-#: C/empathy.xml:493(title)
+#: C/empathy.xml:494(para)
+#| msgid ""
+#| "If you don't already have an account and you don't have your "
+#| "<emphasis>user name</emphasis> and <emphasis>password</emphasis>, you "
+#| "need to register a new account (see <xref linkend=\"empathy-register-"
+#| "account\"/>)."
+msgid "Fill the required fields with your <emphasis>user name</emphasis> and <emphasis>password</emphasis>. Optionally, you can modify some advanced options. For more information, see <xref linkend=\"empathy-advanced-options\"/>."
+msgstr "Συμπληρώστε τα απαιτούμενα πεδία με το <emphasis>όνομα χρήστη</emphasis> σας και το <emphasis>συνθηματικό</emphasis>. Εναλλακτικά, μπορείτε να τροποποιήσετε κάποιες επιλογές για προχωρημένους. Για μερικές πληροφορίες, δείτε <xref linkend=\"empathy - επιλογές για προχωρημένους\"/>."
+
+#: C/empathy.xml:503(para)
+#: C/empathy.xml:566(para)
+#| msgid ""
+#| "To enable the new account, select the <guilabel>Enabled</guilabel> check-"
+#| "box next to the name of the account."
+msgid "To enable the new account, select the <guilabel>Enabled</guilabel> check-box next to the name of the account in the box on the left."
+msgstr "Για να ενεργοποιήσετε το νέο λογαριασμό, επιλέξτε το πεδίο ελέγχου  <guilabel>Ενεργοποιημένο</guilabel> δίπλα στο όνομα του λογαριασμού στο πεδίο στα αριστερά."
+
+#: C/empathy.xml:451(para)
+#| msgid ""
+#| "When you start <application>Empathy</application> the following window is "
+#| "shown. <placeholder-1/>"
+msgid "To add your account to <application>Empathy</application>, proceed as follows: <placeholder-1/>"
+msgstr "Για να προσθέσετε το λογαριασμό σας στο <application>Empathy</application>, προχωρήστε ως εξής: <placeholder-1/>"
+
+#: C/empathy.xml:513(title)
+#| msgid "Creating an Account"
+msgid "Importing Accounts"
+msgstr "Εισαγωγή λογαριασμών"
+
+#: C/empathy.xml:514(para)
+msgid "If you use another instant messaging program, you can import the accounts from that program into <application>Empathy</application>"
+msgstr "Αν χρησιμοποιείτε κάποιο άλλο πρόγραμμα άμεσων μηνυμάτων, μπορείτε να εισάγετε στο <application>Empathy</application> τους λογαριασμούς από το πρόγραμμα αυτό"
+
+#: C/empathy.xml:520(para)
+msgid "At the moment <application>Empathy</application> can import the accounts only from the instant messaging program <application>Pidgin</application>. For more information about <application>Pidgin</application>, see the <ulink type=\"http\" url=\"http://www.pidgin.im/\">Pidgin website</ulink>."
+msgstr "Προς το παρόν το <application>Empathy</application> μπορεί να εισάγει μόνο τους λογαριασμούς από το πρόγραμμα άμεσων μηνυμάτων <application>Pidgin</application>. Για περισσότερες πληροφορίες σχετικά με το <application>Pidgin</application>, δείτε την <ulink type=\"http\" url=\"http://www.pidgin.im/\">Ιστοσελίδα του Pidgin</ulink>."
+
+#: C/empathy.xml:541(para)
+msgid "Click on the <guibutton>Import Accounts...</guibutton> button to open the <guilabel>Import Accounts</guilabel> dialog."
+msgstr "Κάντε κλικ στο κουμπί <guibutton>Εισαγωγή λογαριασμών...</guibutton>για να ανοίξει το παράθυρο διαλόγου <guilabel>Εισαγωγή λογαριασμών</guilabel>."
+
+#: C/empathy.xml:548(para)
+#| msgid ""
+#| "Select the account you wish to disable in the box on the left of the "
+#| "dialog and deselect the <guilabel>Enabled</guilabel> check-box."
+msgid "Select the accounts you would like to import by clicking on the <guilabel>Import</guilabel> check-box."
+msgstr "Επιλέξτε τους λογαριασμού που επιθυμείτε να εισάγετε κάνοντας κλικ στο πεδίο ελέγχου <guilabel>Εισαγωγή</guilabel>."
+
+#: C/empathy.xml:554(para)
+msgid "When you have selected all the desired accounts, click <guibutton>OK</guibutton> to import them. If you don't want to import the accounts, click <guibutton>Cancel</guibutton>."
+msgstr "Αφού έχετε επιλέξει όλους τους επιθυμητούς λογαριασμούς, κάντε κλικ στο κουμπί <guibutton>OK</guibutton> για να τους εισάγετε. Αν δεν επιθυμείτε να εισάγετε τους λογαριασμούς, κάντε κλικ στο κουμπί <guibutton>Ακύρωση</guibutton>."
+
+#: C/empathy.xml:562(para)
+#| msgid ""
+#| "When you start <application>Empathy</application> the following window is "
+#| "shown. <placeholder-1/>"
+msgid "When you import a new account into <application>Empathy</application>, it will not be enabled by default."
+msgstr "Όταν εισάγετε ένα νέο λογαριασμό στο <application>Empathy</application>, αυτός δεν θα ενεργοποιηθεί εξ ορισμού."
+
+#: C/empathy.xml:529(para)
+#| msgid ""
+#| "When you start <application>Empathy</application> the following window is "
+#| "shown. <placeholder-1/>"
+msgid "To import the accounts into <application>Empathy</application>, proceed as follows: <placeholder-1/>"
+msgstr "Για να εισάγετε τους λογαριασμούς στο <application>Empathy</application>, προχωρήστε ως εξής: <placeholder-1/>"
+
+#: C/empathy.xml:578(title)
+#| msgid "Creating an Account"
+msgid "Editing an Account"
+msgstr "Επεξεργασία λογαριασμού"
+
+#: C/empathy.xml:593(para)
+#| msgid ""
+#| "Select the account you wish to disable in the box on the left of the "
+#| "dialog."
+msgid "Select the account you wish to edit in the box on the left."
+msgstr "Επιλέξτε το λογαριασμό που επιθυμείτε να επεξεργαστείτε στο πεδίο στα αριστερά."
+
+#: C/empathy.xml:599(para)
+msgid "Modify the desired data."
+msgstr "Τροποποιήστε τα δεδομένα που επιθυμείτε."
+
+#: C/empathy.xml:579(para)
+msgid "To edit one of your accounts, i.e. to change the <emphasis>password</emphasis> or your <emphasis>user name</emphasis>, proceed as follows: <placeholder-1/>"
+msgstr "Για να επεξεργαστείτε κάποιον από τους λογαριασμούς σας, για παράδειγμα, για να τροποποιήσετε το <emphasis>συνθηματικό</emphasis> ή το <emphasis>όνομα χρήστη</emphasis> σας, προχωρήστε ως εξής: <placeholder-1/>"
+
+#: C/empathy.xml:607(para)
+msgid "Based on the type of the account, it is possibile to edit different settings."
+msgstr "Με βάση τον τύπο του λογαριασμού, είναι δυνατό να επεξεργαστείτε διάφορες ρυθμίσεις."
+
+#: C/empathy.xml:626(para)
+#| msgid ""
+#| "Select the account you wish to disable in the box on the left of the "
+#| "dialog."
+msgid "Select the account you wish to edit in the box on the left and double-click on its name."
+msgstr "Επιλέξτε το λογαριασμό που επιθυμείτε να επεξεργαστείτε στο πεδίο στα αριστερά και κάντε διπλό κλικ στο όνομά του."
+
+#: C/empathy.xml:632(para)
+msgid "Change the name of the account as you desire."
+msgstr "Τροποποιήστε το όνομα του λογαριασμού όπως επιθυμείτε."
+
+#: C/empathy.xml:613(para)
+#| msgid ""
+#| "When you start <application>Empathy</application> the following window is "
+#| "shown. <placeholder-1/>"
+msgid "To modify the identifier of an account, how <application>Empathy</application> identifies an account, proceed as follows: <placeholder-1/>"
+msgstr "Για να τροποποιήσετε το αναγνωριστικό ενός λογαριασμού, δηλαδή πως το <application>Empathy</application> αναγνωρίζει ένα λογαριασμό, προχωρήστε ως εξής: <placeholder-1/>"
+
+#: C/empathy.xml:641(title)
 msgid "Disabling and Removing an Account"
 msgstr "Απενεργοποίηση και αφαίρεση λογαριασμού"
 
-#: C/empathy.xml:494(para)
-msgid "To disable an account, proceed as follow:"
+#: C/empathy.xml:642(para)
+#| msgid "To disable an account, proceed as follow:"
+msgid "To disable an account, proceed as follows:"
 msgstr "Για να απενεργοποιήσετε ένα λογαριασμό, προχωρήστε ως εξής:"
 
-#: C/empathy.xml:508(para)
+#: C/empathy.xml:657(para)
 msgid "Select the account you wish to disable in the box on the left of the dialog and deselect the <guilabel>Enabled</guilabel> check-box."
-msgstr "Επιλέξτε το λογαριασμό που θέλετε να απενεργοποιήσετε στο κουτί στα δεξιά του διαλόγου και αποεπιλέξτε το κουτάκι <guilabel>Ενεργοποιημένο</guilabel>."
+msgstr "Επιλέξτε το λογαριασμό που θέλετε να απενεργοποιήσετε στο πεδίο στα δεξιά του διαλόγου και αποεπιλέξτε το πεδίο ελέγχου <guilabel>Ενεργοποιημένο</guilabel>."
 
-#: C/empathy.xml:516(para)
-msgid "To remove an account, proceed as follow:"
+#: C/empathy.xml:665(para)
+#| msgid "To remove an account, proceed as follow:"
+msgid "To remove an account, proceed as follows:"
 msgstr "Για να αφαιρέσετε ένα λογαριασμό, προχωρήστε ως εξής:"
 
-#: C/empathy.xml:530(para)
+#: C/empathy.xml:680(para)
 msgid "Select the account you wish to disable in the box on the left of the dialog."
-msgstr "Επιλέξτε το λογαριασμό που θέλετε να αφαιρέσετε από το κουτί στα αριστερά του διαλόγου."
+msgstr "Επιλέξτε το λογαριασμό που θέλετε να αφαιρέσετε από το πεδίο στα αριστερά του διαλόγου."
 
-#: C/empathy.xml:536(para)
+#: C/empathy.xml:686(para)
 msgid "Click on the <guibutton>Remove</guibutton> button."
 msgstr "Πατήστε στο <guibutton>Αφαίρεση</guibutton>."
 
-#: C/empathy.xml:541(para)
+#: C/empathy.xml:691(para)
 msgid "A dialog will be shown asking for confirmation. Click on the <guibutton>Remove</guibutton> button to remove the account."
 msgstr "Θα εμφανιστεί ένας διάλογος που θα σας ζητάει επιβεβαίωση. Πατήστε στο <guibutton>Αφαίρεση</guibutton> για να αφαιρέσετε το λογαριασμό."
 
-#: C/empathy.xml:552(title)
-msgid "Contacts"
-msgstr "Επαφές"
+#: C/empathy.xml:701(title)
+msgid "Editing Personal Information"
+msgstr "Επεξεργασία προσωπικών πληροφοριών"
 
-#: C/empathy.xml:553(para)
+#: C/empathy.xml:702(para)
+msgid "To change your personal information, your alias and your icon (the image that other contacts will see of you), for each of your accounts, proceed as follows:"
+msgstr "Για να τροποποιήσετε τις προσωπικές σας πληροφορίες, το ψευδώνυμο και το εικονίδιό σας (η εικόνα σας η οποία θα εμφανίζεται στις άλλες επαφές), για καθέναν από τους λογαριασμούς σας, προχωρήστε ως εξής:"
+
+#: C/empathy.xml:710(para)
+#| msgid ""
+#| "From the <link linkend=\"empathy-FIG-mainwindow\">main window</link> "
+#| "choose <menuchoice><guimenu>Chat</guimenu><guimenuitem>Add Contact...</"
+#| "guimenuitem></menuchoice>. The <guilabel>New Contact</guilabel> dialog "
+#| "will be shown."
+msgid "From the <link linkend=\"empathy-FIG-mainwindow\">main window</link>, select <menuchoice><guimenu>Edit</guimenu><guimenuitem>Personal Information</guimenuitem></menuchoice>."
+msgstr "Από το <link linkend=\"empathy-FIG-mainwindow\">κύριο παράθυρο</link>, επιλέξτε <menuchoice><guimenu>Επεξεργασία</guimenu><guimenuitem>Προσωπικές πληροφορίες</guimenuitem></menuchoice>."
+
+#: C/empathy.xml:719(para)
+#| msgid ""
+#| "From the <guilabel>Account</guilabel> drop-down list, choose the service "
+#| "used by the contact you are adding."
+msgid "From the <guilabel>Account</guilabel> drop-down list, choose the account you want to edit."
+msgstr "Από την αναδιπλούμενη λίστα <guilabel>Λογαριασμός</guilabel>, επιλέξτε το λογαριασμό που επιθυμείτε να επεξεργαστείτε."
+
+#: C/empathy.xml:725(para)
+#| msgid ""
+#| "In the <guilabel>Alias</guilabel> text-box type the name you want to give "
+#| "at the the new contact."
+msgid "In the <guilabel>Alias</guilabel> text box, write your new alias."
+msgstr "Στο πεδίο κειμένου <guilabel>Ψευδώνυμο</guilabel>, εισάγετε το νέο σας ψευδώνυμο."
+
+#: C/empathy.xml:731(para)
+msgid "To change your icon, click on the person-looking button and choose an image file."
+msgstr "Για να αντικαταστήσετε το εικονίδιό σας, κάντε κλικ στο κουμπί με το πρόσωπο και επιλέξτε ένα αρχείο εικόνας."
+
+#: C/empathy.xml:737(para)
+#: C/empathy.xml:1318(para)
+#: C/empathy.xml:1352(para)
+#| msgid "Click on the <guibutton>Remove</guibutton> button."
+msgid "When done, click <guibutton>Close</guibutton>."
+msgstr "Όταν τελειώσετε, κάντε κλικ στο κουμπί <guibutton>Κλείσιμο</guibutton>."
+
+#: C/empathy.xml:745(para)
+msgid "An <emphasis>alias</emphasis> is an alternative way you can identify yourself. You can use your real name or a nickname."
+msgstr "Το <emphasis>ψευδώνυμο</emphasis> είναι ένας εναλλακτικός τρόπος για να προσδιορίσετε τον εαυτό σας. Μπορείτε να χρησιμοποιήσετε το πραγματικό σας όνομα ή το ψευδώνυμό σας."
+
+#: C/empathy.xml:755(title)
+msgid "Advanced Options"
+msgstr "Επιλογές για προχωρημένους"
+
+#: C/empathy.xml:756(para)
+msgid "Based on the service you are using, it is possible to configure more advanced options to modify the normal behavior of <application>Empathy</application>."
+msgstr "Με βάση την υπηρεσία που χρησιμοποιείτε, είναι δυνατό να ρυθμίσετε περισσότερες επιλογές για προχωρημένους για να τροποποιήσετε την κανονική συμπεριφορά του <application>Empathy</application>."
+
+#: C/empathy.xml:761(para)
+msgid "To configure these options, when you are <link linkend=\"empathy-create-account\">adding a new account</link>, click on the drop-down section <guilabel>Advanced</guilabel>."
+msgstr "Για να ρυθμίσετε τις επιλογές αυτές, όταν <link linkend=\"empathy - δημιουργία λογαριασμού\">προσθέτετε ένα νέο λογαριασμό</link>, κάντε κλικ στην αναδιπλούμενη ενότητα <guilabel>Προχωρημένο</guilabel>."
+
+#: C/empathy.xml:769(title)
+msgid "Jabber (or <acronym>XMPP</acronym>) and Google Talk"
+msgstr "Jabber (ή <acronym>XMPP</acronym>) και Google Talk"
+
+#: C/empathy.xml:776(guilabel)
+msgid "Encryption required (TLS/SSL)"
+msgstr "Απαιτείται κρυπτογράφηση (TLS/SSL)"
+
+#: C/empathy.xml:779(para)
+msgid "Select this option in order to use some sort of encryption during your conversations."
+msgstr "Επιλέξτε την επιλογή αυτή για να χρησιμοποιήσετε κάποιο είδος κρυπτογράφησης για τις συνομιλίες σας."
+
+#: C/empathy.xml:787(guilabel)
+msgid "Ignore SSL certificate errors"
+msgstr "Παράβλεψη σφαλμάτων για πιστοποιητικά SSL"
+
+#: C/empathy.xml:790(para)
+msgid "Select this option in order to ignore the errors that can be generated by some types of security certificates. Usually these certificates are called auto-signed."
+msgstr "Επιλέξτε την επιλογή αυτή ώστε να παραβλέπονται τα σφάλματα που ενδεχομένως να παράγονται από μερικούς τύπους πιστοποιητικών ασφαλείας. Συνήθως τα πιστοποιητικά αυτά ονομάζονται αυτόματα υπογεγραμμένα."
+
+#: C/empathy.xml:798(para)
+msgid "Select this option only if you are sure the certificate is secure and you can trust it."
+msgstr "Επιλέξτε την επιλογή αυτή μόνο αν είστε βέβαιος ότι το πιστοποιητικό είναι ασφαλές και μπορείτε να το εμπιστευτείτε."
+
+#: C/empathy.xml:808(guilabel)
+msgid "Resource"
+msgstr "Πηγή"
+
+#: C/empathy.xml:811(para)
+msgid "Use this text box to set a name with which you can identify the running program based on where you are running it. With this option, and the <guilabel>Priority</guilabel> one, you can use your account simultaneously in two different devices. For example, if you set one device to <replaceable>desktop</replaceable> and the other one to <replaceable>mobile</replaceable>, you can connect with both of them and based on the <guilabel>Priority</guilabel> value you will receive messages on one of the two devices or both."
+msgstr "Χρησιμοποιήστε αυτό το πεδίο κειμένου για να καθορίσετε ένα όνομα με το οποίο θα μπορείτε να αναγνωρίσετε το πρόγραμμα που εκτελείται με βάση τη θέση από την οποία το εκτελείτε εσείς. Με την επιλογή αυτή, και με την επιλογή για την <guilabel>Προτεραιότητα</guilabel>, μπορείτε να χρησιμοποιήσετε το λογαριασμό σας ταυτόχρονα σε δύο διαφορετικές συσκευές. Για παράδειγμα, αν καθορίσετε τη μία συσκευή ως <replaceable>επιτραπέζιο υπολογιστή</replaceable> και την άλλη ως <replaceable>συσκευή κινητού</replaceable>, μπορείτε να συνδεθείτε και με τις δύο και με βάση με την τιμή που έχετε εισάγει για την <guilabel>Προτεραιότητα</guilabel> θα λαμβάνετε μηνύματα σε μία  ή και στις δύο συσκευές."
+
+#: C/empathy.xml:824(para)
+msgid "This can be useful if you have two devices, a main one and a portable one, and you move away from the main one bringing with you the other: you can still receive messages from your account with the portable device even if you do not disconnet from the main one."
+msgstr "Η επιλογή αυτή μπορεί να είναι χρήσιμη αν έχετε δύο συσκευές, μία κύρια και μία φορητή, και βρίσκεστε μακριά από την κύρια αλλά έχετε μαζί σας την φορητή συσκευή: μπορείτε ακόμη να λαμβάνετε μηνύματα από το λογαριασμό σας με την φορητή συσκευή αν δεν έχετε αποσυνδεθεί από την κύρια."
+
+#: C/empathy.xml:833(para)
+msgid "If you set the same value for this text box on both the devices, when you connect with one of them, the other one will be disconnected, even if you set a different value with the <guilabel>Priority</guilabel> spin box."
+msgstr "Αν καθορίσετε την ίδια τιμή για αυτό το πεδίο κειμένου και στις δύο συσκευές, όταν συνδέεστε με μία από αυτές, η άλλη θα αποσυνδέεται, ακόμη και αν καθορίζετε μία διαφορετική τιμή με το περιστρεφόμενο κουτί <guilabel>Προτεραιότητα</guilabel>."
+
+#: C/empathy.xml:846(guilabel)
+msgid "Priority"
+msgstr "Προτεραιότητα"
+
+#: C/empathy.xml:849(para)
+msgid "Use this spin box to indicate wich device, set in the <guilabel>Resource</guilabel> text box, will receive the new messages. The higher the number, the higher the priority: you will receive the new messages on the device with the highest number."
+msgstr "Χρησιμοποιήστε αυτό το περιστρεφόμενο πεδίο για να αναδείξετε ποια συσκευή, που καθορίστηκε στο κουτί κειμένου <guilabel>Πηγή</guilabel>, θα λαμβάνει τα νέα μηνύματα. Όσο υψηλότερος είναι ο αριθμός, τόσο υψηλή θα είναι και η προτεραιότητα: θα λαμβάνετε τα νέα μηνύματα στη συσκευή με τον υψηλότερο αριθμό."
+
+#: C/empathy.xml:856(para)
+msgid "You can set values in the range from <literal>-128</literal> to <literal>127</literal>."
+msgstr "Μπορείτε να ορίσετε τιμές με εύρος από <literal>-128</literal> μέχρι <literal>127</literal>."
+
+#: C/empathy.xml:862(para)
+msgid "If you set the same value of this spin box in both the devices, you will receive messages on both of them."
+msgstr "Αν ορίσετε την ίδια τιμή σε αυτό το περιστρεφόμενο πεδίο και για τις δύο συσκευές, θα λαμβάνετε μηνύματα και στις δύο."
+
+#: C/empathy.xml:879(guilabel)
+#: C/empathy.xml:972(guilabel)
+#: C/empathy.xml:1020(guilabel)
+#: C/empathy.xml:1114(guilabel)
+msgid "Server"
+msgstr "Εξυπηρετητής"
+
+#: C/empathy.xml:882(para)
+#: C/empathy.xml:975(para)
+#: C/empathy.xml:1023(para)
+#: C/empathy.xml:1117(para)
+msgid "Use this text box to write the name of the server you want to use for this service."
+msgstr "Χρησιμοποιήστε αυτό το πεδίο κειμένου για να εισάγετε το όνομα του εξυπηρετητή που επιθυμείτε να χρησιμοποιήσετε για την υπηρεσία αυτή."
+
+#: C/empathy.xml:890(guilabel)
+#: C/empathy.xml:983(guilabel)
+#: C/empathy.xml:1031(guilabel)
+#: C/empathy.xml:1125(guilabel)
+msgid "Port"
+msgstr "Θύρα"
+
+#: C/empathy.xml:893(para)
+#: C/empathy.xml:986(para)
+#: C/empathy.xml:1034(para)
+#: C/empathy.xml:1128(para)
+msgid "Use this spin box to set the number of the port of the server to use."
+msgstr "Χρησιμοποιήστε αυτό το περιστρεφόμενο πεδίο για να ορίσετε τον αριθμό της θύρας που θα χρησιμοποιεί ο εξυπηρετητής."
+
+#: C/empathy.xml:897(para)
+#: C/empathy.xml:990(para)
+#: C/empathy.xml:1038(para)
+#: C/empathy.xml:1132(para)
+msgid "You can set values in the range from <literal>0</literal> to <literal>65,555</literal>."
+msgstr "Μπορείτε να ορίσετε τιμές με εύρος από <literal>0</literal> μέχρι <literal>65,555</literal>."
+
+#: C/empathy.xml:905(guilabel)
+msgid "Use old SSL"
+msgstr "Χρήση παλαιού SSL"
+
+#: C/empathy.xml:908(para)
+msgid "Select this option to use the old version of the secure protocol for encrypting your connection."
+msgstr "Επιλέξτε την επιλογή αυτή για να χρησιμοποιήσετε την παλαιά έκδοση του ασφαλούς πρωτοκόλλου για την κρυπτογράφηση της σύνδεσής σας."
+
+#: C/empathy.xml:873(para)
+msgid "In the <guilabel>Override server settings</guilabel> section you can set options that take precedence over the default settings. <placeholder-1/>"
+msgstr "Στην ενότητα <guilabel>Παράκαμψη ιδιοτήτων εξυπηρετητή</guilabel> μπορείτε να καθορίσετε επιλογές με μεγαλύτερη προτεραιότητα από τις προεπιλεγμένες ρυθμίσεις. <placeholder-1/>"
+
+#: C/empathy.xml:924(guilabel)
+msgid "Ignore conference and chatrooms invitations"
+msgstr "Παράβλεψη συνδιάσκεψης και προσκλήσεων σε δωμάτια συνομιλιών"
+
+#: C/empathy.xml:928(para)
+msgid "Select this option to ignore the invitations that other people may send you."
+msgstr "Επιλέξτε την επιλογή αυτή για να παραβλέψετε τις προσκλήσεις που ενδεχομένως να σας στέλνουν άλλα άτομα."
+
+#: C/empathy.xml:936(guilabel)
+msgid "Room List locale"
+msgstr "Εντοπιότητα λίστας συνομιλιών"
+
+#: C/empathy.xml:939(para)
+msgid "The value of this text box identifies the language used to retrieve the room list when connecting to the Yahoo service."
+msgstr "Η τιμή σε αυτό το πεδίο κειμένου αναγνωρίζει τη γλώσσα που χρησιμοποιείται για την ανάκτηση της λίστα με τα δωμάτια συνομιλιών όταν γίνεται σύνδεση με την υπηρεσία Yahoo."
+
+#: C/empathy.xml:944(para)
+msgid "If you need to change this value, use the two letter code of your language."
+msgstr "Αν επιθυμείτε να τροποποιήσετε την τιμή αυτή, χρησιμοποιήστε τον κώδικα δύο γραμμάτων της γλώσσας σας."
+
+#: C/empathy.xml:952(guilabel)
+#: C/empathy.xml:1094(guilabel)
+msgid "Charset"
+msgstr "Κωδικοποίηση"
+
+#: C/empathy.xml:955(para)
+#: C/empathy.xml:1097(para)
+#| msgid ""
+#| "Contains menus used to perform actions in <application>Empathy</"
+#| "application>."
+msgid "The value of this text box identifies the set of the characters used by <application>Empathy</application>."
+msgstr "Η τιμή αυτού του πεδίου κειμένου αναγνωρίζει το σύνολο των χαρακτήρων που χρησιμοποιούνται από το <application>Empathy</application>."
+
+#: C/empathy.xml:961(para)
+#: C/empathy.xml:1103(para)
+msgid "It is advise to leave this value to <literal>UTF-8</literal>. Change it only if that charset does not cover your language."
+msgstr "Προτείνεται να αφήσετε την τιμή αυτή ως <literal>UTF-8</literal>. Τροποποιήστε της μόνο αν η κωδικοποίηση αυτή δεν καλύπτει τη γλώσσα σας."
+
+#: C/empathy.xml:998(guilabel)
+msgid "Use Yahoo Japan"
+msgstr "Χρήση του Yahoo Ιαπωνίας"
+
+#: C/empathy.xml:1001(para)
+msgid "Select this option only if you have a Yahoo! Japan account. With the Yahoo! Japan service you can only use a Yahoo! Japan account: if you have registered an account with the English version of the service, that account will not work."
+msgstr "Επιλέξτε την επιλογή αυτή μόνο αν έχετε ένα λογαριασμό του Yahoo! Ιαπωνίας. Με την υπηρεσία Yahoo! Ιαπωνίας μπορείτε να χρησιμοποιήσετε μόνο ένα λογαριασμό Yahoo! Ιαπωνίας: αν έχετε καταχωρήσει ένα λογαριασμό με την αγγλική έκδοση της υπηρεσίας, ο λογαριασμός αυτός δε μπορεί να χρησιμοποιηθεί."
+
+#: C/empathy.xml:1015(title)
+msgid "<acronym>AIM</acronym>, GroupWise and <acronym>MSN</acronym>"
+msgstr "<acronym>AIM</acronym>, GroupWise και <acronym>MSN</acronym>"
+
+#: C/empathy.xml:1054(guilabel)
+msgid "Published Name"
+msgstr "Δημοσιευμένο όνομα"
+
+#: C/empathy.xml:1057(para)
+msgid "Use this text box to write the name that will be visible to the other users of the network."
+msgstr "Χρησιμοποιήστε αυτό το πεδίο κειμένου για να εισάγετε το όνομα το οποίο θα είναι ορατό προς τους άλλους χρήστες του δικτύου."
+
+#: C/empathy.xml:1065(guilabel)
+msgid "Email"
+msgstr "Ηλεκτρονική Διεύθυνση"
+
+#: C/empathy.xml:1068(para)
+msgid "Use this text box to write your email."
+msgstr "Χρησιμοποιήστε αυτό το πεδίο κειμένου για να εισάγετε την ηλεκτρονικής σας διεύθυνση."
+
+#: C/empathy.xml:1075(guilabel)
+#| msgid "Jabber"
+msgid "Jabber ID"
+msgstr "Jabber ID"
+
+#: C/empathy.xml:1078(para)
+msgid "Use this text box to write your Jabber ID, if you have one."
+msgstr "Χρησιμοποιήστε αυτό το πεδίο κειμένου για να εισάγετε το Jabber ID σας, αν έχετε κάποιο."
+
+#: C/empathy.xml:1143(title)
+msgid "Gadu Gadu"
+msgstr "Gadu Gadu"
+
+#: C/empathy.xml:1147(guilabel)
+msgid "Nick"
+msgstr "Nick"
+
+#: C/empathy.xml:1149(para)
+msgid "Use this text box to write an alternative name to use with this service."
+msgstr "Χρησιμοποιήστε αυτό το πεδίο κειμένου για να εισάγετε ένα εναλλακτικό όνομα ώστε να το χρησιμοποιήσετε με την υπηρεσία αυτή."
+
+#: C/empathy.xml:1164(title)
+msgid "Contacts and Groups"
+msgstr "Επαφές και Ομάδες"
+
+#: C/empathy.xml:1165(para)
 msgid "All the contacts are handled within <application>Empathy</application>'s <link linkend=\"empathy-FIG-mainwindow\">main window</link>."
 msgstr "Η διαχείριση των επαφών γίνεται μέσα από το <link linkend=\"empathy-FIG-mainwindow\">βασικό παράθυρο</link> του <application>Empathy</application>."
 
-#: C/empathy.xml:558(title)
-msgid "Adding a Contact"
-msgstr "Προσθήκη μιας επαφής"
+#: C/empathy.xml:1169(para)
+msgid "You can add or remove a contact or you can edit the information of a particular contact. It is also possibile to arrange contacts in groups. You can have a group for your work contacts, one for you family contacts, and so on."
+msgstr "Μπορείτε να προσθέσετε ή να αφαιρέσετε μία επαφή ή μπορείτε να επεξεργαστεί τις πληροφορίες μίας συγκεκριμένης επαφής. Είναι επίσης δυνατό να τακτοποιήσετε επαφές σε ομάδες. Μπορείτε να έχετε μία ομάδα για τις επαφές της εργασίας σας, μία για τις οικογενειακές επαφές, και ούτω καθεξής."
 
-#: C/empathy.xml:559(para)
-msgid "To add a new contact, proceed as follow:"
-msgstr "Για να προσθέσετε μια νέα επαφή, προχωρήστε ως εξής:"
+#: C/empathy.xml:1176(title)
+#| msgid "Removing a Contact"
+msgid "Adding and Removing a Contact"
+msgstr "Προσθήκη και αφαίρεση μιας επαφής"
 
-#: C/empathy.xml:565(para)
+#: C/empathy.xml:1177(para)
+#| msgid "To add a new contact, proceed as follow:"
+msgid "To add a new contact, proceed as follows:"
+msgstr "To add a new contact, proceed as follows:"
+
+#: C/empathy.xml:1183(para)
 msgid "From the <link linkend=\"empathy-FIG-mainwindow\">main window</link> choose <menuchoice><guimenu>Chat</guimenu><guimenuitem>Add Contact...</guimenuitem></menuchoice>. The <guilabel>New Contact</guilabel> dialog will be shown."
 msgstr "Από το <link linkend=\"empathy-FIG-mainwindow\">βασικό παράθυρο</link> επιλέξτε <menuchoice><guimenu>Συζήτηση</guimenu><guimenuitem>Πρόσθεση επαφής...</guimenuitem></menuchoice>. Ο διάλογος <guilabel>Νέα επαφή</guilabel> θα εμφανιστεί."
 
-#: C/empathy.xml:575(para)
+#: C/empathy.xml:1193(para)
 msgid "From the <guilabel>Account</guilabel> drop-down list, choose the service used by the contact you are adding."
 msgstr "Από την αναδιπλούμενη λίστα <guilabel>Λογαριασμός</guilabel>, επιλέξτε την υπηρεσία που χρησιμοποιεί η επαφή που προσθέτετε."
 
-#: C/empathy.xml:581(para)
-msgid "In the <guilabel>Identifier</guilabel> text-box type the <emphasis>address</emphasis> of the contact in the form of <userinput><replaceable>user name</replaceable>@<replaceable>service\n\t      domain</replaceable></userinput>."
-msgstr "Στο πεδίο <guilabel>Αναγνωριστικό</guilabel> πληκτρολογήστε τη <emphasis>διεύθυνση</emphasis> την επαφής στη μορφή <userinput><replaceable>όνομα χρήστη</replaceable>@<replaceable>διεύθυνση υπηρεσίας\n\t</replaceable></userinput>."
+#: C/empathy.xml:1199(para)
+#| msgid ""
+#| "In the <guilabel>Identifier</guilabel> text-box type the "
+#| "<emphasis>address</emphasis> of the contact in the form of "
+#| "<userinput><replaceable>user name</replaceable>@<replaceable>service\n"
+#| "\t      domain</replaceable></userinput>."
+msgid ""
+"In the <guilabel>Identifier</guilabel> text box type the <emphasis>address</emphasis> of the contact in the form of <userinput><replaceable>user name</replaceable>@<replaceable>service\n"
+"\t      domain</replaceable></userinput>."
+msgstr ""
+"Στο πεδίο κειμένου <guilabel>Αναγνωριστικό</guilabel> πληκτρολογήστε τη <emphasis>διεύθυνση</emphasis> της επαφής στη μορφή <userinput><replaceable>όνομα χρήστη</replaceable>@<replaceable>υπηρεσία\n"
+"\t      τομέας</replaceable></userinput>."
 
-#: C/empathy.xml:590(para)
-msgid "In the <guilabel>Alias</guilabel> text-box type the name you want to give at the the new contact."
-msgstr "Στο <guilabel>Ψευδώνυμο</guilabel> πληκτρολογήστε το όνομα που θέλετε να δώσετε στη νέα επαφή."
+#: C/empathy.xml:1208(para)
+#| msgid ""
+#| "In the <guilabel>Alias</guilabel> text-box type the name you want to give "
+#| "at the the new contact."
+msgid "In the <guilabel>Alias</guilabel> text box type the name you want to give at the the new contact."
+msgstr "Στο πεδίο κειμένου <guilabel>Ψευδώνυμο</guilabel> πληκτρολογήστε το όνομα που επιθυμείτε να δώσετε στη νέα επαφή."
 
-#: C/empathy.xml:596(para)
+#: C/empathy.xml:1214(para)
 msgid "Click on <guibutton>Add</guibutton> to add the new contact."
 msgstr "Πατήστε στο <guibutton>Προσθήκη</guibutton> για να προσθέσετε τη νέα επαφή."
 
-#: C/empathy.xml:604(title)
-msgid "Removing a Contact"
-msgstr "Αφαίρεση μιας επαφής"
-
-#: C/empathy.xml:605(para)
-msgid "To remove a contact, proceed as follow:"
+#: C/empathy.xml:1220(para)
+#| msgid "To remove a contact, proceed as follow:"
+msgid "To remove a contact, proceed as follows:"
 msgstr "Για να αφαιρέσετε μια επαφή, προχωρήστε ως εξής:"
 
-#: C/empathy.xml:611(para)
+#: C/empathy.xml:1226(para)
 msgid "From the <link linkend=\"empathy-FIG-mainwindow\">main window</link>, select the contact you would like to remove and right-click on it."
 msgstr "Από το <link linkend=\"empathy-FIG-mainwindow\">βασικό παράθυρο</link> επιλέξτε την επαφή που θέλετε να αφαιρέσετε και κάντε πάνω της δεξί κλικ."
 
-#: C/empathy.xml:618(para)
+#: C/empathy.xml:1233(para)
 msgid "From the popup menu, choose <guilabel>Remove</guilabel> to remove the contact."
 msgstr "Από το αναδυόμενο μενού επιλέξτε <guilabel>Αφαίρεση</guilabel> για να αφαιρέσετε την επαφή."
 
-#: C/empathy.xml:627(title)
-msgid "Modifying a Contact"
-msgstr "Τροποποίηση επαφής."
+#: C/empathy.xml:1242(para)
+#: C/empathy.xml:1278(para)
+msgid "An <emphasis>alias</emphasis> is an alternative way you can identify that particular contact. You can use the real name or the nickname of that person."
+msgstr "Το <emphasis>ψευδώνυμο</emphasis> είναι ένας εναλλακτικός τρόπος με τον οποίο μπορείτε να προσδιορίσετε τη συγκεκριμένη επαφή. Μπορείτε να χρησιμοποιήσετε το πραγματικό όνομα ή το ψευδώνυμο του προσώπου αυτού."
+
+#: C/empathy.xml:1251(title)
+#| msgid "Adding a Contact"
+msgid "Editing a Contact"
+msgstr "Επεξεργασία επαφής"
+
+#: C/empathy.xml:1252(para)
+#| msgid "To remove a contact, proceed as follow:"
+msgid "To edit a contact, proceed as follows:"
+msgstr "Για να επεξεργαστείτε μια επαφή, προχωρήστε ως εξής:"
+
+#: C/empathy.xml:1258(para)
+#: C/empathy.xml:1300(para)
+#| msgid ""
+#| "From the <link linkend=\"empathy-FIG-mainwindow\">main window</link> "
+#| "choose <menuchoice><guimenu>Chat</guimenu><guimenuitem>Add Contact...</"
+#| "guimenuitem></menuchoice>. The <guilabel>New Contact</guilabel> dialog "
+#| "will be shown."
+msgid "From the <link linkend=\"empathy-FIG-mainwindow\">main window</link>, select the contact you would like to modify and choose <menuchoice><guimenu>Edit</guimenu><guisubmenu>Contact</guisubmenu><guimenuitem>Edit</guimenuitem></menuchoice>, or right-click on it and choose <guilabel>Edit</guilabel>."
+msgstr "Από <link linkend=\"empathy-FIG-mainwindow\">κύριο παράθυρο</link>, επιλέξτε την επαφή που επιθυμείτε να τροποποιήσετε και επιλέξτε <menuchoice><guimenu>Επεξεργασία</guimenu><guisubmenu>Επαφή</guisubmenu><guimenuitem>Επεξεργασία</guimenuitem></menuchoice>, ή κάντε δεξί κλικ πάνω του και επιλέξτε <guilabel>Επεξεργασία</guilabel>."
+
+#: C/empathy.xml:1271(para)
+msgid "From the <guilabel>Edit Contact Information</guilabel> dialog, you can modify the <emphasis>alias</emphasis> and the <emphasis>group</emphasis> of the contact."
+msgstr "Από το παράθυρο διαλόγου <guilabel>Επεξεργασία πληροφοριών επαφής</guilabel>, μπορείτε να τροποποιήσετε το <emphasis>ψευδώνυμο</emphasis> και την <emphasis>ομάδα</emphasis> της επαφής."
+
+#: C/empathy.xml:1285(para)
+msgid "For more information about groups, see <xref linkend=\"empathy-add-contact-group\"/> and <xref linkend=\"empathy-add-group\"/>."
+msgstr "Για περισσότερες πληροφορίες σχετικά με τις ομάδες, δείτε <xref linkend=\"empathy - προσθήκη επαφής σε ομάδα\"/> και <xref linkend=\"empathy - προσθήκη ομάδας\"/>."
+
+#: C/empathy.xml:1293(title)
+#| msgid "Adding a Contact"
+msgid "Adding a Contact to a Group"
+msgstr "Προσθήκη επαφής σε μία ομάδα"
+
+#: C/empathy.xml:1294(para)
+#| msgid "To add a new contact, proceed as follow:"
+msgid "To add a contact to one or more groups, proceed as follows:"
+msgstr "Για να προσθέσετε μια επαφή σε μία ή περισσότερες ομάδες, προχωρήστε ως εξής:"
+
+#: C/empathy.xml:1312(para)
+#| msgid ""
+#| "In the <guilabel>Alias</guilabel> text-box type the name you want to give "
+#| "at the the new contact."
+msgid "From the <guilabel>Groups</guilabel> section, select the group, or groups, you want to add the contact to."
+msgstr "Από την ενότητα <guilabel>Ομάδες</guilabel>, επιλέξτε την ομάδα, ή τις ομάδες, όπου επιθυμείτε να προσθέσετε την επαφή."
+
+#: C/empathy.xml:1327(title)
+msgid "Adding a New Group"
+msgstr "Προσθήκη νέας ομάδας"
+
+#: C/empathy.xml:1328(para)
+#| msgid "To add a new contact, proceed as follow:"
+msgid "To add a new group, proceed as follows:"
+msgstr "Για να προσθέσετε μια νέα ομάδα, προχωρήστε ως εξής:"
+
+#: C/empathy.xml:1334(para)
+#| msgid ""
+#| "From the <link linkend=\"empathy-FIG-mainwindow\">main window</link> "
+#| "choose <menuchoice><guimenu>Chat</guimenu><guimenuitem>Add Contact...</"
+#| "guimenuitem></menuchoice>. The <guilabel>New Contact</guilabel> dialog "
+#| "will be shown."
+msgid "From the <link linkend=\"empathy-FIG-mainwindow\">main window</link>, select one contact and choose <menuchoice><guimenu>Edit</guimenu><guisubmenu>Contact</guisubmenu><guimenuitem>Edit</guimenuitem></menuchoice>, or right-click on it and choose <guilabel>Edit</guilabel>."
+msgstr "Από το <link linkend=\"empathy-FIG-mainwindow\">κύριο παράθυρο</link>, επιλέξτε μία επαφή και επιλέξτε <menuchoice><guimenu>Επεξεργασία</guimenu><guisubmenu>Επαφή</guisubmenu><guimenuitem>Επεξεργασία</guimenuitem></menuchoice>, ή κάντε δεξί κλικ πάνω του και επιλέξτε <guilabel>Επεξεργασία</guilabel>."
+
+#: C/empathy.xml:1345(para)
+#| msgid ""
+#| "From the <guilabel>Type</guilabel> drop-down list choose the service you "
+#| "wish to create an account for, then click on the <guibutton>Create</"
+#| "guibutton> button."
+msgid "In the <guilabel>Groups</guilabel> section, write the name of the group you want to add and then click on <guibutton>Add Group</guibutton>."
+msgstr "Από την ενότητα <guilabel>Ομάδες</guilabel>, εισάγετε το όνομα της ομάδες που επιθυμείτε να προσθέσετε και ύστερα κάντε κλικ στο κουμπί <guibutton>Προσθήκη ομάδας</guibutton>."
 
 #. Put one translator per line, in the form of NAME <EMAIL>, YEAR1, YEAR2.
 #: C/empathy.xml:0(None)
@@ -497,4 +982,55 @@ msgstr ""
 " Μάριος Ζηντίλης <m.zindilis@dmajor.org\n"
 "\n"
 "Για περισσότερα δείτε http://www.gnome.gr/"
+
+#~ msgid ""
+#~ "@@image: 'figures/empathy-new-account.png'; "
+#~ "md5=6c1e0d8c709125d387e975e5738b8c0f"
+#~ msgstr ""
+#~ "@@image: 'figures/empathy-new-account.png'; "
+#~ "md5=6c1e0d8c709125d387e975e5738b8c0f"
+#~ msgid "2008"
+#~ msgstr "2008"
+#~ msgid "milo_casagrande@yahoo.it"
+#~ msgstr "milo_casagrande@yahoo.it"
+#~ msgid "When You Start Empathy for the First Time"
+#~ msgstr "Πρώτη εκκίνηση του Empathy"
+#~ msgid "<application>Empathy</application> Accounts Dialog"
+#~ msgstr "Διάλογος λογαριασμών του <application>Empathy</application>"
+#~ msgid "Shows <placeholder-1/> account creation dialog."
+#~ msgstr "Δείχνει το διάλογο δημιουργίας λογαριασμού <placeholder-1/>."
+#~ msgid ""
+#~ "When you start <application>Empathy</application> for the first time and "
+#~ "you don't have configured any account yet, the following dialog is shown. "
+#~ "<placeholder-1/>"
+#~ msgstr ""
+#~ "Όταν εκκινήσετε το <application>Empathy</application> για πρώτη φορά και "
+#~ "δεν έχετε ακόμα ρυθμίσει κάποιο λογαριασμό, εμφανίζεται ο ακόλουθος "
+#~ "διάλογος. <placeholder-1/>"
+#~ msgid ""
+#~ "From here, you can configure and create your accounts. See <xref linkend="
+#~ "\"empathy-accounts\"/> for more information."
+#~ msgstr ""
+#~ "Από εδώ μπορείτε να δημιουργήσετε και να ρυθμίσετε τους λογαριασμούς σας. "
+#~ "Δείτε το <xref linkend=\"empathy-accounts\"/> για περισσότερες "
+#~ "πληροφορίες."
+#~ msgid ""
+#~ "You can use one of the following services if you already have a <emphasis "
+#~ "role=\"strong\">Jabber</emphasis> account:"
+#~ msgstr ""
+#~ "Μπορείτε να επιλέξετε μια από τις ακόλουθες υπηρεσίες αν έχετε ήδη έναν "
+#~ "λογαριασμό <emphasis>Jabber</emphasis>:"
+#~ msgid ""
+#~ "Fill the required fields with your <emphasis>user name</emphasis> and "
+#~ "<emphasis>password</emphasis>."
+#~ msgstr ""
+#~ "Συμπληρώστε τα απαραίτητα πεδία με τον <emphasis>όνομα χρήστη</emphasis> "
+#~ "και το <emphasis>συνθηματικό</emphasis> σας."
+#~ msgid "To create an account, proceed as follow: <placeholder-1/>"
+#~ msgstr ""
+#~ "Για να δημιουργήσετε ένα λογαριασμό, προχωρήστε ως εξής: <placeholder-1/>"
+#~ msgid "Contacts"
+#~ msgstr "Επαφές"
+#~ msgid "Modifying a Contact"
+#~ msgstr "Τροποποίηση επαφής."
 
