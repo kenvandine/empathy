@@ -450,8 +450,11 @@ do_real_transfer_done (EmpathyFTManager *manager,
   const char *contact_name;
   const char *filename;
   char *first_line, *second_line, *message;
+  char *uri;
   gboolean incoming;
   GtkTreeRowReference *row_ref;
+  GtkRecentManager *recent_manager;
+  GFile *file;
 
   row_ref = ft_manager_get_row_from_handler (manager, handler);
   g_return_if_fail (row_ref != NULL);
@@ -484,6 +487,13 @@ do_real_transfer_done (EmpathyFTManager *manager,
   g_free (first_line);
   g_free (second_line);
 
+  recent_manager = gtk_recent_manager_get_default ();
+  file = empathy_ft_handler_get_gfile (handler);
+  uri = g_file_get_uri (file);
+
+  gtk_recent_manager_add_item (recent_manager, uri);
+
+  g_free (uri);
 }
 
 static void
