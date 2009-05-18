@@ -15,15 +15,15 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
- * 
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ *
  * Authors: Mikael Hallendal <micke@imendio.com>
  *          Richard Hult <richard@imendio.com>
  *          Martyn Russell <martyn@imendio.com>
  *          Xavier Claessens <xclaesse@gmail.com>
  *          Jonny Lamb <jonny.lamb@collabora.co.uk>
- * 
+ *
  *          Part of this file is copied from GtkSourceView (gtksourceiter.c):
  *          Paolo Maggi
  *          Jeroen Zwartepoorte
@@ -609,7 +609,7 @@ g_utf8_strcasestr (const gchar *haystack, const gchar *needle)
 
 	if (needle_len == 0)
 	{
-		ret = (gchar *)haystack;
+		ret = (gchar *) haystack;
 		goto finally_1;
 	}
 
@@ -619,7 +619,7 @@ g_utf8_strcasestr (const gchar *haystack, const gchar *needle)
 		goto finally_1;
 	}
 
-	p = (gchar*)caseless_haystack;
+	p = (gchar *) caseless_haystack;
 	needle_len = strlen (needle);
 	i = 0;
 
@@ -715,7 +715,7 @@ forward_chars_with_skipping (GtkTextIter *iter,
 			/* being UTF8 correct sucks; this accounts for extra
 			   offsets coming from canonical decompositions of
 			   UTF8 characters (e.g. accented characters) which
-			   g_utf8_normalize() performs */
+			   g_utf8_normalize () performs */
 			gchar *normal;
 			gchar buffer[6];
 			gint buffer_len;
@@ -968,7 +968,7 @@ empathy_text_iter_forward_search (const GtkTextIter   *iter,
 		}
 	} while (gtk_text_iter_forward_line (&search));
 
-	g_strfreev ((gchar**)lines);
+	g_strfreev ((gchar **) lines);
 
 	return retval;
 }
@@ -996,7 +996,7 @@ g_utf8_strrcasestr (const gchar *haystack, const gchar *needle)
 
 	if (needle_len == 0)
 	{
-		ret = (gchar *)haystack;
+		ret = (gchar *) haystack;
 		goto finally_1;
 	}
 
@@ -1214,7 +1214,7 @@ empathy_text_iter_backward_search (const GtkTextIter   *iter,
 		}
 	}
 
-	g_strfreev ((gchar**)lines);
+	g_strfreev ((gchar **) lines);
 
 	return retval;
 }
@@ -1240,7 +1240,7 @@ empathy_window_get_is_visible (GtkWindow *window)
 	return TRUE;
 }
 
-void 
+void
 empathy_window_iconify (GtkWindow *window, GtkStatusIcon *status_icon)
 {
 	GdkRectangle  icon_location;
@@ -1350,7 +1350,7 @@ empathy_url_show (GtkWidget *parent,
 		GtkWidget *dialog;
 
 		dialog = gtk_message_dialog_new (NULL, 0,
-						 GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, 
+						 GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
 						 _("Unable to open URI"));
 		gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
 							  "%s", error->message);
@@ -1407,7 +1407,7 @@ static void
 file_manager_send_file_request_cb (EmpathyDispatchOperation *operation,
 				   const GError *error, gpointer user_data)
 {
-	GFile *file = (GFile *)user_data;
+	GFile *file = (GFile *) user_data;
 	EmpathyTpFile *tp_file;
 
 	if (error != NULL) {
@@ -1624,7 +1624,7 @@ empathy_sound_play_full (GtkWidget *widget, EmpathySound sound_id,
 	       entry->event_ca_id,
 	       entry->event_ca_description);
 
-	if (ca_proplist_create(&p) < 0)
+	if (ca_proplist_create (&p) < 0)
 		goto failed;
 
 	if (ca_proplist_sets (p, CA_PROP_EVENT_ID, entry->event_ca_id) < 0)

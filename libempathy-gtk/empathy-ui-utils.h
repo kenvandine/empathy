@@ -15,15 +15,15 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
- * 
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ *
  * Authors: Mikael Hallendal <micke@imendio.com>
  *          Richard Hult <richard@imendio.com>
  *          Martyn Russell <martyn@imendio.com>
  *          Xavier Claessens <xclaesse@gmail.com>
  *          Jonny Lamb <jonny.lamb@collabora.co.uk>
- * 
+ *
  *          Part of this file is copied from GtkSourceView (gtksourceiter.c):
  *          Paolo Maggi
  *          Jeroen Zwartepoorte
