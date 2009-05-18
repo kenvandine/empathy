@@ -302,6 +302,15 @@ fi
 AM_CONDITIONAL(HAVE_PYTHON, test "x$have_python" = "xyes")
 
 # -----------------------------------------------------------
+# Coding style checks
+# -----------------------------------------------------------
+AC_ARG_ENABLE(coding-style-checks,
+  AC_HELP_STRING([--disable-coding-style-checks],
+                 [don't check coding style using grep]),
+    [ENABLE_CODING_STYLE_CHECKS=$enableval], [ENABLE_CODING_STYLE_CHECKS=yes])
+
+AC_SUBST([ENABLE_CODING_STYLE_CHECKS])
+# -----------------------------------------------------------
 
 SHAVE_INIT(.)
 
