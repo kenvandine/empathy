@@ -64,7 +64,7 @@ empathy_contact_menu_new (EmpathyContact             *contact,
 
 	/* Call */
 	if (features & EMPATHY_CONTACT_FEATURE_CALL) {
-		item = empathy_contact_call_menu_item_new (contact);
+		item = empathy_contact_audio_call_menu_item_new (contact);
 		gtk_menu_shell_append (shell, item);
 		gtk_widget_show (item);
 	}
@@ -141,7 +141,7 @@ empathy_contact_chat_menu_item_new (EmpathyContact *contact)
 }
 
 static void
-empathy_contact_call_menu_item_activated (GtkMenuItem *item,
+empathy_contact_audio_call_menu_item_activated (GtkMenuItem *item,
 	EmpathyContact *contact)
 {
 	EmpathyCallFactory *factory;
@@ -151,7 +151,7 @@ empathy_contact_call_menu_item_activated (GtkMenuItem *item,
 }
 
 GtkWidget *
-empathy_contact_call_menu_item_new (EmpathyContact *contact)
+empathy_contact_audio_call_menu_item_new (EmpathyContact *contact)
 {
 	GtkWidget *item;
 	GtkWidget *image;
@@ -166,9 +166,9 @@ empathy_contact_call_menu_item_new (EmpathyContact *contact)
 	gtk_widget_show (image);
 
 	g_signal_connect (item, "activate",
-				  G_CALLBACK (empathy_contact_call_menu_item_activated),
+				  G_CALLBACK (empathy_contact_audio_call_menu_item_activated),
 				  contact);
-	
+
 	return item;
 }
 
