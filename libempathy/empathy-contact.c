@@ -1011,7 +1011,7 @@ empathy_avatar_ref (EmpathyAvatar *avatar)
  *
  * Save the avatar to a file named filename
  *
- * Returns: %TRUE on success, %FALSE if an error occurred 
+ * Returns: %TRUE on success, %FALSE if an error occurred
  */
 gboolean
 empathy_avatar_save_to_file (EmpathyAvatar *self,
