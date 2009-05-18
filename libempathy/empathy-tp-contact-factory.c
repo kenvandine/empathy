@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
 
@@ -563,7 +563,7 @@ tp_contact_factory_add_contact (EmpathyTpContactFactory *tp_factory,
 	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
 	TpHandle self_handle;
 	TpHandle handle;
-	GArray handles = {(gchar*) &handle, 1};
+	GArray handles = {(gchar *) &handle, 1};
 	GHashTable *tokens;
 	GPtrArray *capabilities;
 	GError *error = NULL;
@@ -988,7 +988,7 @@ empathy_tp_contact_factory_set_avatar (EmpathyTpContactFactory *tp_factory,
 	if (data && size > 0 && size < G_MAXUINT) {
 		GArray avatar;
 
-		avatar.data = (gchar*) data;
+		avatar.data = (gchar *) data;
 		avatar.len = size;
 
 		DEBUG ("Setting avatar on connection %s",
