@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
 
@@ -108,7 +108,7 @@ tp_chat_async_cb (TpChannel *proxy,
 		  GObject *weak_object)
 {
 	if (error) {
-		DEBUG ("Error %s: %s", (gchar*) user_data, error->message);
+		DEBUG ("Error %s: %s", (gchar *) user_data, error->message);
 	}
 }
 
@@ -275,7 +275,7 @@ tp_chat_received_cb (TpChannel   *channel,
 	if (priv->listing_pending_messages) {
 		return;
 	}
- 
+
  	DEBUG ("Message received: %s", message_body);
 
 	if (message_flags & TP_CHANNEL_TEXT_MESSAGE_FLAG_NON_TEXT_CONTENT &&
@@ -911,7 +911,7 @@ tp_chat_group_members_changed_cb (TpChannel     *self,
 	/* Request added contacts */
 	if (added->len > 0) {
 		empathy_tp_contact_factory_get_from_handles (priv->factory,
-			added->len, (TpHandle*) added->data,
+			added->len, (TpHandle *) added->data,
 			tp_chat_got_added_contacts_cb, NULL, NULL,
 			G_OBJECT (chat));
 	}
@@ -995,7 +995,7 @@ tp_chat_constructor (GType                  type,
 		members = tp_channel_group_get_members (priv->channel);
 		handles = tp_intset_to_array (members);		
 		empathy_tp_contact_factory_get_from_handles (priv->factory,
-			handles->len, (TpHandle*) handles->data,
+			handles->len, (TpHandle *) handles->data,
 			tp_chat_got_added_contacts_cb, NULL, NULL, chat);
 
 		g_signal_connect (priv->channel, "group-members-changed",
@@ -1360,7 +1360,7 @@ empathy_tp_chat_acknowledge_messages (EmpathyTpChat *chat,
 	g_return_if_fail (EMPATHY_IS_TP_CHAT (chat));
 	g_return_if_fail (priv->ready);
 
-	length = g_list_length ((GList *)messages);
+	length = g_list_length ((GList *) messages);
 
 	if (length == 0)
 		return;
