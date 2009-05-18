@@ -15,9 +15,9 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
- * 
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ *
  * Authors: Xavier Claessens <xclaesse@gmail.com>
  *          Martyn Russell <martyn@imendio.com>
  */
@@ -40,7 +40,7 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_ACCOUNT
 #include <libempathy/empathy-debug.h>
 
-static gboolean 
+static gboolean
 account_widget_entry_focus_cb (GtkWidget     *widget,
 			       GdkEventFocus *event,
 			       McAccount     *account)
@@ -107,7 +107,7 @@ account_widget_int_changed_cb (GtkWidget *widget,
 	}
 }
 
-static void  
+static void
 account_widget_checkbutton_toggled_cb (GtkWidget *widget,
 				       McAccount *account)
 {
@@ -157,7 +157,7 @@ account_widget_password_changed_cb (GtkWidget *entry,
 	gtk_widget_set_sensitive (button, !EMP_STR_EMPTY (str));
 }
 
-static void  
+static void
 account_widget_jabber_ssl_toggled_cb (GtkWidget *checkbutton_ssl,
 				      GtkWidget *spinbutton_port)
 {
@@ -187,9 +187,9 @@ account_widget_setup_widget (GtkWidget   *widget,
 			     McAccount   *account,
 			     const gchar *param_name)
 {
-	g_object_set_data_full (G_OBJECT (widget), "param_name", 
+	g_object_set_data_full (G_OBJECT (widget), "param_name",
 				g_strdup (param_name), g_free);
-	g_object_set_data_full (G_OBJECT (widget), "account", 
+	g_object_set_data_full (G_OBJECT (widget), "account",
 				g_object_ref (account), g_object_unref);
 
 	if (GTK_IS_SPIN_BUTTON (widget)) {
@@ -270,7 +270,7 @@ accounts_widget_generic_setup (McAccount *account,
 	if (!protocol) {
 		/* The CM is not installed, MC shouldn't list them
 		 * see SF bug #1688779
-		 * FIXME: We should display something asking the user to 
+		 * FIXME: We should display something asking the user to
 		 * install the CM
 		 */
 		g_object_unref (profile);
