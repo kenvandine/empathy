@@ -15,8 +15,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
  *
  * Authors: Mikael Hallendal <micke@imendio.com>
  *          Martyn Russell <martyn@imendio.com>
@@ -707,7 +707,7 @@ empathy_contact_list_store_search_equal_func (GtkTreeModel *model,
 	name_folded = g_utf8_casefold (name, -1);
 	key_folded = g_utf8_casefold (key, -1);
 
-	if (name_folded && key_folded && 
+	if (name_folded && key_folded &&
 	    strstr (name_folded, key_folded)) {
 		ret = FALSE;
 	} else {
@@ -920,7 +920,7 @@ contact_list_store_remove_contact (EmpathyContactListStore *store,
 
 		/* NOTE: it is only <= 2 here because we have
 		 * separators after the group name, otherwise it
-		 * should be 1. 
+		 * should be 1.
 		 */
 		if (gtk_tree_model_iter_parent (model, &parent, l->data) &&
 		    gtk_tree_model_iter_n_children (model, &parent) <= 2) {
@@ -1138,7 +1138,7 @@ contact_list_store_contact_active_new (EmpathyContactListStore *store,
 	ShowActiveData *data;
 
 	DEBUG ("Contact:'%s' now active, and %s be removed",
-		empathy_contact_get_name (contact), 
+		empathy_contact_get_name (contact),
 		remove ? "WILL" : "WILL NOT");
 	
 	data = g_slice_new0 (ShowActiveData);
@@ -1259,7 +1259,7 @@ contact_list_store_get_group (EmpathyContactListStore *store,
 		}
 
 		gtk_tree_store_append (GTK_TREE_STORE (store),
-				       &iter_separator, 
+				       &iter_separator,
 				       &iter_group);
 		gtk_tree_store_set (GTK_TREE_STORE (store), &iter_separator,
 				    EMPATHY_CONTACT_LIST_STORE_COL_IS_SEPARATOR, TRUE,
