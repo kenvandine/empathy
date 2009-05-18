@@ -15,8 +15,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
  *
  * Authors: Richard Hult <richard@imendio.com>
  *          Martyn Russell <martyn@imendio.com>
@@ -245,7 +245,7 @@ presence_chooser_popup_shown_cb (GObject *self,
 		return;
 	}
 
-	/* see presence_chooser_entry_focus_out_cb() for what this does */
+	/* see presence_chooser_entry_focus_out_cb () for what this does */
 	if (priv->focus_out_idle_source != 0) {
 		g_source_remove (priv->focus_out_idle_source);
 		priv->focus_out_idle_source = 0;
@@ -383,7 +383,7 @@ presence_chooser_set_status_editing (EmpathyPresenceChooser *self,
 			gtk_window_set_focus (GTK_WINDOW (window), NULL);
 		}
 
-		/* see presence_chooser_entry_focus_out_cb()
+		/* see presence_chooser_entry_focus_out_cb ()
 		 * for what this does */
 		if (priv->focus_out_idle_source != 0) {
 			g_source_remove (priv->focus_out_idle_source);
