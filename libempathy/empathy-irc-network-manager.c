@@ -611,7 +611,7 @@ irc_network_manager_file_parse (EmpathyIrcNetworkManager *self,
       irc_network_manager_parse_irc_network (self, node, user_defined);
     }
 
-  xmlFreeDoc(doc);
+  xmlFreeDoc (doc);
   xmlFreeParserCtxt (ctxt);
 
   return TRUE;
