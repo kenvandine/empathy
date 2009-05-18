@@ -149,10 +149,10 @@ ft_operation_close_clean (EmpathyTpFile *tp_file)
 {
   EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
 
-  DEBUG ("FT operation close clean");
-
   if (priv->is_closed)
     return;
+
+  DEBUG ("FT operation close clean");
 
   priv->is_closed = TRUE;
 
@@ -166,10 +166,10 @@ ft_operation_close_with_error (EmpathyTpFile *tp_file,
 {
   EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
 
-  DEBUG ("FT operation close with error %s", error->message);
-
   if (priv->is_closed)
     return;
+
+  DEBUG ("FT operation close with error %s", error->message);
 
   priv->is_closed = TRUE;
 
@@ -191,9 +191,9 @@ splice_stream_ready_cb (GObject *source,
 
   tp_file = user_data;
 
-  DEBUG ("Splice stream ready cb");
-
   g_output_stream_splice_finish (G_OUTPUT_STREAM (source), res, &error);
+
+  DEBUG ("Splice stream ready cb, error %p", error);
 
   if (error != NULL)
     {
@@ -520,12 +520,12 @@ channel_closed_cb (TpChannel *proxy,
 {
   EmpathyTpFile *tp_file = EMPATHY_TP_FILE (weak_object);
   EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
-  gboolean *cancel = user_data;
+  gboolean cancel = GPOINTER_TO_INT (user_data);
 
-  DEBUG ("Channel is closed");
+  DEBUG ("Channel is closed, should cancel %s", cancel ? "True" : "False");
 
   if (priv->cancellable != NULL &&
-      !g_cancellable_is_cancelled (priv->cancellable) && *cancel)
+      !g_cancellable_is_cancelled (priv->cancellable) && cancel)
     g_cancellable_cancel (priv->cancellable);  
 }
 
@@ -535,10 +535,11 @@ close_channel_internal (EmpathyTpFile *tp_file,
 {
   EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
 
-  DEBUG ("Closing channel..");
+  DEBUG ("Closing channel, should cancel %s", cancel ?
+         "True" : "False");
 
   tp_cli_channel_call_close (priv->channel, -1,
-    channel_closed_cb, &cancel, NULL, G_OBJECT (tp_file));
+    channel_closed_cb, GINT_TO_POINTER (cancel), NULL, G_OBJECT (tp_file));
 }
 
 /* GObject methods */

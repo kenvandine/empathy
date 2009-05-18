@@ -694,6 +694,8 @@ ft_handler_check_if_allowed (EmpathyFTHandler *handler)
       TP_IFACE_CHANNEL ".TargetHandle"))
     res = FALSE;
 
+  DEBUG ("check if FT allowed: %s", res ? "True" : "False");
+
   g_object_unref (dispatcher);
 
   return res;
