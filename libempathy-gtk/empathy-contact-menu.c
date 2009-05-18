@@ -62,9 +62,14 @@ empathy_contact_menu_new (EmpathyContact             *contact,
 		gtk_widget_show (item);
 	}
 
-	/* Call */
 	if (features & EMPATHY_CONTACT_FEATURE_CALL) {
+		/* Audio Call */
 		item = empathy_contact_audio_call_menu_item_new (contact);
+		gtk_menu_shell_append (shell, item);
+		gtk_widget_show (item);
+
+		/* Video Call */
+		item = empathy_contact_video_call_menu_item_new (contact);
 		gtk_menu_shell_append (shell, item);
 		gtk_widget_show (item);
 	}
@@ -167,6 +172,38 @@ empathy_contact_audio_call_menu_item_new (EmpathyContact *contact)
 
 	g_signal_connect (item, "activate",
 				  G_CALLBACK (empathy_contact_audio_call_menu_item_activated),
+				  contact);
+
+	return item;
+}
+
+static void
+empathy_contact_video_call_menu_item_activated (GtkMenuItem *item,
+	EmpathyContact *contact)
+{
+	EmpathyCallFactory *factory;
+
+	factory = empathy_call_factory_get ();
+	empathy_call_factory_new_call_with_streams (factory, contact, TRUE, TRUE);
+}
+
+GtkWidget *
+empathy_contact_video_call_menu_item_new (EmpathyContact *contact)
+{
+	GtkWidget *item;
+	GtkWidget *image;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
+
+	item = gtk_image_menu_item_new_with_mnemonic (C_("menu item", "_Video Call"));
+	image = gtk_image_new_from_icon_name (EMPATHY_IMAGE_VIDEO_CALL,
+					      GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+	gtk_widget_set_sensitive (item, empathy_contact_can_voip (contact));
+	gtk_widget_show (image);
+
+	g_signal_connect (item, "activate",
+				  G_CALLBACK (empathy_contact_video_call_menu_item_activated),
 				  contact);
 
 	return item;
@@ -301,7 +338,6 @@ room_sub_menu_data_new (EmpathyContact *contact,
 	data = g_slice_new (RoomSubMenuData);
 	data->contact = g_object_ref (contact);
 	data->chatroom = g_object_ref (chatroom);
-
 	return data;
 }
 
