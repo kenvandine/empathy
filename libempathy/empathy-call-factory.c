@@ -132,6 +132,15 @@ empathy_call_factory_get (void)
   return EMPATHY_CALL_FACTORY (call_factory);
 }
 
+/**
+ * empathy_call_factory_new_call_with_streams:
+ * @factory: an #EmpathyCallFactory
+ * @contact: an #EmpathyContact
+ * @initial_audio: if %TRUE the call will be started with audio
+ * @initial_video: if %TRUE the call will be started with video
+ *
+ * Initiate a new call with @contact.
+ */
 void
 empathy_call_factory_new_call_with_streams (EmpathyCallFactory *factory,
     EmpathyContact *contact,
@@ -153,6 +162,13 @@ empathy_call_factory_new_call_with_streams (EmpathyCallFactory *factory,
 }
 
 
+/**
+ * empathy_call_factory_new_call:
+ * @factory: an #EmpathyCallFactory
+ * @contact: an #EmpathyContact
+ *
+ * Initiate a new call with @contact.
+ */
 void
 empathy_call_factory_new_call (EmpathyCallFactory *factory,
     EmpathyContact *contact)
