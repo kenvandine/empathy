@@ -39,13 +39,8 @@
     not specified, the publisher/author is the same for all versions of the 
     document.  -->
     <publisher>
-      <year>2009</year>
       <publishername>GNOME Documentation Project</publishername>
     </publisher>
-    <publisher>
-      <year>2008, 2009</year>
-      <publishername>Ubuntu Documentation Project</publishername> 
-    </publisher> 
 
     <!-- licence stuff -->
     &legal;
