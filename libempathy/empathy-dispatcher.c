@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
 
@@ -452,7 +452,7 @@ dispatcher_start_dispatching (EmpathyDispatcher *self,
             dispatch_operation_ready_cb (operation, dispatcher);
             break;
           default:
-            g_assert_not_reached();
+            g_assert_not_reached ();
         }
 
     }
@@ -522,7 +522,7 @@ dispatcher_connection_new_channel (EmpathyDispatcher *dispatcher,
   if (g_hash_table_lookup (cd->dispatching_channels, object_path) != NULL)
     return;
 
-  /* Should never occur, but just in case a CM fires spurious NewChannel(s) 
+  /* Should never occur, but just in case a CM fires spurious NewChannel(s)
    * signals */
   if (g_hash_table_lookup (cd->outstanding_channels, object_path) != NULL)
     return;
@@ -832,7 +832,7 @@ dispatcher_new_connection_cb (EmpathyAccountManager *manager,
   g_ptr_array_free (capabilities, TRUE);
 }
 
-static GObject*
+static GObject *
 dispatcher_constructor (GType type,
                         guint n_construct_params,
                         GObjectConstructParam *construct_params)
@@ -1086,7 +1086,7 @@ dispatcher_request_channel_cb (TpConnection *connection,
                                GObject *weak_object)
 {
   EmpathyDispatcher *dispatcher = EMPATHY_DISPATCHER (weak_object);
-  DispatcherRequestData *request_data = (DispatcherRequestData*) user_data;
+  DispatcherRequestData *request_data = (DispatcherRequestData *) user_data;
 
   dispatcher_connection_new_requested_channel (dispatcher,
     request_data, object_path, NULL, error);
@@ -1116,7 +1116,7 @@ empathy_dispatcher_chat_with_contact (EmpathyContact *contact,
 
   g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 
-  dispatcher = empathy_dispatcher_dup_singleton();
+  dispatcher = empathy_dispatcher_dup_singleton ();
   priv = GET_PRIV (dispatcher);
 
   connection = empathy_contact_get_connection (contact);
@@ -1238,7 +1238,7 @@ empathy_dispatcher_join_muc (TpConnection *connection,
   g_return_if_fail (TP_IS_CONNECTION (connection));
   g_return_if_fail (!EMP_STR_EMPTY (roomname));
 
-  dispatcher = empathy_dispatcher_dup_singleton();
+  dispatcher = empathy_dispatcher_dup_singleton ();
   priv = GET_PRIV (dispatcher);
 
   connection_data = g_hash_table_lookup (priv->connections, connection);
@@ -1268,7 +1268,7 @@ dispatcher_create_channel_cb (TpConnection *connect,
                               GObject *weak_object)
 {
   EmpathyDispatcher *dispatcher = EMPATHY_DISPATCHER (weak_object);
-  DispatcherRequestData *request_data = (DispatcherRequestData*) user_data;
+  DispatcherRequestData *request_data = (DispatcherRequestData *) user_data;
 
   dispatcher_connection_new_requested_channel (dispatcher,
     request_data, object_path, properties, error);
@@ -1327,7 +1327,7 @@ empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
                                          EmpathyDispatcherRequestCb *callback,
                                          gpointer user_data)
 {
-  EmpathyDispatcher *dispatcher = empathy_dispatcher_dup_singleton();
+  EmpathyDispatcher *dispatcher = empathy_dispatcher_dup_singleton ();
   EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
   TpConnection *connection = empathy_contact_get_connection (contact);
   ConnectionData *connection_data =
