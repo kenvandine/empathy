@@ -496,11 +496,9 @@ ft_handler_transfer_done_cb (EmpathyFTHandler *handler,
   if (empathy_ft_handler_is_incoming (handler) &&
       empathy_ft_handler_get_use_hash (handler))
     {
-      /* connect to the signal and return early */
+      /* connect to the signal */
       g_signal_connect (handler, "hashing-started",
           G_CALLBACK (ft_handler_hashing_started_cb), manager);
-
-      return;
     }
 
   do_real_transfer_done (manager, handler);
