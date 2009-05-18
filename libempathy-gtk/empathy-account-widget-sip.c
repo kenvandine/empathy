@@ -63,8 +63,8 @@ account_widget_sip_discover_stun_toggled_cb (
   gboolean active;
 
   active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbox));
-  gtk_widget_set_sensitive(settings->entry_stun_server, !active);
-  gtk_widget_set_sensitive(settings->spinbutton_stun_part, !active);
+  gtk_widget_set_sensitive (settings->entry_stun_server, !active);
+  gtk_widget_set_sensitive (settings->spinbutton_stun_part, !active);
 }
 
 /**
