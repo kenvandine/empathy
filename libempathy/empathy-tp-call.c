@@ -351,7 +351,7 @@ tp_call_async_cb (TpProxy *proxy,
                   GObject *call)
 {
   if (error)
-      DEBUG ("Error %s: %s", (gchar*) user_data, error->message);
+      DEBUG ("Error %s: %s", (gchar *) user_data, error->message);
 }
 
 static GObject *
