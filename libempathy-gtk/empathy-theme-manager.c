@@ -15,8 +15,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
  *
  * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
@@ -69,8 +69,8 @@ G_DEFINE_TYPE (EmpathyThemeManager, empathy_theme_manager, G_TYPE_OBJECT);
 static void
 theme_manager_gdk_color_to_hex (GdkColor *gdk_color, gchar *str_color)
 {
-	g_snprintf (str_color, 10, 
-		    "#%02x%02x%02x", 
+	g_snprintf (str_color, 10,
+		    "#%02x%02x%02x",
 		    gdk_color->red >> 8,
 		    gdk_color->green >> 8,
 		    gdk_color->blue >> 8);
