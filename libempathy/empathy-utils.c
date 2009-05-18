@@ -15,8 +15,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
  *
  * Authors: Richard Hult <richard@imendio.com>
  *          Martyn Russell <martyn@imendio.com>
@@ -140,7 +140,7 @@ empathy_xml_validate (xmlDoc      *doc,
 }
 
 xmlNodePtr
-empathy_xml_node_get_child (xmlNodePtr   node, 
+empathy_xml_node_get_child (xmlNodePtr   node,
 			   const gchar *child_name)
 {
 	xmlNodePtr l;
@@ -158,7 +158,7 @@ empathy_xml_node_get_child (xmlNodePtr   node,
 }
 
 xmlChar *
-empathy_xml_node_get_child_content (xmlNodePtr   node, 
+empathy_xml_node_get_child_content (xmlNodePtr   node,
 				   const gchar *child_name)
 {
 	xmlNodePtr l;
@@ -175,7 +175,7 @@ empathy_xml_node_get_child_content (xmlNodePtr   node,
 }
 
 xmlNodePtr
-empathy_xml_node_find_child_prop_value (xmlNodePtr   node, 
+empathy_xml_node_find_child_prop_value (xmlNodePtr   node,
 				       const gchar *prop_name,
 				       const gchar *prop_value)
 {
@@ -373,7 +373,7 @@ empathy_check_available_state (void)
 
 	if (presence != MC_PRESENCE_AVAILABLE &&
 		presence != MC_PRESENCE_UNSET) {
-		return FALSE;    
+		return FALSE;
 	}
 
 	return TRUE;
