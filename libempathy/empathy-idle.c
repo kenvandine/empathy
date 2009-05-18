@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
 
@@ -31,7 +31,7 @@
 #include <libmissioncontrol/mc-enum-types.h>
 
 #include "empathy-idle.h"
-#include "empathy-utils.h" 
+#include "empathy-utils.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include "empathy-debug.h"
