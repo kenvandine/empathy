@@ -15,9 +15,9 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
- * 
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ *
  * Authors: Martyn Russell <martyn@imendio.com>
  *          Xavier Claessens <xclaesse@gmail.com>
  */
@@ -287,8 +287,8 @@ log_window_entry_find_changed_cb (GtkWidget       *entry,
 	str = gtk_entry_get_text (GTK_ENTRY (window->entry_find));
 
 	is_sensitive &= !EMP_STR_EMPTY (str);
-	is_sensitive &= 
-		!window->last_find || 
+	is_sensitive &=
+		!window->last_find ||
 		(window->last_find && strcmp (window->last_find, str) != 0);
 
 	gtk_widget_set_sensitive (window->button_find, is_sensitive);
