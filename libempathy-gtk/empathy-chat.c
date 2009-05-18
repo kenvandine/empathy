@@ -15,9 +15,9 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
- * 
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ *
  * Authors: Mikael Hallendal <micke@imendio.com>
  *          Richard Hult <richard@imendio.com>
  *          Martyn Russell <martyn@imendio.com>
@@ -282,7 +282,7 @@ chat_composing_stop (EmpathyChat *chat)
 				   TP_CHANNEL_CHAT_STATE_ACTIVE);
 }
 
-static void 
+static void
 chat_sent_message_add (EmpathyChat  *chat,
 		       const gchar *str)
 {
@@ -684,8 +684,8 @@ chat_input_key_press_event_cb (GtkWidget   *widget,
 	priv = GET_PRIV (chat);
 
 	/* Catch ctrl+up/down so we can traverse messages we sent */
-	if ((event->state & GDK_CONTROL_MASK) && 
-	    (event->keyval == GDK_Up || 
+	if ((event->state & GDK_CONTROL_MASK) &&
+	    (event->keyval == GDK_Up ||
 	     event->keyval == GDK_Down)) {
 		GtkTextBuffer *buffer;
 		const gchar   *str;
@@ -698,15 +698,15 @@ chat_input_key_press_event_cb (GtkWidget   *widget,
 			str = chat_sent_message_get_last (chat);
 		}
 
-		g_signal_handlers_block_by_func (buffer, 
+		g_signal_handlers_block_by_func (buffer,
 						 chat_input_text_buffer_changed_cb,
 						 chat);
 		gtk_text_buffer_set_text (buffer, str ? str : "", -1);
-		g_signal_handlers_unblock_by_func (buffer, 
+		g_signal_handlers_unblock_by_func (buffer,
 						   chat_input_text_buffer_changed_cb,
 						   chat);
 
-		return TRUE;    
+		return TRUE;
 	}
 
 	/* Catch enter but not ctrl/shift-enter */
@@ -939,7 +939,7 @@ chat_spelling_menu_activate_cb (GtkMenuItem     *menu_item,
                                gtk_menu_item_get_label (menu_item));
 }
 
-static GtkWidget*
+static GtkWidget *
 chat_spelling_build_menu (EmpathyChatSpell *chat_spell)
 {
     GtkWidget *menu, *menu_item;
@@ -1313,7 +1313,7 @@ chat_create_ui (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
 	GtkBuilder      *gui;
- 	GList           *list = NULL; 
+ 	GList           *list = NULL;
 	gchar           *filename;
 	GtkTextBuffer   *buffer;
 
@@ -1410,7 +1410,7 @@ chat_size_request (GtkWidget      *widget,
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
       GtkRequisition child_requisition;
-      
+
       gtk_widget_size_request (bin->child, &child_requisition);
 
       requisition->width += child_requisition.width;
@@ -1424,7 +1424,7 @@ chat_size_allocate (GtkWidget     *widget,
 {
   GtkBin *bin = GTK_BIN (widget);
   GtkAllocation child_allocation;
-  
+
   widget->allocation = *allocation;
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
