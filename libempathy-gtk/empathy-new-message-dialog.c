@@ -195,7 +195,7 @@ new_message_dialog_call_got_contact_cb (EmpathyTpContactFactory *factory,
 		return;
 	}
 
-	call_factory = empathy_call_factory_get();
+	call_factory = empathy_call_factory_get ();
 	empathy_call_factory_new_call (call_factory, contact);
 }
 
@@ -232,7 +232,7 @@ new_message_dialog_response_cb (GtkWidget               *widget,
 
 static void
 new_message_change_state_button_cb  (GtkEditable             *editable,
-				     EmpathyNewMessageDialog *dialog)  
+				     EmpathyNewMessageDialog *dialog)
 {
 	const gchar *id;
 	gboolean     sensitive;
@@ -302,8 +302,8 @@ empathy_new_message_dialog_show (GtkWindow *parent)
 	g_signal_connect (completion, "match-selected",
 			  G_CALLBACK (new_message_dialog_match_selected_cb),
 			  dialog);
-	g_object_unref(completion);
-	g_object_unref(model);
+	g_object_unref (completion);
+	g_object_unref (model);
 
 	empathy_builder_connect (gui, dialog,
 			       "new_message_dialog", "destroy", new_message_dialog_destroy_cb,
@@ -326,7 +326,7 @@ empathy_new_message_dialog_show (GtkWindow *parent)
 	gtk_widget_show (dialog->account_chooser);
 
 	new_message_dialog_account_changed_cb (dialog->account_chooser, dialog);
-	g_signal_connect (dialog->account_chooser, "changed", 
+	g_signal_connect (dialog->account_chooser, "changed",
 			  G_CALLBACK (new_message_dialog_account_changed_cb),
 			  dialog);
 
