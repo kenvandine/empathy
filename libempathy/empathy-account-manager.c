@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Authors: Cosimo Cecchi <cosimo.cecchi@collabora.co.uk>
  */
 
@@ -451,7 +451,7 @@ empathy_account_manager_init (EmpathyAccountManager *manager)
 
   priv->accounts = g_hash_table_new_full (empathy_account_hash,
                                           empathy_account_equal,
-                                          g_object_unref, 
+                                          g_object_unref,
                                           (GDestroyNotify) account_data_free);
   priv->connections = g_hash_table_new_full (g_direct_hash, g_direct_equal,
                                              g_object_unref, g_object_unref);
@@ -531,7 +531,7 @@ do_dispose (GObject *obj)
   G_OBJECT_CLASS (empathy_account_manager_parent_class)->dispose (obj);
 }
 
-static GObject*
+static GObject *
 do_constructor (GType type,
                 guint n_construct_params,
                 GObjectConstructParam *construct_params)
@@ -647,7 +647,7 @@ empathy_account_manager_class_init (EmpathyAccountManagerClass *klass)
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE,
                   1, TP_TYPE_CONNECTION);
-  
+
   g_type_class_add_private (oclass, sizeof (EmpathyAccountManagerPriv));
 }
 
@@ -800,7 +800,7 @@ empathy_account_manager_dup_connections (EmpathyAccountManager *manager)
   priv = GET_PRIV (manager);
 
   g_hash_table_iter_init (&iter, priv->connections);
-  while (g_hash_table_iter_next (&iter, &connection, NULL)) 
+  while (g_hash_table_iter_next (&iter, &connection, NULL))
     if (connection != NULL && tp_connection_is_ready (connection))
       ret = g_list_prepend (ret, g_object_ref (connection));
 
