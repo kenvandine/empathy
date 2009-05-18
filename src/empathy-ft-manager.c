@@ -623,6 +623,8 @@ ft_handler_hashing_progress_cb (EmpathyFTHandler *handler,
   ft_manager_update_handler_message (manager, row_ref, message);
 
   g_free (message);
+  g_free (first_line);
+  g_free (second_line);
 }
 
 static void
