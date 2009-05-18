@@ -159,7 +159,7 @@ empathy_video_src_set_channel (GstElement *src,
 
   channels = gst_color_balance_list_channels (balance);
 
-  for (l = (GList *)channels; l != NULL; l = g_list_next (l))
+  for (l = (GList *) channels; l != NULL; l = g_list_next (l))
     {
       GstColorBalanceChannel *c = GST_COLOR_BALANCE_CHANNEL (l->data);
 
@@ -195,7 +195,7 @@ empathy_video_src_get_channel (GstElement *src,
 
   channels = gst_color_balance_list_channels (balance);
 
-  for (l = (GList *)channels; l != NULL; l = g_list_next (l))
+  for (l = (GList *) channels; l != NULL; l = g_list_next (l))
     {
       GstColorBalanceChannel *c = GST_COLOR_BALANCE_CHANNEL (l->data);
 
@@ -235,7 +235,7 @@ empathy_video_src_get_supported_channels (GstElement *src)
 
   channels = gst_color_balance_list_channels (balance);
 
-  for (l = (GList *)channels; l != NULL; l = g_list_next (l))
+  for (l = (GList *) channels; l != NULL; l = g_list_next (l))
     {
       GstColorBalanceChannel *channel = GST_COLOR_BALANCE_CHANNEL (l->data);
       int i;

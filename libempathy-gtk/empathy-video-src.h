@@ -55,7 +55,7 @@ GType empathy_video_src_get_type (void);
 
 /* TYPE MACROS */
 #define EMPATHY_TYPE_GST_VIDEO_SRC \
-  (empathy_video_src_get_type())
+  (empathy_video_src_get_type ())
 #define EMPATHY_GST_VIDEO_SRC(obj) \
   (G_TYPE_CHECK_INSTANCE_CAST((obj), EMPATHY_TYPE_GST_VIDEO_SRC, \
     EmpathyGstVideoSrc))
