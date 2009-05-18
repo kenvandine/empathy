@@ -465,7 +465,7 @@ empathy_account_widget_irc_new (McAccount *account)
   /* Fill the networks combobox */
   store = gtk_list_store_new (2, G_TYPE_OBJECT, G_TYPE_STRING);
 
-  gtk_cell_layout_clear (GTK_CELL_LAYOUT (settings->combobox_network)); 
+  gtk_cell_layout_clear (GTK_CELL_LAYOUT (settings->combobox_network));
   renderer = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (settings->combobox_network),
       renderer, TRUE);
