@@ -56,7 +56,7 @@ enum {
  *
  * Return value: a new reference to the selected #McProfile
  */
-McProfile*
+McProfile *
 empathy_profile_chooser_dup_selected (GtkWidget *widget)
 {
 	GtkTreeModel *model;
@@ -208,7 +208,7 @@ empathy_profile_chooser_new (void)
 		if (g_list_find_custom (seen, unique_name, (GCompareFunc) strcmp)) {
 			continue;
 		}
-		seen = g_list_append (seen, (char*) unique_name);
+		seen = g_list_append (seen, (char *) unique_name);
 
 		gtk_list_store_insert_with_values (store, &iter, 0,
 						   COL_ICON, mc_profile_get_icon_name (profile),
