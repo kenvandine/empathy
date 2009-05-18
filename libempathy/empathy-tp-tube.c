@@ -146,7 +146,7 @@ tp_tube_async_cb (TpChannel *channel,
     GObject *tube)
 {
   if (error)
-      DEBUG ("Error %s: %s", (gchar*) user_data, error->message);
+      DEBUG ("Error %s: %s", (gchar *) user_data, error->message);
 }
 
 static void
@@ -553,7 +553,7 @@ tp_tube_accept_stream_cb (TpProxy *proxy,
     GObject *weak_object)
 {
   EmpathyTpTube *tube = EMPATHY_TP_TUBE (weak_object);
-  EmpathyTpTubeAcceptData *data = (EmpathyTpTubeAcceptData *)user_data;
+  EmpathyTpTubeAcceptData *data = (EmpathyTpTubeAcceptData *) user_data;
   EmpathyTpTubeAddress eaddress;
 
   eaddress.type = data->type;
