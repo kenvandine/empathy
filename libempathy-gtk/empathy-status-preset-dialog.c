@@ -19,8 +19,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
  *
  * Authors: Davyd Madeley <davyd.madeley@collabora.co.uk>
  */
@@ -63,7 +63,7 @@ static McPresence states[] = {
 typedef struct _EmpathyStatusPresetDialogPriv EmpathyStatusPresetDialogPriv;
 struct _EmpathyStatusPresetDialogPriv
 {
-	/* block status_preset_dialog_add_combo_changed() when > 0 */
+	/* block status_preset_dialog_add_combo_changed () when > 0 */
 	int block_add_combo_changed;
 
 	GtkWidget *presets_treeview;
@@ -520,7 +520,7 @@ empathy_status_preset_dialog_init (EmpathyStatusPresetDialog *self)
 	status_preset_dialog_setup_presets_treeview (self);
 	status_preset_dialog_setup_add_combobox (self);
 
-	gtk_box_pack_start(GTK_BOX (GTK_DIALOG (self)->vbox), toplevel_vbox,
+	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (self)->vbox), toplevel_vbox,
 			TRUE, TRUE, 0);
 
 	g_object_unref (gui);
