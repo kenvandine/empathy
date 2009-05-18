@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
 
@@ -336,7 +336,7 @@ tp_contact_list_got_added_members_cb (EmpathyTpContactFactory *factory,
 
 		/* This contact is now member, implicitly accept pending. */
 		if (g_hash_table_lookup (priv->pendings, GUINT_TO_POINTER (handle))) {
-			GArray handles = {(gchar*) &handle, 1};
+			GArray handles = {(gchar *) &handle, 1};
 
 			tp_cli_channel_interface_group_call_add_members (priv->publish,
 				-1, &handles, NULL, NULL, NULL, NULL, NULL);
@@ -370,7 +370,7 @@ tp_contact_list_got_local_pending_cb (EmpathyTpContactFactory *factory,
 
 		handle = empathy_contact_get_handle (contact);
 		if (g_hash_table_lookup (priv->members, GUINT_TO_POINTER (handle))) {
-			GArray handles = {(gchar*) &handle, 1};
+			GArray handles = {(gchar *) &handle, 1};
 
 			/* This contact is already member, auto accept. */
 			tp_cli_channel_interface_group_call_add_members (priv->publish,
@@ -446,7 +446,7 @@ tp_contact_list_publish_group_members_changed_cb (TpChannel     *channel,
 	 * member, otherwise add in pendings. */
 	if (local_pending->len > 0) {
 		empathy_tp_contact_factory_get_from_handles (priv->factory,
-			local_pending->len, (TpHandle*) local_pending->data,
+			local_pending->len, (TpHandle *) local_pending->data,
 			tp_contact_list_got_local_pending_cb, NULL, NULL,
 			G_OBJECT (list));
 	}
@@ -520,7 +520,7 @@ tp_contact_list_subscribe_group_members_changed_cb (TpChannel     *channel,
 	/* We now get the presence of those contacts, add them to members */
 	if (added->len > 0) {
 		empathy_tp_contact_factory_get_from_handles (priv->factory,
-			added->len, (TpHandle*) added->data,
+			added->len, (TpHandle *) added->data,
 			tp_contact_list_got_added_members_cb, NULL, NULL,
 			G_OBJECT (list));
 	}
@@ -531,11 +531,11 @@ tp_contact_list_subscribe_group_members_changed_cb (TpChannel     *channel,
 			g_array_index (added, TpHandle, i));
 	}
 
-	/* We want those contacts in our contact list but we don't get their 
+	/* We want those contacts in our contact list but we don't get their
 	 * presence yet. Add to members anyway. */
 	if (remote_pending->len > 0) {
 		empathy_tp_contact_factory_get_from_handles (priv->factory,
-			remote_pending->len, (TpHandle*) remote_pending->data,
+			remote_pending->len, (TpHandle *) remote_pending->data,
 			tp_contact_list_got_added_members_cb, NULL, NULL,
 			G_OBJECT (list));
 	}
