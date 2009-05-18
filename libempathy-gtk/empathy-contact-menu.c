@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
 
@@ -381,7 +381,7 @@ empathy_contact_invite_menu_item_new (EmpathyContact *contact)
 				submenu = gtk_menu_new ();
 
 			room_item = create_room_sub_menu (contact, chatroom);
-			gtk_menu_shell_append ((GtkMenuShell*)submenu, room_item);
+			gtk_menu_shell_append ((GtkMenuShell *) submenu, room_item);
 			gtk_widget_show (room_item);
 		}
 	}
