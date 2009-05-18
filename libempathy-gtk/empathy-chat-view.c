@@ -14,9 +14,9 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
- * 
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
+ *
  * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
 
@@ -66,7 +66,7 @@ empathy_chat_view_append_message (EmpathyChatView *view,
 	g_return_if_fail (EMPATHY_IS_CHAT_VIEW (view));
 	
 	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->append_message) {
-		EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->append_message (view, 
+		EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->append_message (view,
 									 msg);
 	}
 }
@@ -90,7 +90,7 @@ empathy_chat_view_scroll (EmpathyChatView *view,
 	g_return_if_fail (EMPATHY_IS_CHAT_VIEW (view));
 	
 	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->scroll) {
-		EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->scroll (view, 
+		EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->scroll (view,
 								 allow_scrolling);
 	}
 }
@@ -134,8 +134,8 @@ empathy_chat_view_find_previous (EmpathyChatView *view,
 	g_return_val_if_fail (EMPATHY_IS_CHAT_VIEW (view), FALSE);
 	
 	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->find_previous) {
-		return EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->find_previous (view, 
-									       search_criteria, 
+		return EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->find_previous (view,
+									       search_criteria,
 									       new_search);
 	}
 	return FALSE;
@@ -149,8 +149,8 @@ empathy_chat_view_find_next (EmpathyChatView *view,
 	g_return_val_if_fail (EMPATHY_IS_CHAT_VIEW (view), FALSE);
 	
 	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->find_next) {
-		return EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->find_next (view, 
-									   search_criteria, 
+		return EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->find_next (view,
+									   search_criteria,
 									   new_search);
 	}
 	return FALSE;
@@ -166,9 +166,9 @@ empathy_chat_view_find_abilities (EmpathyChatView *view,
 	g_return_if_fail (EMPATHY_IS_CHAT_VIEW (view));
 	
 	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->find_abilities) {
-		EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->find_abilities (view, 
-									 search_criteria, 
-									 can_do_previous, 
+		EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->find_abilities (view,
+									 search_criteria,
+									 can_do_previous,
 									 can_do_next);
 	}
 }
