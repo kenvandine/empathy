@@ -14,8 +14,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
  *
  * Authors: Based on Novell's e-image-chooser.
  *          Xavier Claessens <xclaesse@gmail.com>
@@ -798,7 +798,7 @@ avatar_chooser_drag_data_received_cb (GtkWidget          *widget,
 			gchar *uri;
 
 			uri = g_strndup (selection_data->data,
-					 nl - (gchar*) selection_data->data);
+					 nl - (gchar *) selection_data->data);
 
 			file = g_file_new_for_uri (uri);
 			g_free (uri);
@@ -1000,7 +1000,7 @@ avatar_chooser_clicked_cb (GtkWidget            *button,
 	gtk_file_chooser_add_filter (chooser_dialog, filter);
 	filter = gtk_file_filter_new ();
 	gtk_file_filter_set_name (filter, _("All Files"));
-	gtk_file_filter_add_pattern(filter, "*");
+	gtk_file_filter_add_pattern (filter, "*");
 	gtk_file_chooser_add_filter (chooser_dialog, filter);
 
 	/* Setup response */
