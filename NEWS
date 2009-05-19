@@ -1,6 +1,5 @@
 NEW in 2.27.1.1
 ===============
-
  - Fix ABI version to not conflict with 2.26 branch
  - Fix various coding style
 
@@ -8,10 +7,10 @@ Bugs fixed:
  - Fixed #582589, Should allow users to initially have either audio or audio/video calls
 
 Translations:
-Updated es Translation (Jorge Gonzalez)
+ - Updated es Translation (Jorge Gonzalez)
 
 Documentation translations:
-Updated el Documentation translation (Γιάννης Κατσαμπίρης)
+ - Updated el Documentation translation (Γιάννης Κατσαμπίρης)
 
 NEW in 2.27.1
 ==============
