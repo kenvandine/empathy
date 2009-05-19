@@ -200,8 +200,10 @@ class Project:
 		return bugs
 
 	def generate_news(self):
-		translations = self.get_translations("ls -l po/*.po", "Updated %s Translation (%s)\n")
-		help_translations = self.get_translations("ls -l help/*/*.po", "Updated %s Documentation translation (%s)\n")
+		translations = self.get_translations("ls -l po/*.po", \
+			" - Updated %s Translation (%s)\n")
+		help_translations = self.get_translations("ls -l help/*/*.po", \
+			" - Updated %s Documentation translation (%s)\n")
 		bugs = self.get_bugs()
 
 		news = 'NEW in '+ self.package_version + '\n==============\n'
