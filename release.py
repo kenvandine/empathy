@@ -134,12 +134,13 @@ class Project:
 		t = Template(template)
 		return t.substitute(locals())
 	
-	def get_translations(self):
-		self.translations = ''
-		files_str = self.exec_cmd("ls po/*.po")
+	def get_translations(self, cmd, format):
+		translations = ''
+		files_str = self.exec_cmd(cmd)
 		files = files_str.splitlines()
-		for f in files:
-			lang = f[3:len(f)-3]
+		for line in files:
+			f = line[line.rfind(' '):]
+			lang = f[f.rfind('/')+1:f.rfind('.')]
 			commit_str = self.exec_cmd("git log %s..  %s" % (self.last_tag, f))
 			if commit_str == '':
 				continue
@@ -157,7 +158,8 @@ class Project:
         					authors += ", "
         				authors += author
 
-			self.translations += "Updated %s Translation (%s)\n" % (lang, authors)
+			translations += format % (lang, authors)
+		return translations
 
 	def get_bugs(self):
 		commit_str = self.exec_cmd('git show %s' % (self.last_tag))
@@ -190,25 +192,26 @@ class Project:
 				col_description = i
 			i = i + 1
 
-		self.bugs = ''
+		bugs = ''
 		for row in reader:
 			bug_number = row[col_bug_id]
 			description = row[col_description]
-			self.bugs += ' - Fixed #%s, %s\n' % (bug_number, description)
-
-	def make_tag(self):
-		new_tag = self.package_name.upper() + '_' +\
-			  self.package_version.replace('.', '_')
-		self.exec_cmd('git tag -m "Tagged for release %s." %s' % ( self.package_version, new_tag))
+			bugs += ' - Fixed #%s, %s\n' % (bug_number, description)
+		return bugs
 
 	def generate_news(self):
-		self.get_translations()
-		self.get_bugs()
+		translations = self.get_translations("ls -l po/*.po", "Updated %s Translation (%s)\n")
+		help_translations = self.get_translations("ls -l help/*/*.po", "Updated %s Documentation translation (%s)\n")
+		bugs = self.get_bugs()
+
 		news = 'NEW in '+ self.package_version + '\n==============\n'
-		if self.bugs != '':
-			news += 'Bugs fixed:\n' + self.bugs + '\n'
-		if self.translations != '':
-			news += 'Translations:\n' + self.translations + '\n'
+		if bugs != '':
+			news += 'Bugs fixed:\n' + bugs + '\n'
+		if translations != '':
+			news += 'Translations:\n' + translations + '\n'
+		if help_translations != '':
+			news += 'Documentation translations:\n' + \
+			        help_translations + '\n'
 
 		return news
 
@@ -221,6 +224,11 @@ class Project:
 
 		self.exec_cmd('cat NEWS >> /tmp/NEWS')
 		self.exec_cmd('mv /tmp/NEWS .')
+
+	def make_tag(self):
+		new_tag = self.package_name.upper() + '_' +\
+			  self.package_version.replace('.', '_')
+		self.exec_cmd('git tag -m "Tagged for release %s." %s' % ( self.package_version, new_tag))
 
 	def upload_tarball(self):
 		tarball = '%s-%s.tar.gz' % (self.package_name.lower(), self.package_version)
