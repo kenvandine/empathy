@@ -36,6 +36,7 @@
 #include <gio/gunixinputstream.h>
 #include <gio/gunixoutputstream.h>
 
+#include <telepathy-glib/gtypes.h>
 #include <telepathy-glib/proxy-subclass.h>
 #include <telepathy-glib/util.h>
 
@@ -71,6 +72,8 @@ typedef struct {
   /* org.freedesktop.Telepathy.Channel.Type.FileTransfer D-Bus properties */
   TpFileTransferState state;
   TpFileTransferStateChangeReason state_change_reason;
+  TpSocketAddressType socket_address_type;
+  TpSocketAccessControl socket_access_control;
 
   /* transfer properties */
   gboolean incoming;
@@ -121,6 +124,71 @@ tp_file_get_state_cb (TpProxy *proxy,
     }
 
   priv->state = g_value_get_uint (value);
+}
+
+static gint
+uint_compare (gconstpointer a, gconstpointer b)
+{
+  const guint *uinta = a;
+  const guint *uintb = b;
+
+  if (*uinta == *uintb)
+    return 0;
+
+  return (*uinta > *uintb) ? 1 : -1;
+}
+
+static void
+tp_file_get_available_socket_types_cb (TpProxy *proxy,
+    const GValue *value,
+    const GError *error,
+    gpointer user_data,
+    GObject *weak_object)
+{
+  EmpathyTpFilePriv *priv = GET_PRIV (weak_object);
+  GHashTable *socket_types;
+  GArray *access_controls;
+
+  if (error != NULL ||
+      !G_VALUE_HOLDS (value, TP_HASH_TYPE_SUPPORTED_SOCKET_MAP))
+    {
+      /* set a default value */
+      priv->socket_address_type = TP_SOCKET_ADDRESS_TYPE_UNIX;
+      priv->socket_access_control = TP_SOCKET_ACCESS_CONTROL_LOCALHOST;
+      goto out;
+    }
+
+  socket_types = g_value_get_boxed (value);
+
+  /* here UNIX is preferred to IPV4 */
+  if ((access_controls = g_hash_table_lookup (socket_types,
+      GUINT_TO_POINTER (TP_SOCKET_ADDRESS_TYPE_UNIX))) != NULL)
+    {
+      priv->socket_address_type = TP_SOCKET_ADDRESS_TYPE_UNIX;
+      priv->socket_access_control = TP_SOCKET_ACCESS_CONTROL_LOCALHOST;
+      goto out;
+    }
+
+  if ((access_controls = g_hash_table_lookup (socket_types,
+      GUINT_TO_POINTER (TP_SOCKET_ADDRESS_TYPE_IPV4))) != NULL)
+    {
+      priv->socket_address_type = TP_SOCKET_ADDRESS_TYPE_IPV4;
+      g_array_sort (access_controls, uint_compare);
+
+      /* here port is preferred over localhost */
+      if ((g_array_index (access_controls, guint, 0) ==
+          TP_SOCKET_ACCESS_CONTROL_LOCALHOST) &&
+          (g_array_index (access_controls, guint, 1) ==
+          TP_SOCKET_ACCESS_CONTROL_PORT))
+        priv->socket_access_control = TP_SOCKET_ACCESS_CONTROL_PORT;
+      else
+        priv->socket_access_control =
+            g_array_index (access_controls, guint, 0);
+    }
+
+out:
+  DEBUG ("Socket address type: %d, access control %d",
+      priv->socket_address_type, priv->socket_access_control);  
 }
 
 static void
@@ -666,6 +734,10 @@ do_constructed (GObject *object)
   tp_cli_dbus_properties_call_get (priv->channel,
       -1, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, "State", tp_file_get_state_cb,
       NULL, NULL, object);
+
+  tp_cli_dbus_properties_call_get (priv->channel,
+      -1, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, "AvailableSocketTypes",
+      tp_file_get_available_socket_types_cb, NULL, NULL, file_obj);
 
   priv->state_change_reason =
       TP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE;
