@@ -423,6 +423,25 @@ ft_manager_update_handler_time (EmpathyFTManager *manager,
 }
 
 static void
+ft_manager_clear_handler_time (EmpathyFTManager *manager,
+                               GtkTreeRowReference *row_ref)
+{
+  GtkTreePath *path;
+  GtkTreeIter iter;
+  EmpathyFTManagerPriv *priv = GET_PRIV (manager);
+
+  /* Set new value in the store */
+  path = gtk_tree_row_reference_get_path (row_ref);
+  gtk_tree_model_get_iter (priv->model, &iter, path);
+  gtk_list_store_set (GTK_LIST_STORE (priv->model),
+      &iter,
+      COL_REMAINING, NULL,
+      -1);
+
+  gtk_tree_path_free (path);
+}
+
+static void
 ft_handler_transfer_error_cb (EmpathyFTHandler *handler,
                               GError *error,
                               EmpathyFTManager *manager)
@@ -438,6 +457,7 @@ ft_handler_transfer_error_cb (EmpathyFTHandler *handler,
   message = ft_manager_format_error_message (handler, error);
 
   ft_manager_update_handler_message (manager, row_ref, message);
+  ft_manager_clear_handler_time (manager, row_ref);
   ft_manager_update_buttons (manager);
 
   g_free (message);
@@ -479,6 +499,7 @@ do_real_transfer_done (EmpathyFTManager *manager,
 
   message = g_strdup_printf ("%s\n%s", first_line, second_line);
   ft_manager_update_handler_message (manager, row_ref, message);
+  ft_manager_clear_handler_time (manager, row_ref);
 
   /* update buttons */
   ft_manager_update_buttons (manager);
@@ -953,7 +974,7 @@ ft_manager_build_ui (EmpathyFTManager *manager)
       "ft_manager_dialog", "configure-event", ft_manager_configure_event_cb,
       NULL);
 
-  g_object_unref (gui);
+  empathy_builder_unref_and_keep_widget (gui, priv->window);
 
   /* Window geometry. */
   empathy_geometry_load ("ft-manager", &x, &y, &w, &h);
