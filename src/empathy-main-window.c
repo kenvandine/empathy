@@ -1107,7 +1107,7 @@ empathy_main_window_show (void)
 	GtkWidget                *sw;
 	GtkToggleAction          *show_offline_widget;
 	GtkWidget                *ebox;
-	GtkWidget                *show_map_widget;
+	GtkAction                *show_map_widget;
 	GtkToolItem              *item;
 	gboolean                  show_offline;
 	gboolean                  show_avatars;
@@ -1169,7 +1169,7 @@ empathy_main_window_show (void)
 	g_object_unref (gui);
 
 #if !HAVE_LIBCHAMPLAIN
-	gtk_widget_hide (show_map_widget);
+	gtk_action_set_visible (show_map_widget, FALSE);
 #endif
 
 	window->mc = empathy_mission_control_dup_singleton ();
