@@ -73,7 +73,6 @@ static void map_view_contact_location_notify (GObject *gobject,
 static gchar * get_dup_string (GHashTable *location,
     gchar *key);
 
-/* FIXME: Make it so that only one window can be shown */
 GtkWidget *
 empathy_map_view_show ()
 {
@@ -86,13 +85,11 @@ empathy_map_view_show ()
   EmpathyContactList *list_iface;
   EmpathyContactListStore *list_store;
 
-  /*
   if (window)
     {
       empathy_window_present (GTK_WINDOW (window->window), TRUE);
       return window->window;
     }
-  */
 
   window = g_slice_new0 (EmpathyMapView);
 
@@ -113,6 +110,9 @@ empathy_map_view_show ()
       NULL);
 
   g_object_unref (gui);
+
+  /* Clear the static pointer to window if the dialog is destroyed */
+  g_object_add_weak_pointer (G_OBJECT (window->window), (gpointer *) &window);
 
   list_iface = EMPATHY_CONTACT_LIST (empathy_contact_manager_dup_singleton ());
   list_store = empathy_contact_list_store_new (list_iface);
