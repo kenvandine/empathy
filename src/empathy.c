@@ -471,7 +471,7 @@ main (int argc, char *argv[])
 	gst_init (&argc, &argv);
 
 #if HAVE_LIBCHAMPLAIN
-	gtk_clutter_init(&argc, &argv);
+	gtk_clutter_init (&argc, &argv);
 #endif
 
 	gtk_window_set_default_icon_name ("empathy");

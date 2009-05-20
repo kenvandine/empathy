@@ -1312,7 +1312,7 @@ contact_widget_location_update (EmpathyContactWidget *information)
           char *svalue = NULL;
 
           skey = (const gchar *) key;
-          gvalue = (GValue*) value;
+          gvalue = (GValue *) value;
 
           label = gtk_label_new (_(skey));
           gtk_table_attach_defaults (GTK_TABLE (information->table_location),
