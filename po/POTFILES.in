@@ -79,3 +79,5 @@ src/empathy-status-icon.c
 [type: gettext/glade]src/empathy-status-icon.ui
 src/empathy-tube-dispatch.c
 [type: gettext/glade]src/empathy-call-window-fullscreen.ui
+src/empathy-map-view.c
+[type: gettext/glade]src/empathy-map-view.ui
