@@ -90,6 +90,7 @@ struct _EmpathyCallWindowPriv
   gboolean connected;
 
   GtkUIManager *ui_manager;
+  GtkWidget *self_user_output_frame;
   GtkWidget *video_output;
   GtkWidget *video_preview;
   GtkWidget *remote_user_avatar_widget;
@@ -103,6 +104,7 @@ struct _EmpathyCallWindowPriv
   GtkWidget *camera_button;
   GtkWidget *toolbar;
   GtkWidget *pane;
+  GtkAction *show_preview;
   GtkAction *send_video;
   GtkAction *redial;
   GtkAction *menu_fullscreen;
@@ -645,6 +647,7 @@ empathy_call_window_init (EmpathyCallWindow *self)
     "toolbar", &priv->toolbar,
     "send_video", &priv->send_video,
     "menuredial", &priv->redial,
+    "show_preview", &priv->show_preview,
     "ui_manager", &priv->ui_manager,
     "menufullscreen", &priv->menu_fullscreen,
     NULL);
@@ -1223,6 +1226,19 @@ empathy_call_window_connected (gpointer user_data)
   if (empathy_tp_call_has_dtmf (call))
     gtk_widget_set_sensitive (priv->dtmf_panel, TRUE);
 
+
+  priv->sending_video = empathy_tp_call_is_sending_video (call);
+
+  if (priv->sending_video)
+      {
+        gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->show_preview),
+            TRUE);
+        gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->send_video),
+            TRUE);
+        gtk_toggle_tool_button_set_active (
+            GTK_TOGGLE_TOOL_BUTTON (priv->camera_button), TRUE);
+      }
+
   if (priv->video_input != NULL)
     {
       gtk_widget_set_sensitive (priv->camera_button, TRUE);
@@ -1682,6 +1698,11 @@ empathy_call_window_camera_toggled_cb (GtkToggleToolButton *toggle,
     return;
   priv->sending_video = active;
 
+  /* When we start sending video, we want to show the video preview by
+     default. */
+  if (priv->sending_video)
+    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->show_preview), TRUE);
+
   empathy_call_window_set_send_video (window, active);
   gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->send_video), active);
 }
@@ -1699,6 +1720,11 @@ empathy_call_window_send_video_toggled_cb (GtkToggleAction *toggle,
     return;
   priv->sending_video = active;
 
+  /* When we start sending video, we want to show the video preview by
+     default. */
+  if (priv->sending_video)
+    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->show_preview), TRUE);
+
   empathy_call_window_set_send_video (window, active);
   gtk_toggle_tool_button_set_active (
       GTK_TOGGLE_TOOL_BUTTON (priv->camera_button), active);
@@ -1708,7 +1734,15 @@ static void
 empathy_call_window_show_preview_toggled_cb (GtkToggleAction *toggle,
   EmpathyCallWindow *window)
 {
-  /* FIXME: Not implemented */
+  gboolean show_preview_toggled;
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+
+  show_preview_toggled = gtk_toggle_action_get_active (toggle);
+
+  if (show_preview_toggled)
+    gtk_widget_show (priv->self_user_output_frame);
+  else
+    gtk_widget_hide (priv->self_user_output_frame);
 }
 
 static void
