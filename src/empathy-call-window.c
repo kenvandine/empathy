@@ -1,6 +1,6 @@
 /*
  * empathy-call-window.c - Source for EmpathyCallWindow
- * Copyright (C) 2008 Collabora Ltd.
+ * Copyright (C) 2008-2009 Collabora Ltd.
  * @author Sjoerd Simons <sjoerd.simons@collabora.co.uk>
  *
  * This library is free software; you can redistribute it and/or
@@ -31,7 +31,9 @@
 
 #include <telepathy-farsight/channel.h>
 
+#include <libempathy/empathy-tp-contact-factory.h>
 #include <libempathy/empathy-utils.h>
+#include <libempathy-gtk/empathy-avatar-image.h>
 #include <libempathy-gtk/empathy-video-widget.h>
 #include <libempathy-gtk/empathy-audio-src.h>
 #include <libempathy-gtk/empathy-audio-sink.h>
@@ -48,6 +50,14 @@
 #define CONTENT_HBOX_BORDER_WIDTH 6
 #define CONTENT_HBOX_SPACING 3
 #define CONTENT_HBOX_CHILDREN_PACKING_PADDING 3
+
+#define SELF_VIDEO_SECTION_WIDTH 160
+#define SELF_VIDEO_SECTION_HEIGTH 120
+
+/* The avatar's default width and height are set to the same value because we
+   want a square icon. */
+#define REMOTE_CONTACT_AVATAR_DEFAULT_WIDTH EMPATHY_VIDEO_WIDGET_DEFAULT_HEIGHT
+#define REMOTE_CONTACT_AVATAR_DEFAULT_HEIGHT EMPATHY_VIDEO_WIDGET_DEFAULT_HEIGHT
 
 G_DEFINE_TYPE(EmpathyCallWindow, empathy_call_window, GTK_TYPE_WINDOW)
 
@@ -79,6 +89,8 @@ struct _EmpathyCallWindowPriv
   GtkUIManager *ui_manager;
   GtkWidget *video_output;
   GtkWidget *video_preview;
+  GtkWidget *remote_user_avatar_widget;
+  GtkWidget *self_user_avatar_widget;
   GtkWidget *sidebar;
   GtkWidget *sidebar_button;
   GtkWidget *statusbar;
@@ -512,6 +524,8 @@ empathy_call_window_init (EmpathyCallWindow *self)
   GtkWidget *h;
   GtkWidget *arrow;
   GtkWidget *page;
+  GtkWidget *remote_user_output_frame, *self_user_output_frame;
+  GtkWidget *remote_user_output_hbox, *self_user_output_hbox;
   GstBus *bus;
   gchar *filename;
 
@@ -555,13 +569,28 @@ empathy_call_window_init (EmpathyCallWindow *self)
 
   gst_bus_add_watch (bus, empathy_call_window_bus_message, self);
 
+  remote_user_output_frame = gtk_frame_new (NULL);
+  gtk_widget_set_size_request (remote_user_output_frame,
+      EMPATHY_VIDEO_WIDGET_DEFAULT_WIDTH, EMPATHY_VIDEO_WIDGET_DEFAULT_HEIGHT);
+  remote_user_output_hbox = gtk_hbox_new (FALSE, 0);
+
+  priv->remote_user_avatar_widget = gtk_image_new ();
+  gtk_box_pack_start (GTK_BOX (remote_user_output_hbox),
+      priv->remote_user_avatar_widget, TRUE, TRUE, 0);
+
   priv->video_output = empathy_video_widget_new (bus);
-  gtk_box_pack_start (GTK_BOX (priv->content_hbox), priv->video_output,
-                      TRUE, TRUE, CONTENT_HBOX_CHILDREN_PACKING_PADDING);
+  gtk_box_pack_start (GTK_BOX (remote_user_output_hbox),
+      priv->video_output, TRUE, TRUE, 0);
+
+  gtk_container_add (GTK_CONTAINER (remote_user_output_frame),
+      remote_user_output_hbox);
+
   gtk_widget_add_events (priv->video_output,
       GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK);
   g_signal_connect (G_OBJECT (priv->video_output), "button-press-event",
       G_CALLBACK (empathy_call_window_video_button_press_cb), self);
+  gtk_box_pack_start (GTK_BOX (priv->content_hbox), remote_user_output_frame,
+      TRUE, TRUE, CONTENT_HBOX_CHILDREN_PACKING_PADDING);
 
   priv->video_tee = gst_element_factory_make ("tee", NULL);
   gst_object_ref (priv->video_tee);
@@ -571,9 +600,26 @@ empathy_call_window_init (EmpathyCallWindow *self)
   gtk_box_pack_start (GTK_BOX (priv->content_hbox), priv->vbox,
                       FALSE, FALSE, CONTENT_HBOX_CHILDREN_PACKING_PADDING);
 
-  priv->video_preview = empathy_video_widget_new_with_size (bus, 160, 120);
+  self_user_output_frame = gtk_frame_new (NULL);
+  gtk_widget_set_size_request (self_user_output_frame, SELF_VIDEO_SECTION_WIDTH,
+      SELF_VIDEO_SECTION_HEIGTH);
+  self_user_output_hbox = gtk_hbox_new (FALSE, 0);
+
+  priv->self_user_avatar_widget = gtk_image_new ();
+  gtk_box_pack_start (GTK_BOX (self_user_output_hbox),
+      priv->self_user_avatar_widget, TRUE, TRUE, 0);
+
+  priv->video_preview = empathy_video_widget_new_with_size (bus,
+      SELF_VIDEO_SECTION_WIDTH, SELF_VIDEO_SECTION_HEIGTH);
   g_object_set (priv->video_preview, "sync", FALSE, "async", TRUE, NULL);
-  gtk_box_pack_start (GTK_BOX (priv->vbox), priv->video_preview, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (self_user_output_hbox), priv->video_preview,
+      TRUE, TRUE, 0);
+
+  gtk_container_add (GTK_CONTAINER (self_user_output_frame),
+      self_user_output_hbox);
+
+  gtk_box_pack_start (GTK_BOX (priv->vbox), self_user_output_frame, FALSE,
+      FALSE, 0);
 
   priv->video_input = empathy_video_src_new ();
   gst_object_ref (priv->video_input);
@@ -651,6 +697,30 @@ empathy_call_window_init (EmpathyCallWindow *self)
   g_free (filename);
 }
 
+/* Instead of specifying a width and a height, we specify only one size. That's
+   because we want a square avatar icon.  */
+static void
+init_contact_avatar_with_size (EmpathyContact *contact, GtkWidget *image_widget,
+    gint size)
+{
+
+  GdkPixbuf *pixbuf_avatar;
+
+  if (contact != NULL)
+    {
+      pixbuf_avatar = empathy_pixbuf_avatar_from_contact_scaled (contact,
+        size, size);
+    }
+
+  if (pixbuf_avatar == NULL)
+    {
+      pixbuf_avatar = empathy_pixbuf_from_icon_name_sized ("stock_person",
+          size);
+    }
+
+  gtk_image_set_from_pixbuf (GTK_IMAGE (image_widget), pixbuf_avatar);
+}
+
 static void
 set_window_title (EmpathyCallWindow *self)
 {
@@ -665,10 +735,32 @@ set_window_title (EmpathyCallWindow *self)
 
 static void
 contact_name_changed_cb (EmpathyContact *contact,
-                         GParamSpec *pspec,
-                         EmpathyCallWindow *self)
+    GParamSpec *pspec, EmpathyCallWindow *self)
 {
   set_window_title (self);
+}
+
+static void
+contact_avatar_changed_cb (EmpathyContact *contact,
+    GParamSpec *pspec, GtkWidget *avatar_widget)
+{
+  init_contact_avatar_with_size (contact, avatar_widget,
+      avatar_widget->allocation.height);
+}
+
+static void
+empathy_call_window_got_self_contact_cb (EmpathyTpContactFactory *factory,
+    EmpathyContact *contact, const GError *error, gpointer user_data,
+    GObject *weak_object)
+{
+  EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (user_data);
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
+
+  init_contact_avatar_with_size (contact, priv->self_user_avatar_widget,
+      MIN (SELF_VIDEO_SECTION_WIDTH, SELF_VIDEO_SECTION_HEIGTH));
+
+  g_signal_connect (contact, "notify::avatar",
+      G_CALLBACK (contact_avatar_changed_cb), priv->self_user_avatar_widget);
 }
 
 static void
@@ -683,16 +775,49 @@ empathy_call_window_constructed (GObject *object)
 
   if (priv->contact != NULL)
     {
+      TpConnection *connection;
+      EmpathyTpContactFactory *factory;
+
       set_window_title (self);
 
       g_signal_connect (priv->contact, "notify::name",
           G_CALLBACK (contact_name_changed_cb), self);
+      g_signal_connect (priv->contact, "notify::avatar",
+          G_CALLBACK (contact_avatar_changed_cb),
+          priv->remote_user_avatar_widget);
+
+      /* Retreiving the self avatar */
+      connection = empathy_contact_get_connection (priv->contact);
+      factory = empathy_tp_contact_factory_dup_singleton(connection);
+      empathy_tp_contact_factory_get_from_handle (factory,
+          tp_connection_get_self_handle (connection),
+          empathy_call_window_got_self_contact_cb, self, NULL, NULL);
+
+      g_object_unref (factory);
     }
   else
     {
       g_warning ("call handler doesn't have a contact");
       gtk_window_set_title (GTK_WINDOW (self), _("Call"));
+
+      /* Since we can't access the remote contact, we can't get a connection
+         to it and can't get the self contact (and its avatar). This means
+         that we have to manually set the self avatar. */
+      init_contact_avatar_with_size (NULL, priv->self_user_avatar_widget,
+          MIN (SELF_VIDEO_SECTION_WIDTH, SELF_VIDEO_SECTION_HEIGTH));
     }
+
+  init_contact_avatar_with_size (priv->contact,
+      priv->remote_user_avatar_widget, MIN (REMOTE_CONTACT_AVATAR_DEFAULT_WIDTH,
+      REMOTE_CONTACT_AVATAR_DEFAULT_HEIGHT));
+
+  /* We hide the self avatar. It will be shown if a problem is
+     encountered when we try to send video. As for the remote avatar, it
+     is shown by default and will be hidden when we receive video from
+     the remote side. */
+  gtk_widget_hide (priv->self_user_avatar_widget);
+  gtk_widget_hide (priv->video_output);
+  gtk_widget_show (priv->remote_user_avatar_widget);
 }
 
 static void empathy_call_window_dispose (GObject *object);
@@ -1034,6 +1159,8 @@ empathy_call_window_src_added_cb (EmpathyCallHandler *handler,
         pad = empathy_call_window_get_audio_sink_pad (self);
         break;
       case TP_MEDIA_STREAM_TYPE_VIDEO:
+        gtk_widget_hide (priv->remote_user_avatar_widget);
+        gtk_widget_show (priv->video_output);
         pad = empathy_call_window_get_video_sink_pad (self);
         break;
       default:
@@ -1068,7 +1195,7 @@ empathy_call_window_sink_added_cb (EmpathyCallHandler *handler,
       case TP_MEDIA_STREAM_TYPE_VIDEO:
         if (priv->video_input != NULL)
           {
-            pad =  gst_element_get_request_pad (priv->video_tee, "src%d");
+            pad = gst_element_get_request_pad (priv->video_tee, "src%d");
             gst_pad_link (pad, sink);
           }
         break;
@@ -1137,6 +1264,9 @@ empathy_call_window_remove_video_input (EmpathyCallWindow *self)
   priv->video_input = NULL;
   g_object_unref (priv->video_tee);
   priv->video_tee = NULL;
+
+  gtk_widget_hide (priv->video_preview);
+  gtk_widget_show (priv->self_user_avatar_widget);
 }
 
 

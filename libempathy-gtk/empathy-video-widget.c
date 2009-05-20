@@ -263,14 +263,14 @@ empathy_video_widget_class_init (
   param_spec = g_param_spec_int ("min-width",
     "min-width",
     "Minimal width of the widget",
-    0, G_MAXINT, 320,
+    0, G_MAXINT, EMPATHY_VIDEO_WIDGET_DEFAULT_WIDTH,
     G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (object_class, PROP_MIN_WIDTH, param_spec);
 
   param_spec = g_param_spec_int ("min-height",
     "min-height",
     "Minimal height of the widget",
-    0, G_MAXINT, 240,
+    0, G_MAXINT, EMPATHY_VIDEO_WIDGET_DEFAULT_HEIGHT,
     G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (object_class, PROP_MIN_HEIGHT, param_spec);
 

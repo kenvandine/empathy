@@ -21,6 +21,9 @@
 #ifndef __EMPATHY_VIDEO_WIDGET_H__
 #define __EMPATHY_VIDEO_WIDGET_H__
 
+#define EMPATHY_VIDEO_WIDGET_DEFAULT_WIDTH 320
+#define EMPATHY_VIDEO_WIDGET_DEFAULT_HEIGHT 240
+
 #include <glib-object.h>
 #include <gst/gst.h>
 #include <gtk/gtk.h>
