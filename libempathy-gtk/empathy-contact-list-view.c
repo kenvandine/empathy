@@ -1459,8 +1459,7 @@ contact_list_view_remove_activate_cb (GtkMenuItem            *menuitem,
 			EmpathyContactList *list;
 
 			list = empathy_contact_list_store_get_list_iface (priv->store);
-			empathy_contact_list_remove (list, contact,
-				_("Sorry, I don't want you in my contact list anymore."));
+			empathy_contact_list_remove (list, contact, "");
 		}
 
 		g_free (text);

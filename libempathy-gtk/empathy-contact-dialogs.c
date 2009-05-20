@@ -364,8 +364,7 @@ new_contact_response_cb (GtkDialog *dialog,
 
 	if (contact && response == GTK_RESPONSE_OK) {
 		empathy_contact_list_add (EMPATHY_CONTACT_LIST (manager),
-					  contact,
-					  _("I would like to add you to my contact list."));
+					  contact, "");
 	}
 
 	new_contact_dialog = NULL;
