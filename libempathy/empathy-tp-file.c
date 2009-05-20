@@ -26,6 +26,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <errno.h>
+#include <arpa/inet.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/un.h>
@@ -78,7 +79,7 @@ typedef struct {
   /* transfer properties */
   gboolean incoming;
   time_t start_time;
-  GArray *unix_socket_path;
+  GArray *socket_path;
   guint64 offset;
 
   /* GCancellable we're passed when offering/accepting the transfer */
@@ -187,7 +188,7 @@ tp_file_get_available_socket_types_cb (TpProxy *proxy,
     }
 
 out:
-  DEBUG ("Socket address type: %d, access control %d",
+  DEBUG ("Socket address type: %u, access control %u",
       priv->socket_address_type, priv->socket_access_control);  
 }
 
@@ -274,12 +275,18 @@ splice_stream_ready_cb (GObject *source,
 static void
 tp_file_start_transfer (EmpathyTpFile *tp_file)
 {
-  gint fd;
-  struct sockaddr_un addr;
+  gint fd, domain, res = 0;
   GError *error = NULL;
   EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
 
-  fd = socket (PF_UNIX, SOCK_STREAM, 0);
+  if (priv->socket_address_type == TP_SOCKET_ADDRESS_TYPE_UNIX)
+    domain = AF_UNIX;
+
+  if (priv->socket_address_type == TP_SOCKET_ADDRESS_TYPE_IPV4)
+    domain = AF_INET;
+
+  fd = socket (domain, SOCK_STREAM, 0);
+
   if (fd < 0)
     {
       int code = errno;
@@ -295,12 +302,29 @@ tp_file_start_transfer (EmpathyTpFile *tp_file)
       return;
     }
 
-  memset (&addr, 0, sizeof (addr));
-  addr.sun_family = AF_UNIX;
-  strncpy (addr.sun_path, priv->unix_socket_path->data,
-      priv->unix_socket_path->len);
+  if (priv->socket_address_type == TP_SOCKET_ADDRESS_TYPE_UNIX)
+    {
+      struct sockaddr_un addr;
 
-  if (connect (fd, (struct sockaddr*) &addr, sizeof (addr)) < 0)
+      memset (&addr, 0, sizeof (addr));
+      addr.sun_family = domain;
+      strncpy (addr.sun_path, priv->socket_path->data,
+          priv->socket_path->len);
+
+      res = connect (fd, (struct sockaddr*) &addr, sizeof (addr));
+    }
+  else if (priv->socket_address_type == TP_SOCKET_ADDRESS_TYPE_IPV4)
+    {
+      struct sockaddr_in addr;
+
+      memset (&addr, 0, sizeof (addr));
+      addr.sin_family = domain;
+      addr.sin_addr.s_addr = inet_network (priv->socket_path->data);
+
+      res = connect (fd, (struct sockaddr*) &addr, sizeof (addr));
+    }
+
+  if (res < 0)
     {
       int code = errno;
 
@@ -422,7 +446,7 @@ tp_file_state_changed_cb (TpChannel *proxy,
    * data transfer but are just an observer for the channel.
    */
   if (state == TP_FILE_TRANSFER_STATE_OPEN &&
-      priv->unix_socket_path != NULL)
+      priv->socket_path != NULL)
     tp_file_start_transfer (EMPATHY_TP_FILE (weak_object));
 
   if (state == TP_FILE_TRANSFER_STATE_COMPLETED)
@@ -489,7 +513,7 @@ ft_operation_provide_or_accept_file_cb (TpChannel *proxy,
 
   if (G_VALUE_TYPE (address) == DBUS_TYPE_G_UCHAR_ARRAY)
     {
-      priv->unix_socket_path = g_value_dup_boxed (address);
+      priv->socket_path = g_value_dup_boxed (address);
     }
   else if (G_VALUE_TYPE (address) == G_TYPE_STRING)
     {
@@ -498,18 +522,33 @@ ft_operation_provide_or_accept_file_cb (TpChannel *proxy,
       const gchar *path;
 
       path = g_value_get_string (address);
-      priv->unix_socket_path = g_array_sized_new (TRUE, FALSE, sizeof (gchar),
-                                                  strlen (path));
-      g_array_insert_vals (priv->unix_socket_path, 0, path, strlen (path));
+      priv->socket_path = g_array_sized_new (TRUE, FALSE, sizeof (gchar),
+          strlen (path));
+      g_array_insert_vals (priv->socket_path, 0, path, strlen (path));
     }
 
-  DEBUG ("Got unix socket path: %s", priv->unix_socket_path->data);
+  DEBUG ("Got socket path: %s", priv->socket_path->data);
 
   /* if the channel is already open, start the transfer now, otherwise,
    * wait for the state change signal.
    */
   if (priv->state == TP_FILE_TRANSFER_STATE_OPEN)
     tp_file_start_transfer (tp_file);
+}
+
+static void
+initialize_empty_ac_variant (TpSocketAccessControl ac,
+    GValue *val)
+{
+  if (ac == TP_SOCKET_ACCESS_CONTROL_LOCALHOST)
+    {
+      g_value_init (val, G_TYPE_STRING);
+      g_value_set_static_string (val, "");
+    }
+  else if (ac == TP_SOCKET_ACCESS_CONTROL_PORT)
+    {
+      g_value_init (val, TP_STRUCT_TYPE_SOCKET_ADDRESS_IPV4);
+    }
 }
 
 static void
@@ -536,12 +575,14 @@ file_read_async_cb (GObject *source,
 
   priv->in_stream = G_INPUT_STREAM (in_stream);
 
-  g_value_init (&nothing, G_TYPE_STRING);
-  g_value_set_static_string (&nothing, "");
+  /* we don't impose specific interface/port requirements even
+   * if we're not using UNIX sockets.
+   */
+  initialize_empty_ac_variant (priv->socket_access_control, &nothing);
 
   tp_cli_channel_type_file_transfer_call_provide_file (
       priv->channel, -1,
-      TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
+      priv->socket_address_type, priv->socket_access_control,
       &nothing, ft_operation_provide_or_accept_file_cb,
       NULL, NULL, G_OBJECT (tp_file));
 }
@@ -571,11 +612,13 @@ file_replace_async_cb (GObject *source,
 
   priv->out_stream = G_OUTPUT_STREAM (out_stream);
 
-  g_value_init (&nothing, G_TYPE_STRING);
-  g_value_set_static_string (&nothing, "");
+  /* we don't impose specific interface/port requirements even
+   * if we're not using UNIX sockets.
+   */
+  initialize_empty_ac_variant (priv->socket_access_control, &nothing);
 
   tp_cli_channel_type_file_transfer_call_accept_file (priv->channel,
-      -1, TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
+      -1, priv->socket_address_type, priv->socket_access_control,
       &nothing, priv->offset,
       ft_operation_provide_or_accept_file_cb, NULL, NULL, G_OBJECT (tp_file));
 }
@@ -660,10 +703,10 @@ do_finalize (GObject *object)
 
   DEBUG ("%p", object);
 
-  if (priv->unix_socket_path != NULL)
+  if (priv->socket_path != NULL)
     {
-      g_array_free (priv->unix_socket_path, TRUE);
-      priv->unix_socket_path = NULL;
+      g_array_free (priv->socket_path, TRUE);
+      priv->socket_path = NULL;
     }
 
   G_OBJECT_CLASS (empathy_tp_file_parent_class)->finalize (object);
