@@ -159,6 +159,10 @@ map_view_destroy_cb (GtkWidget *widget,
 #define GEOCODE_SERVICE "org.freedesktop.Geoclue.Providers.Yahoo"
 #define GEOCODE_PATH "/org/freedesktop/Geoclue/Providers/Yahoo"
 
+/* This callback is called by geoclue when it found a position
+ * for the given address.  A position is necessary for a contact
+ * to show up on the map
+ */
 static void
 map_view_geocode_cb (GeoclueGeocode *geocode,
     GeocluePositionFields fields,
@@ -170,11 +174,9 @@ map_view_geocode_cb (GeoclueGeocode *geocode,
     gpointer userdata)
 {
   GValue *new_value;
-  gboolean found = FALSE;
   GHashTable *location;
 
   location = empathy_contact_get_location (EMPATHY_CONTACT (userdata));
-  g_hash_table_ref (location);
 
   if (error != NULL)
     {
@@ -184,30 +186,29 @@ map_view_geocode_cb (GeoclueGeocode *geocode,
 
   if (fields & GEOCLUE_POSITION_FIELDS_LONGITUDE)
     {
-      new_value = tp_g_value_slice_new (G_TYPE_DOUBLE);
-      g_value_set_double (new_value, longitude);
+      new_value = tp_g_value_slice_new_double (longitude);
       g_hash_table_replace (location, EMPATHY_LOCATION_LON, new_value);
       DEBUG ("\t - Longitude: %f", longitude);
     }
   if (fields & GEOCLUE_POSITION_FIELDS_LATITUDE)
     {
-      new_value = tp_g_value_slice_new (G_TYPE_DOUBLE);
-      g_value_set_double (new_value, latitude);
+      new_value = tp_g_value_slice_new_double (latitude);
       g_hash_table_replace (location, EMPATHY_LOCATION_LAT, new_value);
       DEBUG ("\t - Latitude: %f", latitude);
-      found = TRUE;
     }
   if (fields & GEOCLUE_POSITION_FIELDS_ALTITUDE)
     {
-      new_value = tp_g_value_slice_new (G_TYPE_DOUBLE);
-      g_value_set_double (new_value, altitude);
+      new_value = tp_g_value_slice_new_double (altitude);
       g_hash_table_replace (location, EMPATHY_LOCATION_ALT, new_value);
       DEBUG ("\t - Altitude: %f", altitude);
     }
 
   /* Don't change the accuracy as we used an address to get this position */
-  if (found == TRUE)
-    empathy_contact_set_location (EMPATHY_CONTACT (userdata), location);
+
+  /* Ref the location hash table as it will be unref'd in set_location, 
+   * and we are only updating it */
+  g_hash_table_ref (location);
+  empathy_contact_set_location (EMPATHY_CONTACT (userdata), location);
   g_hash_table_unref (location);
 }
 #endif
