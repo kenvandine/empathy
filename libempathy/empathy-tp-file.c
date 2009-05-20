@@ -79,7 +79,8 @@ typedef struct {
   /* transfer properties */
   gboolean incoming;
   time_t start_time;
-  GArray *socket_path;
+  GArray *socket_address;
+  guint port;
   guint64 offset;
 
   /* GCancellable we're passed when offering/accepting the transfer */
@@ -308,8 +309,8 @@ tp_file_start_transfer (EmpathyTpFile *tp_file)
 
       memset (&addr, 0, sizeof (addr));
       addr.sun_family = domain;
-      strncpy (addr.sun_path, priv->socket_path->data,
-          priv->socket_path->len);
+      strncpy (addr.sun_path, priv->socket_address->data,
+          priv->socket_address->len);
 
       res = connect (fd, (struct sockaddr*) &addr, sizeof (addr));
     }
@@ -319,7 +320,8 @@ tp_file_start_transfer (EmpathyTpFile *tp_file)
 
       memset (&addr, 0, sizeof (addr));
       addr.sin_family = domain;
-      addr.sin_addr.s_addr = inet_network (priv->socket_path->data);
+      inet_pton (AF_INET, priv->socket_address->data, &addr.sin_addr);
+      addr.sin_port = htons (priv->port);
 
       res = connect (fd, (struct sockaddr*) &addr, sizeof (addr));
     }
@@ -446,7 +448,7 @@ tp_file_state_changed_cb (TpChannel *proxy,
    * data transfer but are just an observer for the channel.
    */
   if (state == TP_FILE_TRANSFER_STATE_OPEN &&
-      priv->socket_path != NULL)
+      priv->socket_address != NULL)
     tp_file_start_transfer (EMPATHY_TP_FILE (weak_object));
 
   if (state == TP_FILE_TRANSFER_STATE_COMPLETED)
@@ -513,7 +515,7 @@ ft_operation_provide_or_accept_file_cb (TpChannel *proxy,
 
   if (G_VALUE_TYPE (address) == DBUS_TYPE_G_UCHAR_ARRAY)
     {
-      priv->socket_path = g_value_dup_boxed (address);
+      priv->socket_address = g_value_dup_boxed (address);
     }
   else if (G_VALUE_TYPE (address) == G_TYPE_STRING)
     {
@@ -522,12 +524,32 @@ ft_operation_provide_or_accept_file_cb (TpChannel *proxy,
       const gchar *path;
 
       path = g_value_get_string (address);
-      priv->socket_path = g_array_sized_new (TRUE, FALSE, sizeof (gchar),
+      priv->socket_address = g_array_sized_new (TRUE, FALSE, sizeof (gchar),
           strlen (path));
-      g_array_insert_vals (priv->socket_path, 0, path, strlen (path));
+      g_array_insert_vals (priv->socket_address, 0, path, strlen (path));
+    }
+  else if (G_VALUE_TYPE (address) == TP_STRUCT_TYPE_SOCKET_ADDRESS_IPV4)
+    {
+      GValueArray *val_array;
+      GValue *v;
+      const char *addr;
+
+      val_array = g_value_get_boxed (address);
+
+      /* IPV4 address */
+      v = g_value_array_get_nth (val_array, 0);
+      addr = g_value_get_string (v);
+      priv->socket_address = g_array_sized_new (TRUE, FALSE, sizeof (gchar),
+          strlen (addr));
+      g_array_insert_vals (priv->socket_address, 0, addr, strlen (addr));
+
+      /* port number */
+      v = g_value_array_get_nth (val_array, 1);
+      priv->port = g_value_get_uint (v);
     }
 
-  DEBUG ("Got socket path: %s", priv->socket_path->data);
+  DEBUG ("Got socket address: %s, port (not zero if IPV4): %d",
+      priv->socket_address->data, priv->port);
 
   /* if the channel is already open, start the transfer now, otherwise,
    * wait for the state change signal.
@@ -703,10 +725,10 @@ do_finalize (GObject *object)
 
   DEBUG ("%p", object);
 
-  if (priv->socket_path != NULL)
+  if (priv->socket_address != NULL)
     {
-      g_array_free (priv->socket_path, TRUE);
-      priv->socket_path = NULL;
+      g_array_free (priv->socket_address, TRUE);
+      priv->socket_address = NULL;
     }
 
   G_OBJECT_CLASS (empathy_tp_file_parent_class)->finalize (object);
