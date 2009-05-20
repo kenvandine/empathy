@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-20 13:45+0530\n"
+"POT-Creation-Date: 2009-05-20 13:57+0530\n"
 "PO-Revision-Date: 2009-05-07 21:34+0530\n"
 "Last-Translator: Dr.T.vasudevan <agnihot3@gmail.com>\n"
 "Language-Team: Tamil <Ubuntu-l10n-tam@lists.ubuntu.com>\n"
@@ -638,7 +638,7 @@ msgstr "%s அறையில் சேர்ந்தார்"
 msgid "%s has left the room"
 msgstr "%s அறையில் இருந்து வெளியேறினார்"
 
-#: ../libempathy-gtk/empathy-chat.c:1289 ../src/empathy-call-window.c:811
+#: ../libempathy-gtk/empathy-chat.c:1289 ../src/empathy-call-window.c:889
 msgid "Disconnected"
 msgstr "துண்டிக்கபட்டது"
 
@@ -694,66 +694,73 @@ msgstr "(_L) பிறகு முடிவு எடுக்கலாம்"
 msgid "Subscription Request"
 msgstr "சந்தா வேண்டுதல்"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1315
+#: ../libempathy-gtk/empathy-contact-list-view.c:1377
 #, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr "நீங்கள் நிச்சயம் குழு '%s' ஐ நீக்க விரும்புகிறீர்களா?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1317
+#: ../libempathy-gtk/empathy-contact-list-view.c:1379
 msgid "Removing group"
 msgstr "குழுவை நீக்குதல்"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1364
-#: ../libempathy-gtk/empathy-contact-list-view.c:1443
+#: ../libempathy-gtk/empathy-contact-list-view.c:1426
+#: ../libempathy-gtk/empathy-contact-list-view.c:1505
 msgid "_Remove"
 msgstr "நீக்கவும் (_R)"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1394
+#: ../libempathy-gtk/empathy-contact-list-view.c:1456
 #, c-format
 msgid "Do you really want to remove the contact '%s'?"
 msgstr "நீங்கள் நிச்சயம் தொடர்பு '%s' ஐ நீக்க விரும்புகிறீர்களா?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1396
+#: ../libempathy-gtk/empathy-contact-list-view.c:1458
 msgid "Removing contact"
 msgstr "தொடர்பு ஐ நீக்குதல்"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1401
+#: ../libempathy-gtk/empathy-contact-list-view.c:1463
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "மன்னிக்கவும். மேலும் நீங்கள் தொடர்பு பட்டியலில் இருக்க வேண்டாம்."
 
-#: ../libempathy-gtk/empathy-contact-menu.c:130
+#: ../libempathy-gtk/empathy-contact-menu.c:135
 #: ../src/empathy-main-window.ui.h:9
 msgid "_Chat"
 msgstr "_C அரட்டை"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:161
-msgctxt "menu item"
-msgid "_Call"
-msgstr "(_C) அழை"
+#: ../libempathy-gtk/empathy-contact-menu.c:166
 
-#: ../libempathy-gtk/empathy-contact-menu.c:200
+msgctxt "menu item"
+msgid "_Audio Call"
+msgstr "(_A) ஒலி அழைப்பு"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:198
+
+msgctxt "menu item"
+msgid "_Video Call"
+msgstr "(_V) விடியோ அழைப்பு"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:237
 #: ../src/empathy-main-window.ui.h:18
 msgid "_View Previous Conversations"
 msgstr "(_V) முந்தைய உரையாடல்கள் ஐ காண்"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:222
+#: ../libempathy-gtk/empathy-contact-menu.c:259
 msgid "Send file"
 msgstr "கோப்பு ஐ அனுப்புக"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:250
+#: ../libempathy-gtk/empathy-contact-menu.c:287
 msgid "Infor_mation"
 msgstr "(_m) தகவல்"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:277
+#: ../libempathy-gtk/empathy-contact-menu.c:314
 #: ../src/empathy-main-window.ui.h:11
 msgid "_Edit"
 msgstr "திருத்து (_E)"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:336
+#: ../libempathy-gtk/empathy-contact-menu.c:372
 msgid "Inviting to this room"
 msgstr "இந்த அறைக்கு அழைப்பு"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:367
+#: ../libempathy-gtk/empathy-contact-menu.c:403
 msgid "_Invite to chatroom"
 msgstr "(_I) அரட்டை அறைக்கு அழைப்பு"
 
@@ -1385,53 +1392,53 @@ msgstr "வகை:"
 msgid "_Add..."
 msgstr "சேர்... (_A)"
 
-#: ../src/empathy-call-window.c:321
+#: ../src/empathy-call-window.c:370
 msgid "Contrast"
 msgstr "வேறுபாடு"
 
-#: ../src/empathy-call-window.c:324
+#: ../src/empathy-call-window.c:373
 msgid "Brightness"
 msgstr "வெளிச்சம்"
 
-#: ../src/empathy-call-window.c:327
+#: ../src/empathy-call-window.c:376
 msgid "Gamma"
 msgstr "காமா"
 
-#: ../src/empathy-call-window.c:431
+#: ../src/empathy-call-window.c:480
 msgid "Volume"
 msgstr "ஒலி அளவு"
 
-#: ../src/empathy-call-window.c:534
+#: ../src/empathy-call-window.c:592
 msgid "_Sidebar"
 msgstr "பக்கப்பட்டை(_S)"
 
-#: ../src/empathy-call-window.c:552
+#: ../src/empathy-call-window.c:611
 msgid "Dialpad"
 msgstr "டயல் அட்டை"
 
-#: ../src/empathy-call-window.c:558
+#: ../src/empathy-call-window.c:617
 msgid "Audio input"
 msgstr "ஒலி உள்ளீடு"
 
-#: ../src/empathy-call-window.c:562
+#: ../src/empathy-call-window.c:621
 msgid "Video input"
 msgstr "வீடியோ உள்ளீடு"
 
-#: ../src/empathy-call-window.c:575
+#: ../src/empathy-call-window.c:645
 msgid "Connecting..."
 msgstr "இணைக்கிறது...."
 
-#: ../src/empathy-call-window.c:589
+#: ../src/empathy-call-window.c:660
 #, c-format
 msgid "Call with %s"
 msgstr "%s ஆல் அழை "
 
-#: ../src/empathy-call-window.c:623
+#: ../src/empathy-call-window.c:694
 msgid "Call"
 msgstr "அழை"
 
 #. Translators: number of minutes:seconds the caller has been connected
-#: ../src/empathy-call-window.c:893
+#: ../src/empathy-call-window.c:971
 #, c-format
 msgid "Connected — %d:%02dm"
 msgstr "இணைக்கப்பட்டது — %d:%02dm"
@@ -1883,15 +1890,15 @@ msgstr "(_P) தனிப்பட்ட தகவல்"
 msgid "_Room"
 msgstr "(_R) அறை"
 
-#: ../src/empathy-new-chatroom-dialog.c:313
+#: ../src/empathy-new-chatroom-dialog.c:319
 msgid "Chat Room"
 msgstr "அரட்டை அறை"
 
-#: ../src/empathy-new-chatroom-dialog.c:328
+#: ../src/empathy-new-chatroom-dialog.c:335
 msgid "Members"
 msgstr "உறுப்பினர்கள்"
 
-#: ../src/empathy-new-chatroom-dialog.c:449
+#: ../src/empathy-new-chatroom-dialog.c:464
 #, c-format
 msgctxt ""
 "Room/Join's roomlist tooltip. Parametersare a channel name, yes/no, yes/no "
@@ -1907,13 +1914,13 @@ msgstr ""
 "Password required: %s\n"
 "Members: %s"
 
-#: ../src/empathy-new-chatroom-dialog.c:451
-#: ../src/empathy-new-chatroom-dialog.c:452
+#: ../src/empathy-new-chatroom-dialog.c:466
+#: ../src/empathy-new-chatroom-dialog.c:467
 msgid "Yes"
 msgstr "ஆம்"
 
-#: ../src/empathy-new-chatroom-dialog.c:451
-#: ../src/empathy-new-chatroom-dialog.c:452
+#: ../src/empathy-new-chatroom-dialog.c:466
+#: ../src/empathy-new-chatroom-dialog.c:467
 msgid "No"
 msgstr "இல்லை"
 
@@ -2109,3 +2116,7 @@ msgid ""
 msgstr ""
 " %s சேவைக்கு அழைப்பு கொடுக்கப்பட்டது ஆனால் அதை கையாள உங்கள் கணினியில் தேவையான பயன்பாடு "
 "இல்லை"
+
+#: ../src/empathy-call-window-fullscreen.ui.h:1
+msgid "gtk-leave-fullscreen"
+msgstr "ஜிடிகே முழுத்திரையை  விட்டுவிலகு"
