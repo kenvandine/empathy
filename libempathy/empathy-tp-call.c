@@ -672,3 +672,40 @@ empathy_tp_call_has_dtmf (EmpathyTpCall *call)
       TP_IFACE_QUARK_CHANNEL_INTERFACE_DTMF);
 }
 
+/**
+ * empathy_tp_call_is_receiving_video:
+ * @call: the call
+ *
+ * Indicates if the call is receiving video or not.
+ *
+ * Returns: %TRUE if the call is currently receiving video, %FALSE otherwise.
+ */
+gboolean
+empathy_tp_call_is_receiving_video (EmpathyTpCall *call)
+{
+  EmpathyTpCallPriv *priv = GET_PRIV (call);
+
+  g_return_val_if_fail (EMPATHY_IS_TP_CALL (call), FALSE);
+
+  return priv->video->direction == TP_MEDIA_STREAM_DIRECTION_RECEIVE ||
+            priv->video->direction == TP_MEDIA_STREAM_DIRECTION_BIDIRECTIONAL;
+}
+
+/**
+ * empathy_tp_call_is_sending_video:
+ * @call: the call
+ *
+ * Indicates if the call is sending video or not.
+ *
+ * Returns: %TRUE if the call is currently sending video, %FALSE otherwise.
+ */
+gboolean
+empathy_tp_call_is_sending_video (EmpathyTpCall *call)
+{
+  EmpathyTpCallPriv *priv = GET_PRIV (call);
+
+  g_return_val_if_fail (EMPATHY_IS_TP_CALL (call), FALSE);
+
+  return priv->video->direction == TP_MEDIA_STREAM_DIRECTION_SEND ||
+            priv->video->direction == TP_MEDIA_STREAM_DIRECTION_BIDIRECTIONAL;
+}

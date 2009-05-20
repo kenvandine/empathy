@@ -85,6 +85,8 @@ void empathy_tp_call_request_video_stream_direction (EmpathyTpCall *call,
 void empathy_tp_call_start_tone (EmpathyTpCall *call, TpDTMFEvent event);
 void empathy_tp_call_stop_tone (EmpathyTpCall *call);
 gboolean empathy_tp_call_has_dtmf (EmpathyTpCall *call);
+gboolean empathy_tp_call_is_receiving_video (EmpathyTpCall *call);
+gboolean empathy_tp_call_is_sending_video (EmpathyTpCall *call);
 
 G_END_DECLS
 

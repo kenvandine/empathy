@@ -229,6 +229,9 @@ static void empathy_call_window_restart_call (EmpathyCallWindow *window);
 static void empathy_call_window_status_message (EmpathyCallWindow *window,
   gchar *message);
 
+static void empathy_call_window_update_avatars_visibility (EmpathyTpCall *call,
+  EmpathyCallWindow *window);
+
 static gboolean empathy_call_window_bus_message (GstBus *bus,
   GstMessage *message, gpointer user_data);
 
@@ -1229,6 +1232,8 @@ empathy_call_window_connected (gpointer user_data)
   gtk_action_set_sensitive (priv->redial, FALSE);
   gtk_widget_set_sensitive (priv->redial_button, FALSE);
 
+  empathy_call_window_update_avatars_visibility (call, self);
+
   g_object_unref (call);
 
   g_mutex_lock (priv->lock);
@@ -1443,6 +1448,48 @@ empathy_call_window_bus_message (GstBus *bus, GstMessage *message,
 }
 
 static void
+empathy_call_window_update_avatars_visibility (EmpathyTpCall *call,
+    EmpathyCallWindow *window)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+
+  if (empathy_tp_call_is_receiving_video (call))
+    {
+      gtk_widget_hide (priv->remote_user_avatar_widget);
+      gtk_widget_show (priv->video_output);
+    }
+  else
+    {
+      gtk_widget_hide (priv->video_output);
+      gtk_widget_show (priv->remote_user_avatar_widget);
+    }
+
+  if (empathy_tp_call_is_sending_video (call))
+    {
+      gtk_widget_hide (priv->self_user_avatar_widget);
+      gtk_widget_show (priv->video_preview);
+    }
+  else
+    {
+      gtk_widget_hide (priv->video_preview);
+      gtk_widget_show (priv->self_user_avatar_widget);
+    }
+}
+
+static void
+empathy_call_window_video_stream_changed_cb (EmpathyCallHandler *handler,
+    EmpathyCallWindow *window)
+{
+  EmpathyTpCall *call;
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+
+  g_object_get (priv->handler, "tp-call", &call, NULL);
+
+  empathy_call_window_update_avatars_visibility (call, window);
+  g_object_unref (call);
+}
+
+static void
 empathy_call_window_realized_cb (GtkWidget *widget, EmpathyCallWindow *window)
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (window);
@@ -1457,6 +1504,8 @@ empathy_call_window_realized_cb (GtkWidget *widget, EmpathyCallWindow *window)
     G_CALLBACK (empathy_call_window_src_added_cb), window);
   g_signal_connect (priv->handler, "sink-pad-added",
     G_CALLBACK (empathy_call_window_sink_added_cb), window);
+  g_signal_connect (priv->handler, "video-stream-changed",
+    G_CALLBACK (empathy_call_window_video_stream_changed_cb), window);
 
   empathy_call_window_setup_video_preview (window);
 

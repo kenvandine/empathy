@@ -43,6 +43,7 @@ enum {
   SINK_PAD_ADDED,
   REQUEST_RESOURCE,
   CLOSED,
+  VIDEO_STREAM_CHANGED,
   LAST_SIGNAL
 };
 
@@ -71,6 +72,13 @@ typedef struct {
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyCallHandler)
 
 static void
+empathy_call_handler_call_video_stream_cb (EmpathyTpCall *call,
+    GParamSpec *property, EmpathyCallHandler *self)
+{
+  g_signal_emit (G_OBJECT (self), signals[VIDEO_STREAM_CHANGED], 0);
+}
+
+static void
 empathy_call_handler_dispose (GObject *object)
 {
   EmpathyCallHandlerPriv *priv = GET_PRIV (object);
@@ -93,6 +101,8 @@ empathy_call_handler_dispose (GObject *object)
   if (priv->call != NULL)
     {
       empathy_tp_call_close (priv->call);
+      g_signal_handlers_disconnect_by_func (priv->call,
+          empathy_call_handler_call_video_stream_cb, object);
       g_object_unref (priv->call);
     }
 
@@ -258,6 +268,13 @@ empathy_call_handler_class_init (EmpathyCallHandlerClass *klass)
 
   signals[CLOSED] =
     g_signal_new ("closed", G_TYPE_FROM_CLASS (klass),
+      G_SIGNAL_RUN_LAST, 0, NULL, NULL,
+      g_cclosure_marshal_VOID__VOID,
+      G_TYPE_NONE,
+      0);
+
+  signals[VIDEO_STREAM_CHANGED] =
+    g_signal_new ("video-stream-changed", G_TYPE_FROM_CLASS (klass),
       G_SIGNAL_RUN_LAST, 0, NULL, NULL,
       g_cclosure_marshal_VOID__VOID,
       G_TYPE_NONE,
@@ -514,6 +531,9 @@ empathy_call_handler_request_cb (EmpathyDispatchOperation *operation,
 
   g_object_ref (priv->call);
 
+  g_signal_connect (priv->call, "notify::video-stream",
+      G_CALLBACK (empathy_call_handler_call_video_stream_cb), self);
+
   empathy_call_handler_start_tpfs (self);
 
   empathy_tp_call_to (priv->call, priv->contact,
@@ -536,6 +556,8 @@ empathy_call_handler_start_call (EmpathyCallHandler *handler)
   if (priv->call != NULL)
     {
       empathy_call_handler_start_tpfs (handler);
+      g_signal_connect (priv->call, "notify::video-stream",
+          G_CALLBACK (empathy_call_handler_call_video_stream_cb), handler);
       empathy_tp_call_accept_incoming_call (priv->call);
       return;
     }
