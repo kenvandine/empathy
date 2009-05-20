@@ -1238,9 +1238,10 @@ contact_widget_location_update (EmpathyContactWidget *information)
   GHashTable *location;
   GValue *value;
   gdouble lat, lon;
+  gboolean has_position = TRUE;
 
   location = empathy_contact_get_location (information->contact);
-  if (location == NULL)
+  if (location == NULL || g_hash_table_size (location) == 0)
     {
       gtk_widget_hide (information->vbox_location);
       return;
@@ -1248,19 +1249,15 @@ contact_widget_location_update (EmpathyContactWidget *information)
 
   value = g_hash_table_lookup (location, EMPATHY_LOCATION_LAT);
   if (value == NULL)
-    {
-      gtk_widget_hide (information->vbox_location);
-      return;
-    }
-  lat = g_value_get_double (value);
+      has_position = FALSE;
+  else
+      lat = g_value_get_double (value);
 
   value = g_hash_table_lookup (location, EMPATHY_LOCATION_LON);
   if (value == NULL)
-    {
-      gtk_widget_hide (information->vbox_location);
-      return;
-    }
-  lon = g_value_get_double (value);
+      has_position = FALSE;
+  else
+      lon = g_value_get_double (value);
 
   value = g_hash_table_lookup (location, EMPATHY_LOCATION_TIMESTAMP);
   if (value == NULL)
@@ -1348,7 +1345,10 @@ contact_widget_location_update (EmpathyContactWidget *information)
     }
 
 #if HAVE_LIBCHAMPLAIN
-  if (/* information->flags & EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP || */
+  /* Cannot be displayed in tooltips until Clutter-Gtk can deal with such
+   * windows
+   */
+  if (has_position &&
       information->flags & EMPATHY_CONTACT_WIDGET_SHOW_LOCATION)
     {
       ClutterActor *marker;
