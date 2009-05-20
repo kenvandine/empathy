@@ -132,7 +132,7 @@ empathy_map_view_show ()
   champlain_view_center_on (window->map_view, 36, 0);
 
   embed = champlain_view_embed_new (window->map_view);
-  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw),
+  gtk_container_add (GTK_CONTAINER (sw),
      GTK_WIDGET (embed));
   gtk_widget_show_all (embed);
 
