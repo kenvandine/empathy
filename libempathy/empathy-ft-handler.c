@@ -404,7 +404,9 @@ empathy_ft_handler_class_init (EmpathyFTHandlerClass *klass)
    * is started. Note that this only happens if the handler is created
    * with checksum enabled and, even if the option is set, is not
    * guaranteed to happen for incoming handlers, as the CM might not
-   * support sending/receiving the file hash.
+   * support sending/receiving the file hash. You can use
+   * empathy_ft_handler_get_use_hash() to find out whether the handler really
+   * supports checksum.
    */
   signals[HASHING_STARTED] =
     g_signal_new ("hashing-started", G_TYPE_FROM_CLASS (klass),
@@ -1383,7 +1385,9 @@ empathy_ft_handler_get_gfile (EmpathyFTHandler *handler)
  * empathy_ft_handler_get_use_hash:
  * @handler: an #EmpathyFTHandler
  *
- * Returns whether @handler has checksumming enabled.
+ * Returns whether @handler has checksumming enabled. Note that if the CM
+ * doesn't support sending/receiving the checksum, this can return %FALSE even
+ * if the handler was created with the use_hash parameter set to %TRUE.
  *
  * Return value: %TRUE if the handler has checksumming enabled,
  * %FALSE otherwise.
