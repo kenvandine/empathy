@@ -844,7 +844,7 @@ again:
       g_io_scheduler_job_send_to_mainloop_async (job, emit_hashing_progress,
           hash_data, NULL);
 
-      g_slice_free (guchar, hash_data->buffer);
+      g_slice_free1 (BUFFER_SIZE, hash_data->buffer);
       hash_data->buffer = NULL;
 
       goto again;
