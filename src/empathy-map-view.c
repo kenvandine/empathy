@@ -55,6 +55,9 @@ typedef struct {
   GtkWidget *zoom_out;
   ChamplainView *map_view;
   ChamplainLayer *layer;
+#if HAVE_GEOCLUE
+  GeoclueGeocode *geocode;
+#endif
 } EmpathyMapView;
 
 static void map_view_destroy_cb (GtkWidget *widget,
@@ -152,6 +155,10 @@ map_view_destroy_cb (GtkWidget *widget,
 
   g_object_unref (window->list_store);
   g_object_unref (window->layer);
+#if HAVE_GEOCLUE
+  if (window->geocode != NULL)
+    g_object_unref (window->geocode);
+#endif
   g_slice_free (EmpathyMapView, window);
 }
 
@@ -177,6 +184,10 @@ map_view_geocode_cb (GeoclueGeocode *geocode,
   GHashTable *location;
 
   location = empathy_contact_get_location (EMPATHY_CONTACT (userdata));
+
+  GHashTable *address = g_object_get_data (userdata, "geoclue-address");
+  g_hash_table_destroy (address);
+  g_object_set_data (userdata, "geoclue-address", NULL);
 
   if (error != NULL)
     {
@@ -245,33 +256,6 @@ map_view_marker_update_position (ChamplainMarker *marker,
   value = g_hash_table_lookup (location, EMPATHY_LOCATION_LAT);
   if (value == NULL)
     {
-#if HAVE_GEOCLUE
-      GeoclueGeocode *geocode;
-      gchar *str;
-      GHashTable *address;
-
-      geocode = geoclue_geocode_new (GEOCODE_SERVICE, GEOCODE_PATH);
-      address = geoclue_address_details_new();
-
-      str = get_dup_string (location, EMPATHY_LOCATION_COUNTRY);
-      if (str != NULL)
-        g_hash_table_insert (address, g_strdup ("country"), str);
-
-      str = get_dup_string (location, EMPATHY_LOCATION_POSTAL_CODE);
-      if (str != NULL)
-        g_hash_table_insert (address, g_strdup ("postalcode"), str);
-
-      str = get_dup_string (location, EMPATHY_LOCATION_LOCALITY);
-      if (str != NULL)
-        g_hash_table_insert (address, g_strdup ("locality"), str);
-
-      str = get_dup_string (location, EMPATHY_LOCATION_STREET);
-      if (str != NULL)
-        g_hash_table_insert (address, g_strdup ("street"), str);
-
-      geoclue_geocode_address_to_position_async (geocode, address,
-          map_view_geocode_cb, contact);
-#endif
       clutter_actor_hide (CLUTTER_ACTOR (marker));
       return;
     }
@@ -279,7 +263,10 @@ map_view_marker_update_position (ChamplainMarker *marker,
 
   value = g_hash_table_lookup (location, EMPATHY_LOCATION_LON);
   if (value == NULL)
-    return;
+    {
+      clutter_actor_hide (CLUTTER_ACTOR (marker));
+      return;
+    }
   lon = g_value_get_double (value);
 
   clutter_actor_show (CLUTTER_ACTOR (marker));
@@ -306,8 +293,6 @@ map_view_contacts_foreach (GtkTreeModel *model,
   EmpathyContact *contact;
   ClutterActor *marker;
   ClutterActor *texture;
-  GHashTable *location;
-  GValue *value;
   GdkPixbuf *avatar;
   const gchar *name;
 
@@ -337,6 +322,44 @@ map_view_contacts_foreach (GtkTreeModel *model,
 
   g_signal_connect (contact, "notify::location",
       G_CALLBACK (map_view_contact_location_notify), marker);
+
+#if HAVE_GEOCLUE
+  gchar *str;
+  GHashTable *address;
+  GHashTable *location;
+  GValue *value;
+
+  location = empathy_contact_get_location (contact);
+  value = g_hash_table_lookup (location, EMPATHY_LOCATION_LON);
+  if (value == NULL)
+      {
+        if (window->geocode == NULL)
+          window->geocode = geoclue_geocode_new (GEOCODE_SERVICE, GEOCODE_PATH);
+
+        address = geoclue_address_details_new();
+
+        str = get_dup_string (location, EMPATHY_LOCATION_COUNTRY);
+        if (str != NULL)
+          g_hash_table_insert (address, g_strdup ("country"), str);
+
+        str = get_dup_string (location, EMPATHY_LOCATION_POSTAL_CODE);
+        if (str != NULL)
+          g_hash_table_insert (address, g_strdup ("postalcode"), str);
+
+        str = get_dup_string (location, EMPATHY_LOCATION_LOCALITY);
+        if (str != NULL)
+          g_hash_table_insert (address, g_strdup ("locality"), str);
+
+        str = get_dup_string (location, EMPATHY_LOCATION_STREET);
+        if (str != NULL)
+          g_hash_table_insert (address, g_strdup ("street"), str);
+
+        g_object_set_data (G_OBJECT (contact), "geoclue-address", address);
+
+        geoclue_geocode_address_to_position_async (window->geocode, address,
+            map_view_geocode_cb, contact);
+      }
+#endif
 
   g_object_unref (contact);
   return FALSE;
