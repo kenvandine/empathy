@@ -15,7 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * Authors: Pierre-Luc Beaudoin <pierre-luc@pierlux.com>
+ * Authors: Pierre-Luc Beaudoin <pierre-luc.beaudoin@collabora.co.uk>
  */
 
 #include <config.h>
@@ -73,7 +73,7 @@ static void map_view_contact_location_notify (GObject *gobject,
 static gchar * get_dup_string (GHashTable *location,
     gchar *key);
 
-// FIXME: Make it so that only one window can be shown
+/* FIXME: Make it so that only one window can be shown */
 GtkWidget *
 empathy_map_view_show ()
 {
@@ -94,18 +94,23 @@ empathy_map_view_show ()
     }
   */
 
-  window = g_new0 (EmpathyMapView, 1);
+  window = g_slice_new0 (EmpathyMapView);
 
   /* Set up interface */
   filename = empathy_file_lookup ("empathy-map-view.ui", "src");
-  gui = empathy_builder_get_file (filename, "map_view",
-      &window->window, "zoom_in", &window->zoom_in, "zoom_out",
-      &window->zoom_out, "map_scrolledwindow", &sw, NULL);
+  gui = empathy_builder_get_file (filename,
+     "map_view", &window->window,
+     "zoom_in", &window->zoom_in,
+     "zoom_out", &window->zoom_out,
+     "map_scrolledwindow", &sw,
+     NULL);
   g_free (filename);
 
-  empathy_builder_connect (gui, window, "map_view", "destroy",
-      map_view_destroy_cb, "zoom_in", "clicked", map_view_zoom_in_cb,
-      "zoom_out", "clicked", map_view_zoom_out_cb, NULL);
+  empathy_builder_connect (gui, window,
+      "map_view", "destroy", map_view_destroy_cb,
+      "zoom_in", "clicked", map_view_zoom_in_cb,
+      "zoom_out", "clicked", map_view_zoom_out_cb,
+      NULL);
 
   g_object_unref (gui);
 
@@ -128,7 +133,7 @@ empathy_map_view_show ()
      GTK_WIDGET (embed));
   gtk_widget_show_all (embed);
 
-  window->layer = champlain_layer_new ();
+  window->layer = g_object_ref (champlain_layer_new ());
   champlain_view_add_layer (window->map_view, window->layer);
 
   /* Set up contact list. */
@@ -146,7 +151,8 @@ map_view_destroy_cb (GtkWidget *widget,
   GtkTreeModel *model;
 
   g_object_unref (window->list_store);
-  g_free (window);
+  g_object_unref (window->layer);
+  g_slice_free (EmpathyMapView, window);
 }
 
 #if HAVE_GEOCLUE
@@ -199,7 +205,7 @@ map_view_geocode_cb (GeoclueGeocode *geocode,
       DEBUG ("\t - Altitude: %f", altitude);
     }
 
-  //Don't change the accuracy as we used an address to get this position
+  /* Don't change the accuracy as we used an address to get this position */
   if (found == TRUE)
     empathy_contact_set_location (EMPATHY_CONTACT (userdata), location);
   g_hash_table_unref (location);
