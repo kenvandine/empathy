@@ -76,7 +76,6 @@ typedef struct {
 	/* Menu items. */
 	GtkUIManager *ui_manager;
 	GtkAction   *menu_conv_insert_smiley;
-	GtkAction   *menu_conv_contact;
 	GtkAction   *menu_conv_favorite;
 
 	GtkAction   *menu_edit_cut;
@@ -488,19 +487,7 @@ chat_window_conv_activate_cb (GtkAction         *action,
 			      EmpathyChatWindow *window)
 {
 	EmpathyChatWindowPriv *priv = GET_PRIV (window);
-	GtkWidget             *menu = NULL;
-	GtkWidget             *submenu = NULL;
 	gboolean               is_room;
-
-	/* Contact submenu */
-	submenu = empathy_chat_get_contact_menu (priv->current_chat);
-	if (submenu) {
-		menu = gtk_ui_manager_get_widget (priv->ui_manager,
-			"/chats_menubar/menu_conv/menu_conv_contact");
-		gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu), submenu);
-		gtk_widget_show (submenu);
-	}
-	gtk_action_set_visible (priv->menu_conv_contact, submenu != NULL);
 
 	/* Favorite room menu */
 	is_room = empathy_chat_is_room (priv->current_chat);
@@ -1326,7 +1313,6 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 				       "chat_vbox", &chat_vbox,
 				       "ui_manager", &priv->ui_manager,
 				       "menu_conv_insert_smiley", &priv->menu_conv_insert_smiley,
-				       "menu_conv_contact", &priv->menu_conv_contact,
 				       "menu_conv_favorite", &priv->menu_conv_favorite,
 				       "menu_edit_cut", &priv->menu_edit_cut,
 				       "menu_edit_copy", &priv->menu_edit_copy,

@@ -26,12 +26,6 @@
           </object>
         </child>
         <child>
-          <object class="GtkAction" id="menu_conv_contact">
-            <property name="name">menu_conv_contact</property>
-            <property name="label" translatable="yes">_Contact</property>
-          </object>
-        </child>
-        <child>
           <object class="GtkToggleAction" id="menu_conv_favorite">
             <property name="name">menu_conv_favorite</property>
             <property name="label" translatable="yes">_Favorite Chatroom</property>
@@ -136,7 +130,6 @@
         <menu action="menu_conv">
           <menuitem action="menu_conv_clear"/>
           <menuitem action="menu_conv_insert_smiley"/>
-          <menuitem action="menu_conv_contact"/>
           <menuitem action="menu_conv_favorite"/>
           <separator/>
           <menuitem action="menu_conv_close"/>
