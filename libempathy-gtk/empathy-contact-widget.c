@@ -1232,6 +1232,65 @@ contact_widget_client_update (EmpathyContactWidget *information)
   /* FIXME: Needs new telepathy spec */
 }
 
+/* Converts the Location's GHashTable's key to a user readable string */
+static const gchar *
+location_key_to_label (const gchar *key)
+{
+  if (strcmp (key, EMPATHY_LOCATION_COUNTRY_CODE) == 0)
+    return _("Country ISO Code:");
+  else if (strcmp (key, EMPATHY_LOCATION_COUNTRY) == 0)
+    return _("Country:");
+  else if (strcmp (key, EMPATHY_LOCATION_REGION) == 0)
+    return _("State:");
+  else if (strcmp (key, EMPATHY_LOCATION_LOCALITY) == 0)
+    return _("City:");
+  else if (strcmp (key, EMPATHY_LOCATION_AREA) == 0)
+    return _("Area:");
+  else if (strcmp (key, EMPATHY_LOCATION_POSTAL_CODE) == 0)
+    return _("Postal Code:");
+  else if (strcmp (key, EMPATHY_LOCATION_STREET) == 0)
+    return _("Street:");
+  else if (strcmp (key, EMPATHY_LOCATION_BUILDING) == 0)
+    return _("Building:");
+  else if (strcmp (key, EMPATHY_LOCATION_FLOOR) == 0)
+    return _("Floor:");
+  else if (strcmp (key, EMPATHY_LOCATION_ROOM) == 0)
+    return _("Room:");
+  else if (strcmp (key, EMPATHY_LOCATION_TEXT) == 0)
+    return _("Text:");
+  else if (strcmp (key, EMPATHY_LOCATION_DESCRIPTION) == 0)
+    return _("Description:");
+  else if (strcmp (key, EMPATHY_LOCATION_URI) == 0)
+    return _("URI:");
+  else if (strcmp (key, EMPATHY_LOCATION_ACCURACY_LEVEL) == 0)
+    return _("Accuracy Level:");
+  else if (strcmp (key, EMPATHY_LOCATION_ERROR) == 0)
+    return _("Error:");
+  else if (strcmp (key, EMPATHY_LOCATION_VERTICAL_ERROR_M) == 0)
+    return _("Vertical Error (meters):");
+  else if (strcmp (key, EMPATHY_LOCATION_HORIZONTAL_ERROR_M) == 0)
+    return _("Horizontal Error (meters):");
+  else if (strcmp (key, EMPATHY_LOCATION_SPEED) == 0)
+    return _("Speed:");
+  else if (strcmp (key, EMPATHY_LOCATION_BEARING) == 0)
+    return _("Bearing:");
+  else if (strcmp (key, EMPATHY_LOCATION_CLIMB) == 0)
+    return _("Climb Speed:");
+  else if (strcmp (key, EMPATHY_LOCATION_TIMESTAMP) == 0)
+    return _("Taken at:");
+  else if (strcmp (key, EMPATHY_LOCATION_LON) == 0)
+    return _("Longitude:");
+  else if (strcmp (key, EMPATHY_LOCATION_LAT) == 0)
+    return _("Latitude:");
+  else if (strcmp (key, EMPATHY_LOCATION_ALT) == 0)
+    return _("Altitude:");
+  else
+  {
+    DEBUG ("Unexpected Location key: %s", key);
+    return key;
+  }
+}
+
 static void
 contact_widget_location_update (EmpathyContactWidget *information)
 {
@@ -1305,16 +1364,18 @@ contact_widget_location_update (EmpathyContactWidget *information)
       while (g_hash_table_iter_next (&iter, &key, &value))
         {
           const gchar *skey;
+          const gchar* user_label;
           GValue *gvalue;
           char *svalue = NULL;
 
           skey = (const gchar *) key;
+          user_label = location_key_to_label (skey);
           gvalue = (GValue *) value;
 
-          label = gtk_label_new (_(skey));
-          gtk_table_attach_defaults (GTK_TABLE (information->table_location),
-              label, 0, 1, row, row + 1);
-          gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
+          label = gtk_label_new (user_label);
+          gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+          gtk_table_attach (GTK_TABLE (information->table_location),
+              label, 0, 1, row, row + 1, GTK_FILL, GTK_FILL, 10, 0);
           gtk_widget_show (label);
 
           if (G_VALUE_TYPE (gvalue) == G_TYPE_DOUBLE)
