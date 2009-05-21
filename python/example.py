@@ -16,7 +16,8 @@ class HelloWorld:
 
         manager = empathy.ContactManager()
         store = empathygtk.ContactListStore(manager)
-        view = empathygtk.ContactListView(store, 0)
+        features = empathygtk.ContactListFeatureFlags(empathygtk.CONTACT_LIST_FEATURE_NONE)
+        view = empathygtk.ContactListView(store, 0, features)
 
         self.window.add (view)
         view.show()
