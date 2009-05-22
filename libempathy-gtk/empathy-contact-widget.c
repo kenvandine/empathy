@@ -1236,53 +1236,53 @@ contact_widget_client_update (EmpathyContactWidget *information)
 static const gchar *
 location_key_to_label (const gchar *key)
 {
-  if (strcmp (key, EMPATHY_LOCATION_COUNTRY_CODE) == 0)
+  if (tp_strdiff (key, EMPATHY_LOCATION_COUNTRY_CODE) == FALSE)
     return _("Country ISO Code:");
-  else if (strcmp (key, EMPATHY_LOCATION_COUNTRY) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_COUNTRY) == FALSE)
     return _("Country:");
-  else if (strcmp (key, EMPATHY_LOCATION_REGION) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_REGION) == FALSE)
     return _("State:");
-  else if (strcmp (key, EMPATHY_LOCATION_LOCALITY) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_LOCALITY) == FALSE)
     return _("City:");
-  else if (strcmp (key, EMPATHY_LOCATION_AREA) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_AREA) == FALSE)
     return _("Area:");
-  else if (strcmp (key, EMPATHY_LOCATION_POSTAL_CODE) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_POSTAL_CODE) == FALSE)
     return _("Postal Code:");
-  else if (strcmp (key, EMPATHY_LOCATION_STREET) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_STREET) == FALSE)
     return _("Street:");
-  else if (strcmp (key, EMPATHY_LOCATION_BUILDING) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_BUILDING) == FALSE)
     return _("Building:");
-  else if (strcmp (key, EMPATHY_LOCATION_FLOOR) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_FLOOR) == FALSE)
     return _("Floor:");
-  else if (strcmp (key, EMPATHY_LOCATION_ROOM) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_ROOM) == FALSE)
     return _("Room:");
-  else if (strcmp (key, EMPATHY_LOCATION_TEXT) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_TEXT) == FALSE)
     return _("Text:");
-  else if (strcmp (key, EMPATHY_LOCATION_DESCRIPTION) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_DESCRIPTION) == FALSE)
     return _("Description:");
-  else if (strcmp (key, EMPATHY_LOCATION_URI) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_URI) == FALSE)
     return _("URI:");
-  else if (strcmp (key, EMPATHY_LOCATION_ACCURACY_LEVEL) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_ACCURACY_LEVEL) == FALSE)
     return _("Accuracy Level:");
-  else if (strcmp (key, EMPATHY_LOCATION_ERROR) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_ERROR) == FALSE)
     return _("Error:");
-  else if (strcmp (key, EMPATHY_LOCATION_VERTICAL_ERROR_M) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_VERTICAL_ERROR_M) == FALSE)
     return _("Vertical Error (meters):");
-  else if (strcmp (key, EMPATHY_LOCATION_HORIZONTAL_ERROR_M) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_HORIZONTAL_ERROR_M) == FALSE)
     return _("Horizontal Error (meters):");
-  else if (strcmp (key, EMPATHY_LOCATION_SPEED) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_SPEED) == FALSE)
     return _("Speed:");
-  else if (strcmp (key, EMPATHY_LOCATION_BEARING) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_BEARING) == FALSE)
     return _("Bearing:");
-  else if (strcmp (key, EMPATHY_LOCATION_CLIMB) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_CLIMB) == FALSE)
     return _("Climb Speed:");
-  else if (strcmp (key, EMPATHY_LOCATION_TIMESTAMP) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_TIMESTAMP) == FALSE)
     return _("Taken at:");
-  else if (strcmp (key, EMPATHY_LOCATION_LON) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_LON) == FALSE)
     return _("Longitude:");
-  else if (strcmp (key, EMPATHY_LOCATION_LAT) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_LAT) == FALSE)
     return _("Latitude:");
-  else if (strcmp (key, EMPATHY_LOCATION_ALT) == 0)
+  else if (tp_strdiff (key, EMPATHY_LOCATION_ALT) == FALSE)
     return _("Altitude:");
   else
   {
