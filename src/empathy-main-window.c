@@ -93,7 +93,7 @@ typedef struct {
 	GtkWidget              *errors_vbox;
 
 	GtkUIManager           *ui_manager;
-	GtkAction              *chat_history;
+	GtkAction              *view_history;
 	GtkAction              *room_join_favorites;
 	GtkWidget              *room_menu;
 	GtkWidget              *room_separator;
@@ -663,7 +663,7 @@ main_window_chat_quit_cb (GtkAction         *action,
 }
 
 static void
-main_window_chat_history_cb (GtkAction         *action,
+main_window_view_history_cb (GtkAction         *action,
 			     EmpathyMainWindow *window)
 {
 	empathy_log_window_show (NULL, NULL, FALSE, GTK_WINDOW (window->window));
@@ -993,7 +993,7 @@ main_window_account_created_or_deleted_cb (EmpathyAccountManager  *manager,
 					   McAccount              *account,
 					   EmpathyMainWindow      *window)
 {
-	gtk_action_set_sensitive (window->chat_history,
+	gtk_action_set_sensitive (window->view_history,
 		empathy_account_manager_get_count (manager) > 0);
 }
 
@@ -1120,7 +1120,7 @@ empathy_main_window_show (void)
 				       "errors_vbox", &window->errors_vbox,
 				       "ui_manager", &window->ui_manager,
 				       "view_show_offline", &show_offline_widget,
-				       "chat_history", &window->chat_history,
+				       "view_history", &window->view_history,
 				       "room_join_favorites", &window->room_join_favorites,
 				       "presence_toolbar", &window->presence_toolbar,
 				       "roster_scrolledwindow", &sw,
@@ -1132,7 +1132,7 @@ empathy_main_window_show (void)
 			      "main_window", "configure_event", main_window_configure_event_cb,
 			      "chat_quit", "activate", main_window_chat_quit_cb,
 			      "chat_new_message", "activate", main_window_chat_new_message_cb,
-			      "chat_history", "activate", main_window_chat_history_cb,
+			      "view_history", "activate", main_window_view_history_cb,
 			      "room_join_new", "activate", main_window_room_join_new_cb,
 			      "room_join_favorites", "activate", main_window_room_join_favorites_cb,
 			      "room_manage_favorites", "activate", main_window_room_manage_favorites_cb,
