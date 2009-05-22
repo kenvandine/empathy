@@ -519,7 +519,7 @@ start_listing_error_cb (EmpathyTpRoomlist        *room_list,
 			GError                   *error,
 			EmpathyNewChatroomDialog *dialog)
 {
-	gtk_label_set_text (GTK_LABEL (dialog->label_error_message), "Could not start room listing");
+	gtk_label_set_text (GTK_LABEL (dialog->label_error_message), _("Could not start room listing"));
 	gtk_widget_show_all (dialog->viewport_error);
 	gtk_widget_set_sensitive (dialog->treeview, FALSE);
 }
@@ -529,7 +529,7 @@ stop_listing_error_cb (EmpathyTpRoomlist        *room_list,
 		       GError                   *error,
 		       EmpathyNewChatroomDialog *dialog)
 {
-	gtk_label_set_text (GTK_LABEL (dialog->label_error_message), "Could not stop room listing");
+	gtk_label_set_text (GTK_LABEL (dialog->label_error_message), _("Could not stop room listing"));
 	gtk_widget_show_all (dialog->viewport_error);
 	gtk_widget_set_sensitive (dialog->treeview, FALSE);
 }
