@@ -1369,6 +1369,9 @@ contact_widget_location_update (EmpathyContactWidget *information)
           char *svalue = NULL;
 
           skey = (const gchar *) key;
+          if (tp_strdiff (skey, EMPATHY_LOCATION_TIMESTAMP) == FALSE)
+            continue;
+
           user_label = location_key_to_label (skey);
           gvalue = (GValue *) value;
 
