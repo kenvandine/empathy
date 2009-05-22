@@ -518,9 +518,9 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
   else
     g_hash_table_ref (parameters);
 
-  if (!emp_cli_channel_type_stream_tube_run_offer_stream_tube (
+  if (!emp_cli_channel_type_stream_tube_run_offer (
         TP_PROXY(channel), -1, type, address,
-        TP_SOCKET_ACCESS_CONTROL_LOCALHOST, control_param, parameters,
+        TP_SOCKET_ACCESS_CONTROL_LOCALHOST, parameters,
         &error, NULL))
     {
       DEBUG ("Couldn't offer tube: %s", error->message);
@@ -609,7 +609,7 @@ empathy_tp_tube_accept_stream_tube (EmpathyTpTube *tube,
 
   data = new_empathy_tp_tube_accept_data (type, callback, user_data);
 
-  emp_cli_channel_type_stream_tube_call_accept_stream_tube (
+  emp_cli_channel_type_stream_tube_call_accept (
      TP_PROXY (priv->channel), -1, type, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
      control_param, tp_tube_accept_stream_cb, data,
      free_empathy_tp_tube_accept_data, G_OBJECT (tube));
