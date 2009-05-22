@@ -87,6 +87,12 @@
           </object>
         </child>
         <child>
+          <object class="GtkAction" id="view">
+            <property name="name">view</property>
+            <property name="label" translatable="yes">_View</property>
+          </object>
+        </child>
+        <child>
           <object class="GtkAction" id="room">
             <property name="name">room</property>
             <property name="label" translatable="yes">_Room</property>
@@ -155,6 +161,8 @@
           <menuitem action="edit_personal_information"/>
           <separator/>
           <menuitem action="edit_preferences"/>
+        </menu>
+        <menu action="view">
         </menu>
         <menu action="room">
           <menuitem action="room_join_new"/>
