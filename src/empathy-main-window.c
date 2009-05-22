@@ -684,7 +684,7 @@ main_window_chat_add_contact_cb (GtkAction         *action,
 }
 
 static void
-main_window_chat_show_ft_manager (GtkAction         *action,
+main_window_view_show_ft_manager (GtkAction         *action,
 				  EmpathyMainWindow *window)
 {
 	EmpathyFTManager *manager;
@@ -1137,7 +1137,7 @@ empathy_main_window_show (void)
 			      "room_join_favorites", "activate", main_window_room_join_favorites_cb,
 			      "room_manage_favorites", "activate", main_window_room_manage_favorites_cb,
 			      "chat_add_contact", "activate", main_window_chat_add_contact_cb,
-			      "chat_show_ft_manager", "activate", main_window_chat_show_ft_manager,
+			      "view_show_ft_manager", "activate", main_window_view_show_ft_manager,
 			      "chat_show_offline", "toggled", main_window_chat_show_offline_cb,
 			      "edit", "activate", main_window_edit_cb,
 			      "edit_accounts", "activate", main_window_edit_accounts_cb,

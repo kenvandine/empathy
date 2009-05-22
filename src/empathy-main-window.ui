@@ -34,9 +34,9 @@
           </object>
         </child>
         <child>
-          <object class="GtkAction" id="chat_show_ft_manager">
+          <object class="GtkAction" id="view_show_ft_manager">
             <property name="icon-name">document-send</property>
-            <property name="name">chat_show_ft_manager</property>
+            <property name="name">view_show_ft_manager</property>
             <property name="label" translatable="yes">Show _File Transfers</property>
           </object>
         </child>
@@ -148,8 +148,6 @@
           <separator/>
           <menuitem action="chat_add_contact"/>
           <separator/>
-          <menuitem action="chat_show_ft_manager"/>
-          <separator/>
           <menuitem action="chat_show_offline"/>
           <separator/>
           <menuitem action="chat_quit"/>
@@ -163,6 +161,8 @@
           <menuitem action="edit_preferences"/>
         </menu>
         <menu action="view">
+          <menuitem action="view_show_ft_manager"/>
+          <separator/>
         </menu>
         <menu action="room">
           <menuitem action="room_join_new"/>
