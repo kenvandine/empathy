@@ -627,6 +627,9 @@ presence_chooser_changed_cb (GtkComboBox *self, gpointer user_data)
 		presence_chooser_set_status_editing (
 			EMPATHY_PRESENCE_CHOOSER (self),
 			FALSE);
+		gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+					   GTK_ENTRY_ICON_PRIMARY,
+					   icon_name);
 
 		gtk_tree_model_get (model, &iter,
 				    COL_STATUS_TEXT, &status,
