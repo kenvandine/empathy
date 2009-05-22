@@ -278,6 +278,8 @@ chat_window_update (EmpathyChatWindow *window)
 	gboolean               avatar_in_icon;
 	GtkWidget             *chat;
 	GtkWidget             *chat_close_button;
+	GtkWidget             *submenu;
+	GtkWidget             *menu;
 
 	/* Get information */
 	page_num = gtk_notebook_get_current_page (GTK_NOTEBOOK (priv->notebook));
@@ -297,6 +299,13 @@ chat_window_update (EmpathyChatWindow *window)
 	gtk_action_set_sensitive (priv->menu_tabs_left, !first_page);
 	gtk_action_set_sensitive (priv->menu_tabs_right, !last_page);
 	gtk_action_set_sensitive (priv->menu_conv_insert_smiley, is_connected);
+
+	/* Update Contact menu */
+	menu = gtk_ui_manager_get_widget (priv->ui_manager,
+		"/chats_menubar/menu_contact");
+	submenu = empathy_chat_get_contact_menu (priv->current_chat);
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu), submenu);
+	gtk_widget_show (menu);
 
 	/* Update window title */
 	if (n_chats == 1) {
