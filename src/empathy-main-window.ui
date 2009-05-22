@@ -41,8 +41,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkToggleAction" id="chat_show_offline">
-            <property name="name">chat_show_offline</property>
+          <object class="GtkToggleAction" id="view_show_offline">
+            <property name="name">view_show_offline</property>
             <property name="label" translatable="yes">Show _Offline Contacts</property>
           </object>
           <accelerator key="H" modifiers="GDK_CONTROL_MASK"/>
@@ -148,8 +148,6 @@
           <separator/>
           <menuitem action="chat_add_contact"/>
           <separator/>
-          <menuitem action="chat_show_offline"/>
-          <separator/>
           <menuitem action="chat_quit"/>
         </menu>
         <menu action="edit">
@@ -161,8 +159,9 @@
           <menuitem action="edit_preferences"/>
         </menu>
         <menu action="view">
-          <menuitem action="view_show_ft_manager"/>
+          <menuitem action="view_show_offline"/>
           <separator/>
+          <menuitem action="view_show_ft_manager"/>
         </menu>
         <menu action="room">
           <menuitem action="room_join_new"/>

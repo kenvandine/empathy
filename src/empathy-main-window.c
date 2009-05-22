@@ -698,7 +698,7 @@ main_window_view_show_ft_manager (GtkAction         *action,
 }
 
 static void
-main_window_chat_show_offline_cb (GtkToggleAction   *action,
+main_window_view_show_offline_cb (GtkToggleAction   *action,
 				  EmpathyMainWindow *window)
 {
 	gboolean current;
@@ -1119,7 +1119,7 @@ empathy_main_window_show (void)
 				       "main_vbox", &window->main_vbox,
 				       "errors_vbox", &window->errors_vbox,
 				       "ui_manager", &window->ui_manager,
-				       "chat_show_offline", &show_offline_widget,
+				       "view_show_offline", &show_offline_widget,
 				       "chat_history", &window->chat_history,
 				       "room_join_favorites", &window->room_join_favorites,
 				       "presence_toolbar", &window->presence_toolbar,
@@ -1138,7 +1138,7 @@ empathy_main_window_show (void)
 			      "room_manage_favorites", "activate", main_window_room_manage_favorites_cb,
 			      "chat_add_contact", "activate", main_window_chat_add_contact_cb,
 			      "view_show_ft_manager", "activate", main_window_view_show_ft_manager,
-			      "chat_show_offline", "toggled", main_window_chat_show_offline_cb,
+			      "view_show_offline", "toggled", main_window_view_show_offline_cb,
 			      "edit", "activate", main_window_edit_cb,
 			      "edit_accounts", "activate", main_window_edit_accounts_cb,
 			      "edit_personal_information", "activate", main_window_edit_personal_information_cb,
