@@ -132,7 +132,6 @@ typedef struct {
   guint64 mtime;
   gchar *content_hash;
   TpFileHashType content_hash_type;
-  TpFileTransferState current_state;
 
   /* time and speed */
   gdouble speed;
