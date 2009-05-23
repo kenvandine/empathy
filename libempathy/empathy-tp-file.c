@@ -669,8 +669,6 @@ do_constructed (GObject *object)
 
   priv->state_change_reason =
       TP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE;
-
-  G_OBJECT_CLASS (empathy_tp_file_parent_class)->constructed (object);
 }
 
 static void
