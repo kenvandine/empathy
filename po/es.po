@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=empathy&component=general\n"
-"POT-Creation-Date: 2009-05-18 15:49+0000\n"
-"PO-Revision-Date: 2009-05-18 20:21+0200\n"
+"POT-Creation-Date: 2009-05-22 15:45+0000\n"
+"PO-Revision-Date: 2009-05-23 20:14+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -430,7 +430,7 @@ msgstr "_Puerto:"
 #: ../libempathy-gtk/empathy-account-widget-jabber.ui.h:11
 #: ../libempathy-gtk/empathy-account-widget-msn.ui.h:5
 #: ../libempathy-gtk/empathy-account-widget-yahoo.ui.h:9
-#: ../src/empathy-new-chatroom-dialog.ui.h:8
+#: ../src/empathy-new-chatroom-dialog.ui.h:9
 msgid "_Server:"
 msgstr "_Servidor:"
 
@@ -713,11 +713,7 @@ msgstr "Editar información del contacto"
 msgid "Personal Information"
 msgstr "Información personal"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:368
-msgid "I would like to add you to my contact list."
-msgstr "Me gustaría añadirte a mi lista de contactos."
-
-#: ../libempathy-gtk/empathy-contact-dialogs.c:392
+#: ../libempathy-gtk/empathy-contact-dialogs.c:391
 msgid "New Contact"
 msgstr "Contacto nuevo"
 
@@ -739,7 +735,7 @@ msgid "Removing group"
 msgstr "Quitando grupo"
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:1426
-#: ../libempathy-gtk/empathy-contact-list-view.c:1505
+#: ../libempathy-gtk/empathy-contact-list-view.c:1504
 msgid "_Remove"
 msgstr "_Quitar"
 
@@ -752,23 +748,17 @@ msgstr "¿Realmente quiere quitar el contacto «%s»?"
 msgid "Removing contact"
 msgstr "Quitando el contacto"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1463
-msgid "Sorry, I don't want you in my contact list anymore."
-msgstr "Lo siento, no te quiero en mi lista de contactos."
-
 #: ../libempathy-gtk/empathy-contact-menu.c:135
 #: ../src/empathy-main-window.ui.h:9
 msgid "_Chat"
 msgstr "_Chat"
 
 #: ../libempathy-gtk/empathy-contact-menu.c:166
-#| msgid "_End Call"
 msgctxt "menu item"
 msgid "_Audio Call"
 msgstr "Llamada de _sonido"
 
 #: ../libempathy-gtk/empathy-contact-menu.c:198
-#| msgid "_End Call"
 msgctxt "menu item"
 msgid "_Video Call"
 msgstr "Llamada de _vídeo"
@@ -979,12 +969,12 @@ msgstr "Pulse para hacer este estado uno favorito"
 msgid "Set status"
 msgstr "Establecer estado"
 
-#: ../libempathy-gtk/empathy-presence-chooser.c:776
+#: ../libempathy-gtk/empathy-presence-chooser.c:779
 msgid "Set your presence and current status"
 msgstr "Establecer su presencia y estado actual"
 
 #. Custom messages
-#: ../libempathy-gtk/empathy-presence-chooser.c:1011
+#: ../libempathy-gtk/empathy-presence-chooser.c:1014
 msgid "Custom messages..."
 msgstr "Mensajes personalizados…"
 
@@ -1506,20 +1496,20 @@ msgstr "_Llamar"
 msgid "_View"
 msgstr "_Ver"
 
-#: ../src/empathy-chat-window.c:308
+#: ../src/empathy-chat-window.c:316
 #, c-format
 msgid "Conversations (%d)"
 msgstr "Conversaciones (%d)"
 
-#: ../src/empathy-chat-window.c:413
+#: ../src/empathy-chat-window.c:421
 msgid "Topic:"
 msgstr "Tema:"
 
-#: ../src/empathy-chat-window.c:418
+#: ../src/empathy-chat-window.c:426
 msgid "Typing a message."
 msgstr "Tecleando un mensaje."
 
-#: ../src/empathy-chat-window.c:889 ../src/empathy-event-manager.c:429
+#: ../src/empathy-chat-window.c:885 ../src/empathy-event-manager.c:429
 #, c-format
 msgid "New message from %s"
 msgstr "Nuevo mensaje de %s"
@@ -1590,7 +1580,7 @@ msgid "_Decline"
 msgstr "_Rechazar"
 
 #: ../src/empathy-event-manager.c:701
-#: ../src/empathy-new-chatroom-dialog.ui.h:6
+#: ../src/empathy-new-chatroom-dialog.ui.h:7
 msgid "_Join"
 msgstr "_Unirse"
 
@@ -1929,15 +1919,15 @@ msgstr "Información p_ersonal"
 msgid "_Room"
 msgstr "_Sala"
 
-#: ../src/empathy-new-chatroom-dialog.c:319
+#: ../src/empathy-new-chatroom-dialog.c:332
 msgid "Chat Room"
 msgstr "Sala de chat"
 
-#: ../src/empathy-new-chatroom-dialog.c:335
+#: ../src/empathy-new-chatroom-dialog.c:348
 msgid "Members"
 msgstr "Miembros"
 
-#: ../src/empathy-new-chatroom-dialog.c:464
+#: ../src/empathy-new-chatroom-dialog.c:492
 #, c-format
 msgctxt ""
 "Room/Join's roomlist tooltip. Parametersare a channel name, yes/no, yes/no "
@@ -1953,24 +1943,36 @@ msgstr ""
 "Contraseña necesaria: %s\n"
 "Miembros: %s"
 
-#: ../src/empathy-new-chatroom-dialog.c:466
-#: ../src/empathy-new-chatroom-dialog.c:467
+#: ../src/empathy-new-chatroom-dialog.c:494
+#: ../src/empathy-new-chatroom-dialog.c:495
 msgid "Yes"
 msgstr "Sí"
 
-#: ../src/empathy-new-chatroom-dialog.c:466
-#: ../src/empathy-new-chatroom-dialog.c:467
+#: ../src/empathy-new-chatroom-dialog.c:494
+#: ../src/empathy-new-chatroom-dialog.c:495
 msgid "No"
 msgstr "No"
 
+#: ../src/empathy-new-chatroom-dialog.c:522
+msgid "Could not start room listing"
+msgstr "No se pudo iniciar la lista de la sala"
+
+#: ../src/empathy-new-chatroom-dialog.c:532
+msgid "Could not stop room listing"
+msgstr "No se pudo parar la lista de la sala"
+
 #: ../src/empathy-new-chatroom-dialog.ui.h:2
+msgid "Couldn't load room list"
+msgstr "No se pudo cargar la lista de la sala"
+
+#: ../src/empathy-new-chatroom-dialog.ui.h:3
 msgid ""
 "Enter the room name to join here or click on one or more rooms in the list."
 msgstr ""
 "Introduzca el nombre de la sala a la que unirse o pulse una o más salas de "
 "la lista."
 
-#: ../src/empathy-new-chatroom-dialog.ui.h:3
+#: ../src/empathy-new-chatroom-dialog.ui.h:4
 msgid ""
 "Enter the server which hosts the room, or leave it empty if the room is on "
 "the current account's server"
@@ -1978,15 +1980,15 @@ msgstr ""
 "Introduzca el servidor que aloja la sala o déjelo vacío si la sala está en "
 "la cuenta del servidor actual"
 
-#: ../src/empathy-new-chatroom-dialog.ui.h:4
+#: ../src/empathy-new-chatroom-dialog.ui.h:5
 msgid "Join Room"
 msgstr "Unirse a sala"
 
-#: ../src/empathy-new-chatroom-dialog.ui.h:5
+#: ../src/empathy-new-chatroom-dialog.ui.h:6
 msgid "Room List"
 msgstr "Lista de salas"
 
-#: ../src/empathy-new-chatroom-dialog.ui.h:7
+#: ../src/empathy-new-chatroom-dialog.ui.h:8
 msgid "_Room:"
 msgstr "_Sala:"
 
@@ -2161,6 +2163,12 @@ msgstr ""
 #: ../src/empathy-call-window-fullscreen.ui.h:1
 msgid "gtk-leave-fullscreen"
 msgstr "gtk-leave-fullscreen"
+
+#~ msgid "I would like to add you to my contact list."
+#~ msgstr "Me gustaría añadirte a mi lista de contactos."
+
+#~ msgid "Sorry, I don't want you in my contact list anymore."
+#~ msgstr "Lo siento, no te quiero en mi lista de contactos."
 
 #~ msgctxt "menu item"
 #~ msgid "_Call"
