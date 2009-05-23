@@ -58,6 +58,8 @@ typedef struct
 
   /* channels which the dispatcher is listening "invalidated" */
   GList *channels;
+
+  GHashTable *request_channel_class_async_ids;
 } EmpathyDispatcherPriv;
 
 G_DEFINE_TYPE (EmpathyDispatcher, empathy_dispatcher, G_TYPE_OBJECT);
@@ -872,6 +874,17 @@ dispatcher_new_connection_cb (EmpathyAccountManager *manager,
   g_ptr_array_free (capabilities, TRUE);
 }
 
+static void
+remove_idle_handlers (gpointer key,
+                      gpointer value,
+                      gpointer user_data)
+{
+  guint source_id;
+
+  source_id = GPOINTER_TO_UINT (value);
+  g_source_remove (source_id);
+}
+
 static GObject *
 dispatcher_constructor (GType type,
                         guint n_construct_params,
@@ -903,6 +916,13 @@ dispatcher_finalize (GObject *object)
   GHashTableIter iter;
   gpointer connection;
   GList *list;
+
+  if (priv->request_channel_class_async_ids != NULL)
+    {
+      g_hash_table_foreach (priv->request_channel_class_async_ids,
+        remove_idle_handlers, NULL);
+      g_hash_table_destroy (priv->request_channel_class_async_ids);
+    }
 
   g_signal_handlers_disconnect_by_func (priv->account_manager,
       dispatcher_new_connection_cb, object);
@@ -1008,6 +1028,9 @@ empathy_dispatcher_init (EmpathyDispatcher *dispatcher)
       g_object_unref (l->data);
     }
   g_list_free (connections);
+
+  priv->request_channel_class_async_ids = g_hash_table_new (g_direct_hash,
+    g_direct_equal);
 }
 
 EmpathyDispatcher *
@@ -1436,6 +1459,8 @@ find_channel_class_idle_cb (gpointer user_data)
   gboolean is_ready = TRUE;
   EmpathyDispatcherPriv *priv = GET_PRIV (request->dispatcher);
 
+  g_hash_table_remove (priv->request_channel_class_async_ids, request);
+
   cd = g_hash_table_lookup (priv->connections, request->connection);
 
   if (cd == NULL)
@@ -1472,11 +1497,15 @@ empathy_dispatcher_find_channel_class_async (EmpathyDispatcher *dispatcher,
                                              gpointer user_data)
 {
   FindChannelRequest *request;
+  EmpathyDispatcherPriv *priv;
+  guint source_id;
 
   g_return_if_fail (EMPATHY_IS_DISPATCHER (dispatcher));
   g_return_if_fail (TP_IS_CONNECTION (connection));
   g_return_if_fail (channel_type != NULL);
   g_return_if_fail (handle_type != 0);
+
+  priv = GET_PRIV (dispatcher);
 
   /* append another request for this connection */
   request = g_slice_new0 (FindChannelRequest);
@@ -1486,6 +1515,8 @@ empathy_dispatcher_find_channel_class_async (EmpathyDispatcher *dispatcher,
   request->connection = connection;
   request->callback = callback;
   request->user_data = user_data;
+  source_id = g_idle_add (find_channel_class_idle_cb, request);
 
-  g_idle_add (find_channel_class_idle_cb, request);
+  g_hash_table_insert (priv->request_channel_class_async_ids,
+    request, GUINT_TO_POINTER (source_id));
 }
