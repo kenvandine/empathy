@@ -81,6 +81,7 @@ typedef struct {
 	TpHandleType       handle_type;
 	gint               contacts_width;
 	gboolean           has_input_vscroll;
+	guint              notify_id; /* show contacts' notification */
 
 	GtkWidget         *widget;
 	GtkWidget         *hpaned;
@@ -1190,13 +1191,18 @@ chat_reset_size_request (gpointer widget)
 static void
 chat_set_show_contacts (EmpathyChat *chat, gboolean show)
 {
+	gboolean conf_show;
 	EmpathyChatPriv *priv = GET_PRIV (chat);
 
 	if (!priv->scrolled_window_contacts) {
 		return;
-	}
+	}	
 
-	if (show) {
+	empathy_conf_get_bool (empathy_conf_get (),
+			       EMPATHY_PREFS_CHAT_SHOW_CONTACTS_IN_ROOMS,
+			       &conf_show);
+
+	if (show && conf_show) {
 		EmpathyContactListStore *store;
 		gint                     min_width;
 
@@ -1238,23 +1244,35 @@ chat_set_show_contacts (EmpathyChat *chat, gboolean show)
 }
 
 static void
+chat_notify_show_contacts_cb (EmpathyConf *conf,
+			      const gchar *key,
+			      gpointer     user_data)
+{
+	EmpathyChatPriv *priv;
+	
+	priv = GET_PRIV (user_data);
+
+	chat_set_show_contacts (EMPATHY_CHAT (user_data), priv->remote_contact == NULL);
+}
+
+static void
 chat_remote_contact_changed_cb (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
 
-	if (priv->remote_contact) {
+	if (priv->remote_contact != NULL) {
 		g_object_unref (priv->remote_contact);
 		priv->remote_contact = NULL;
 	}
 
 	priv->remote_contact = empathy_tp_chat_get_remote_contact (priv->tp_chat);
-	if (priv->remote_contact) {
+	if (priv->remote_contact != NULL) {
 		g_object_ref (priv->remote_contact);
 		priv->handle_type = TP_HANDLE_TYPE_CONTACT;
 		g_free (priv->id);
 		priv->id = g_strdup (empathy_contact_get_id (priv->remote_contact));
 	}
-	else if (priv->tp_chat) {
+	else if (priv->tp_chat != NULL) {
 		TpChannel *channel;
 
 		channel = empathy_tp_chat_get_channel (priv->tp_chat);
@@ -1491,6 +1509,8 @@ chat_finalize (GObject *object)
 	if (priv->block_events_timeout_id) {
 		g_source_remove (priv->block_events_timeout_id);
 	}
+	
+	empathy_conf_notify_remove (empathy_conf_get (), priv->notify_id);
 
 	g_free (priv->id);
 	g_free (priv->name);
@@ -1618,6 +1638,11 @@ empathy_chat_init (EmpathyChat *chat)
 			  "new-connection",
 			  G_CALLBACK (chat_new_connection_cb),
 			  chat);
+			  
+	priv->notify_id = empathy_conf_notify_add (empathy_conf_get (),
+				     EMPATHY_PREFS_CHAT_SHOW_CONTACTS_IN_ROOMS,
+				     chat_notify_show_contacts_cb,
+				     chat);
 
 	/* Block events for some time to avoid having "has come online" or
 	 * "joined" messages. */
