@@ -52,6 +52,7 @@ typedef struct {
 	GtkWidget *checkbutton_show_avatars;
 	GtkWidget *checkbutton_compact_contact_list;
 	GtkWidget *checkbutton_show_smileys;
+	GtkWidget *checkbutton_show_contacts_in_rooms;
 	GtkWidget *combobox_chat_theme;
 	GtkWidget *hbox_adium_theme;
 	GtkWidget *filechooserbutton_adium_theme;
@@ -236,6 +237,10 @@ preferences_setup_widgets (EmpathyPreferences *preferences)
 	preferences_hookup_toggle_button (preferences,
 					  EMPATHY_PREFS_CHAT_SHOW_SMILEYS,
 					  preferences->checkbutton_show_smileys);
+					  
+	preferences_hookup_toggle_button (preferences,
+					  EMPATHY_PREFS_CHAT_SHOW_CONTACTS_IN_ROOMS,
+					  preferences->checkbutton_show_contacts_in_rooms);
 
 	preferences_hookup_radio_button (preferences,
 					 EMPATHY_PREFS_CONTACTS_SORT_CRITERIUM,
@@ -1190,6 +1195,7 @@ empathy_preferences_show (GtkWindow *parent)
 		"checkbutton_show_avatars", &preferences->checkbutton_show_avatars,
 		"checkbutton_compact_contact_list", &preferences->checkbutton_compact_contact_list,
 		"checkbutton_show_smileys", &preferences->checkbutton_show_smileys,
+		"checkbutton_show_contacts_in_rooms", &preferences->checkbutton_show_contacts_in_rooms,
 		"combobox_chat_theme", &preferences->combobox_chat_theme,
 		"hbox_adium_theme", &preferences->hbox_adium_theme,
 		"filechooserbutton_adium_theme", &preferences->filechooserbutton_adium_theme,

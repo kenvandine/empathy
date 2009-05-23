@@ -288,6 +288,20 @@
          </long>
       </locale>
     </schema>
+    
+    <schema>
+      <key>/schemas/apps/empathy/conversation/show_contacts_in_rooms</key>
+      <applyto>/apps/empathy/conversation/show_contacts_in_rooms</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+         <short>Show contact list in rooms</short>
+         <long>
+         Whether or not to show the contact list in chat rooms.
+         </long>
+      </locale>
+    </schema>
 
     <schema>
       <key>/schemas/apps/empathy/conversation/theme</key>
