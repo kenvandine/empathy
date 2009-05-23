@@ -32,6 +32,13 @@
           </object>
         </child>
         <child>
+          <object class="GtkToggleAction" id="menu_conv_toggle_contacts">
+            <property name="name">menu_conv_toggle_contacts</property>
+            <property name="active">TRUE</property>
+            <property name="label" translatable="yes">_Show Contact List</property>
+          </object>
+        </child>
+        <child>
           <object class="GtkAction" id="menu_conv_close">
             <property name="stock_id">gtk-close</property>
             <property name="name">menu_conv_close</property>
@@ -137,6 +144,7 @@
           <menuitem action="menu_conv_clear"/>
           <menuitem action="menu_conv_insert_smiley"/>
           <menuitem action="menu_conv_favorite"/>
+          <menuitem action="menu_conv_toggle_contacts"/>
           <separator/>
           <menuitem action="menu_conv_close"/>
         </menu>

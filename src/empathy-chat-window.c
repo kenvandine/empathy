@@ -72,11 +72,13 @@ typedef struct {
 	GtkWidget   *dialog;
 	GtkWidget   *notebook;
 	NotifyNotification *notification;
+	guint        notify_id;	/* show contacts' notification */
 
 	/* Menu items. */
 	GtkUIManager *ui_manager;
 	GtkAction   *menu_conv_insert_smiley;
 	GtkAction   *menu_conv_favorite;
+	GtkAction   *menu_conv_toggle_contacts;
 
 	GtkAction   *menu_edit_cut;
 	GtkAction   *menu_edit_copy;
@@ -130,6 +132,21 @@ chat_window_accel_cb (GtkAccelGroup    *accelgroup,
 
 	if (num != -1) {
 		gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->notebook), num);
+	}
+}
+
+static void
+chat_window_notify_show_contacts_cb (EmpathyConf *conf,
+				     const gchar *key,
+				     gpointer     user_data)
+{
+	gboolean value;
+	EmpathyChatWindowPriv *priv;
+	
+	priv = GET_PRIV (user_data);
+
+	if (empathy_conf_get_bool (empathy_conf_get (), key, &value)) {
+		gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->menu_conv_toggle_contacts), value);
 	}
 }
 
@@ -565,6 +582,7 @@ chat_window_conv_activate_cb (GtkAction         *action,
 			GTK_TOGGLE_ACTION (priv->menu_conv_favorite), found);
 	}
 	gtk_action_set_visible (priv->menu_conv_favorite, is_room);
+	gtk_action_set_visible (priv->menu_conv_toggle_contacts, is_room);
 }
 
 static void
@@ -606,6 +624,19 @@ chat_window_favorite_toggled_cb (GtkToggleAction   *toggle_action,
 	if (!active && chatroom) {
 		empathy_chatroom_manager_remove (priv->chatroom_manager, chatroom);
 	}
+}
+
+static void
+chat_window_contacts_toggled_cb (GtkToggleAction   *toggle_action,
+				 EmpathyChatWindow *window)
+{
+	gboolean               active;
+
+	active = gtk_toggle_action_get_active (toggle_action);
+	
+	empathy_conf_set_bool (empathy_conf_get (),
+			       EMPATHY_PREFS_CHAT_SHOW_CONTACTS_IN_ROOMS,
+			       active);
 }
 
 static const gchar *
@@ -1319,6 +1350,8 @@ chat_window_finalize (GObject *object)
 
 	chat_windows = g_list_remove (chat_windows, window);
 	gtk_widget_destroy (priv->dialog);
+	
+	empathy_conf_notify_remove (empathy_conf_get (), priv->notify_id);
 
 	G_OBJECT_CLASS (empathy_chat_window_parent_class)->finalize (object);
 }
@@ -1368,6 +1401,7 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 				       "ui_manager", &priv->ui_manager,
 				       "menu_conv_insert_smiley", &priv->menu_conv_insert_smiley,
 				       "menu_conv_favorite", &priv->menu_conv_favorite,
+				       "menu_conv_toggle_contacts", &priv->menu_conv_toggle_contacts,
 				       "menu_edit_cut", &priv->menu_edit_cut,
 				       "menu_edit_copy", &priv->menu_edit_copy,
 				       "menu_edit_paste", &priv->menu_edit_paste,
@@ -1384,6 +1418,7 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 			      "menu_conv", "activate", chat_window_conv_activate_cb,
 			      "menu_conv_clear", "activate", chat_window_clear_activate_cb,
 			      "menu_conv_favorite", "toggled", chat_window_favorite_toggled_cb,
+			      "menu_conv_toggle_contacts", "toggled", chat_window_contacts_toggled_cb,
 			      "menu_conv_close", "activate", chat_window_close_activate_cb,
 			      "menu_edit", "activate", chat_window_edit_activate_cb,
 			      "menu_edit_cut", "activate", chat_window_cut_activate_cb,
@@ -1469,6 +1504,10 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 			  "page_removed",
 			  G_CALLBACK (chat_window_page_removed_cb),
 			  window);
+	priv->notify_id = empathy_conf_notify_add (empathy_conf_get (),
+				     EMPATHY_PREFS_CHAT_SHOW_CONTACTS_IN_ROOMS,
+				     chat_window_notify_show_contacts_cb,
+				     window);
 
 	/* Set up drag and drop */
 	gtk_drag_dest_set (GTK_WIDGET (priv->notebook),
