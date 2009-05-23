@@ -37,7 +37,6 @@
                         <child>
                           <object class="GtkVBox" id="vbox199">
                             <property name="visible">True</property>
-                            <property name="spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="checkbutton_compact_contact_list">
                                 <property name="label" translatable="yes">Show co_mpact contact list</property>
