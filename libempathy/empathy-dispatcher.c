@@ -1432,13 +1432,22 @@ find_channel_class_idle_cb (gpointer user_data)
   GStrv retval;
   GList *requests;
   FindChannelRequest *request = user_data;
+  ConnectionData *cd;
+  gboolean is_ready = TRUE;
   EmpathyDispatcherPriv *priv = GET_PRIV (request->dispatcher);
 
-  retval = empathy_dispatcher_find_channel_class (request->dispatcher,
-      request->connection, request->channel_type, request->handle_type);
+  cd = g_hash_table_lookup (priv->connections, request->connection);
 
-  if (retval)
+  if (cd == NULL)
+    is_ready = FALSE;
+  else if (cd->requestable_channels == NULL)
+    is_ready = FALSE;
+
+  if (is_ready)
     {
+      retval = empathy_dispatcher_find_channel_class (request->dispatcher,
+          request->connection, request->channel_type, request->handle_type);
+
       request->callback (retval, request->user_data);
       free_find_channel_request (request);
       return FALSE;
