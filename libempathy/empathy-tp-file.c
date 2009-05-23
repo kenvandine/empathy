@@ -644,40 +644,33 @@ do_set_property (GObject *object,
     };
 }
 
-static GObject *
-do_constructor (GType type,
-    guint n_props,
-    GObjectConstructParam *props)
+static void
+do_constructed (GObject *object)
 {
-  GObject *file_obj;
   EmpathyTpFile *tp_file;
   EmpathyTpFilePriv *priv;
 
-  file_obj = G_OBJECT_CLASS (empathy_tp_file_parent_class)->constructor (type,
-      n_props, props);
-
-  tp_file = EMPATHY_TP_FILE (file_obj);
+  tp_file = EMPATHY_TP_FILE (object);
   priv = GET_PRIV (tp_file);
 
   g_signal_connect (priv->channel, "invalidated",
     G_CALLBACK (tp_file_invalidated_cb), tp_file);
 
   tp_cli_channel_type_file_transfer_connect_to_file_transfer_state_changed (
-      priv->channel, tp_file_state_changed_cb, NULL, NULL,
-      G_OBJECT (tp_file), NULL);
+      priv->channel, tp_file_state_changed_cb, NULL, NULL, object, NULL);
 
   tp_cli_channel_type_file_transfer_connect_to_transferred_bytes_changed (
       priv->channel, tp_file_transferred_bytes_changed_cb,
-      NULL, NULL, G_OBJECT (tp_file), NULL);
+      NULL, NULL, object, NULL);
 
   tp_cli_dbus_properties_call_get (priv->channel,
       -1, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, "State", tp_file_get_state_cb,
-      NULL, NULL, file_obj);
+      NULL, NULL, object);
 
   priv->state_change_reason =
       TP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE;
 
-  return file_obj;
+  G_OBJECT_CLASS (empathy_tp_file_parent_class)->constructed (object);
 }
 
 static void
@@ -687,7 +680,7 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
 
   object_class->finalize = do_finalize;
   object_class->dispose = do_dispose;
-  object_class->constructor = do_constructor;
+  object_class->constructed = do_constructed;
   object_class->get_property = do_get_property;
   object_class->set_property = do_set_property;
 
