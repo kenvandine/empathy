@@ -756,8 +756,7 @@ dispatcher_connection_got_all (TpProxy *proxy,
           free_find_channel_request (request);
         }
 
-      if (requests)
-        g_list_free (requests);
+      g_list_free (requests);
 
       g_hash_table_remove (priv->outstanding_classes_requests, proxy);
     }

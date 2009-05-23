@@ -460,34 +460,19 @@ empathy_ft_handler_init (EmpathyFTHandler *self)
 static void
 hash_data_free (HashingData *data)
 {
-  if (data->buffer != NULL)
-    {
-      g_free (data->buffer);
-      data->buffer = NULL;
-    }
+  g_free (data->buffer);
 
   if (data->stream != NULL)
-    {
-      g_object_unref (data->stream);
-      data->stream = NULL;
-    }
+    g_object_unref (data->stream);
 
   if (data->checksum != NULL)
-    {
-      g_checksum_free (data->checksum);
-      data->checksum = NULL;
-    }
+    g_checksum_free (data->checksum);
 
   if (data->error != NULL)
-    {
-      g_error_free (data->error);
-      data->error = NULL;
-    }
+    g_error_free (data->error);
+
   if (data->handler != NULL)
-    {
-      g_object_unref (data->handler);
-      data->handler = NULL;
-    }
+    g_object_unref (data->handler);
 
   g_slice_free (HashingData, data);
 }
