@@ -78,6 +78,12 @@ enum {
   PROP_TP_FILE = 1,
   PROP_G_FILE,
   PROP_CONTACT,
+  PROP_CONTENT_TYPE,
+  PROP_DESCRIPTION,
+  PROP_FILENAME,
+  PROP_MODIFICATION_TIME,
+  PROP_TOTAL_BYTES,
+  PROP_TRANSFERRED_BYTES,
   PROP_USE_HASH
 };
 
@@ -154,11 +160,29 @@ do_get_property (GObject *object,
     GParamSpec *pspec)
 {
   EmpathyFTHandlerPriv *priv = GET_PRIV (object);
-
+  
   switch (property_id)
     {
       case PROP_CONTACT:
         g_value_set_object (value, priv->contact);
+        break;
+      case PROP_CONTENT_TYPE:
+        g_value_set_string (value, priv->content_type);
+        break;
+      case PROP_DESCRIPTION:
+        g_value_set_string (value, priv->description);
+        break;
+      case PROP_FILENAME:
+        g_value_set_string (value, priv->filename);
+        break;
+      case PROP_MODIFICATION_TIME:
+        g_value_set_uint64 (value, priv->mtime);
+        break;
+      case PROP_TOTAL_BYTES:
+        g_value_set_uint64 (value, priv->total_bytes);
+        break;
+      case PROP_TRANSFERRED_BYTES:
+        g_value_set_uint64 (value, priv->transferred_bytes);
         break;
       case PROP_G_FILE:
         g_value_set_object (value, priv->gfile);
@@ -186,6 +210,24 @@ do_set_property (GObject *object,
     {
       case PROP_CONTACT:
         priv->contact = g_value_dup_object (value);
+        break;
+      case PROP_CONTENT_TYPE:
+        priv->content_type = g_value_dup_string (value);
+        break;
+      case PROP_DESCRIPTION:
+        priv->description = g_value_dup_string (value);
+        break;
+      case PROP_FILENAME:
+        priv->filename = g_value_dup_string (value);
+        break;
+      case PROP_MODIFICATION_TIME:
+        priv->mtime = g_value_get_uint64 (value);
+        break;
+      case PROP_TOTAL_BYTES:
+        priv->total_bytes = g_value_get_uint64 (value);
+        break;
+      case PROP_TRANSFERRED_BYTES:
+        priv->transferred_bytes = g_value_get_uint64 (value);
         break;
       case PROP_G_FILE:
         priv->gfile = g_value_dup_object (value);
@@ -294,6 +336,72 @@ empathy_ft_handler_class_init (EmpathyFTHandlerClass *klass)
     EMPATHY_TYPE_CONTACT,
     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
   g_object_class_install_property (object_class, PROP_CONTACT, param_spec);
+
+  /**
+   * EmpathyFTHandler:content-type:
+   *
+   * The content type of the file being transferred
+   */
+  param_spec = g_param_spec_string ("content-type",
+    "content-type", "The content type of the file", NULL,
+    G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class,
+      PROP_CONTENT_TYPE, param_spec);
+
+  /**
+   * EmpathyFTHandler:description:
+   *
+   * The description of the file being transferred
+   */
+  param_spec = g_param_spec_string ("description",
+    "description", "The description of the file", NULL,
+    G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class,
+      PROP_DESCRIPTION, param_spec);
+
+  /**
+   * EmpathyFTHandler:filename:
+   *
+   * The name of the file being transferred
+   */
+  param_spec = g_param_spec_string ("filename",
+    "filename", "The name of the file", NULL,
+    G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class,
+      PROP_FILENAME, param_spec);
+
+  /**
+   * EmpathyFTHandler:modification-time:
+   *
+   * The modification time of the file being transferred
+   */
+  param_spec = g_param_spec_uint64 ("modification-time",
+    "modification-time", "The mtime of the file", 0,
+    G_MAXUINT64, 0, G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class,
+      PROP_MODIFICATION_TIME, param_spec);
+
+  /**
+   * EmpathyFTHandler:total-bytes:
+   *
+   * The size (in bytes) of the file being transferred
+   */
+  param_spec = g_param_spec_uint64 ("total-bytes",
+    "total-bytes", "The size of the file", 0,
+    G_MAXUINT64, 0, G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class,
+      PROP_TOTAL_BYTES, param_spec);
+
+  /**
+   * EmpathyFTHandler:transferred-bytes:
+   *
+   * The number of the bytes already transferred
+   */
+  param_spec = g_param_spec_uint64 ("transferred-bytes",
+    "transferred-bytes", "The number of bytes already transferred", 0,
+    G_MAXUINT64, 0, G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class,
+      PROP_TRANSFERRED_BYTES, param_spec);
 
   /**
    * EmpathyFTHandler:gfile:
