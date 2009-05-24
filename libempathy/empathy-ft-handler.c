@@ -1010,9 +1010,7 @@ ft_handler_read_async_cb (GObject *source,
   hash_data->stream = G_INPUT_STREAM (stream);
   hash_data->total_bytes = priv->total_bytes;
   hash_data->handler = g_object_ref (handler);
-  /* FIXME: should look at the CM capabilities before setting the
-   * checksum type?
-   */
+  /* FIXME: MD5 is the only ContentHashType supported right now */
   hash_data->checksum = g_checksum_new (G_CHECKSUM_MD5);
 
   /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.ContentHashType */
@@ -1027,19 +1025,31 @@ ft_handler_read_async_cb (GObject *source,
 }
 
 static void
-find_channel_class_cb (GStrv channel_class,
+callbacks_data_free (gpointer user_data)
+{
+  CallbacksData *data = user_data;
+
+  if (data->handler != NULL)
+    g_object_unref (data->handler);
+
+  g_slice_free (CallbacksData, data);
+}
+
+static void
+find_ft_channel_class_cb (GStrv channel_class,
     gpointer user_data)
 {
-  EmpathyFTHandler *handler = user_data;
-  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
+  CallbacksData *data = user_data;
+  EmpathyFTHandler *handler = data->handler;  
   gboolean allowed = TRUE;
   GError *myerr = NULL;
 
+  /* this takes care of channel_class == NULL as well */
   if (!tp_strv_contains ((const gchar * const *) channel_class,
       TP_IFACE_CHANNEL ".TargetHandle"))
     allowed = FALSE;
 
-  DEBUG ("check if FT allowed: %s", allowed ? "True" : "False");
+  DEBUG ("check if FT is allowed: %s", allowed ? "True" : "False");
 
   if (!allowed)
     {
@@ -1047,11 +1057,56 @@ find_channel_class_cb (GStrv channel_class,
           EMPATHY_FT_ERROR_NOT_SUPPORTED,
           _("File transfer not supported by remote contact"));
 
-      emit_error_signal (handler, myerr);
+      data->callback (NULL, myerr, data->user_data);
       g_clear_error (&myerr);
+    }
+  else
+    {
+      data->callback (handler, NULL, data->user_data);
+    }
+
+  callbacks_data_free (data);
+}
+
+static void
+find_hash_channel_class_cb (GStrv channel_class,
+    gpointer user_data)
+{
+  CallbacksData *data = user_data;
+  EmpathyFTHandler *handler = data->handler;
+  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);  
+  gboolean allowed = TRUE;
+
+  /* this takes care of channel_class == NULL as well */
+  if (!tp_strv_contains ((const gchar * const *) channel_class,
+      TP_IFACE_CHANNEL ".TargetHandle"))
+    allowed = FALSE;
+
+  DEBUG ("check if FT+hash is allowed: %s", allowed ? "True" : "False");
+
+  if (!allowed)
+    {
+      priv->use_hash = FALSE;
+
+      /* see if we support FT without hash instead */
+      empathy_dispatcher_find_requestable_channel_classes_async
+          (priv->dispatcher, empathy_contact_get_connection (priv->contact),
+           TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, TP_HANDLE_TYPE_CONTACT,
+           find_ft_channel_class_cb, data, NULL);
 
       return;
     }
+  else
+    {
+      data->callback (handler, NULL, data->user_data);
+      callbacks_data_free (data);
+    }
+}
+
+static void
+ft_handler_complete_request (EmpathyFTHandler *handler)
+{
+  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
 
   /* populate the request table with all the known properties */
   ft_handler_populate_outgoing_request (handler);
@@ -1063,31 +1118,6 @@ find_channel_class_cb (GStrv channel_class,
   else
     /* push directly the handler to the dispatcher */
     ft_handler_push_to_dispatcher (handler);
-}
-
-static void
-ft_handler_complete_request (EmpathyFTHandler *handler)
-{
-  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
-  TpConnection *connection;
-
-  /* check if FT is allowed before firing up the I/O machinery */
-  connection = empathy_contact_get_connection (priv->contact);
-
-  empathy_dispatcher_find_channel_class_async (priv->dispatcher, connection,
-      TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, TP_HANDLE_TYPE_CONTACT,
-      find_channel_class_cb, handler);
-}
-
-static void
-callbacks_data_free (gpointer user_data)
-{
-  CallbacksData *data = user_data;
-
-  if (data->handler != NULL)
-    g_object_unref (data->handler);
-
-  g_slice_free (CallbacksData, data);
 }
 
 static void
@@ -1118,11 +1148,7 @@ ft_handler_gfile_ready_cb (GObject *source,
   g_object_unref (info);
 
 out:
-  if (error == NULL)
-    {
-      cb_data->callback (cb_data->handler, NULL, cb_data->user_data);
-    }
-  else
+  if (error != NULL)
     {
       if (!g_cancellable_is_cancelled (priv->cancellable))
         g_cancellable_cancel (priv->cancellable);
@@ -1130,9 +1156,17 @@ out:
       cb_data->callback (NULL, error, cb_data->user_data);
       g_error_free (error);
       g_object_unref (cb_data->handler);
-    }
 
-  callbacks_data_free (cb_data);
+      callbacks_data_free (cb_data);
+    }
+  else
+    {
+      /* see if FT/hashing are allowed */
+      empathy_dispatcher_find_requestable_channel_classes_async
+          (priv->dispatcher, empathy_contact_get_connection (priv->contact),
+           TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, TP_HANDLE_TYPE_CONTACT,
+           find_hash_channel_class_cb, cb_data, "ContentHashType", NULL);
+    }
 }
 
 static void
