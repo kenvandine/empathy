@@ -173,25 +173,20 @@ empathy_ft_factory_dup_singleton (void)
  * @factory: an #EmpathyFTFactory
  * @contact: the #EmpathyContact destination of the transfer
  * @source: the #GFile to be transferred to @contact
- * @use_hash: whether the handler should try to use checksum to validate
- * the transfer
  *
  * Trigger the creation of an #EmpathyFTHandler object to send @source to
- * the specified @contact. Note that it's not guaranteed that setting
- * @use_hash to TRUE will trigger checksumming, as that is not supported
- * by all the underlying connection managers.
+ * the specified @contact.
  */
 void
 empathy_ft_factory_new_transfer_outgoing (EmpathyFTFactory *factory,
     EmpathyContact *contact,
-    GFile *source,
-    gboolean use_hash)
+    GFile *source)
 {
   g_return_if_fail (EMPATHY_IS_FT_FACTORY (factory));
   g_return_if_fail (EMPATHY_IS_CONTACT (contact));
   g_return_if_fail (G_IS_FILE (source));
 
-  empathy_ft_handler_new_outgoing (contact, source, use_hash,
+  empathy_ft_handler_new_outgoing (contact, source,
       ft_handler_outgoing_ready_cb, factory);
 }
 
@@ -227,8 +222,6 @@ empathy_ft_factory_claim_channel (EmpathyFTFactory *factory,
  * @factory: an #EmpathyFTFactory
  * @handler: the #EmpathyFTHandler to set the destination of
  * @destination: the #GFile destination of the transfer
- * @use_hash: whether the handler should try to use checksum to validate
- * the transfer
  *
  * Sets @destination as destination file for the transfer. After the call of
  * this method, the ::new-ft-handler will be emitted for the incoming handler.
@@ -237,14 +230,13 @@ void
 empathy_ft_factory_set_destination_for_incoming_handler (
     EmpathyFTFactory *factory,
     EmpathyFTHandler *handler,
-    GFile *destination,
-    gboolean use_hash)
+    GFile *destination)
 {
   g_return_if_fail (EMPATHY_IS_FT_FACTORY (factory));
   g_return_if_fail (EMPATHY_IS_FT_HANDLER (handler));
   g_return_if_fail (G_IS_FILE (destination));
 
-  empathy_ft_handler_incoming_set_destination (handler, destination, use_hash);
+  empathy_ft_handler_incoming_set_destination (handler, destination);
 
   g_signal_emit (factory, signals[NEW_FT_HANDLER], 0, handler, NULL);
 }

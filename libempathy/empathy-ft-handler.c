@@ -83,8 +83,7 @@ enum {
   PROP_FILENAME,
   PROP_MODIFICATION_TIME,
   PROP_TOTAL_BYTES,
-  PROP_TRANSFERRED_BYTES,
-  PROP_USE_HASH
+  PROP_TRANSFERRED_BYTES
 };
 
 enum {
@@ -190,9 +189,6 @@ do_get_property (GObject *object,
       case PROP_TP_FILE:
         g_value_set_object (value, priv->tpfile);
         break;
-      case PROP_USE_HASH:
-        g_value_set_boolean (value, priv->use_hash);
-        break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -234,9 +230,6 @@ do_set_property (GObject *object,
         break;
       case PROP_TP_FILE:
         priv->tpfile = g_value_dup_object (value);
-        break;
-      case PROP_USE_HASH:
-        priv->use_hash = g_value_get_boolean (value);
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -425,16 +418,6 @@ empathy_ft_handler_class_init (EmpathyFTHandlerClass *klass)
     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
   g_object_class_install_property (object_class, PROP_TP_FILE, param_spec);
 
-  /**
-   * EmpathyFTHandler:use-hash:
-   *
-   * %TRUE if checksumming is enabled for the handler, %FALSE otherwise
-   */
-  param_spec = g_param_spec_boolean ("use-hash",
-    "use-hash", "Whether we should use checksum when sending or receiving",
-    FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-  g_object_class_install_property (object_class, PROP_USE_HASH, param_spec);
-
   /* signals */
 
   /**
@@ -508,12 +491,11 @@ empathy_ft_handler_class_init (EmpathyFTHandlerClass *klass)
    * @handler: the object which has received the signal
    *
    * This signal is emitted when the hashing operation of the handler
-   * is started. Note that this only happens if the handler is created
-   * with checksum enabled and, even if the option is set, is not
-   * guaranteed to happen for incoming handlers, as the CM might not
-   * support sending/receiving the file hash. You can use
-   * empathy_ft_handler_get_use_hash() to find out whether the handler really
-   * supports checksum.
+   * is started. Note that this might happen or not, depending on the CM
+   * and remote contact capabilities. Clients shoud use
+   * empathy_ft_handler_get_use_hash() before calling
+   * empathy_ft_handler_start_transfer() to know whether they should connect
+   * to this signal.
    */
   signals[HASHING_STARTED] =
     g_signal_new ("hashing-started", G_TYPE_FROM_CLASS (klass),
@@ -1084,10 +1066,10 @@ find_hash_channel_class_cb (GStrv channel_class,
 
   DEBUG ("check if FT+hash is allowed: %s", allowed ? "True" : "False");
 
+  priv->use_hash = allowed;
+
   if (!allowed)
     {
-      priv->use_hash = FALSE;
-
       /* see if we support FT without hash instead */
       empathy_dispatcher_find_requestable_channel_classes_async
           (priv->dispatcher, empathy_contact_get_connection (priv->contact),
@@ -1255,7 +1237,6 @@ channel_get_all_properties_cb (TpProxy *proxy,
  * empathy_ft_handler_new_outgoing:
  * @contact: the #EmpathyContact to send @source to
  * @source: the #GFile to send
- * @use_hash: whether the handler should send a checksum of the file
  * @callback: callback to be called when the handler has been created
  * @user_data: user data to be passed to @callback
  *
@@ -1264,7 +1245,6 @@ channel_get_all_properties_cb (TpProxy *proxy,
 void
 empathy_ft_handler_new_outgoing (EmpathyContact *contact,
     GFile *source,
-    gboolean use_hash,
     EmpathyFTHandlerReadyCallback callback,
     gpointer user_data)
 {
@@ -1272,14 +1252,13 @@ empathy_ft_handler_new_outgoing (EmpathyContact *contact,
   CallbacksData *data;
   EmpathyFTHandlerPriv *priv;
 
-  DEBUG ("New handler outgoing, use hash %s",
-         use_hash ? "True" : "False");
+  DEBUG ("New handler outgoing");
 
   g_return_if_fail (EMPATHY_IS_CONTACT (contact));
   g_return_if_fail (G_IS_FILE (source));
 
   handler = g_object_new (EMPATHY_TYPE_FT_HANDLER,
-      "contact", contact, "gfile", source, "use-hash", use_hash, NULL);
+      "contact", contact, "gfile", source, NULL);
 
   priv = GET_PRIV (handler);
 
@@ -1394,8 +1373,6 @@ empathy_ft_handler_cancel_transfer (EmpathyFTHandler *handler)
  * empathy_ft_handler_incoming_set_destination:
  * @handler: an #EmpathyFTHandler
  * @destination: the #GFile where the transfer should be saved
- * @use_hash: whether the handler should, after the transfer, try to
- * validate it with checksum.
  *
  * Sets the destination of the incoming handler to be @destination.
  * Note that calling this method is mandatory before starting the transfer
@@ -1403,28 +1380,25 @@ empathy_ft_handler_cancel_transfer (EmpathyFTHandler *handler)
  */
 void
 empathy_ft_handler_incoming_set_destination (EmpathyFTHandler *handler,
-    GFile *destination,
-    gboolean use_hash)
+    GFile *destination)
 {
   EmpathyFTHandlerPriv *priv;
-
-  DEBUG ("Set incoming destination, use hash %s",
-         use_hash ? "True" : "False");
 
   g_return_if_fail (EMPATHY_IS_FT_HANDLER (handler));
   g_return_if_fail (G_IS_FILE (destination));
 
   priv = GET_PRIV (handler);
 
-  g_object_set (handler, "gfile", destination,
-      "use-hash", use_hash, NULL);
+  g_object_set (handler, "gfile", destination, NULL);
 
-  /* check if hash is really supported. if it isn't, set use_hash to FALSE
+  /* check if hash is supported. if it isn't, set use_hash to FALSE
    * anyway, so that clients won't be expecting us to checksum.
    */
   if (EMP_STR_EMPTY (priv->content_hash) ||
       priv->content_hash_type == TP_FILE_HASH_TYPE_NONE)
     priv->use_hash = FALSE;
+  else
+    priv->use_hash = TRUE;
 }
 
 /**
@@ -1511,9 +1485,8 @@ empathy_ft_handler_get_gfile (EmpathyFTHandler *handler)
  * empathy_ft_handler_get_use_hash:
  * @handler: an #EmpathyFTHandler
  *
- * Returns whether @handler has checksumming enabled. Note that if the CM
- * doesn't support sending/receiving the checksum, this can return %FALSE even
- * if the handler was created with the use_hash parameter set to %TRUE.
+ * Returns whether @handler has checksumming enabled. This can depend on
+ * the CM and the remote contact capabilities.
  *
  * Return value: %TRUE if the handler has checksumming enabled,
  * %FALSE otherwise.

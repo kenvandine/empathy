@@ -71,7 +71,6 @@ GType empathy_ft_handler_get_type (void);
 /* public methods */
 void empathy_ft_handler_new_outgoing (EmpathyContact *contact,
     GFile *source,
-    gboolean use_hash,
     EmpathyFTHandlerReadyCallback callback,
     gpointer user_data);
 
@@ -79,8 +78,7 @@ void empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
     EmpathyFTHandlerReadyCallback callback,
     gpointer user_data);
 void empathy_ft_handler_incoming_set_destination (EmpathyFTHandler *handler,
-    GFile *destination,
-    gboolean use_hash);
+    GFile *destination);
 
 void empathy_ft_handler_start_transfer (EmpathyFTHandler *handler);
 void empathy_ft_handler_cancel_transfer (EmpathyFTHandler *handler);
