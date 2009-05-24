@@ -82,7 +82,6 @@ struct _EmpathyConfClass {
 #define EMPATHY_PREFS_LOCATION_RESOURCE_CELL       EMPATHY_PREFS_PATH "/location/resource_cell"
 #define EMPATHY_PREFS_LOCATION_RESOURCE_GPS        EMPATHY_PREFS_PATH "/location/resource_gps"
 #define EMPATHY_PREFS_LOCATION_REDUCE_ACCURACY     EMPATHY_PREFS_PATH "/location/reduce_accuracy"
-#define EMPATHY_PREFS_FILE_TRANSFER_USE_HASH       EMPATHY_PREFS_PATH "/file_transfer/use_hash"
 
 typedef void (*EmpathyConfNotifyFunc) (EmpathyConf  *conf,
 				      const gchar *key,

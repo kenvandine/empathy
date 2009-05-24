@@ -53,7 +53,6 @@ typedef struct {
 	GtkWidget *checkbutton_autoconnect;
 	GtkWidget *radiobutton_contact_list_sort_by_name;
 	GtkWidget *radiobutton_contact_list_sort_by_state;
-	GtkWidget *checkbutton_use_hash;
 
 	GtkWidget *checkbutton_sounds_enabled;
 	GtkWidget *checkbutton_sounds_disabled_away;
@@ -285,9 +284,6 @@ preferences_setup_widgets (EmpathyPreferences *preferences)
 	preferences_hookup_sensitivity (preferences,
 					EMPATHY_PREFS_LOCATION_PUBLISH,
 					preferences->checkbutton_location_reduce_accuracy);
-	preferences_hookup_toggle_button (preferences,
-	                                  EMPATHY_PREFS_FILE_TRANSFER_USE_HASH,
-	                                  preferences->checkbutton_use_hash);
 
 	id = empathy_conf_notify_add (empathy_conf_get (),
 				      EMPATHY_PREFS_UI_COMPACT_CONTACT_LIST,
@@ -1132,7 +1128,6 @@ empathy_preferences_show (GtkWindow *parent)
 		"checkbutton_autoconnect", &preferences->checkbutton_autoconnect,
 		"radiobutton_contact_list_sort_by_name", &preferences->radiobutton_contact_list_sort_by_name,
 		"radiobutton_contact_list_sort_by_state", &preferences->radiobutton_contact_list_sort_by_state,
-	        "checkbutton_use_hash", &preferences->checkbutton_use_hash,
 		"checkbutton_notifications_enabled", &preferences->checkbutton_notifications_enabled,
 		"checkbutton_notifications_disabled_away", &preferences->checkbutton_notifications_disabled_away,
 		"checkbutton_notifications_focus", &preferences->checkbutton_notifications_focus,
