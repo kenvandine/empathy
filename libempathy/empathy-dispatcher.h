@@ -85,12 +85,16 @@ void empathy_dispatcher_join_muc (TpConnection *connection,
   const gchar *roomname, EmpathyDispatcherRequestCb *callback,
   gpointer user_data);
 
-GStrv empathy_dispatcher_find_channel_class (EmpathyDispatcher *dispatcher,
-  TpConnection *connection, const gchar *channel_type, guint handle_type);
+void empathy_dispatcher_find_requestable_channel_classes_async
+    (EmpathyDispatcher *dispatcher, TpConnection *connection,
+     const gchar *channel_type, guint handle_type,
+     EmpathyDispatcherFindChannelClassCb callback, gpointer user_data,
+     const char *first_property_name, ...);
 
-void empathy_dispatcher_find_channel_class_async (EmpathyDispatcher *dispatcher,
-  TpConnection *connection, const gchar *channel_type, guint handle_type,
-  EmpathyDispatcherFindChannelClassCb callback, gpointer user_data);
+GStrv empathy_dispatcher_find_requestable_channel_classes
+    (EmpathyDispatcher *dispatcher, TpConnection *connection,
+     const gchar *channel_type, guint handle_type,
+     const gchar *first_property_name, ...);
 
 /* Get the dispatcher singleton */
 EmpathyDispatcher *    empathy_dispatcher_dup_singleton (void);
