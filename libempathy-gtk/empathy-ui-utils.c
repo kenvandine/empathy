@@ -1411,20 +1411,15 @@ file_manager_send_file_response_cb (GtkDialog      *widget,
 	GFile *file;
 	gchar *uri;
 	GtkRecentManager *manager;
-	gboolean use_hash;
 
 	if (response_id == GTK_RESPONSE_OK) {
 		file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (widget));
 		uri = g_file_get_uri (file);
 
-		empathy_conf_get_bool (empathy_conf_get (),
-			 EMPATHY_PREFS_FILE_TRANSFER_USE_HASH,
-			 &use_hash);
-
 		factory = empathy_ft_factory_dup_singleton ();
 
 		empathy_ft_factory_new_transfer_outgoing (factory, contact,
-		                                          file, use_hash);
+		                                          file);
 
 		manager = gtk_recent_manager_get_default ();
 		gtk_recent_manager_add_item (manager, uri);
@@ -1480,18 +1475,13 @@ file_manager_receive_file_response_cb (GtkDialog *dialog,
 {
 	EmpathyFTFactory *factory;
 	GFile *file;
-	gboolean use_hash;
 
 	if (response == GTK_RESPONSE_OK) {
 		factory = empathy_ft_factory_dup_singleton ();
 		file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
 
-		empathy_conf_get_bool (empathy_conf_get (),
-			 EMPATHY_PREFS_FILE_TRANSFER_USE_HASH,
-			 &use_hash);
-
 		empathy_ft_factory_set_destination_for_incoming_handler
-			(factory, handler, file, use_hash);
+			(factory, handler, file);
 
 		g_object_unref (factory);
 		g_object_unref (file);
