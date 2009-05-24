@@ -544,8 +544,9 @@ empathy_call_handler_start_call (EmpathyCallHandler *handler)
 
   dispatcher = empathy_dispatcher_dup_singleton ();
   connection = empathy_contact_get_connection (priv->contact);
-  allowed = empathy_dispatcher_find_channel_class (dispatcher, connection,
-    TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA, TP_HANDLE_TYPE_CONTACT);
+  allowed = empathy_dispatcher_find_requestable_channel_classes
+    (dispatcher, connection, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
+     TP_HANDLE_TYPE_CONTACT, NULL);
 
   if (!tp_strv_contains ((const gchar * const *) allowed,
       TP_IFACE_CHANNEL ".TargetHandle"))
