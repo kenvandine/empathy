@@ -802,7 +802,7 @@ do_constructed (GObject *object)
 
   tp_cli_dbus_properties_call_get (priv->channel,
       -1, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, "AvailableSocketTypes",
-      tp_file_get_available_socket_types_cb, NULL, NULL, file_obj);
+      tp_file_get_available_socket_types_cb, NULL, NULL, object);
 
   priv->state_change_reason =
       TP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE;
