@@ -159,7 +159,7 @@ do_get_property (GObject *object,
     GParamSpec *pspec)
 {
   EmpathyFTHandlerPriv *priv = GET_PRIV (object);
-  
+
   switch (property_id)
     {
       case PROP_CONTACT:
@@ -1022,7 +1022,7 @@ find_ft_channel_class_cb (GStrv channel_class,
     gpointer user_data)
 {
   CallbacksData *data = user_data;
-  EmpathyFTHandler *handler = data->handler;  
+  EmpathyFTHandler *handler = data->handler;
   gboolean allowed = TRUE;
   GError *myerr = NULL;
 
@@ -1056,7 +1056,7 @@ find_hash_channel_class_cb (GStrv channel_class,
 {
   CallbacksData *data = user_data;
   EmpathyFTHandler *handler = data->handler;
-  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);  
+  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
   gboolean allowed = TRUE;
 
   /* this takes care of channel_class == NULL as well */

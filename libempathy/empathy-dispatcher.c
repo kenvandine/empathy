@@ -1475,7 +1475,7 @@ empathy_dispatcher_find_channel_class (EmpathyDispatcher *dispatcher,
                   g_array_index (properties, char *, j), NULL);
 
               /* TODO: this might not be enough if we want e.g. use this to
-               * look for all the values for a given property, but we don't 
+               * look for all the values for a given property, but we don't
                * currently use it that way.
                */
               if (!tp_asv_lookup (fprops, my_class))
@@ -1614,7 +1614,7 @@ empathy_dispatcher_find_requestable_channel_classes (EmpathyDispatcher *dispatch
   va_start (var_args, first_property_name);
 
   properties = setup_varargs (var_args, first_property_name);
-  
+
   va_end (var_args);
 
   retval = empathy_dispatcher_find_channel_class (dispatcher, connection,
