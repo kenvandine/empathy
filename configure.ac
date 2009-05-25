@@ -428,6 +428,8 @@ Configure summary:
 	Documentation...............:  ${enable_gtk_doc}
 	Python bindings.............:  ${have_python}
 	Spell checking..............:  ${have_enchant}
+	Use libchamplain............:  ${have_libchamplain}
+	Use Geoclue.................:  ${have_geoclue}
 	Megaphone applet............:  ${have_megaphone}
 	Nothere applet..............:  ${have_nothere}
 "
