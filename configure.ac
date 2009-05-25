@@ -348,3 +348,20 @@ AC_OUTPUT([
    shave
    shave-libtool
 ])
+
+echo "
+Configure summary:
+
+	Compiler....................:  ${CC}
+	Compiler Flags..............:  ${CFLAGS}
+	Prefix......................:  ${prefix}
+	Shaved build................:  ${enable_shave}
+	Tests.......................:  ${have_check}
+	Coding style checks.........:  ${ENABLE_CODING_STYLE_CHECKS}
+
+	Documentation...............:  ${enable_gtk_doc}
+	Python bindings.............:  ${have_python}
+	Spell checking..............:  ${have_enchant}
+	Megaphone applet............:  ${have_megaphone}
+	Nothere applet..............:  ${have_nothere}
+"
