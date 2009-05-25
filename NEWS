@@ -1,3 +1,20 @@
+NEW in 2.27.2
+==============
+Bugs fixed:
+ - Fixed #569578, Lockdown patch
+ - Fixed #580922, Conversation menu is dead to me
+ - Fixed #582773, Empathy puts cheesy strings in my subscription requests
+ - Fixed #583391, Python binding for pyempathygtk are broken
+ - Fixed #583430, new editable status doesn't behave properly
+ - Fixed #583558, Rename OfferStreamTube and AcceptStreamTube to Offer and Accept
+ - Fixed #583566, Add View top level menu
+ - Fixed #583785, Display a summary at the end of configure
+ - Fixed #581871, "join chatroom" dialog doesn't report errors
+
+Translations:
+ - Updated es Translation (Jorge Gonzalez)
+ - Updated ta Translation (drtvasudevan)
+
 NEW in 2.27.1.1
 ===============
  - Fix ABI version to not conflict with 2.26 branch
