@@ -293,12 +293,19 @@ map_view_contacts_foreach (GtkTreeModel *model,
   EmpathyContact *contact;
   ClutterActor *marker;
   ClutterActor *texture;
+  GHashTable *location;
   GdkPixbuf *avatar;
   const gchar *name;
 
   gtk_tree_model_get (model, iter, EMPATHY_CONTACT_LIST_STORE_COL_CONTACT,
      &contact, -1);
+
   if (contact == NULL)
+    return FALSE;
+
+  location = empathy_contact_get_location (contact);
+
+  if (location == NULL)
     return FALSE;
 
   marker = champlain_marker_new ();
@@ -316,20 +323,17 @@ map_view_contacts_foreach (GtkTreeModel *model,
   name = empathy_contact_get_name (contact);
   champlain_marker_set_text (CHAMPLAIN_MARKER (marker), name);
 
-  map_view_marker_update_position (CHAMPLAIN_MARKER (marker), contact);
-
   clutter_container_add (CLUTTER_CONTAINER (window->layer), marker, NULL);
 
   g_signal_connect (contact, "notify::location",
       G_CALLBACK (map_view_contact_location_notify), marker);
 
+
 #if HAVE_GEOCLUE
   gchar *str;
   GHashTable *address;
-  GHashTable *location;
   GValue *value;
 
-  location = empathy_contact_get_location (contact);
   value = g_hash_table_lookup (location, EMPATHY_LOCATION_LON);
   if (value == NULL)
       {
@@ -360,6 +364,8 @@ map_view_contacts_foreach (GtkTreeModel *model,
             map_view_geocode_cb, contact);
       }
 #endif
+
+  map_view_marker_update_position (CHAMPLAIN_MARKER (marker), contact);
 
   g_object_unref (contact);
   return FALSE;
