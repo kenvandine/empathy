@@ -694,7 +694,7 @@ tp_chat_dispose (GObject *object)
 		g_object_unref (priv->factory);
 	priv->factory = NULL;
 
-	if (priv->user != NULL);
+	if (priv->user != NULL)
 		g_object_unref (priv->user);
 	priv->user = NULL;
 
