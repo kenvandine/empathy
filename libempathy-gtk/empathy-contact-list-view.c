@@ -169,7 +169,8 @@ contact_list_view_query_tooltip_cb (EmpathyContactListView *view,
 
 	if (!priv->tooltip_widget) {
 		priv->tooltip_widget = empathy_contact_widget_new (contact,
-			EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP);
+			EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP |
+			EMPATHY_CONTACT_WIDGET_SHOW_LOCATION);
 		g_object_ref (priv->tooltip_widget);
 		g_signal_connect (priv->tooltip_widget, "destroy",
 				  G_CALLBACK (contact_list_view_tooltip_destroy_cb),

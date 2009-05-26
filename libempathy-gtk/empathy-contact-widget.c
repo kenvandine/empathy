@@ -1297,6 +1297,16 @@ contact_widget_location_update (EmpathyContactWidget *information)
   GValue *value;
   gdouble lat, lon;
   gboolean has_position = TRUE;
+  GtkWidget *label;
+  guint row = 0;
+  GHashTableIter iter;
+  gpointer key, pvalue;
+
+  if (!(information->flags & EMPATHY_CONTACT_WIDGET_SHOW_LOCATION))
+    {
+      gtk_widget_hide (information->vbox_location);
+      return;
+    }
 
   location = empathy_contact_get_location (information->contact);
   if (location == NULL || g_hash_table_size (location) == 0)
@@ -1337,77 +1347,70 @@ contact_widget_location_update (EmpathyContactWidget *information)
       g_free (text);
     }
 
-  if (information->flags & EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP ||
-      information->flags & EMPATHY_CONTACT_WIDGET_SHOW_LOCATION)
+
+  /* Prepare the location information table */
+  if (information->table_location != NULL)
     {
-      GtkWidget *label;
-      guint row = 0;
-      GHashTableIter iter;
-      gpointer key, value;
-
-      if (information->table_location != NULL)
-        {
-          gtk_widget_destroy (information->table_location);
-        }
-
-      information->table_location = gtk_table_new (1, 2, FALSE);
-      gtk_box_pack_start (GTK_BOX (information->subvbox_location),
-          information->table_location, FALSE, FALSE, 5);
-
-      g_hash_table_iter_init (&iter, location);
-      while (g_hash_table_iter_next (&iter, &key, &value))
-        {
-          const gchar *skey;
-          const gchar* user_label;
-          GValue *gvalue;
-          char *svalue = NULL;
-
-          skey = (const gchar *) key;
-          if (tp_strdiff (skey, EMPATHY_LOCATION_TIMESTAMP) == FALSE)
-            continue;
-
-          user_label = location_key_to_label (skey);
-          gvalue = (GValue *) value;
-
-          label = gtk_label_new (user_label);
-          gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
-          gtk_table_attach (GTK_TABLE (information->table_location),
-              label, 0, 1, row, row + 1, GTK_FILL, GTK_FILL, 10, 0);
-          gtk_widget_show (label);
-
-          if (G_VALUE_TYPE (gvalue) == G_TYPE_DOUBLE)
-            {
-              gdouble dvalue;
-              dvalue = g_value_get_double (gvalue);
-              svalue = g_strdup_printf ("%f", dvalue);
-            }
-          else if (G_VALUE_TYPE (gvalue) == G_TYPE_STRING)
-            {
-              svalue = g_value_dup_string (gvalue);
-            }
-
-          if (svalue != NULL)
-            {
-              label = gtk_label_new (svalue);
-              gtk_table_attach_defaults (GTK_TABLE (information->table_location),
-                  label, 1, 2, row, row + 1);
-              gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
-              gtk_widget_show (label);
-            }
-
-          g_free (svalue);
-          row++;
-        }
-
-      gtk_widget_show (information->table_location);
+      gtk_widget_destroy (information->table_location);
     }
+
+  information->table_location = gtk_table_new (1, 2, FALSE);
+  gtk_box_pack_start (GTK_BOX (information->subvbox_location),
+      information->table_location, FALSE, FALSE, 5);
+
+  g_hash_table_iter_init (&iter, location);
+  while (g_hash_table_iter_next (&iter, &key, &pvalue))
+    {
+      const gchar *skey;
+      const gchar* user_label;
+      GValue *gvalue;
+      char *svalue = NULL;
+
+      skey = (const gchar *) key;
+      if (tp_strdiff (skey, EMPATHY_LOCATION_TIMESTAMP) == FALSE)
+        continue;
+
+      user_label = location_key_to_label (skey);
+      gvalue = (GValue *) pvalue;
+
+      label = gtk_label_new (user_label);
+      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_table_attach (GTK_TABLE (information->table_location),
+          label, 0, 1, row, row + 1, GTK_FILL, GTK_FILL, 10, 0);
+      gtk_widget_show (label);
+
+      if (G_VALUE_TYPE (gvalue) == G_TYPE_DOUBLE)
+        {
+          gdouble dvalue;
+          dvalue = g_value_get_double (gvalue);
+          svalue = g_strdup_printf ("%f", dvalue);
+        }
+      else if (G_VALUE_TYPE (gvalue) == G_TYPE_STRING)
+        {
+          svalue = g_value_dup_string (gvalue);
+        }
+
+      if (svalue != NULL)
+        {
+          label = gtk_label_new (svalue);
+          gtk_table_attach_defaults (GTK_TABLE (information->table_location),
+              label, 1, 2, row, row + 1);
+          gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
+          gtk_widget_show (label);
+        }
+
+      g_free (svalue);
+      row++;
+    }
+
+  gtk_widget_show (information->table_location);
 
 #if HAVE_LIBCHAMPLAIN
   /* Cannot be displayed in tooltips until Clutter-Gtk can deal with such
    * windows
    */
   if (has_position &&
-      information->flags & EMPATHY_CONTACT_WIDGET_SHOW_LOCATION)
+      !(information->flags & EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP))
     {
       ClutterActor *marker;
       ChamplainLayer *layer;
