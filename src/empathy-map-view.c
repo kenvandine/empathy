@@ -376,6 +376,7 @@ map_view_contacts_foreach (GtkTreeModel *model,
       time = g_value_get_int64 (gtime);
       date = empathy_time_to_string_relative (time);
       label = g_strconcat ("<b>", name, "</b>\n<small>", date, "</small>", NULL);
+      g_free (date);
     }
   else
     {
