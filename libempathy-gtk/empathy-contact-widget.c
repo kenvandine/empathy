@@ -1340,9 +1340,9 @@ contact_widget_location_update (EmpathyContactWidget *information)
       stamp = g_value_get_int64 (value);
       time = stamp;
 
-      user_date = empathy_time_to_string_local (time, _("%B %e, %Y at %R"));
+      user_date = empathy_time_to_string_relative (time);
 
-      text = g_strconcat ( _("<b>Location</b> on "), user_date, NULL);
+      text = g_strconcat ( _("<b>Location</b>, "), user_date, NULL);
       gtk_label_set_markup (GTK_LABEL (information->label_location), text);
       g_free (text);
     }
@@ -1367,8 +1367,6 @@ contact_widget_location_update (EmpathyContactWidget *information)
       char *svalue = NULL;
 
       skey = (const gchar *) key;
-      if (tp_strdiff (skey, EMPATHY_LOCATION_TIMESTAMP) == FALSE)
-        continue;
 
       user_label = location_key_to_label (skey);
       gvalue = (GValue *) pvalue;
@@ -1388,6 +1386,13 @@ contact_widget_location_update (EmpathyContactWidget *information)
       else if (G_VALUE_TYPE (gvalue) == G_TYPE_STRING)
         {
           svalue = g_value_dup_string (gvalue);
+        }
+      else if (G_VALUE_TYPE (gvalue) == G_TYPE_INT64)
+        {
+          time_t time;
+
+          time = g_value_get_int64 (value);
+          svalue = empathy_time_to_string_utc (time, _("%B %e, %Y at %R UTC"));
         }
 
       if (svalue != NULL)

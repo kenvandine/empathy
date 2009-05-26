@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <glib/gi18n.h>
 
 #include "empathy-time.h"
 
@@ -122,3 +123,43 @@ empathy_time_to_string_local (time_t       t,
 	return g_strdup (stamp);
 }
 
+gchar  *
+empathy_time_to_string_relative (time_t then)
+{
+	time_t now;
+	gint   seconds;
+
+	now = time (NULL);
+	seconds = now - then;
+
+	if (seconds > 0) {
+		if (seconds < 60) {
+			seconds /= 60;
+			return g_strdup_printf (ngettext ("%d second ago",
+				"%d seconds ago", seconds), seconds);
+		}
+		else if (seconds < (60 * 60)) {
+			seconds /= 60;
+			return g_strdup_printf (ngettext ("%d minute ago",
+				"%d minutes ago", seconds), seconds);
+		}
+		else if (seconds < (60 * 60 * 24)) {
+			seconds /= 60 * 60;
+			return g_strdup_printf (ngettext ("%d hour ago",
+				"%d hours ago", seconds), seconds);
+		}
+		else if (seconds < (60 * 60 * 24 * 7)) {
+			seconds /= 60 * 60 * 24;
+			return g_strdup_printf (ngettext ("%d day ago",
+				"%d days ago", seconds), seconds);
+		}
+		else {
+			seconds /= 60 * 60 * 24 * 30;
+			return g_strdup_printf (ngettext ("%d month ago",
+				"%d months ago", seconds), seconds);
+		}
+	}
+	else {
+		return g_strdup ("in the future");
+	}
+}

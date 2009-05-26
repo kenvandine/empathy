@@ -296,6 +296,10 @@ map_view_contacts_foreach (GtkTreeModel *model,
   GHashTable *location;
   GdkPixbuf *avatar;
   const gchar *name;
+  gchar *date;
+  gchar *label;
+  GValue *gtime;
+  time_t time;
 
   gtk_tree_model_get (model, iter, EMPATHY_CONTACT_LIST_STORE_COL_CONTACT,
      &contact, -1);
@@ -321,7 +325,20 @@ map_view_contacts_foreach (GtkTreeModel *model,
     champlain_marker_set_image (CHAMPLAIN_MARKER (marker), NULL);
 
   name = empathy_contact_get_name (contact);
-  champlain_marker_set_text (CHAMPLAIN_MARKER (marker), name);
+  gtime = g_hash_table_lookup (location, EMPATHY_LOCATION_TIMESTAMP);
+  if (gtime != NULL)
+    {
+      time = g_value_get_int64 (gtime);
+      date = empathy_time_to_string_relative (time);
+      label = g_strconcat ("<b>", name, "</b>\n<small>", date, "</small>", NULL);
+    }
+  else
+    {
+      label = g_strconcat ("<b>", name, "</b>\n", NULL);
+    }
+  champlain_marker_set_use_markup (CHAMPLAIN_MARKER (marker), TRUE);
+  champlain_marker_set_text (CHAMPLAIN_MARKER (marker), label);
+  g_free (label);
 
   clutter_container_add (CLUTTER_CONTAINER (window->layer), marker, NULL);
 

@@ -40,6 +40,7 @@ gchar  *empathy_time_to_string_utc   (time_t       t,
 				      const gchar *format);
 gchar  *empathy_time_to_string_local (time_t       t,
 				      const gchar *format);
+gchar  *empathy_time_to_string_relative (time_t t);
 
 G_END_DECLS
 
