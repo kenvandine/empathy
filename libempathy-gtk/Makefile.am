@@ -7,7 +7,6 @@ AM_CPPFLAGS =                                           \
 	-DPKGDATADIR=\""$(pkgdatadir)"\"		\
 	$(LIBEMPATHYGTK_CFLAGS)				\
 	$(ENCHANT_CFLAGS)				\
-	$(GEOCLUE_CFLAGS)				\
 	$(LIBCHAMPLAIN_CFLAGS)				\
 	$(WARN_CFLAGS)					\
 	$(DISABLE_DEPRECATED)
@@ -70,7 +69,6 @@ nodist_libempathy_gtk_la_SOURCES =\
 libempathy_gtk_la_LIBADD =			\
 	$(LIBEMPATHYGTK_LIBS)			\
 	$(ENCHANT_LIBS)				\
-	$(GEOCLUE_LIBS)				\
 	$(LIBCHAMPLAIN_LIBS)			\
 	$(top_builddir)/libempathy/libempathy.la
 
