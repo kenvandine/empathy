@@ -185,10 +185,6 @@ map_view_geocode_cb (GeoclueGeocode *geocode,
 
   location = empathy_contact_get_location (EMPATHY_CONTACT (userdata));
 
-  GHashTable *address = g_object_get_data (userdata, "geoclue-address");
-  g_hash_table_destroy (address);
-  g_object_set_data (userdata, "geoclue-address", NULL);
-
   if (error != NULL)
     {
       DEBUG ("Error geocoding location : %s", error->message);
@@ -371,10 +367,10 @@ map_view_contacts_foreach (GtkTreeModel *model,
         if (str != NULL)
           g_hash_table_insert (address, g_strdup ("street"), str);
 
-        g_object_set_data (G_OBJECT (contact), "geoclue-address", address);
-
         geoclue_geocode_address_to_position_async (window->geocode, address,
             map_view_geocode_cb, contact);
+
+        g_hash_table_unref (address);
       }
 #endif
 
