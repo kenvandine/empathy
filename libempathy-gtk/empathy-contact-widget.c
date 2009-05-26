@@ -21,10 +21,8 @@
 
 #include <config.h>
 
-#define _GNU_SOURCE
 #include <string.h>
 #include <stdlib.h>
-#include <time.h>
 
 #include <gtk/gtk.h>
 #include <glib/gi18n-lib.h>
@@ -41,6 +39,7 @@
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-location.h>
+#include <libempathy/empathy-time.h>
 #include <libempathy/empathy-utils.h>
 
 #include "empathy-contact-widget.h"
@@ -1323,24 +1322,19 @@ contact_widget_location_update (EmpathyContactWidget *information)
     gtk_label_set_markup (GTK_LABEL (information->label_location), _("<b>Location</b>"));
   else
     {
-      gchar user_date [100];
+      gchar *user_date;
+      gchar *text;
       gint64 stamp;
-      struct tm *ptm;
       time_t time;
 
       stamp = g_value_get_int64 (value);
       time = stamp;
-      ptm = gmtime (&time);
 
-      if (strftime (user_date, 100, _("%B %e, %Y at %R UTC"), ptm) > 0)
-        {
-          gchar *text;
-          text = g_strconcat ( _("<b>Location</b> on "), user_date, NULL);
-          gtk_label_set_markup (GTK_LABEL (information->label_location), text);
-          g_free (text);
-        }
-      else
-        gtk_label_set_markup (GTK_LABEL (information->label_location), _("<b>Location</b>"));
+      user_date = empathy_time_to_string_local (time, _("%B %e, %Y at %R"));
+
+      text = g_strconcat ( _("<b>Location</b> on "), user_date, NULL);
+      gtk_label_set_markup (GTK_LABEL (information->label_location), text);
+      g_free (text);
     }
 
   if (information->flags & EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP ||
