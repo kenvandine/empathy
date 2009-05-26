@@ -216,11 +216,7 @@ map_view_geocode_cb (GeoclueGeocode *geocode,
 
   /* Don't change the accuracy as we used an address to get this position */
 
-  /* Ref the location hash table as it will be unref'd in set_location, 
-   * and we are only updating it */
-  g_hash_table_ref (location);
-  empathy_contact_set_location (EMPATHY_CONTACT (userdata), location);
-  g_hash_table_unref (location);
+  g_object_notify (userdata, "location");
 }
 #endif
 
