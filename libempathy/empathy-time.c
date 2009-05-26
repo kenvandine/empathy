@@ -134,7 +134,6 @@ empathy_time_to_string_relative (time_t then)
 
 	if (seconds > 0) {
 		if (seconds < 60) {
-			seconds /= 60;
 			return g_strdup_printf (ngettext ("%d second ago",
 				"%d seconds ago", seconds), seconds);
 		}
@@ -160,6 +159,6 @@ empathy_time_to_string_relative (time_t then)
 		}
 	}
 	else {
-		return g_strdup ("in the future");
+		return g_strdup (_("in the future"));
 	}
 }
