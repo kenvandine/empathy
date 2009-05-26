@@ -715,14 +715,14 @@ main_window_view_show_offline_cb (GtkToggleAction   *action,
 	//empathy_sound_set_enabled (TRUE);
 }
 
-#if HAVE_LIBCHAMPLAIN
 static void
 main_window_view_show_map_cb (GtkCheckMenuItem  *item,
 			      EmpathyMainWindow *window)
 {
+#if HAVE_LIBCHAMPLAIN
 	empathy_map_view_show ();
-}
 #endif
+}
 
 static void
 main_window_favorite_chatroom_join (EmpathyChatroom *chatroom)
@@ -1151,9 +1151,7 @@ empathy_main_window_show (void)
 			      "chat_add_contact", "activate", main_window_chat_add_contact_cb,
 			      "view_show_ft_manager", "activate", main_window_view_show_ft_manager,
 			      "view_show_offline", "toggled", main_window_view_show_offline_cb,
-#if HAVE_LIBCHAMPLAIN
 			      "view_show_map", "activate", main_window_view_show_map_cb,
-#endif
 			      "edit", "activate", main_window_edit_cb,
 			      "edit_accounts", "activate", main_window_edit_accounts_cb,
 			      "edit_personal_information", "activate", main_window_edit_personal_information_cb,
