@@ -211,8 +211,6 @@ if test "x$enable_map" != "xno"; then
 
    if test "x$have_libchamplain" = "xyes"; then
       AC_DEFINE(HAVE_LIBCHAMPLAIN, 1, [Define if you have libchamplain])
-   else
-       have_libchamplain="no"
    fi
 else
    have_libchamplain=no
@@ -240,8 +238,6 @@ if test "x$enable_location" != "xno"; then
 
    if test "x$have_geoclue" = "xyes"; then
       AC_DEFINE(HAVE_GEOCLUE, 1, [Define if you have geoclue])
-   else
-       have_geoclue="no"
    fi
 else
    have_geoclue=no
