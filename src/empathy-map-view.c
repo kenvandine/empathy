@@ -77,7 +77,7 @@ static gchar * get_dup_string (GHashTable *location,
     gchar *key);
 
 GtkWidget *
-empathy_map_view_show ()
+empathy_map_view_show (void)
 {
   static EmpathyMapView *window = NULL;
   GtkBuilder *gui;
