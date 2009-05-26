@@ -312,6 +312,7 @@ map_view_contacts_foreach (GtkTreeModel *model,
       texture = clutter_texture_new ();
       gtk_clutter_texture_set_from_pixbuf (CLUTTER_TEXTURE (texture), avatar);
       champlain_marker_set_image (CHAMPLAIN_MARKER (marker), texture);
+      g_object_unref (avatar);
     }
   else
     champlain_marker_set_image (CHAMPLAIN_MARKER (marker), NULL);
