@@ -704,7 +704,7 @@ init_contact_avatar_with_size (EmpathyContact *contact, GtkWidget *image_widget,
     gint size)
 {
 
-  GdkPixbuf *pixbuf_avatar;
+  GdkPixbuf *pixbuf_avatar = NULL;
 
   if (contact != NULL)
     {
