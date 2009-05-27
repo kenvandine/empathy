@@ -867,7 +867,7 @@ tp_chat_got_added_contacts_cb (EmpathyTpContactFactory *factory,
 			priv->members = g_list_prepend (priv->members,
 				g_object_ref (contact));
 			g_signal_emit_by_name (chat, "members-changed",
-					       contact, NULL, 0, NULL, FALSE);
+					       contact, NULL, 0, NULL, TRUE);
 		}
 	}
 
