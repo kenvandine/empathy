@@ -26,11 +26,15 @@
 #include <telepathy-glib/util.h>
 #include <telepathy-glib/gtypes.h>
 #include <telepathy-glib/dbus.h>
+#if HAVE_GEOCLUE
+#include <geoclue/geoclue-geocode.h>
+#endif
 
 #include <extensions/extensions.h>
 
 #include "empathy-tp-contact-factory.h"
 #include "empathy-utils.h"
+#include "empathy-location.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_TP | EMPATHY_DEBUG_CONTACT
 #include "empathy-debug.h"
@@ -391,6 +395,126 @@ tp_contact_factory_got_capabilities (EmpathyTpContactFactory *tp_factory,
 	g_ptr_array_free (capabilities, TRUE);
 }
 
+#if HAVE_GEOCLUE
+#define GEOCODE_SERVICE "org.freedesktop.Geoclue.Providers.Yahoo"
+#define GEOCODE_PATH "/org/freedesktop/Geoclue/Providers/Yahoo"
+
+/* This callback is called by geoclue when it found a position
+ * for the given address.  A position is necessary for a contact
+ * to show up on the map
+ */
+static void
+geocode_cb (GeoclueGeocode *geocode,
+	    GeocluePositionFields fields,
+	    double latitude,
+	    double longitude,
+	    double altitude,
+	    GeoclueAccuracy *accuracy,
+	    GError *error,
+	    gpointer userdata)
+{
+	GValue *new_value;
+	GHashTable *location;
+
+	location = empathy_contact_get_location (EMPATHY_CONTACT (userdata));
+
+	if (error != NULL) {
+		DEBUG ("Error geocoding location : %s", error->message);
+		g_object_unref (geocode);
+		g_object_unref (userdata);
+		return;
+	}
+
+	if (fields & GEOCLUE_POSITION_FIELDS_LATITUDE) {
+		new_value = tp_g_value_slice_new_double (latitude);
+		g_hash_table_replace (location, g_strdup (EMPATHY_LOCATION_LAT), new_value);
+		DEBUG ("\t - Latitude: %f", latitude);
+	}
+	if (fields & GEOCLUE_POSITION_FIELDS_LONGITUDE) {
+		new_value = tp_g_value_slice_new_double (longitude);
+		g_hash_table_replace (location, g_strdup (EMPATHY_LOCATION_LON), new_value);
+		DEBUG ("\t - Longitude: %f", longitude);
+	}
+	if (fields & GEOCLUE_POSITION_FIELDS_ALTITUDE) {
+		new_value = tp_g_value_slice_new_double (altitude);
+		g_hash_table_replace (location, g_strdup (EMPATHY_LOCATION_ALT), new_value);
+		DEBUG ("\t - Altitude: %f", altitude);
+	}
+
+	/* Don't change the accuracy as we used an address to get this position */
+	g_object_notify (userdata, "location");
+	g_object_unref (geocode);
+	g_object_unref (userdata);
+}
+#endif
+
+#if HAVE_GEOCLUE
+static gchar *
+get_dup_string (GHashTable *location,
+    gchar *key)
+{
+  GValue *value;
+
+  value = g_hash_table_lookup (location, key);
+  if (value != NULL)
+    return g_value_dup_string (value);
+
+  return NULL;
+}
+#endif
+
+static void
+tp_contact_factory_geocode (EmpathyContact *contact)
+{
+#if HAVE_GEOCLUE
+	static GeoclueGeocode *geocode;
+	gchar *str;
+	GHashTable *address;
+	GValue* value;
+	GHashTable *location;
+
+	location = empathy_contact_get_location (contact);
+	if (location == NULL)
+		return;
+
+	value = g_hash_table_lookup (location, EMPATHY_LOCATION_LAT);
+	if (value != NULL)
+		return;
+
+	if (geocode == NULL) {
+		geocode = geoclue_geocode_new (GEOCODE_SERVICE, GEOCODE_PATH);
+		g_object_add_weak_pointer (G_OBJECT (geocode), (gpointer*)&geocode);
+	}
+	else
+		g_object_ref (geocode);
+
+	address = geoclue_address_details_new();
+
+	str = get_dup_string (location, EMPATHY_LOCATION_COUNTRY);
+	if (str != NULL)
+		g_hash_table_insert (address, g_strdup ("country"), str);
+
+	str = get_dup_string (location, EMPATHY_LOCATION_POSTAL_CODE);
+	if (str != NULL)
+		g_hash_table_insert (address, g_strdup ("postalcode"), str);
+
+	str = get_dup_string (location, EMPATHY_LOCATION_LOCALITY);
+	if (str != NULL)
+		g_hash_table_insert (address, g_strdup ("locality"), str);
+
+	str = get_dup_string (location, EMPATHY_LOCATION_STREET);
+	if (str != NULL)
+		g_hash_table_insert (address, g_strdup ("street"), str);
+
+	g_object_ref (contact);
+	geoclue_geocode_address_to_position_async (geocode, address,
+		geocode_cb, contact);
+
+	g_hash_table_unref (address);
+	return;
+#endif
+}
+
 static void
 tp_contact_factory_update_location (EmpathyTpContactFactory *tp_factory,
 				    guint handle,
@@ -398,6 +522,7 @@ tp_contact_factory_update_location (EmpathyTpContactFactory *tp_factory,
 {
 	EmpathyContact *contact;
 	GHashTable     *new_location;
+	GValue         *value;
 
 	contact = tp_contact_factory_find_by_handle (tp_factory, handle);
 
@@ -410,6 +535,11 @@ tp_contact_factory_update_location (EmpathyTpContactFactory *tp_factory,
 		(GBoxedCopyFunc) tp_g_value_slice_dup);
 	empathy_contact_set_location (contact, new_location);
 	g_hash_table_unref (new_location);
+
+	value = g_hash_table_lookup (location, EMPATHY_LOCATION_LAT);
+	if (value == NULL) {
+		tp_contact_factory_geocode (contact);
+	}
 }
 
 static void

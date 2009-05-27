@@ -27,9 +27,6 @@
 #include <champlain/champlain.h>
 #include <champlain-gtk/champlain-gtk.h>
 #include <clutter-gtk/gtk-clutter-embed.h>
-#if HAVE_GEOCLUE
-#include <geoclue/geoclue-geocode.h>
-#endif
 #include <telepathy-glib/util.h>
 
 #include <libempathy/empathy-contact.h>
@@ -71,8 +68,6 @@ static void map_view_zoom_out_cb (GtkWidget *widget,
 static void map_view_contact_location_notify (GObject *gobject,
     GParamSpec *arg1,
     gpointer user_data);
-static gchar * get_dup_string (GHashTable *location,
-    gchar *key);
 
 GtkWidget *
 empathy_map_view_show (void)
@@ -170,74 +165,6 @@ map_view_destroy_cb (GtkWidget *widget,
   g_slice_free (EmpathyMapView, window);
 }
 
-#if HAVE_GEOCLUE
-#define GEOCODE_SERVICE "org.freedesktop.Geoclue.Providers.Yahoo"
-#define GEOCODE_PATH "/org/freedesktop/Geoclue/Providers/Yahoo"
-
-/* This callback is called by geoclue when it found a position
- * for the given address.  A position is necessary for a contact
- * to show up on the map
- */
-static void
-map_view_geocode_cb (GeoclueGeocode *geocode,
-    GeocluePositionFields fields,
-    double latitude,
-    double longitude,
-    double altitude,
-    GeoclueAccuracy *accuracy,
-    GError *error,
-    gpointer userdata)
-{
-  GValue *new_value;
-  GHashTable *location;
-
-  location = empathy_contact_get_location (EMPATHY_CONTACT (userdata));
-
-  if (error != NULL)
-    {
-      DEBUG ("Error geocoding location : %s", error->message);
-      return;
-    }
-
-  if (fields & GEOCLUE_POSITION_FIELDS_LONGITUDE)
-    {
-      new_value = tp_g_value_slice_new_double (longitude);
-      g_hash_table_replace (location, EMPATHY_LOCATION_LON, new_value);
-      DEBUG ("\t - Longitude: %f", longitude);
-    }
-  if (fields & GEOCLUE_POSITION_FIELDS_LATITUDE)
-    {
-      new_value = tp_g_value_slice_new_double (latitude);
-      g_hash_table_replace (location, EMPATHY_LOCATION_LAT, new_value);
-      DEBUG ("\t - Latitude: %f", latitude);
-    }
-  if (fields & GEOCLUE_POSITION_FIELDS_ALTITUDE)
-    {
-      new_value = tp_g_value_slice_new_double (altitude);
-      g_hash_table_replace (location, EMPATHY_LOCATION_ALT, new_value);
-      DEBUG ("\t - Altitude: %f", altitude);
-    }
-
-  /* Don't change the accuracy as we used an address to get this position */
-
-  g_object_notify (userdata, "location");
-  g_object_unref (geocode);
-}
-#endif
-
-static gchar *
-get_dup_string (GHashTable *location,
-    gchar *key)
-{
-  GValue *value;
-
-  value = g_hash_table_lookup (location, key);
-  if (value != NULL)
-    return g_value_dup_string (value);
-
-  return NULL;
-}
-
 static void
 map_view_marker_update_position (ChamplainMarker *marker,
     EmpathyContact *contact)
@@ -247,48 +174,6 @@ map_view_marker_update_position (ChamplainMarker *marker,
   GHashTable *location;
 
   location = empathy_contact_get_location (contact);
-
-#if HAVE_GEOCLUE
-  gchar *str;
-  GHashTable *address;
-
-  value = g_hash_table_lookup (location, EMPATHY_LOCATION_LON);
-  if (value == NULL)
-      {
-        static GeoclueGeocode *geocode;
-        if (geocode == NULL)
-          {
-            geocode = geoclue_geocode_new (GEOCODE_SERVICE, GEOCODE_PATH);
-            g_object_add_weak_pointer (G_OBJECT (geocode), (gpointer*)&geocode);
-          }
-        else
-          g_object_ref (geocode);
-
-        address = geoclue_address_details_new();
-
-        str = get_dup_string (location, EMPATHY_LOCATION_COUNTRY);
-        if (str != NULL)
-          g_hash_table_insert (address, g_strdup ("country"), str);
-
-        str = get_dup_string (location, EMPATHY_LOCATION_POSTAL_CODE);
-        if (str != NULL)
-          g_hash_table_insert (address, g_strdup ("postalcode"), str);
-
-        str = get_dup_string (location, EMPATHY_LOCATION_LOCALITY);
-        if (str != NULL)
-          g_hash_table_insert (address, g_strdup ("locality"), str);
-
-        str = get_dup_string (location, EMPATHY_LOCATION_STREET);
-        if (str != NULL)
-          g_hash_table_insert (address, g_strdup ("street"), str);
-
-        geoclue_geocode_address_to_position_async (geocode, address,
-            map_view_geocode_cb, contact);
-
-        g_hash_table_unref (address);
-        return;
-      }
-#endif
 
   if (location == NULL ||
       g_hash_table_size (location) == 0)

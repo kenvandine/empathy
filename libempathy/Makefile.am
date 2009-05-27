@@ -7,6 +7,7 @@ AM_CPPFLAGS =                                           \
 	-DDATADIR=\""$(datadir)"\"              	\
 	-DLOCALEDIR=\""$(datadir)/locale"\"		\
 	$(LIBEMPATHY_CFLAGS)				\
+	$(GEOCLUE_CFLAGS)				\
 	$(WARN_CFLAGS)					\
 	$(DISABLE_DEPRECATED)
 
@@ -59,7 +60,8 @@ nodist_libempathy_la_SOURCES =\
 
 libempathy_la_LIBADD =		\
 	$(top_builddir)/extensions/libemp-extensions.la \
-	$(LIBEMPATHY_LIBS)
+	$(LIBEMPATHY_LIBS) \
+	$(GEOCLUE_LIBS)
 
 libempathy_la_LDFLAGS =		\
        -version-info ${LIBEMPATHY_CURRENT}:${LIBEMPATHY_REVISION}:${LIBEMPATHY_AGE} \
