@@ -243,7 +243,7 @@ else
    have_geoclue=no
 fi
 
-if test "x$enable_map" = "xyes" -a "x$have_geoclue" != "xyes"; then
+if test "x$enable_location" = "xyes" -a "x$have_geoclue" != "xyes"; then
    AC_MSG_ERROR([Couldn't find location dependencies.])
 fi
 
