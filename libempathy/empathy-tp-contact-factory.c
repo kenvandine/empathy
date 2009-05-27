@@ -411,40 +411,43 @@ geocode_cb (GeoclueGeocode *geocode,
 	    double altitude,
 	    GeoclueAccuracy *accuracy,
 	    GError *error,
-	    gpointer userdata)
+	    gpointer contact)
 {
 	GValue *new_value;
 	GHashTable *location;
 
-	location = empathy_contact_get_location (EMPATHY_CONTACT (userdata));
+	location = empathy_contact_get_location (EMPATHY_CONTACT (contact));
 
 	if (error != NULL) {
 		DEBUG ("Error geocoding location : %s", error->message);
 		g_object_unref (geocode);
-		g_object_unref (userdata);
+		g_object_unref (contact);
 		return;
 	}
 
 	if (fields & GEOCLUE_POSITION_FIELDS_LATITUDE) {
 		new_value = tp_g_value_slice_new_double (latitude);
-		g_hash_table_replace (location, g_strdup (EMPATHY_LOCATION_LAT), new_value);
+		g_hash_table_replace (location, g_strdup (EMPATHY_LOCATION_LAT),
+			new_value);
 		DEBUG ("\t - Latitude: %f", latitude);
 	}
 	if (fields & GEOCLUE_POSITION_FIELDS_LONGITUDE) {
 		new_value = tp_g_value_slice_new_double (longitude);
-		g_hash_table_replace (location, g_strdup (EMPATHY_LOCATION_LON), new_value);
+		g_hash_table_replace (location, g_strdup (EMPATHY_LOCATION_LON),
+			new_value);
 		DEBUG ("\t - Longitude: %f", longitude);
 	}
 	if (fields & GEOCLUE_POSITION_FIELDS_ALTITUDE) {
 		new_value = tp_g_value_slice_new_double (altitude);
-		g_hash_table_replace (location, g_strdup (EMPATHY_LOCATION_ALT), new_value);
+		g_hash_table_replace (location, g_strdup (EMPATHY_LOCATION_ALT),
+			new_value);
 		DEBUG ("\t - Altitude: %f", altitude);
 	}
 
 	/* Don't change the accuracy as we used an address to get this position */
-	g_object_notify (userdata, "location");
+	g_object_notify (contact, "location");
 	g_object_unref (geocode);
-	g_object_unref (userdata);
+	g_object_unref (contact);
 }
 #endif
 
