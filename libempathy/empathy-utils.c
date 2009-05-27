@@ -380,3 +380,10 @@ empathy_check_available_state (void)
 	return TRUE;
 }
 
+gint
+empathy_uint_compare (gconstpointer a,
+		      gconstpointer b)
+{
+	return *(guint*) a - *(guint*) b;
+}
+
