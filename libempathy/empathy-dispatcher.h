@@ -59,7 +59,7 @@ typedef void (EmpathyDispatcherRequestCb) (
   EmpathyDispatchOperation *dispatch,  const GError *error,
   gpointer user_data);
 typedef void (EmpathyDispatcherFindChannelClassCb) (
-  GStrv channel_class, gpointer user_data);
+  GList *channel_classes, gpointer user_data);
 
 GType empathy_dispatcher_get_type (void) G_GNUC_CONST;
 
@@ -91,10 +91,10 @@ void empathy_dispatcher_find_requestable_channel_classes_async
      EmpathyDispatcherFindChannelClassCb callback, gpointer user_data,
      const char *first_property_name, ...);
 
-GStrv empathy_dispatcher_find_requestable_channel_classes
+GList * empathy_dispatcher_find_requestable_channel_classes
     (EmpathyDispatcher *dispatcher, TpConnection *connection,
      const gchar *channel_type, guint handle_type,
-     const gchar *first_property_name, ...);
+     const char *first_property_name, ...);
 
 /* Get the dispatcher singleton */
 EmpathyDispatcher *    empathy_dispatcher_dup_singleton (void);

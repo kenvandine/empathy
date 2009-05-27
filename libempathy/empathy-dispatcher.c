@@ -64,10 +64,6 @@ typedef struct
 
 G_DEFINE_TYPE (EmpathyDispatcher, empathy_dispatcher, G_TYPE_OBJECT);
 
-static GStrv empathy_dispatcher_find_channel_class
-    (EmpathyDispatcher *dispatcher, TpConnection *connection,
-     const gchar *channel_type, guint handle_type, GArray *properties);
-
 enum
 {
   OBSERVE,
@@ -78,6 +74,11 @@ enum
 
 static guint signals[LAST_SIGNAL];
 static EmpathyDispatcher *dispatcher = NULL;
+
+static GList * empathy_dispatcher_find_channel_classes
+  (EmpathyDispatcher *dispatcher, TpConnection *connection,
+   const gchar *channel_type, guint handle_type, GArray *fixed_properties);
+
 
 typedef struct
 {
@@ -755,7 +756,7 @@ dispatcher_connection_got_all (TpProxy *proxy,
       ConnectionData *cd;
       GList *requests, *l;
       FindChannelRequest *request;
-      GStrv retval;
+      GList *retval;
 
       cd = g_hash_table_lookup (priv->connections, proxy);
       g_assert (cd != NULL);
@@ -770,7 +771,7 @@ dispatcher_connection_got_all (TpProxy *proxy,
         {
           request = l->data;
 
-          retval = empathy_dispatcher_find_channel_class (dispatcher,
+          retval = empathy_dispatcher_find_channel_classes (dispatcher,
               TP_CONNECTION (proxy), request->channel_type,
               request->handle_type, request->properties);
           request->callback (retval, request->user_data);
@@ -1413,17 +1414,57 @@ empathy_dispatcher_create_channel (EmpathyDispatcher *dispatcher,
     G_OBJECT (request_data->dispatcher));
 }
 
-static GStrv
-empathy_dispatcher_find_channel_class (EmpathyDispatcher *dispatcher,
-                                       TpConnection *connection,
-                                       const gchar *channel_type,
-                                       guint handle_type,
-                                       GArray *properties)
+typedef struct {
+  gboolean mismatch;
+  gboolean not_generic;
+  const char *channel_namespace;
+  GArray *properties;
+} PropertiesMatcherData;
+
+static void
+match_with_properties (gpointer key,
+                       gpointer val,
+                       gpointer user_data)
+{
+  int idx;
+  PropertiesMatcherData *data = user_data;
+
+  if (data->mismatch)
+    return;
+
+  /* discard generic properties, as we already checked them */
+  if (!g_str_has_prefix ((char *) key, data->channel_namespace))
+    return;
+
+  data->not_generic = TRUE;
+
+  for (idx = 0; idx < data->properties->len; idx++)
+    {
+      /* if |key| exists in the properties, it's fine */
+      if (!tp_strdiff ((char *) key, g_array_index (data->properties,
+          char *, idx)))
+        return;
+    }
+}
+
+static GList *
+empathy_dispatcher_find_channel_classes (EmpathyDispatcher *dispatcher,
+                                         TpConnection *connection,
+                                         const gchar *channel_type,
+                                         guint handle_type,
+                                         GArray *fixed_properties)
 {
   EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
-  ConnectionData *cd;
-  int i, j;
+  GValueArray *class;
+  GHashTable *fixed_props;
+  GValue *val;
   GPtrArray *classes;
+  GList *matching_classes;
+  const gchar *c_type;
+  guint32 h_type;
+  gboolean valid, found;
+  int i;
+  ConnectionData *cd;
 
   g_return_val_if_fail (channel_type != NULL, NULL);
   g_return_val_if_fail (handle_type != 0, NULL);
@@ -1437,71 +1478,65 @@ empathy_dispatcher_find_channel_class (EmpathyDispatcher *dispatcher,
   if (classes == NULL)
     return NULL;
 
+  found = TRUE;
+  matching_classes = NULL;
+
   for (i = 0; i < classes->len; i++)
     {
-      GValueArray *class;
-      GValue *fixed;
-      GValue *allowed;
-      GHashTable *fprops;
-      const gchar *c_type;
-      guint32 h_type;
-      gboolean valid;
-      gboolean missed;
-
       class = g_ptr_array_index (classes, i);
-      fixed = g_value_array_get_nth (class, 0);
+      val = g_value_array_get_nth (class, 0);
 
-      fprops = g_value_get_boxed (fixed);
-      c_type = tp_asv_get_string (fprops, TP_IFACE_CHANNEL ".ChannelType");
+      /* if the class doesn't match channel type discard it. */
+      fixed_props = g_value_get_boxed (val);
+      c_type = tp_asv_get_string (fixed_props,
+        TP_IFACE_CHANNEL ".ChannelType");
 
       if (tp_strdiff (channel_type, c_type))
         continue;
 
-      h_type = tp_asv_get_uint32 (fprops,
+      /* we have the right channel type, see if the handle type matches */
+      h_type = tp_asv_get_uint32 (fixed_props,
         TP_IFACE_CHANNEL ".TargetHandleType", &valid);
 
       if (!valid || handle_type != h_type)
         continue;
 
-      missed = FALSE;
-
-      if (properties != NULL)
+      /* now we should ensure that the fixed props that we specified
+       * are the only values inside the hash table.
+       */
+      if (fixed_properties != NULL)
         {
-          for (j = 0; j < properties->len; j++)
-            {
-              char *my_class;
+          PropertiesMatcherData *data;
 
-              my_class = g_strconcat (channel_type, ".",
-                  g_array_index (properties, char *, j), NULL);
+          data = g_slice_new0 (PropertiesMatcherData);
+          data->mismatch = FALSE;
+          data->not_generic = FALSE;
+          data->channel_namespace = channel_type;
+          data->properties = fixed_properties;
+          g_hash_table_foreach (fixed_props, match_with_properties, data);
 
-              /* TODO: this might not be enough if we want e.g. use this to
-               * look for all the values for a given property, but we don't
-               * currently use it that way.
-               */
-              if (!tp_asv_lookup (fprops, my_class))
-                {
-                  missed = TRUE;
-                  break;
-                }
-            }
+          found = (!data->mismatch && data->not_generic);
 
-          if (missed)
+          g_slice_free (PropertiesMatcherData, data);
+
+          if (!found)
             continue;
         }
 
-      if (!missed)
-        allowed = g_value_array_get_nth (class, 1);
-
-      return g_value_get_boxed (allowed);
+      if (found)
+        matching_classes = g_list_prepend (matching_classes, class);
     }
 
-  return NULL;
+  if (matching_classes != NULL)
+    return g_list_reverse (matching_classes);
+  else
+    return NULL;
 }
 
 static gboolean
 find_channel_class_idle_cb (gpointer user_data)
 {
-  GStrv retval;
+  GList *retval;
   GList *requests;
   FindChannelRequest *request = user_data;
   ConnectionData *cd;
@@ -1519,7 +1554,7 @@ find_channel_class_idle_cb (gpointer user_data)
 
   if (is_ready)
     {
-      retval = empathy_dispatcher_find_channel_class (request->dispatcher,
+      retval = empathy_dispatcher_find_channel_classes (request->dispatcher,
           request->connection, request->channel_type, request->handle_type,
           request->properties);
 
@@ -1538,15 +1573,126 @@ find_channel_class_idle_cb (gpointer user_data)
   return FALSE;
 }
 
-static void
-empathy_dispatcher_find_channel_class_async (EmpathyDispatcher *dispatcher,
-                                             TpConnection *connection,
-                                             const gchar *channel_type,
-                                             guint handle_type,
-                                             GArray *properties,
-                                             EmpathyDispatcherFindChannelClassCb callback,
-                                             gpointer user_data)
+static GArray *
+setup_varargs (va_list var_args,
+               const char *channel_namespace,
+               const char *first_property_name)
 {
+  const char *name;
+  char *name_full;
+  GArray *properties;
+
+  if (first_property_name == NULL)
+    return NULL;
+
+  name = first_property_name;
+  properties = g_array_new (TRUE, TRUE, sizeof (char *));
+
+  while (name != NULL)
+    {
+      name_full = g_strconcat (channel_namespace, ".", name, NULL);
+      properties = g_array_append_val (properties, name_full);
+      name = va_arg (var_args, char *);
+    }
+
+  return properties;
+}
+
+/**
+ * empathy_dispatcher_find_requestable_channel_classes:
+ * @dispatcher: an #EmpathyDispatcher
+ * @connection: a #TpConnection
+ * @channel_type: a string identifying the type of the channel to lookup
+ * @handle_type: the handle type for the channel
+ * @first_property_name: %NULL, or the name of the first fixed property,
+ * followed optionally by more names, followed by %NULL.
+ *
+ * Returns all the channel classes that a client can request for the connection
+ * @connection, of the type identified by @channel_type, @handle_type and the
+ * fixed properties list.
+ * If @first_property_name is %NULL, no additional fixed properties will be
+ * specified and the function will return all the requestable classes for
+ * the specified channel type and handle type.
+ * Note that this function may return %NULL without performing any lookup if
+ * @connection is not ready. To ensure that @connection is always ready,
+ * use the empathy_dispatcher_find_requestable_channel_classes_async() variant.
+ *
+ * Return value: a #GList of #GValueArray objects, where the first element in
+ * the array is a #GHashTable of the fixed properties, and the second is
+ * a #GStrv of the allowed properties for the class.
+ */
+GList *
+empathy_dispatcher_find_requestable_channel_classes
+                                 (EmpathyDispatcher *dispatcher,
+                                  TpConnection *connection,
+                                  const gchar *channel_type,
+                                  guint handle_type,
+                                  const char *first_property_name,
+                                  ...)
+{
+  va_list var_args;
+  GArray *properties;
+  EmpathyDispatcherPriv *priv;
+  GList *retval;
+  int idx;
+  char *str;
+
+  g_return_val_if_fail (EMPATHY_IS_DISPATCHER (dispatcher), NULL);
+  g_return_val_if_fail (TP_IS_CONNECTION (connection), NULL);
+  g_return_val_if_fail (channel_type != NULL, NULL);
+  g_return_val_if_fail (handle_type != 0, NULL);
+
+  priv = GET_PRIV (dispatcher);
+
+  va_start (var_args, first_property_name);
+
+  properties = setup_varargs (var_args, channel_type, first_property_name);
+
+  va_end (var_args);
+
+  retval = empathy_dispatcher_find_channel_classes (dispatcher, connection,
+    channel_type, handle_type, properties);
+
+  /* free the properties array */
+  for (idx = 0; idx < properties->len ; idx++)
+    {
+      str = g_array_index (properties, char *, idx);
+      g_free (str);
+    }
+
+  g_array_free (properties, TRUE);
+
+  return retval;
+}
+
+/**
+ * empathy_dispatcher_find_requestable_channel_classes_async:
+ * @dispatcher: an #EmpathyDispatcher
+ * @connection: a #TpConnection
+ * @channel_type: a string identifying the type of the channel to lookup
+ * @handle_type: the handle type for the channel
+ * @callback: the callback to call when @connection is ready
+ * @user_data: the user data to pass to @callback
+ * @first_property_name: %NULL, or the name of the first fixed property,
+ * followed optionally by more names, followed by %NULL.
+ *
+ * Please see the documentation of
+ * empathy_dispatcher_find_requestable_channel_classes() for a detailed
+ * description of this function.
+ */
+void
+empathy_dispatcher_find_requestable_channel_classes_async
+                                 (EmpathyDispatcher *dispatcher,
+                                  TpConnection *connection,
+                                  const gchar *channel_type,
+                                  guint handle_type,
+                                  EmpathyDispatcherFindChannelClassCb callback,
+                                  gpointer user_data,
+                                  const char *first_property_name,
+                                  ...)
+{
+  va_list var_args;
+  GArray *properties;
   FindChannelRequest *request;
   EmpathyDispatcherPriv *priv;
   guint source_id;
@@ -1557,6 +1703,12 @@ empathy_dispatcher_find_channel_class_async (EmpathyDispatcher *dispatcher,
   g_return_if_fail (handle_type != 0);
 
   priv = GET_PRIV (dispatcher);
+
+  va_start (var_args, first_property_name);
+
+  properties = setup_varargs (var_args, channel_type, first_property_name);
+
+  va_end (var_args);
 
   /* append another request for this connection */
   request = g_slice_new0 (FindChannelRequest);
@@ -1572,86 +1724,4 @@ empathy_dispatcher_find_channel_class_async (EmpathyDispatcher *dispatcher,
 
   g_hash_table_insert (priv->request_channel_class_async_ids,
     request, GUINT_TO_POINTER (source_id));
-}
-
-static GArray *
-setup_varargs (va_list var_args,
-               const char *first_property_name)
-{
-  const char *name;
-  char *name_dup;
-  GArray *properties;
-
-  name = first_property_name;
-  properties = g_array_new (TRUE, TRUE, sizeof (char *));
-
-  while (name != NULL)
-    {
-      name_dup = g_strdup (name);
-      properties = g_array_append_val (properties, name_dup);
-      name = va_arg (var_args, char *);
-    }
-
-  return properties;
-}
-
-GStrv
-empathy_dispatcher_find_requestable_channel_classes (EmpathyDispatcher *dispatcher,
-                                                     TpConnection *connection,
-                                                     const gchar *channel_type,
-                                                     guint handle_type,
-                                                     const gchar *first_property_name,
-                                                     ...)
-{
-  va_list var_args;
-  GArray *properties;
-  GStrv retval;
-
-  if (first_property_name == NULL)
-    return empathy_dispatcher_find_channel_class (dispatcher, connection,
-        channel_type, handle_type, NULL);
-
-  va_start (var_args, first_property_name);
-
-  properties = setup_varargs (var_args, first_property_name);
-
-  va_end (var_args);
-
-  retval = empathy_dispatcher_find_channel_class (dispatcher, connection,
-      channel_type, handle_type, properties);
-
-  g_array_free (properties, TRUE);
-
-  return retval;
-}
-
-void
-empathy_dispatcher_find_requestable_channel_classes_async
-                                 (EmpathyDispatcher *dispatcher,
-                                  TpConnection *connection,
-                                  const gchar *channel_type,
-                                  guint handle_type,
-                                  EmpathyDispatcherFindChannelClassCb callback,
-                                  gpointer user_data,
-                                  const char *first_property_name,
-                                  ...)
-{
-  va_list var_args;
-  GArray *properties;
-
-  if (first_property_name == NULL)
-    {
-      empathy_dispatcher_find_channel_class_async (dispatcher, connection,
-          channel_type, handle_type, NULL, callback, user_data);
-      return;
-    }
-
-  va_start (var_args, first_property_name);
-
-  properties = setup_varargs (var_args, first_property_name);
-
-  va_end (var_args);
-
-  empathy_dispatcher_find_channel_class_async (dispatcher, connection,
-      channel_type, handle_type, properties, callback, user_data);
 }
