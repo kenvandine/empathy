@@ -421,11 +421,14 @@ Configure summary:
 	Tests.......................:  ${have_check}
 	Coding style checks.........:  ${ENABLE_CODING_STYLE_CHECKS}
 
+    Features:
+	Spell checking (enchant)....:  ${have_enchant}
+	Display maps (libchamplain).:  ${have_libchamplain}
+	Location awareness (Geoclue):  ${have_geoclue}
+
+    Extras:
 	Documentation...............:  ${enable_gtk_doc}
 	Python bindings.............:  ${have_python}
-	Spell checking..............:  ${have_enchant}
-	Use libchamplain............:  ${have_libchamplain}
-	Use Geoclue.................:  ${have_geoclue}
 	Megaphone applet............:  ${have_megaphone}
 	Nothere applet..............:  ${have_nothere}
 "
