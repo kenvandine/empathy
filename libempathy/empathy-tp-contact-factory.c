@@ -511,7 +511,6 @@ tp_contact_factory_geocode (EmpathyContact *contact)
 		geocode_cb, contact);
 
 	g_hash_table_unref (address);
-	return;
 #endif
 }
 
@@ -522,7 +521,6 @@ tp_contact_factory_update_location (EmpathyTpContactFactory *tp_factory,
 {
 	EmpathyContact *contact;
 	GHashTable     *new_location;
-	GValue         *value;
 
 	contact = tp_contact_factory_find_by_handle (tp_factory, handle);
 
@@ -536,10 +534,7 @@ tp_contact_factory_update_location (EmpathyTpContactFactory *tp_factory,
 	empathy_contact_set_location (contact, new_location);
 	g_hash_table_unref (new_location);
 
-	value = g_hash_table_lookup (location, EMPATHY_LOCATION_LAT);
-	if (value == NULL) {
-		tp_contact_factory_geocode (contact);
-	}
+	tp_contact_factory_geocode (contact);
 }
 
 static void
