@@ -926,24 +926,15 @@ chat_window_new_message_cb (EmpathyChat       *chat,
 	/* - if we're the sender, we play the sound if it's specified in the
 	 *   preferences and we're not away.
 	 * - if we receive a message, we play the sound if it's specified in the
-	 *   prefereces and the window does not have focus on the chat receiving
+	 *   preferences and the window does not have focus on the chat receiving
 	 *   the message.
 	 */
 
 	sender = empathy_message_get_sender (message);
 
-	if (empathy_contact_is_user (sender) != FALSE) {
+	if (empathy_contact_is_user (sender)) {
 		empathy_sound_play (GTK_WIDGET (priv->dialog),
 				    EMPATHY_SOUND_MESSAGE_OUTGOING);
-	} else {
-		if ((!has_focus || priv->current_chat != chat)) {
-			empathy_sound_play (GTK_WIDGET (priv->dialog),
-					    EMPATHY_SOUND_MESSAGE_INCOMING);
-		}
-	}
-
-	if (!has_focus) {
-		chat_window_show_or_update_notification (window, message, chat);
 	}
 
 	if (has_focus && priv->current_chat == chat) {
@@ -962,8 +953,13 @@ chat_window_new_message_cb (EmpathyChat       *chat,
 		needs_urgency = TRUE;
 	}
 
-	if (needs_urgency && !has_focus) {
-		chat_window_set_urgency_hint (window, TRUE);
+	if (needs_urgency) {
+		if (!has_focus)
+			chat_window_set_urgency_hint (window, TRUE);
+
+		empathy_sound_play (GTK_WIDGET (priv->dialog),
+		    EMPATHY_SOUND_MESSAGE_INCOMING);
+		chat_window_show_or_update_notification (window, message, chat);
 	}
 
 	if (!g_list_find (priv->chats_new_msg, chat)) {
