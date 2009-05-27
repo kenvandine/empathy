@@ -24,6 +24,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <telepathy-glib/util.h>
+#include <telepathy-glib/dbus.h>
 
 #include "empathy-ft-handler.h"
 #include "empathy-tp-contact-factory.h"
@@ -1018,28 +1019,72 @@ callbacks_data_free (gpointer user_data)
 }
 
 static void
-find_ft_channel_class_cb (GStrv channel_class,
+set_content_hash_type_from_classes (EmpathyFTHandler *handler,
+    GList *classes)
+{
+  GValueArray *class;
+  GValue *v;
+  GList *l;
+  GArray *possible_values;
+  guint value;
+  GHashTable *fprops;
+  gboolean valid;
+  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
+
+  possible_values = g_array_new (TRUE, TRUE, sizeof (guint));
+
+  for (l = classes; l != NULL; l = l->next)
+    {
+      class = l->data;
+      v = g_value_array_get_nth (class, 0);
+      fprops = g_value_get_boxed (v);
+
+      value = tp_asv_get_uint32
+        (fprops, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentHashType",
+         &valid);
+      
+      if (valid)
+        g_array_append_val (possible_values, value);
+    }
+
+  if (possible_values->len == 1)
+    {
+      priv->content_hash_type = g_array_index (possible_values, guint, 0);
+    }
+  else
+    {
+      /* order the array and pick the first non zero, so that MD5
+       * is the preferred value.
+       */
+      g_array_sort (possible_values, empathy_uint_compare);
+
+      if (g_array_index (possible_values, guint, 0) == 0)
+        priv->content_hash_type = g_array_index (possible_values, guint, 1);
+      else
+        priv->content_hash_type = g_array_index (possible_values, guint, 0);
+    }
+
+  DEBUG ("Setting content hash type as %u", priv->content_hash_type);
+}
+
+static void
+find_ft_channel_class_cb (GList *channel_classes,
     gpointer user_data)
 {
   CallbacksData *data = user_data;
   EmpathyFTHandler *handler = data->handler;
-  gboolean allowed = TRUE;
   GError *myerr = NULL;
 
-  /* this takes care of channel_class == NULL as well */
-  if (!tp_strv_contains ((const gchar * const *) channel_class,
-      TP_IFACE_CHANNEL ".TargetHandle"))
-    allowed = FALSE;
+  DEBUG ("check if FT without hash is allowed: %s", (channel_classes != NULL) ?
+      "True" : "False");
 
-  DEBUG ("check if FT is allowed: %s", allowed ? "True" : "False");
-
-  if (!allowed)
+  if (channel_classes == NULL)
     {
       g_set_error_literal (&myerr, EMPATHY_FT_ERROR_QUARK,
           EMPATHY_FT_ERROR_NOT_SUPPORTED,
           _("File transfer not supported by remote contact"));
 
-      data->callback (NULL, myerr, data->user_data);
+      data->callback (handler, myerr, data->user_data);
       g_clear_error (&myerr);
     }
   else
@@ -1051,24 +1096,17 @@ find_ft_channel_class_cb (GStrv channel_class,
 }
 
 static void
-find_hash_channel_class_cb (GStrv channel_class,
+find_hash_channel_class_cb (GList *channel_classes,
     gpointer user_data)
 {
   CallbacksData *data = user_data;
   EmpathyFTHandler *handler = data->handler;
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
-  gboolean allowed = TRUE;
 
-  /* this takes care of channel_class == NULL as well */
-  if (!tp_strv_contains ((const gchar * const *) channel_class,
-      TP_IFACE_CHANNEL ".TargetHandle"))
-    allowed = FALSE;
+  DEBUG ("check if FT with hash is allowed: %s", (channel_classes != NULL) ?
+      "True" : "False");
 
-  DEBUG ("check if FT+hash is allowed: %s", allowed ? "True" : "False");
-
-  priv->use_hash = allowed;
-
-  if (!allowed)
+  if (channel_classes == NULL)
     {
       /* see if we support FT without hash instead */
       empathy_dispatcher_find_requestable_channel_classes_async
@@ -1080,6 +1118,12 @@ find_hash_channel_class_cb (GStrv channel_class,
     }
   else
     {
+      priv->use_hash = TRUE;
+
+      /* pick a value for the ContentHashType */
+      set_content_hash_type_from_classes (handler, channel_classes);
+
+      /* get back to the caller now */
       data->callback (handler, NULL, data->user_data);
       callbacks_data_free (data);
     }
