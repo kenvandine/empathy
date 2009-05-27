@@ -25,6 +25,7 @@
 
 #include <telepathy-glib/util.h>
 #include <telepathy-glib/gtypes.h>
+#include <telepathy-glib/dbus.h>
 
 #include <extensions/extensions.h>
 
@@ -391,6 +392,27 @@ tp_contact_factory_got_capabilities (EmpathyTpContactFactory *tp_factory,
 }
 
 static void
+tp_contact_factory_update_location (EmpathyTpContactFactory *tp_factory,
+				    guint handle,
+				    GHashTable *location)
+{
+	EmpathyContact *contact;
+	GHashTable     *new_location;
+
+	contact = tp_contact_factory_find_by_handle (tp_factory, handle);
+
+	if (contact == NULL)
+		return;
+
+	new_location = g_hash_table_new_full (g_str_hash, g_str_equal,
+		(GDestroyNotify) g_free, (GDestroyNotify) tp_g_value_slice_free);
+	tp_g_hash_table_update (new_location, location, (GBoxedCopyFunc) g_strdup,
+		(GBoxedCopyFunc) tp_g_value_slice_dup);
+	empathy_contact_set_location (contact, new_location);
+	g_hash_table_unref (new_location);
+}
+
+static void
 tp_contact_factory_got_locations (TpProxy                 *tp_proxy,
 				  GHashTable              *locations,
 				  const GError            *error,
@@ -411,12 +433,8 @@ tp_contact_factory_got_locations (TpProxy                 *tp_proxy,
 	while (g_hash_table_iter_next (&iter, &key, &value)) {
 		guint           handle = GPOINTER_TO_INT (key);
 		GHashTable     *location = value;
-		EmpathyContact *contact;
 
-		contact = tp_contact_factory_find_by_handle (tp_factory, handle);
-		if (contact != NULL) {
-			empathy_contact_set_location (contact, location);
-		}
+		tp_contact_factory_update_location (tp_factory, handle, location);
 	}
 }
 
@@ -458,14 +476,7 @@ tp_contact_factory_location_updated_cb (TpProxy      *proxy,
 					GObject      *weak_object)
 {
 	EmpathyTpContactFactory *tp_factory = EMPATHY_TP_CONTACT_FACTORY (weak_object);
-	EmpathyContact          *contact;
-
-	contact = tp_contact_factory_find_by_handle (tp_factory, handle);
-
-	if (contact == NULL)
-		return;
-
-	empathy_contact_set_location (contact, location);
+	tp_contact_factory_update_location (tp_factory, handle, location);
 }
 
 static void
