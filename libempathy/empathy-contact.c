@@ -599,12 +599,12 @@ presence_type_to_mc_presence (TpConnectionPresenceType type)
 {
   switch (type)
     {
-      case TP_CONNECTION_PRESENCE_TYPE_UNSET:
       case TP_CONNECTION_PRESENCE_TYPE_UNKNOWN:
       case TP_CONNECTION_PRESENCE_TYPE_ERROR:
         return MC_PRESENCE_UNSET;
       case TP_CONNECTION_PRESENCE_TYPE_OFFLINE:
         return MC_PRESENCE_OFFLINE;
+      case TP_CONNECTION_PRESENCE_TYPE_UNSET:
       case TP_CONNECTION_PRESENCE_TYPE_AVAILABLE:
         return MC_PRESENCE_AVAILABLE;
       case TP_CONNECTION_PRESENCE_TYPE_AWAY:
