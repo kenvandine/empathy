@@ -1276,7 +1276,7 @@ location_key_to_label (const gchar *key)
   else if (tp_strdiff (key, EMPATHY_LOCATION_CLIMB) == FALSE)
     return _("Climb Speed:");
   else if (tp_strdiff (key, EMPATHY_LOCATION_TIMESTAMP) == FALSE)
-    return _("Taken at:");
+    return _("Last Updated on:");
   else if (tp_strdiff (key, EMPATHY_LOCATION_LON) == FALSE)
     return _("Longitude:");
   else if (tp_strdiff (key, EMPATHY_LOCATION_LAT) == FALSE)
