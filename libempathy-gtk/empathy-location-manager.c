@@ -531,13 +531,19 @@ publish_cb (EmpathyConf *conf,
 
   DEBUG ("Publish Conf changed");
   priv = GET_PRIV (manager);
-  if (!empathy_conf_get_bool (conf, key, &can_publish))
+
+
+  if (empathy_conf_get_bool (conf, key, &can_publish) == FALSE)
     return;
 
-  if (can_publish)
+  if (can_publish == TRUE)
     {
-      if (!priv->is_setup)
+      if (priv->is_setup == FALSE)
         setup_geoclue (manager);
+      /* if still not setup than the init failed */
+      if (priv->is_setup == FALSE)
+        return;
+
       geoclue_address_get_address_async (priv->gc_address,
           initial_address_cb, manager);
       geoclue_position_get_position_async (priv->gc_position,
