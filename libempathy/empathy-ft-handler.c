@@ -1042,7 +1042,7 @@ set_content_hash_type_from_classes (EmpathyFTHandler *handler,
       value = tp_asv_get_uint32
         (fprops, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentHashType",
          &valid);
-      
+
       if (valid)
         g_array_append_val (possible_values, value);
     }

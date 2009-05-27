@@ -384,6 +384,6 @@ gint
 empathy_uint_compare (gconstpointer a,
 		      gconstpointer b)
 {
-	return *(guint*) a - *(guint*) b;
+	return *(guint *) a - *(guint *) b;
 }
 
