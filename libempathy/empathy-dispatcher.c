@@ -777,6 +777,7 @@ dispatcher_connection_got_all (TpProxy *proxy,
           request->callback (retval, request->user_data);
 
           free_find_channel_request (request);
+          g_list_free (retval);
         }
 
       g_list_free (requests);
@@ -1560,6 +1561,8 @@ find_channel_class_idle_cb (gpointer user_data)
 
       request->callback (retval, request->user_data);
       free_find_channel_request (request);
+      g_list_free (retval);
+
       return FALSE;
     }
 
