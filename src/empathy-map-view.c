@@ -52,7 +52,6 @@ typedef struct {
   GtkWidget *zoom_out;
   ChamplainView *map_view;
   ChamplainLayer *layer;
-  GSList *notify_handles;
 } EmpathyMapView;
 
 static void map_view_destroy_cb (GtkWidget *widget,
@@ -144,9 +143,9 @@ static void
 map_view_destroy_cb (GtkWidget *widget,
     EmpathyMapView *window)
 {
-  GSList *item;
+  GList *item;
 
-  item = window->notify_handles;
+  item = clutter_container_get_children (window->layer);
   while (item != NULL)
   {
     EmpathyContact *contact;
@@ -155,9 +154,8 @@ map_view_destroy_cb (GtkWidget *widget,
     marker = CHAMPLAIN_MARKER (item->data);
     contact = g_object_get_data (G_OBJECT (marker), "contact");
     g_signal_handlers_disconnect_by_func (contact, map_view_contact_location_notify, marker);
-    g_object_unref (marker);
 
-    item = g_slist_next (item);
+    item = g_list_next (item);
   }
 
   g_object_unref (window->list_store);
@@ -276,8 +274,6 @@ map_view_contacts_foreach (GtkTreeModel *model,
   g_signal_connect (contact, "notify::location",
       G_CALLBACK (map_view_contact_location_notify), marker);
   g_object_set_data_full (G_OBJECT (marker), "contact", g_object_ref (contact), g_object_unref);
-  window->notify_handles = g_slist_append (window->notify_handles,
-      g_object_ref (marker));
 
   map_view_marker_update_position (CHAMPLAIN_MARKER (marker), contact);
 
