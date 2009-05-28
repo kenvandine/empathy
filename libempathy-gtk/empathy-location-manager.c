@@ -283,14 +283,16 @@ empathy_location_manager_get_default (void)
 }
 
 static void
-update_timestamp (EmpathyLocationManager *location_manager,
-                  int timestamp)
+update_timestamp (EmpathyLocationManager *location_manager)
 {
   EmpathyLocationManagerPriv *priv;
   priv = GET_PRIV (location_manager);
   GValue *new_value;
-  gint64 stamp64 = (gint64) timestamp;
+  gint64 stamp64;
+  time_t timestamp;
 
+  timestamp = time (NULL);
+  stamp64 = (gint64) timestamp;
   new_value = tp_g_value_slice_new (G_TYPE_INT64);
   g_value_set_int64 (new_value, stamp64);
   g_hash_table_insert (priv->location, g_strdup (EMPATHY_LOCATION_TIMESTAMP),
@@ -377,7 +379,7 @@ position_changed_cb (GeocluePosition *position,
       DEBUG ("\t - Accuracy: %f", mean);
     }
 
-  update_timestamp (location_manager, timestamp);
+  update_timestamp (location_manager);
   publish_location_to_all_accounts (EMPATHY_LOCATION_MANAGER (location_manager),
       FALSE);
 }
@@ -438,9 +440,12 @@ address_changed_cb (GeoclueAddress *address,
   priv = GET_PRIV (location_manager);
   g_hash_table_remove_all (priv->location);
 
+  if (g_hash_table_size (details) == 0)
+    return;
+
   g_hash_table_foreach (details, address_foreach_cb, (gpointer)location_manager);
 
-  update_timestamp (location_manager, timestamp);
+  update_timestamp (location_manager);
   publish_location_to_all_accounts (EMPATHY_LOCATION_MANAGER (location_manager),
       FALSE);
 }
