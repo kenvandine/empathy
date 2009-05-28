@@ -458,10 +458,10 @@ update_resources (EmpathyLocationManager *location_manager)
 
   priv = GET_PRIV (location_manager);
 
-  DEBUG ("Updating resources");
+  DEBUG ("Updating resources %d", priv->resources);
 
   if (!geoclue_master_client_set_requirements (priv->gc_client,
-          GEOCLUE_ACCURACY_LEVEL_LOCALITY, 0, TRUE, priv->resources,
+          GEOCLUE_ACCURACY_LEVEL_NONE, 0, TRUE, priv->resources,
           NULL))
     {
       g_printerr ("set_requirements failed");
