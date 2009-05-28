@@ -788,7 +788,7 @@ empathy_call_window_constructed (GObject *object)
 
       /* Retreiving the self avatar */
       connection = empathy_contact_get_connection (priv->contact);
-      factory = empathy_tp_contact_factory_dup_singleton(connection);
+      factory = empathy_tp_contact_factory_dup_singleton (connection);
       empathy_tp_contact_factory_get_from_handle (factory,
           tp_connection_get_self_handle (connection),
           empathy_call_window_got_self_contact_cb, self, NULL, NULL);
