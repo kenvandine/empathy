@@ -50,7 +50,7 @@ struct _EmpathyLocationManagerClass
 };
 
 GType empathy_location_manager_get_type (void) G_GNUC_CONST;
-EmpathyLocationManager * empathy_location_manager_get_default (void);
+EmpathyLocationManager * empathy_location_manager_dup_default (void);
 
 G_END_DECLS
 

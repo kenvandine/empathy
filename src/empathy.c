@@ -588,7 +588,7 @@ main (int argc, char *argv[])
 
 	/* Location mananger */
 #if HAVE_GEOCLUE
-	location_manager = empathy_location_manager_get_default ();
+	location_manager = empathy_location_manager_dup_default ();
 #endif
 
 	gtk_main ();

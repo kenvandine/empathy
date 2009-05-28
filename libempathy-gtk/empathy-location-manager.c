@@ -275,12 +275,16 @@ location_manager_set_property (GObject *object,
 
 
 EmpathyLocationManager *
-empathy_location_manager_get_default (void)
+empathy_location_manager_dup_default (void)
 {
   static EmpathyLocationManager *singleton = NULL;
   if (singleton == NULL)
-    singleton = g_object_new (EMPATHY_TYPE_LOCATION_MANAGER, NULL);
-  return singleton;
+    {
+      singleton = g_object_new (EMPATHY_TYPE_LOCATION_MANAGER, NULL);
+      g_object_add_weak_pointer (G_OBJECT (singleton), (gpointer *)&singleton);
+    }
+
+  return g_object_ref (singleton);
 }
 
 static void
