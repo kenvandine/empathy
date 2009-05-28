@@ -143,7 +143,8 @@ publish_location (EmpathyLocationManager *location_manager,
   if (connection_status != TP_CONNECTION_STATUS_CONNECTED)
     return;
 
-  DEBUG ("Publishing location to account %s",
+  DEBUG ("Publishing %s location to account %s", 
+      (g_hash_table_size (priv->location) == 0 ? "empty" : ""),
       mc_account_get_display_name (account));
 
   empathy_tp_contact_factory_set_location (factory, priv->location);
@@ -477,7 +478,6 @@ update_resources (EmpathyLocationManager *location_manager)
       initial_position_cb, location_manager);
 
 }
-
 
 static void
 setup_geoclue (EmpathyLocationManager *location_manager)
