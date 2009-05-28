@@ -412,9 +412,12 @@ status_preset_dialog_add_preset (GtkWidget *widget,
 {
 	EmpathyStatusPresetDialogPriv *priv = GET_PRIV (self);
 	GtkTreeModel *model;
+	GtkTreeIter iter;
 	GtkWidget *entry;
-	McPresence state;
+	McPresence state, cstate;
 	const char *status;
+	char *cstatus;
+	gboolean valid, match = FALSE;
 
 	g_return_if_fail (priv->add_combo_changed);
 
@@ -431,6 +434,37 @@ status_preset_dialog_add_preset (GtkWidget *widget,
 
 	status_preset_dialog_presets_update (self);
 	status_preset_add_combo_reset (self);
+
+	/* select the added status*/
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->presets_treeview));
+	for (valid = gtk_tree_model_get_iter_first (model, &iter);
+             valid;
+             valid = gtk_tree_model_iter_next (model, &iter)) {
+
+		gtk_tree_model_get (model, &iter,
+				PRESETS_STORE_STATE, &cstate,
+				PRESETS_STORE_STATUS, &cstatus,
+				-1);
+
+		match = (cstate == state) && (strcmp (cstatus, status) == 0);
+
+		g_free (cstatus);
+
+		if (match) {
+			GtkTreePath *path;
+
+			path = gtk_tree_model_get_path (model, &iter);
+
+			gtk_tree_selection_select_iter (
+				gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->presets_treeview)),
+				&iter);
+			gtk_tree_view_scroll_to_cell (
+					GTK_TREE_VIEW (priv->presets_treeview),
+					path, NULL,
+					FALSE, 0., 0.);
+			break;
+		}
+        }
 }
 
 static gboolean
