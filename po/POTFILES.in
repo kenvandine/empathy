@@ -6,6 +6,7 @@ data/empathy.schemas.in
 
 libempathy/empathy-tp-contact-list.c
 libempathy/empathy-utils.c
+libempathy/empathy-time.c
 
 libempathy-gtk/empathy-account-chooser.c
 libempathy-gtk/empathy-account-widget.c
