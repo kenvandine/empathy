@@ -857,8 +857,8 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
 
       g_free (header);
     }
-  else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_STREAM_TUBE) ||
-      !tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_DBUS_TUBE))
+  else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAM_TUBE) ||
+      !tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_DBUS_TUBE))
     {
       TpChannel *channel;
       TpHandle handle;

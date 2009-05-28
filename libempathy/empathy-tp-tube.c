@@ -88,7 +88,7 @@ typedef struct {
 typedef struct
 {
   TpChannel *channel;
-  EmpTubeChannelState state;
+  TpTubeChannelState state;
   gboolean ready;
   GSList *ready_callbacks;
 } EmpathyTpTubePriv;
@@ -111,8 +111,8 @@ static guint signals[LAST_SIGNAL];
 G_DEFINE_TYPE (EmpathyTpTube, empathy_tp_tube, G_TYPE_OBJECT)
 
 static void
-tp_tube_state_changed_cb (TpProxy *proxy,
-                          EmpTubeChannelState state,
+tp_tube_state_changed_cb (TpChannel *channel,
+                          TpTubeChannelState state,
                           gpointer user_data,
                           GObject *tube)
 {
@@ -313,12 +313,12 @@ tp_tube_constructor (GType type,
 
   priv->ready = FALSE;
 
-  emp_cli_channel_interface_tube_connect_to_tube_channel_state_changed (
-    TP_PROXY (priv->channel), tp_tube_state_changed_cb, NULL, NULL,
+  tp_cli_channel_interface_tube_connect_to_tube_channel_state_changed (
+    priv->channel, tp_tube_state_changed_cb, NULL, NULL,
     self, NULL);
 
   tp_cli_dbus_properties_call_get (priv->channel, -1,
-      EMP_IFACE_CHANNEL_INTERFACE_TUBE, "State", got_tube_state_cb,
+      TP_IFACE_CHANNEL_INTERFACE_TUBE, "State", got_tube_state_cb,
       self, NULL, G_OBJECT (self));
 
   return self;
@@ -381,7 +381,7 @@ empathy_tp_tube_class_init (EmpathyTpTubeClass *klass)
    */
   g_object_class_install_property (object_class, PROP_STATE,
       g_param_spec_uint ("state", "state", "state",
-        0, NUM_EMP_TUBE_CHANNEL_STATES, 0,
+        0, NUM_TP_TUBE_CHANNEL_STATES, 0,
         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_STRINGS));
   /**
    * EmpathyTpTube::destroy:
@@ -469,7 +469,7 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
 
   /* org.freedesktop.Telepathy.Channel.ChannelType */
   value = tp_g_value_slice_new (G_TYPE_STRING);
-  g_value_set_string (value, EMP_IFACE_CHANNEL_TYPE_STREAM_TUBE);
+  g_value_set_string (value, TP_IFACE_CHANNEL_TYPE_STREAM_TUBE);
   g_hash_table_insert (request, TP_IFACE_CHANNEL ".ChannelType", value);
 
   /* org.freedesktop.Telepathy.Channel.TargetHandleType */
@@ -486,7 +486,7 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
   value = tp_g_value_slice_new (G_TYPE_STRING);
   g_value_set_string (value, service);
   g_hash_table_insert (request,
-    EMP_IFACE_CHANNEL_TYPE_STREAM_TUBE  ".Service", value);
+    TP_IFACE_CHANNEL_TYPE_STREAM_TUBE  ".Service", value);
 
   if (!tp_cli_connection_interface_requests_run_create_channel (connection, -1,
     request, &object_path, &channel_properties, &error, NULL))
@@ -518,8 +518,7 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
   else
     g_hash_table_ref (parameters);
 
-  if (!emp_cli_channel_type_stream_tube_run_offer (
-        TP_PROXY(channel), -1, type, address,
+  if (!tp_cli_channel_type_stream_tube_run_offer (channel, -1, type, address,
         TP_SOCKET_ACCESS_CONTROL_LOCALHOST, parameters,
         &error, NULL))
     {
@@ -546,7 +545,7 @@ OUT:
 }
 
 static void
-tp_tube_accept_stream_cb (TpProxy *proxy,
+tp_tube_accept_stream_cb (TpChannel *channel,
     const GValue *address,
     const GError *error,
     gpointer user_data,
@@ -609,8 +608,8 @@ empathy_tp_tube_accept_stream_tube (EmpathyTpTube *tube,
 
   data = new_empathy_tp_tube_accept_data (type, callback, user_data);
 
-  emp_cli_channel_type_stream_tube_call_accept (
-     TP_PROXY (priv->channel), -1, type, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
+  tp_cli_channel_type_stream_tube_call_accept (
+     priv->channel, -1, type, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
      control_param, tp_tube_accept_stream_cb, data,
      free_empathy_tp_tube_accept_data, G_OBJECT (tube));
 
