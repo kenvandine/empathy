@@ -1295,7 +1295,7 @@ contact_widget_location_update (EmpathyContactWidget *information)
 {
   GHashTable *location;
   GValue *value;
-  gdouble lat, lon;
+  gdouble lat = 0.0, lon = 0.0;
   gboolean has_position = TRUE;
   GtkWidget *label;
   guint row = 0;
