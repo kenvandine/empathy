@@ -153,6 +153,10 @@ static void
 status_preset_add_combo_reset (EmpathyStatusPresetDialog *self)
 {
 	EmpathyStatusPresetDialogPriv *priv = GET_PRIV (self);
+	GtkWidget *entry;
+
+	entry = gtk_bin_get_child (GTK_BIN (priv->add_combobox));
+	gtk_entry_set_text (GTK_ENTRY (entry), "");
 
 	gtk_combo_box_set_active_iter (GTK_COMBO_BOX (priv->add_combobox),
 			&priv->selected_iter);
@@ -433,7 +437,6 @@ status_preset_dialog_add_preset (GtkWidget *widget,
 	empathy_status_presets_set_last (state, status);
 
 	status_preset_dialog_presets_update (self);
-	status_preset_add_combo_reset (self);
 
 	/* select the added status*/
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->presets_treeview));
@@ -465,6 +468,10 @@ status_preset_dialog_add_preset (GtkWidget *widget,
 			break;
 		}
         }
+
+	if (!match) g_warning ("No match");
+
+	status_preset_add_combo_reset (self);
 }
 
 static gboolean
