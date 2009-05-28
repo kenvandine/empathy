@@ -486,12 +486,12 @@ tp_contact_factory_geocode (EmpathyContact *contact)
 
 	if (geocode == NULL) {
 		geocode = geoclue_geocode_new (GEOCODE_SERVICE, GEOCODE_PATH);
-		g_object_add_weak_pointer (G_OBJECT (geocode), (gpointer*)&geocode);
+		g_object_add_weak_pointer (G_OBJECT (geocode), (gpointer *) &geocode);
 	}
 	else
 		g_object_ref (geocode);
 
-	address = geoclue_address_details_new();
+	address = geoclue_address_details_new ();
 
 	str = get_dup_string (location, EMPATHY_LOCATION_COUNTRY);
 	if (str != NULL)
