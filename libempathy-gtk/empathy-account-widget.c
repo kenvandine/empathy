@@ -313,6 +313,11 @@ accounts_widget_generic_setup (McAccount *account,
 			gtk_widget_show (widget);
 
 			widget = gtk_entry_new ();
+			if (strcmp (param->name, "account") == 0) {
+				g_signal_connect (widget, "realize",
+					G_CALLBACK (gtk_widget_grab_focus),
+					NULL);
+			}
 			gtk_table_attach (GTK_TABLE (table_settings),
 					  widget,
 					  1, 2,
@@ -459,6 +464,18 @@ empathy_account_widget_add_forget_button (McAccount   *account,
 			  button_forget);
 }
 
+void
+empathy_account_widget_set_default_focus (GtkBuilder  *gui,
+					  const gchar *entry)
+{
+	GObject *default_focus_entry;
+
+	default_focus_entry = gtk_builder_get_object (gui, entry);
+	g_signal_connect (default_focus_entry, "realize",
+			  G_CALLBACK (gtk_widget_grab_focus),
+			  NULL);
+}
+
 GtkWidget *
 empathy_account_widget_generic_new (McAccount *account)
 {
@@ -507,6 +524,8 @@ empathy_account_widget_salut_new (McAccount *account)
 			"entry_jid", "jid",
 			NULL);
 
+	empathy_account_widget_set_default_focus (gui, "entry_nickname");
+
 	return empathy_builder_unref_and_keep_widget (gui, widget);
 }
 
@@ -534,6 +553,8 @@ empathy_account_widget_msn_new (McAccount *account)
 	empathy_account_widget_add_forget_button (account, gui,
 						  "button_forget",
 						  "entry_password");
+
+	empathy_account_widget_set_default_focus (gui, "entry_id");
 
 	return empathy_builder_unref_and_keep_widget (gui, widget);
 }
@@ -572,6 +593,8 @@ empathy_account_widget_jabber_new (McAccount *account)
 						  "button_forget",
 						  "entry_password");
 
+	empathy_account_widget_set_default_focus (gui, "entry_id");
+
 	g_signal_connect (checkbutton_ssl, "toggled",
 			  G_CALLBACK (account_widget_jabber_ssl_toggled_cb),
 			  spinbutton_port);
@@ -607,6 +630,8 @@ empathy_account_widget_icq_new (McAccount *account)
 						  "button_forget",
 						  "entry_password");
 
+	empathy_account_widget_set_default_focus (gui, "entry_uin");
+
 	return empathy_builder_unref_and_keep_widget (gui, widget);
 }
 
@@ -636,6 +661,8 @@ empathy_account_widget_aim_new (McAccount *account)
 	empathy_account_widget_add_forget_button (account, gui,
 						  "button_forget",
 						  "entry_password");
+
+	empathy_account_widget_set_default_focus (gui, "entry_screenname");
 
 	return empathy_builder_unref_and_keep_widget (gui, widget);
 }
@@ -669,6 +696,8 @@ empathy_account_widget_yahoo_new (McAccount *account)
 						  "button_forget",
 						  "entry_password");
 
+	empathy_account_widget_set_default_focus (gui, "entry_id");
+
 	return empathy_builder_unref_and_keep_widget (gui, widget);
 }
 
@@ -696,6 +725,8 @@ empathy_account_widget_groupwise_new (McAccount *account)
 	empathy_account_widget_add_forget_button (account, gui,
 						  "button_forget",
 						  "entry_password");
+
+	empathy_account_widget_set_default_focus (gui, "entry_id");
 
 	return empathy_builder_unref_and_keep_widget (gui, widget);
 }

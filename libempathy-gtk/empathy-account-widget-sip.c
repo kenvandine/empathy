@@ -115,5 +115,7 @@ empathy_account_widget_sip_new (McAccount *account)
       "checkbutton_discover-stun", "toggled", account_widget_sip_discover_stun_toggled_cb,
       NULL);
 
+  empathy_account_widget_set_default_focus (gui, "entry_userid");
+
   return empathy_builder_unref_and_keep_widget (gui, settings->vbox_settings);
 }

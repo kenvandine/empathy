@@ -499,5 +499,7 @@ empathy_account_widget_irc_new (McAccount *account)
       "combobox_network", "changed", account_widget_irc_combobox_network_changed_cb,
       NULL);
 
+  empathy_account_widget_set_default_focus (gui, "entry_nick");
+
   return empathy_builder_unref_and_keep_widget (gui, settings->vbox_settings);
 }
