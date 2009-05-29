@@ -68,7 +68,7 @@ typedef struct {
     guint idle_id;
 } EmpathyLocationManagerPriv;
 
-static void location_manager_finalize (GObject *object);
+static void location_manager_dispose (GObject *object);
 static void location_manager_get_property (GObject *object, guint param_id,
     GValue *value, GParamSpec *pspec);
 static void location_manager_set_property (GObject *object, guint param_id,
@@ -104,7 +104,7 @@ empathy_location_manager_class_init (EmpathyLocationManagerClass *class)
 
   object_class = G_OBJECT_CLASS (class);
 
-  object_class->finalize = location_manager_finalize;
+  object_class->dispose = location_manager_dispose;
   object_class->get_property = location_manager_get_property;
   object_class->set_property = location_manager_set_property;
 
@@ -237,14 +237,40 @@ empathy_location_manager_init (EmpathyLocationManager *location_manager)
 
 
 static void
-location_manager_finalize (GObject *object)
+location_manager_dispose (GObject *object)
 {
   EmpathyLocationManagerPriv *priv;
-
   priv = GET_PRIV (object);
 
-  DEBUG ("finalize: %p", object);
-  g_object_unref (priv->account_manager);
+  if (priv->account_manager != NULL)
+  {
+    g_object_unref (priv->account_manager);
+    priv->account_manager = NULL;
+  }
+
+  if (priv->gc_client != NULL)
+  {
+    g_object_unref (priv->gc_client);
+    priv->gc_client = NULL;
+  }
+
+  if (priv->gc_position != NULL)
+  {
+    g_object_unref (priv->gc_position);
+    priv->gc_position = NULL;
+  }
+
+  if (priv->gc_address != NULL)
+  {
+    g_object_unref (priv->gc_address);
+    priv->gc_address = NULL;
+  }
+
+  if (priv->location != NULL)
+  {
+    g_hash_table_unref (priv->location);
+    priv->location = NULL;
+  }
 
   G_OBJECT_CLASS (empathy_location_manager_parent_class)->finalize (object);
 }
