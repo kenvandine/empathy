@@ -362,8 +362,10 @@ initial_position_cb (GeocluePosition *position,
       g_error_free (error);
     }
   else
-    position_changed_cb (position, fields, timestamp, latitude, longitude,
-      altitude, accuracy, location_manager);
+    {
+      position_changed_cb (position, fields, timestamp, latitude, longitude,
+          altitude, accuracy, location_manager);
+    }
 }
 
 static void
@@ -466,7 +468,9 @@ initial_address_cb (GeoclueAddress *address,
       g_error_free (error);
     }
   else
-    address_changed_cb (address, timestamp, details, accuracy, location_manager);
+    {
+      address_changed_cb (address, timestamp, details, accuracy, location_manager);
+    }
 }
 
 static void
@@ -634,7 +638,9 @@ accuracy_cb (EmpathyConf  *conf,
       g_rand_free (rand);
     }
   else
-    priv->reduce_value = 0.0;
+    {
+      priv->reduce_value = 0.0;
+    }
 
   if (!priv->geoclue_is_setup)
     return;
