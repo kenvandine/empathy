@@ -47,7 +47,6 @@ libempathy_gtk_handwritten_source =            	\
 	empathy-video-src.c			\
 	empathy-video-widget.c			\
 	empathy-irc-network-dialog.c		\
-	empathy-location-manager.c		\
 	empathy-log-window.c			\
 	empathy-new-message-dialog.c		\
 	empathy-presence-chooser.c		\
@@ -106,7 +105,6 @@ libempathy_gtk_headers =			\
 	empathy-video-widget.h			\
 	empathy-images.h			\
 	empathy-irc-network-dialog.h		\
-	empathy-location-manager.h		\
 	empathy-log-window.h			\
 	empathy-new-message-dialog.h		\
 	empathy-presence-chooser.h		\
@@ -118,6 +116,14 @@ libempathy_gtk_headers =			\
 	empathy-theme-irc.h			\
 	empathy-theme-manager.h			\
 	empathy-ui-utils.h
+
+if HAVE_GEOCLUE
+libempathy_gtk_handwritten_source +=		\
+	empathy-location-manager.c
+
+libempathy_gtk_headers +=			\
+	empathy-location-manager.h
+endif
 
 check_c_sources = \
     $(libempathy_gtk_handwritten_source) \

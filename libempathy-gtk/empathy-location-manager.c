@@ -28,7 +28,6 @@
 
 #include <telepathy-glib/util.h>
 
-#if HAVE_GEOCLUE
 #include <geoclue/geoclue-master.h>
 
 #include <extensions/extensions.h>
@@ -652,5 +651,3 @@ resource_cb (EmpathyConf  *conf,
   if (priv->is_setup)
     update_resources (manager);
 }
-
-#endif
