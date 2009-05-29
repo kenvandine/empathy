@@ -60,6 +60,9 @@ typedef struct {
     gboolean reduce_accuracy;
     gdouble reduce_value;
     EmpathyAccountManager *account_manager;
+
+    /* The idle id for publish_on_idle func */
+    guint idle_id;
 } EmpathyLocationManagerPriv;
 
 static void location_manager_finalize (GObject *object);
@@ -85,6 +88,9 @@ static void account_connection_changed_cb (EmpathyAccountManager *manager,
     McAccount *account, TpConnectionStatusReason reason,
     TpConnectionStatus current, TpConnectionStatus previous,
     gpointer *location_manager);
+static void publish_to_all_accounts (EmpathyLocationManager *location_manager,
+    gboolean force_publication);
+static gboolean publish_on_idle (gpointer user_data);
 
 G_DEFINE_TYPE (EmpathyLocationManager, empathy_location_manager, G_TYPE_OBJECT);
 
@@ -105,6 +111,17 @@ empathy_location_manager_class_init (EmpathyLocationManagerClass *class)
   object_class->set_property = location_manager_set_property;
 
   g_type_class_add_private (object_class, sizeof (EmpathyLocationManagerPriv));
+}
+
+static gboolean
+publish_on_idle (gpointer user_data)
+{
+  EmpathyLocationManager *manager = EMPATHY_LOCATION_MANAGER (user_data);
+  EmpathyLocationManagerPriv *priv = GET_PRIV (manager);
+
+  priv->idle_id = 0;
+  publish_to_all_accounts (manager, TRUE);
+  return FALSE;
 }
 
 static void
@@ -152,7 +169,7 @@ publish_location (EmpathyLocationManager *location_manager,
 }
 
 static void
-publish_location_to_all_accounts (EmpathyLocationManager *location_manager,
+publish_to_all_accounts (EmpathyLocationManager *location_manager,
                                   gboolean force_publication)
 {
   GList *accounts = NULL, *l;
@@ -385,8 +402,8 @@ position_changed_cb (GeocluePosition *position,
     }
 
   update_timestamp (location_manager);
-  publish_location_to_all_accounts (EMPATHY_LOCATION_MANAGER (location_manager),
-      FALSE);
+  if (priv->idle_id == 0)
+    g_idle_add (publish_on_idle, location_manager);
 }
 
 
@@ -451,8 +468,8 @@ address_changed_cb (GeoclueAddress *address,
   g_hash_table_foreach (details, address_foreach_cb, (gpointer)location_manager);
 
   update_timestamp (location_manager);
-  publish_location_to_all_accounts (EMPATHY_LOCATION_MANAGER (location_manager),
-      FALSE);
+  if (priv->idle_id == 0)
+    g_idle_add (publish_on_idle, location_manager);
 }
 
 
@@ -557,7 +574,6 @@ publish_cb (EmpathyConf *conf,
           initial_address_cb, manager);
       geoclue_position_get_position_async (priv->gc_position,
           initial_position_cb, manager);
-      publish_location_to_all_accounts (manager, FALSE);
     }
   else
     {
@@ -565,7 +581,7 @@ publish_cb (EmpathyConf *conf,
        * location from the servers
        */
       g_hash_table_remove_all (priv->location);
-      publish_location_to_all_accounts (manager, TRUE);
+      publish_to_all_accounts (manager, TRUE);
     }
 
 }
