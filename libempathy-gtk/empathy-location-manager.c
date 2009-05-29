@@ -142,8 +142,6 @@ publish_location (EmpathyLocationManager *location_manager,
   if (!conn)
     return;
 
-  factory = empathy_tp_contact_factory_dup_singleton (conn);
-
   if (force_publication == FALSE)
     {
       if (!empathy_conf_get_bool (conf, EMPATHY_PREFS_LOCATION_PUBLISH,
@@ -164,6 +162,7 @@ publish_location (EmpathyLocationManager *location_manager,
       (g_hash_table_size (priv->location) == 0 ? "empty" : ""),
       mc_account_get_display_name (account));
 
+  factory = empathy_tp_contact_factory_dup_singleton (conn);
   empathy_tp_contact_factory_set_location (factory, priv->location);
   g_object_unref (factory);
 }
