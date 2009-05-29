@@ -77,6 +77,11 @@ struct _EmpathyConfClass {
 #define EMPATHY_PREFS_AUTOCONNECT                  EMPATHY_PREFS_PATH "/autoconnect"
 #define EMPATHY_PREFS_IMPORT_ASKED                 EMPATHY_PREFS_PATH "/import_asked"
 #define EMPATHY_PREFS_FILE_TRANSFER_DEFAULT_FOLDER EMPATHY_PREFS_PATH "/file_transfer/default_folder"
+#define EMPATHY_PREFS_LOCATION_PUBLISH             EMPATHY_PREFS_PATH "/location/publish"
+#define EMPATHY_PREFS_LOCATION_RESOURCE_NETWORK    EMPATHY_PREFS_PATH "/location/resource_network"
+#define EMPATHY_PREFS_LOCATION_RESOURCE_CELL       EMPATHY_PREFS_PATH "/location/resource_cell"
+#define EMPATHY_PREFS_LOCATION_RESOURCE_GPS        EMPATHY_PREFS_PATH "/location/resource_gps"
+#define EMPATHY_PREFS_LOCATION_REDUCE_ACCURACY     EMPATHY_PREFS_PATH "/location/reduce_accuracy"
 
 typedef void (*EmpathyConfNotifyFunc) (EmpathyConf  *conf,
 				      const gchar *key,

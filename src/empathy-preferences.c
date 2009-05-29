@@ -64,6 +64,12 @@ typedef struct {
 
 	GtkWidget *treeview_spell_checker;
 
+	GtkWidget *checkbutton_location_publish;
+	GtkWidget *checkbutton_location_reduce_accuracy;
+	GtkWidget *checkbutton_location_resource_network;
+	GtkWidget *checkbutton_location_resource_cell;
+	GtkWidget *checkbutton_location_resource_gps;
+
 	GList     *notify_ids;
 } EmpathyPreferences;
 
@@ -246,6 +252,38 @@ preferences_setup_widgets (EmpathyPreferences *preferences)
 	preferences_hookup_toggle_button (preferences,
 					  EMPATHY_PREFS_AUTOCONNECT,
 					  preferences->checkbutton_autoconnect);
+
+	preferences_hookup_toggle_button (preferences,
+					  EMPATHY_PREFS_LOCATION_PUBLISH,
+					  preferences->checkbutton_location_publish);
+
+	preferences_hookup_toggle_button (preferences,
+					  EMPATHY_PREFS_LOCATION_RESOURCE_NETWORK,
+					  preferences->checkbutton_location_resource_network);
+	preferences_hookup_sensitivity (preferences,
+					EMPATHY_PREFS_LOCATION_PUBLISH,
+					preferences->checkbutton_location_resource_network);
+
+	preferences_hookup_toggle_button (preferences,
+					  EMPATHY_PREFS_LOCATION_RESOURCE_CELL,
+					  preferences->checkbutton_location_resource_cell);
+	preferences_hookup_sensitivity (preferences,
+					EMPATHY_PREFS_LOCATION_PUBLISH,
+					preferences->checkbutton_location_resource_cell);
+
+	preferences_hookup_toggle_button (preferences,
+					  EMPATHY_PREFS_LOCATION_RESOURCE_GPS,
+					  preferences->checkbutton_location_resource_gps);
+	preferences_hookup_sensitivity (preferences,
+					EMPATHY_PREFS_LOCATION_PUBLISH,
+					preferences->checkbutton_location_resource_gps);
+
+	preferences_hookup_toggle_button (preferences,
+					  EMPATHY_PREFS_LOCATION_REDUCE_ACCURACY,
+					  preferences->checkbutton_location_reduce_accuracy);
+	preferences_hookup_sensitivity (preferences,
+					EMPATHY_PREFS_LOCATION_PUBLISH,
+					preferences->checkbutton_location_reduce_accuracy);
 
 	id = empathy_conf_notify_add (empathy_conf_get (),
 				      EMPATHY_PREFS_UI_COMPACT_CONTACT_LIST,
@@ -1009,6 +1047,8 @@ preferences_radio_button_toggled_cb (GtkWidget *button,
 		}
 
 		value = enum_value->value_nick;
+	} else if (key && strcmp (key, EMPATHY_PREFS_CONTACTS_SORT_CRITERIUM) == 0) {
+           return;
 	}
 
 	empathy_conf_set_string (empathy_conf_get (), key, value);
@@ -1094,6 +1134,11 @@ empathy_preferences_show (GtkWindow *parent)
 		"checkbutton_sounds_disabled_away", &preferences->checkbutton_sounds_disabled_away,
 		"treeview_sounds", &preferences->treeview_sounds,
 		"treeview_spell_checker", &preferences->treeview_spell_checker,
+		"checkbutton_location_publish", &preferences->checkbutton_location_publish,
+		"checkbutton_location_reduce_accuracy", &preferences->checkbutton_location_reduce_accuracy,
+		"checkbutton_location_resource_network", &preferences->checkbutton_location_resource_network,
+		"checkbutton_location_resource_cell", &preferences->checkbutton_location_resource_cell,
+		"checkbutton_location_resource_gps", &preferences->checkbutton_location_resource_gps,
 		NULL);
 	g_free (filename);
 
@@ -1121,6 +1166,13 @@ empathy_preferences_show (GtkWindow *parent)
 		GtkWidget *page;
 
 		page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (preferences->notebook), 2);
+		gtk_widget_show (page);
+	}
+
+	if (TRUE) { /* FIXME */
+		GtkWidget *page;
+
+		page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (preferences->notebook), 4);
 		gtk_widget_show (page);
 	}
 

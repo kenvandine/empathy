@@ -463,5 +463,75 @@
       </locale>
     </schema>
 
-  </schemalist>  
+    <schema>
+      <key>/schemas/apps/empathy/location/publish</key>
+      <applyto>/apps/empathy/location/publish</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>Empathy can publish the user's location</short>
+        <long>
+        Whether or not Empathy can publish the user's location to his contacts.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/location/resource_network</key>
+      <applyto>/apps/empathy/location/resource_network</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Empathy can use the network to guess the location</short>
+        <long>
+        Whether or not Empathy can use the network to guess the location.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/location/resource_cell</key>
+      <applyto>/apps/empathy/location/resource_cell</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Empathy can use the cellular network to guess the location</short>
+        <long>
+        Whether or not Empathy can use the cellular network to guess the location.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/location/resource_gps</key>
+      <applyto>/apps/empathy/location/resource_gps</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>Empathy can use the GPS to guess the location</short>
+        <long>
+        Whether or not Empathy can use the GPS to guess the location.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/location/reduce_accuracy</key>
+      <applyto>/apps/empathy/location/reduce_accuracy</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>Empathy should reduce the location's accuracy</short>
+        <long>
+        Whether or not Empathy should reduce the location's accuracy for privacy reasons.
+        </long>
+      </locale>
+    </schema>
+
+  </schemalist>
 </gconfschemafile>
