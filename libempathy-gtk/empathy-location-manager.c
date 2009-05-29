@@ -44,6 +44,9 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_LOCATION
 #include "libempathy/empathy-debug.h"
 
+/* Seconds before updating the location */
+#define TIMEOUT 10
+
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyLocationManager)
 typedef struct {
     gboolean geoclue_is_setup;
@@ -65,7 +68,7 @@ typedef struct {
     EmpathyAccountManager *account_manager;
 
     /* The idle id for publish_on_idle func */
-    guint idle_id;
+    guint timeout_id;
 } EmpathyLocationManagerPriv;
 
 static void location_manager_dispose (GObject *object);
@@ -117,7 +120,7 @@ publish_on_idle (gpointer user_data)
   EmpathyLocationManager *manager = EMPATHY_LOCATION_MANAGER (user_data);
   EmpathyLocationManagerPriv *priv = GET_PRIV (manager);
 
-  priv->idle_id = 0;
+  priv->timeout_id = 0;
   publish_to_all_accounts (manager, TRUE);
   return FALSE;
 }
@@ -235,7 +238,6 @@ empathy_location_manager_init (EmpathyLocationManager *location_manager)
     G_CALLBACK (account_connection_changed_cb), location_manager);
 }
 
-
 static void
 location_manager_dispose (GObject *object)
 {
@@ -275,7 +277,6 @@ location_manager_dispose (GObject *object)
   G_OBJECT_CLASS (empathy_location_manager_parent_class)->finalize (object);
 }
 
-
 static void
 location_manager_get_property (GObject *object,
                       guint param_id,
@@ -294,7 +295,6 @@ location_manager_get_property (GObject *object,
     };
 }
 
-
 static void
 location_manager_set_property (GObject *object,
                       guint param_id,
@@ -312,7 +312,6 @@ location_manager_set_property (GObject *object,
         break;
     };
 }
-
 
 EmpathyLocationManager *
 empathy_location_manager_dup_default (void)
@@ -427,8 +426,8 @@ position_changed_cb (GeocluePosition *position,
     }
 
   update_timestamp (location_manager);
-  if (priv->idle_id == 0)
-    g_idle_add (publish_on_idle, location_manager);
+  if (priv->timeout_id == 0)
+    priv->timeout_id = g_timeout_add_seconds (TIMEOUT, publish_on_idle, location_manager);
 }
 
 static void
@@ -488,10 +487,9 @@ address_changed_cb (GeoclueAddress *address,
 
 
   update_timestamp (location_manager);
-  if (priv->idle_id == 0)
-    g_idle_add (publish_on_idle, location_manager);
+  if (priv->timeout_id == 0)
+    priv->timeout_id = g_timeout_add_seconds (TIMEOUT, publish_on_idle, location_manager);
 }
-
 
 static void
 update_resources (EmpathyLocationManager *location_manager)
@@ -517,7 +515,6 @@ update_resources (EmpathyLocationManager *location_manager)
       initial_address_cb, location_manager);
   geoclue_position_get_position_async (priv->gc_position,
       initial_position_cb, location_manager);
-
 }
 
 static void
@@ -605,7 +602,6 @@ publish_cb (EmpathyConf *conf,
     }
 
 }
-
 
 static void
 accuracy_cb (EmpathyConf  *conf,
