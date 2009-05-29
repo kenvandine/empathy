@@ -814,6 +814,18 @@ empathy_contact_can_send_files (EmpathyContact *contact)
   return priv->capabilities & EMPATHY_CAPABILITIES_FT;
 }
 
+gboolean
+empathy_contact_can_use_stream_tube (EmpathyContact *contact)
+{
+  EmpathyContactPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), FALSE);
+
+  priv = GET_PRIV (contact);
+
+  return priv->capabilities & EMPATHY_CAPABILITIES_STREAM_TUBE;
+}
+
 static gchar *
 contact_get_avatar_filename (EmpathyContact *contact,
                              const gchar *token)
