@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 Collabora Ltd.
+ * Copyright (C) 2009 Collabora Ltd.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  *
- * Authors: Pierre-Luc Beaudoin <pierre-luc@pierlux.com>
+ * Authors: Pierre-Luc Beaudoin <pierre-luc.beaudoin@collabora.co.uk>
  */
 
 #include "config.h"
@@ -46,8 +46,12 @@
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyLocationManager)
 typedef struct {
-    gboolean is_setup;
+    gboolean geoclue_is_setup;
     MissionControl *mc;
+    /* Contains the location to be sent to accounts.  Geoclue is used
+     * to populate it.  This HashTable uses Telepathy's style (string,
+     * GValue). Keys are defined in empathy-location.h
+     */
     GHashTable *location;
     gpointer token;
 
@@ -92,11 +96,6 @@ static void publish_to_all_accounts (EmpathyLocationManager *location_manager,
 static gboolean publish_on_idle (gpointer user_data);
 
 G_DEFINE_TYPE (EmpathyLocationManager, empathy_location_manager, G_TYPE_OBJECT);
-
-enum
-{
-  PROP_0,
-};
 
 static void
 empathy_location_manager_class_init (EmpathyLocationManagerClass *class)
@@ -205,12 +204,12 @@ empathy_location_manager_init (EmpathyLocationManager *location_manager)
       EMPATHY_TYPE_LOCATION_MANAGER, EmpathyLocationManagerPriv);
 
   location_manager->priv = priv;
-  priv->is_setup = FALSE;
+  priv->geoclue_is_setup = FALSE;
   priv->mc = empathy_mission_control_dup_singleton ();
   priv->location = g_hash_table_new_full (g_direct_hash, g_direct_equal,
       g_free, (GDestroyNotify) tp_g_value_slice_free);
 
-  // Setup settings status callbacks
+  /* Setup settings status callbacks */
   conf = empathy_conf_get ();
   empathy_conf_notify_add (conf, EMPATHY_PREFS_LOCATION_PUBLISH, publish_cb,
       location_manager);
@@ -229,7 +228,7 @@ empathy_location_manager_init (EmpathyLocationManager *location_manager)
   accuracy_cb (conf, EMPATHY_PREFS_LOCATION_REDUCE_ACCURACY, location_manager);
   publish_cb (conf, EMPATHY_PREFS_LOCATION_PUBLISH, location_manager);
 
-  // Setup account status callbacks
+  /* Setup account status callbacks */
   priv->account_manager = empathy_account_manager_dup_singleton ();
   g_signal_connect (priv->account_manager,
     "account-connection-changed",
@@ -416,7 +415,7 @@ address_foreach_cb (gpointer key,
   EmpathyLocationManagerPriv *priv;
   priv = GET_PRIV (location_manager);
 
-  // Discard street information if reduced accuracy is on
+  /* Discard street information if reduced accuracy is on */
   if (priv->reduce_accuracy && strcmp (key, EMPATHY_LOCATION_STREET) == 0)
     return;
 
@@ -488,7 +487,7 @@ update_resources (EmpathyLocationManager *location_manager)
       return;
     }
 
-  if (!priv->is_setup)
+  if (!priv->geoclue_is_setup)
     return;
 
   geoclue_address_get_address_async (priv->gc_address,
@@ -541,7 +540,7 @@ setup_geoclue (EmpathyLocationManager *location_manager)
   g_signal_connect (G_OBJECT (priv->gc_address), "address-changed",
       G_CALLBACK (address_changed_cb), location_manager);
 
-  priv->is_setup = TRUE;
+  priv->geoclue_is_setup = TRUE;
 }
 
 static void
@@ -562,10 +561,10 @@ publish_cb (EmpathyConf *conf,
 
   if (can_publish == TRUE)
     {
-      if (priv->is_setup == FALSE)
+      if (priv->geoclue_is_setup == FALSE)
         setup_geoclue (manager);
       /* if still not setup than the init failed */
-      if (priv->is_setup == FALSE)
+      if (priv->geoclue_is_setup == FALSE)
         return;
 
       geoclue_address_get_address_async (priv->gc_address,
@@ -611,7 +610,7 @@ accuracy_cb (EmpathyConf  *conf,
   else
     priv->reduce_value = 0.0;
 
-  if (!priv->is_setup)
+  if (!priv->geoclue_is_setup)
     return;
 
   geoclue_address_get_address_async (priv->gc_address,
@@ -648,6 +647,6 @@ resource_cb (EmpathyConf  *conf,
   else
     priv->resources &= ~resource;
 
-  if (priv->is_setup)
+  if (priv->geoclue_is_setup)
     update_resources (manager);
 }
