@@ -13,8 +13,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ * Boston, MA  02110-1301  USA
  *
  * Authors: Pierre-Luc Beaudoin <pierre-luc.beaudoin@collabora.co.uk>
  */
@@ -159,7 +159,7 @@ publish_location (EmpathyLocationManager *location_manager,
   if (connection_status != TP_CONNECTION_STATUS_CONNECTED)
     return;
 
-  DEBUG ("Publishing %s location to account %s", 
+  DEBUG ("Publishing %s location to account %s",
       (g_hash_table_size (priv->location) == 0 ? "empty" : ""),
       mc_account_get_display_name (account));
 
@@ -482,7 +482,7 @@ address_changed_cb (GeoclueAddress *address,
       new_value = tp_g_value_slice_new_string (value);
       g_hash_table_insert (priv->location, g_strdup (key), new_value);
 
-      DEBUG ("\t - %s: %s", (char*) key, (char*) value);
+      DEBUG ("\t - %s: %s", (gchar *) key, (gchar *) value);
     }
 
 
