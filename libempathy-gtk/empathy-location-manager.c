@@ -506,7 +506,7 @@ update_resources (EmpathyLocationManager *location_manager)
           GEOCLUE_ACCURACY_LEVEL_NONE, 0, TRUE, priv->resources,
           NULL))
     {
-      g_printerr ("set_requirements failed");
+      DEBUG ("set_requirements failed");
       return;
     }
 
@@ -542,7 +542,7 @@ setup_geoclue (EmpathyLocationManager *location_manager)
       priv->gc_client, &error);
   if (priv->gc_position == NULL)
     {
-      g_printerr ("Failed to create GeocluePosition: %s", error->message);
+      DEBUG ("Failed to create GeocluePosition: %s", error->message);
       g_error_free (error);
       return;
     }
@@ -555,7 +555,7 @@ setup_geoclue (EmpathyLocationManager *location_manager)
       priv->gc_client, &error);
   if (priv->gc_address == NULL)
     {
-      g_printerr ("Failed to create GeoclueAddress: %s", error->message);
+      DEBUG ("Failed to create GeoclueAddress: %s", error->message);
       g_error_free (error);
       return;
     }
