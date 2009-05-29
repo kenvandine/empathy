@@ -431,29 +431,6 @@ position_changed_cb (GeocluePosition *position,
     g_idle_add (publish_on_idle, location_manager);
 }
 
-
-static void
-address_foreach_cb (gpointer key,
-                    gpointer value,
-                    gpointer location_manager)
-{
-  if (location_manager == NULL)
-    return;
-
-  EmpathyLocationManagerPriv *priv;
-  priv = GET_PRIV (location_manager);
-
-  /* Discard street information if reduced accuracy is on */
-  if (priv->reduce_accuracy && strcmp (key, EMPATHY_LOCATION_STREET) == 0)
-    return;
-
-  GValue *new_value = tp_g_value_slice_new (G_TYPE_STRING);
-  g_value_set_string (new_value, value);
-
-  g_hash_table_insert (priv->location, g_strdup (key), new_value);
-  DEBUG ("\t - %s: %s", (char*) key, (char*) value);
-}
-
 static void
 initial_address_cb (GeoclueAddress *address,
                     int timestamp,
@@ -483,6 +460,8 @@ address_changed_cb (GeoclueAddress *address,
   GeoclueAccuracyLevel level;
   geoclue_accuracy_get_details (accuracy, &level, NULL, NULL);
   EmpathyLocationManagerPriv *priv;
+  GHashTableIter iter;
+  gpointer key, value;
 
   DEBUG ("New address (accuracy level %d):", level);
 
@@ -492,7 +471,21 @@ address_changed_cb (GeoclueAddress *address,
   if (g_hash_table_size (details) == 0)
     return;
 
-  g_hash_table_foreach (details, address_foreach_cb, (gpointer)location_manager);
+  g_hash_table_iter_init (&iter, details);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      GValue *new_value;
+      /* do something with key and value */
+      /* Discard street information if reduced accuracy is on */
+      if (priv->reduce_accuracy && strcmp (key, EMPATHY_LOCATION_STREET) == 0)
+        continue;
+
+      new_value = tp_g_value_slice_new_string (value);
+      g_hash_table_insert (priv->location, g_strdup (key), new_value);
+
+      DEBUG ("\t - %s: %s", (char*) key, (char*) value);
+    }
+
 
   update_timestamp (location_manager);
   if (priv->idle_id == 0)
