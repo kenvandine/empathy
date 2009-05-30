@@ -432,7 +432,7 @@ ui_set_custom_state (EmpathyPresenceChooser *self,
 	gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
 					   GTK_ENTRY_ICON_PRIMARY,
 					   icon_name);
-	gtk_entry_set_text (GTK_ENTRY (entry), status);
+	gtk_entry_set_text (GTK_ENTRY (entry), status == NULL ? "" : status);
 	presence_chooser_set_favorite_icon (self);
 
 	priv->block_changed--;
@@ -873,7 +873,7 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 				COL_STATUS_TEXT, &m_status,
 				-1);
 
-		match = !strcmp (status, m_status);
+		match = !tp_strdiff (status, m_status);
 
 		g_free (m_status);
 
