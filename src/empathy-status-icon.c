@@ -201,7 +201,8 @@ status_icon_update_icon (EmpathyStatusIcon *icon)
 		icon_name = empathy_icon_name_for_presence (state);
 	}
 
-	gtk_status_icon_set_from_icon_name (priv->icon, icon_name);
+	if (icon_name != NULL)
+		gtk_status_icon_set_from_icon_name (priv->icon, icon_name);
 }
 
 static gboolean
