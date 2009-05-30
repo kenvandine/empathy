@@ -161,14 +161,31 @@ chat_window_close_clicked_cb (GtkAction   *action,
 }
 
 static void
-chat_window_close_button_style_set_cb (GtkWidget *button,
+chat_tab_style_set_cb (GtkWidget *hbox,
 				       GtkStyle  *previous_style,
 				       gpointer   user_data)
 {
-	gint h, w;
+	GtkWidget *button;
+	int char_width, h, w;
+	PangoContext *context;
+	PangoFontMetrics *metrics;
+
+	button = g_object_get_data (G_OBJECT (user_data),
+		"chat-window-tab-close-button");
+	context = gtk_widget_get_pango_context (hbox);
+
+	metrics = pango_context_get_metrics (context, hbox->style->font_desc,
+		pango_context_get_language (context));
+	char_width = pango_font_metrics_get_approximate_char_width (metrics);
+	pango_font_metrics_unref (metrics);
 
 	gtk_icon_size_lookup_for_settings (gtk_widget_get_settings (button),
 					   GTK_ICON_SIZE_MENU, &w, &h);
+
+	/* Request at least about 12 chars width plus at least space for the status
+	 * image and the close button */
+	gtk_widget_set_size_request (hbox,
+		12 * PANGO_PIXELS (char_width) + 2 * w, -1);
 
 	gtk_widget_set_size_request (button, w, h);
 }
@@ -243,12 +260,10 @@ chat_window_create_label (EmpathyChatWindow *window,
 	gtk_box_pack_start (GTK_BOX (hbox), event_box, TRUE, TRUE, 0);
 	gtk_box_pack_end (GTK_BOX (hbox), close_button, FALSE, FALSE, 0);
 
-	/* React to theme changes and also used to setup the initial size
-	 * correctly.
-	 */
-	g_signal_connect (close_button,
+	/* React to theme changes and also setup the size correctly.  */
+	g_signal_connect (hbox,
 			  "style-set",
-			  G_CALLBACK (chat_window_close_button_style_set_cb),
+			  G_CALLBACK (chat_tab_style_set_cb),
 			  chat);
 
 	g_signal_connect (close_button,
@@ -1353,7 +1368,8 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 	priv->chatroom_manager = empathy_chatroom_manager_dup_singleton (NULL);
 
 	priv->notebook = gtk_notebook_new ();
- 	gtk_notebook_set_group (GTK_NOTEBOOK (priv->notebook), "EmpathyChatWindow");
+	gtk_notebook_set_group (GTK_NOTEBOOK (priv->notebook), "EmpathyChatWindow");
+	gtk_notebook_set_scrollable (GTK_NOTEBOOK (priv->notebook), TRUE);
 	gtk_box_pack_start (GTK_BOX (chat_vbox), priv->notebook, TRUE, TRUE, 0);
 	gtk_widget_show (priv->notebook);
 
