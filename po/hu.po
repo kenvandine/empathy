@@ -149,7 +149,7 @@ msgstr "Salut fiók létrehozva"
 
 #: ../data/empathy.schemas.in.h:30
 msgid "Show avatars"
-msgstr "Avatarok mutatása"
+msgstr "Avatarok megjelenítése"
 
 #: ../data/empathy.schemas.in.h:31
 msgid "Show hint about closing the main window"
@@ -157,7 +157,7 @@ msgstr "Tanács megjelenítése a főablak bezárásakor"
 
 #: ../data/empathy.schemas.in.h:32
 msgid "Show offline contacts"
-msgstr "Kilépett partnerek mutatása"
+msgstr "Kilépett partnerek megjelenítése"
 
 #: ../data/empathy.schemas.in.h:33
 msgid "Spell checking languages"
@@ -288,7 +288,7 @@ msgstr ""
 
 #: ../data/empathy.schemas.in.h:59
 msgid "Whether or not to show contacts that are offline in the contact list."
-msgstr "Kilépett partnerek mutatása a partnerlistában."
+msgstr "Kilépett partnerek megjelenítése a partnerlistában."
 
 #: ../data/empathy.schemas.in.h:60
 msgid "Whether or not to show popup notifications when away or busy."
@@ -1920,7 +1920,7 @@ msgstr "Kedvencek kezelése"
 
 #: ../src/empathy-main-window.glade.h:6
 msgid "Show _Offline Contacts"
-msgstr "Kilé_pett partnerek mutatása"
+msgstr "Kilé_pett partnerek megjelenítése"
 
 #: ../src/empathy-main-window.glade.h:7
 msgid "_Accounts"
@@ -2089,7 +2089,7 @@ msgstr "_Hangulatjelek képekké alakítása"
 
 #: ../src/empathy-preferences.glade.h:18
 msgid "Show co_mpact contact list"
-msgstr "_Tömör partnerlista mutatása"
+msgstr "_Tömör partnerlista megjelenítése"
 
 #: ../src/empathy-preferences.glade.h:19
 msgid "Sort by _name"
