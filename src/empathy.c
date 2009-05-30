@@ -545,7 +545,8 @@ main (int argc, char *argv[])
 			       EMPATHY_PREFS_AUTOCONNECT,
 			       &autoconnect);
 	if (autoconnect && ! no_connect &&
-	    empathy_idle_get_state (idle) <= MC_PRESENCE_OFFLINE) {
+		tp_connection_presence_type_cmp_availability (empathy_idle_get_state
+			(idle), TP_CONNECTION_PRESENCE_TYPE_OFFLINE) <= 0) {
 		empathy_idle_set_state (idle, MC_PRESENCE_AVAILABLE);
 	}
 	
@@ -583,7 +584,7 @@ main (int argc, char *argv[])
 
 	gtk_main ();
 
-	empathy_idle_set_state (idle, MC_PRESENCE_OFFLINE);
+	empathy_idle_set_state (idle, TP_CONNECTION_PRESENCE_TYPE_OFFLINE);
 
 	g_object_unref (mc);
 	g_object_unref (idle);

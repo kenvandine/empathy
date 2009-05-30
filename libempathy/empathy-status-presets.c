@@ -46,23 +46,23 @@
 
 typedef struct {
 	gchar      *status;
-	McPresence  state;
+	TpConnectionPresenceType  state;
 } StatusPreset;
 
-static StatusPreset *status_preset_new          (McPresence    state,
+static StatusPreset *status_preset_new          (TpConnectionPresenceType    state,
 						 const gchar  *status);
 static void     status_preset_free              (StatusPreset *status);
 static void     status_presets_file_parse       (const gchar  *filename);
-const gchar *   status_presets_get_state_as_str (McPresence    state);
+const gchar *   status_presets_get_state_as_str (TpConnectionPresenceType    state);
 static gboolean status_presets_file_save        (void);
-static void     status_presets_set_default      (McPresence    state,
+static void     status_presets_set_default      (TpConnectionPresenceType    state,
 						 const gchar  *status);
 
 static GList        *presets = NULL;
 static StatusPreset *default_preset = NULL;
 
 static StatusPreset *
-status_preset_new (McPresence   state,
+status_preset_new (TpConnectionPresenceType   state,
 		   const gchar *status)
 {
 	StatusPreset *preset;
@@ -116,7 +116,7 @@ status_presets_file_parse (const gchar *filename)
 	while (node) {
 		if (strcmp ((gchar *) node->name, "status") == 0 ||
 		    strcmp ((gchar *) node->name, "default") == 0) {
-			McPresence    state;
+			TpConnectionPresenceType    state;
 			gchar        *status;
 			gchar        *state_str;
 			StatusPreset *preset;
@@ -153,7 +153,7 @@ status_presets_file_parse (const gchar *filename)
 
 	/* Use the default if not set */
 	if (!default_preset) {
-		status_presets_set_default (MC_PRESENCE_OFFLINE, NULL);
+		status_presets_set_default (TP_CONNECTION_PRESENCE_TYPE_OFFLINE, NULL);
 	}
 
 	DEBUG ("Parsed %d status presets", g_list_length (presets));
@@ -195,10 +195,10 @@ status_presets_file_save (void)
 	GList      *l;
 	gchar      *dir;
 	gchar      *file;
-	gint        count[LAST_MC_PRESENCE];
+	gint        count[NUM_TP_CONNECTION_PRESENCE_TYPES];
 	gint        i;
 
-	for (i = 0; i < LAST_MC_PRESENCE; i++) {
+	for (i = 0; i < NUM_TP_CONNECTION_PRESENCE_TYPES; i++) {
 		count[i] = 0;
 	}
 
@@ -253,7 +253,7 @@ status_presets_file_save (void)
 }
 
 GList *
-empathy_status_presets_get (McPresence state,
+empathy_status_presets_get (TpConnectionPresenceType state,
 			   gint       max_number)
 {
 	GList *list = NULL;
@@ -282,7 +282,7 @@ empathy_status_presets_get (McPresence state,
 }
 
 void
-empathy_status_presets_set_last (McPresence   state,
+empathy_status_presets_set_last (TpConnectionPresenceType   state,
 				const gchar *status)
 {
 	GList        *l;
@@ -323,7 +323,7 @@ empathy_status_presets_set_last (McPresence   state,
 }
 
 void
-empathy_status_presets_remove (McPresence   state,
+empathy_status_presets_remove (TpConnectionPresenceType   state,
 			       const gchar *status)
 {
 	StatusPreset *preset;
@@ -350,16 +350,16 @@ empathy_status_presets_reset (void)
 
 	presets = NULL;
 
-	status_presets_set_default (MC_PRESENCE_AVAILABLE, NULL);
+	status_presets_set_default (TP_CONNECTION_PRESENCE_TYPE_AVAILABLE, NULL);
 
 	status_presets_file_save ();
 }
 
-McPresence
+TpConnectionPresenceType
 empathy_status_presets_get_default_state (void)
 {
 	if (!default_preset) {
-		return MC_PRESENCE_OFFLINE;
+		return TP_CONNECTION_PRESENCE_TYPE_OFFLINE;
 	}
 
 	return default_preset->state;
@@ -377,7 +377,7 @@ empathy_status_presets_get_default_status (void)
 }
 
 static void
-status_presets_set_default (McPresence   state,
+status_presets_set_default (TpConnectionPresenceType   state,
 			    const gchar *status)
 {
 	if (default_preset) {
@@ -388,7 +388,7 @@ status_presets_set_default (McPresence   state,
 }
 
 void
-empathy_status_presets_set_default (McPresence   state,
+empathy_status_presets_set_default (TpConnectionPresenceType   state,
 				   const gchar *status)
 {
 	status_presets_set_default (state, status);

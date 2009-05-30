@@ -231,6 +231,7 @@
     '("edit-id" "EMPATHY_CONTACT_WIDGET_EDIT_ID")
     '("edit-groups" "EMPATHY_CONTACT_WIDGET_EDIT_GROUPS")
     '("for-tooltip" "EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP")
+    '("show-location" "EMPATHY_CONTACT_WIDGET_SHOW_LOCATION")
   )
 )
 
@@ -356,6 +357,15 @@
     '("McAccount*" "account")
     '("GtkBuilder*" "gui")
     '("const-gchar*" "button")
+    '("const-gchar*" "entry")
+  )
+)
+
+(define-function account_widget_set_default_focus
+  (c-name "empathy_account_widget_set_default_focus")
+  (return-type "none")
+  (parameters
+    '("GtkBuilder*" "gui")
     '("const-gchar*" "entry")
   )
 )
@@ -1808,7 +1818,7 @@
   (c-name "empathy_icon_name_for_presence")
   (return-type "const-gchar*")
   (parameters
-    '("McPresence" "presence")
+    '("TpConnectionPresenceType" "presence")
   )
 )
 

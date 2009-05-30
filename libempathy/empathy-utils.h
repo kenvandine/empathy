@@ -69,9 +69,9 @@ guint        empathy_account_hash                   (gconstpointer    key);
 gboolean     empathy_account_equal                  (gconstpointer    a,
 						    gconstpointer    b);
 MissionControl *empathy_mission_control_dup_singleton (void);
-const gchar * empathy_presence_get_default_message  (McPresence       presence);
-const gchar * empathy_presence_to_str               (McPresence       presence);
-McPresence    empathy_presence_from_str             (const gchar     *str);
+const gchar * empathy_presence_get_default_message  (TpConnectionPresenceType presence);
+const gchar * empathy_presence_to_str               (TpConnectionPresenceType presence);
+TpConnectionPresenceType empathy_presence_from_str  (const gchar     *str);
 gchar *       empathy_file_lookup                   (const gchar     *filename,
 						     const gchar     *subdir);
 gboolean     empathy_proxy_equal                    (gconstpointer    a,

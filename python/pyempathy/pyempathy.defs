@@ -765,7 +765,7 @@
 (define-method get_presence
   (of-object "EmpathyContact")
   (c-name "empathy_contact_get_presence")
-  (return-type "McPresence")
+  (return-type "TpConnectionPresenceType")
 )
 
 (define-method set_presence
@@ -773,7 +773,7 @@
   (c-name "empathy_contact_set_presence")
   (return-type "none")
   (parameters
-    '("McPresence" "presence")
+    '("TpConnectionPresenceType" "presence")
   )
 )
 
@@ -1358,7 +1358,7 @@
 (define-method get_state
   (of-object "EmpathyIdle")
   (c-name "empathy_idle_get_state")
-  (return-type "McPresence")
+  (return-type "TpConnectionPresenceType")
 )
 
 (define-method set_state
@@ -1366,7 +1366,7 @@
   (c-name "empathy_idle_set_state")
   (return-type "none")
   (parameters
-    '("McPresence" "state")
+    '("TpConnectionPresenceType" "state")
   )
 )
 
@@ -1388,7 +1388,7 @@
 (define-method get_flash_state
   (of-object "EmpathyIdle")
   (c-name "empathy_idle_get_flash_state")
-  (return-type "McPresence")
+  (return-type "TpConnectionPresenceType")
 )
 
 (define-method set_flash_state
@@ -1396,7 +1396,7 @@
   (c-name "empathy_idle_set_flash_state")
   (return-type "none")
   (parameters
-    '("McPresence" "state")
+    '("TpConnectionPresenceType" "state")
   )
 )
 
@@ -1405,7 +1405,7 @@
   (c-name "empathy_idle_set_presence")
   (return-type "none")
   (parameters
-    '("McPresence" "state")
+    '("TpConnectionPresenceType" "state")
     '("const-gchar*" "status")
   )
 )
@@ -1965,7 +1965,7 @@
   (c-name "empathy_status_presets_get")
   (return-type "GList*")
   (parameters
-    '("McPresence" "state")
+    '("TpConnectionPresenceType" "state")
     '("gint" "max_number")
   )
 )
@@ -1974,7 +1974,7 @@
   (c-name "empathy_status_presets_set_last")
   (return-type "none")
   (parameters
-    '("McPresence" "state")
+    '("TpConnectionPresenceType" "state")
     '("const-gchar*" "status")
   )
 )
@@ -1983,7 +1983,7 @@
   (c-name "empathy_status_presets_remove")
   (return-type "none")
   (parameters
-    '("McPresence" "state")
+    '("TpConnectionPresenceType" "state")
     '("const-gchar*" "status")
   )
 )
@@ -1995,7 +1995,7 @@
 
 (define-function status_presets_get_default_state
   (c-name "empathy_status_presets_get_default_state")
-  (return-type "McPresence")
+  (return-type "TpConnectionPresenceType")
 )
 
 (define-function status_presets_get_default_status
@@ -2007,7 +2007,7 @@
   (c-name "empathy_status_presets_set_default")
   (return-type "none")
   (parameters
-    '("McPresence" "state")
+    '("TpConnectionPresenceType" "state")
     '("const-gchar*" "status")
   )
 )
@@ -2057,6 +2057,14 @@
   (parameters
     '("time_t" "t")
     '("const-gchar*" "format")
+  )
+)
+
+(define-function time_to_string_relative
+  (c-name "empathy_time_to_string_relative")
+  (return-type "gchar*")
+  (parameters
+    '("time_t" "t")
   )
 )
 
@@ -2720,7 +2728,7 @@
   (c-name "empathy_presence_get_default_message")
   (return-type "const-gchar*")
   (parameters
-    '("McPresence" "presence")
+    '("TpConnectionPresenceType" "presence")
   )
 )
 
@@ -2728,13 +2736,13 @@
   (c-name "empathy_presence_to_str")
   (return-type "const-gchar*")
   (parameters
-    '("McPresence" "presence")
+    '("TpConnectionPresenceType" "presence")
   )
 )
 
 (define-function presence_from_str
   (c-name "empathy_presence_from_str")
-  (return-type "McPresence")
+  (return-type "TpConnectionPresenceType")
   (parameters
     '("const-gchar*" "str")
   )

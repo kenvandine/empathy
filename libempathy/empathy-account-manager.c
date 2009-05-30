@@ -44,7 +44,7 @@ typedef struct {
 
 typedef struct {
   TpConnection *connection;
-  McPresence presence;
+  TpConnectionPresenceType presence;
   TpConnectionStatus status;
   gboolean is_enabled;
 
@@ -424,10 +424,35 @@ account_status_changed_cb (MissionControl *mc,
                            EmpathyAccountManager *manager)
 {
   ChangedSignalData *data;
+  TpConnectionPresenceType tp_presence;
+
+  switch (presence)
+    {
+      case MC_PRESENCE_OFFLINE:
+        tp_presence = TP_CONNECTION_PRESENCE_TYPE_OFFLINE;
+        break;
+      case MC_PRESENCE_AVAILABLE:
+        tp_presence = TP_CONNECTION_PRESENCE_TYPE_AVAILABLE;
+        break;
+      case MC_PRESENCE_AWAY:
+        tp_presence = TP_CONNECTION_PRESENCE_TYPE_AWAY;
+        break;
+      case MC_PRESENCE_EXTENDED_AWAY:
+        tp_presence = TP_CONNECTION_PRESENCE_TYPE_EXTENDED_AWAY;
+        break;
+      case MC_PRESENCE_HIDDEN:
+        tp_presence = TP_CONNECTION_PRESENCE_TYPE_HIDDEN;
+        break;
+      case MC_PRESENCE_DO_NOT_DISTURB:
+        tp_presence = TP_CONNECTION_PRESENCE_TYPE_BUSY;
+        break;
+      default:
+        tp_presence = TP_CONNECTION_PRESENCE_TYPE_UNSET;
+    }
 
   data = g_slice_new0 (ChangedSignalData);
   data->status = status;
-  data->presence = presence;
+  data->presence = tp_presence;
   data->reason = reason;
   data->unique_name = g_strdup (unique_name);
   data->manager = g_object_ref (manager);

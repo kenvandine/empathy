@@ -26,7 +26,6 @@
 #include <glib/gi18n-lib.h>
 
 #include <telepathy-glib/util.h>
-#include <libmissioncontrol/mc-enum-types.h>
 
 #include "empathy-contact.h"
 #include "empathy-account-manager.h"
@@ -44,7 +43,7 @@ typedef struct {
   gchar *id;
   gchar *name;
   EmpathyAvatar *avatar;
-  McPresence presence;
+  TpConnectionPresenceType presence;
   gchar *presence_message;
   guint handle;
   EmpathyCapabilities capabilities;
@@ -99,10 +98,11 @@ tp_contact_notify_cb (TpContact *tp_contact,
   if (!tp_strdiff (param->name, "alias"))
     g_object_notify (contact, "name");
   else if (!tp_strdiff (param->name, "presence-type")) {
-    McPresence presence;
+    TpConnectionPresenceType presence;
 
     presence = empathy_contact_get_presence (EMPATHY_CONTACT (contact));
-    g_signal_emit (contact, signals[PRESENCE_CHANGED], 0, presence, priv->presence);
+    g_signal_emit (contact, signals[PRESENCE_CHANGED], 0, presence,
+      priv->presence);
     priv->presence = presence;
     g_object_notify (contact, "presence");
   }
@@ -191,9 +191,9 @@ empathy_contact_class_init (EmpathyContactClass *class)
       g_param_spec_uint ("presence",
         "Contact presence",
         "Presence of contact",
-        MC_PRESENCE_UNSET,
-        LAST_MC_PRESENCE,
-        MC_PRESENCE_UNSET,
+        TP_CONNECTION_PRESENCE_TYPE_UNSET,
+        NUM_TP_CONNECTION_PRESENCE_TYPES,
+        TP_CONNECTION_PRESENCE_TYPE_UNSET,
         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_property (object_class,
@@ -246,10 +246,10 @@ empathy_contact_class_init (EmpathyContactClass *class)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  _empathy_marshal_VOID__ENUM_ENUM,
+                  _empathy_marshal_VOID__UINT_UINT,
                   G_TYPE_NONE,
-                  2, MC_TYPE_PRESENCE,
-                  MC_TYPE_PRESENCE);
+                  2, G_TYPE_UINT,
+                  G_TYPE_UINT);
 
   g_type_class_add_private (object_class, sizeof (EmpathyContactPriv));
 }
@@ -594,54 +594,28 @@ empathy_contact_get_connection (EmpathyContact *contact)
   return NULL;
 }
 
-static McPresence
-presence_type_to_mc_presence (TpConnectionPresenceType type)
-{
-  switch (type)
-    {
-      case TP_CONNECTION_PRESENCE_TYPE_UNKNOWN:
-      case TP_CONNECTION_PRESENCE_TYPE_ERROR:
-        return MC_PRESENCE_UNSET;
-      case TP_CONNECTION_PRESENCE_TYPE_OFFLINE:
-        return MC_PRESENCE_OFFLINE;
-      case TP_CONNECTION_PRESENCE_TYPE_UNSET:
-      case TP_CONNECTION_PRESENCE_TYPE_AVAILABLE:
-        return MC_PRESENCE_AVAILABLE;
-      case TP_CONNECTION_PRESENCE_TYPE_AWAY:
-        return MC_PRESENCE_AWAY;
-      case TP_CONNECTION_PRESENCE_TYPE_EXTENDED_AWAY:
-        return MC_PRESENCE_EXTENDED_AWAY;
-      case TP_CONNECTION_PRESENCE_TYPE_HIDDEN:
-        return MC_PRESENCE_HIDDEN;
-      case TP_CONNECTION_PRESENCE_TYPE_BUSY:
-        return MC_PRESENCE_DO_NOT_DISTURB;
-    }
-
-  return MC_PRESENCE_UNSET;
-}
-
-McPresence
+TpConnectionPresenceType
 empathy_contact_get_presence (EmpathyContact *contact)
 {
   EmpathyContactPriv *priv;
 
-  g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), MC_PRESENCE_UNSET);
+  g_return_val_if_fail (EMPATHY_IS_CONTACT (contact),
+    TP_CONNECTION_PRESENCE_TYPE_UNSET);
 
   priv = GET_PRIV (contact);
 
   if (priv->tp_contact != NULL)
-    return presence_type_to_mc_presence (tp_contact_get_presence_type (
-        priv->tp_contact));
+    return tp_contact_get_presence_type (priv->tp_contact);
 
   return priv->presence;
 }
 
 void
 empathy_contact_set_presence (EmpathyContact *contact,
-                              McPresence presence)
+                              TpConnectionPresenceType presence)
 {
   EmpathyContactPriv *priv;
-  McPresence old_presence;
+  TpConnectionPresenceType old_presence;
 
   g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 
@@ -789,7 +763,15 @@ empathy_contact_is_online (EmpathyContact *contact)
 {
   g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), FALSE);
 
-  return (empathy_contact_get_presence (contact) > MC_PRESENCE_OFFLINE);
+  switch (empathy_contact_get_presence(contact))
+    {
+      case TP_CONNECTION_PRESENCE_TYPE_OFFLINE:
+      case TP_CONNECTION_PRESENCE_TYPE_UNKNOWN:
+      case TP_CONNECTION_PRESENCE_TYPE_ERROR:
+        return FALSE;
+      default:
+        return TRUE;
+    }
 }
 
 const gchar *

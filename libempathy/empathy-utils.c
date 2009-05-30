@@ -35,6 +35,7 @@
 #include <telepathy-glib/connection.h>
 #include <telepathy-glib/channel.h>
 #include <telepathy-glib/dbus.h>
+#include <telepathy-glib/util.h>
 
 #include "empathy-utils.h"
 #include "empathy-contact-manager.h"
@@ -47,6 +48,28 @@
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include "empathy-debug.h"
+
+/* Translation between presence types and string */
+static struct {
+	gchar *name;
+	TpConnectionPresenceType type;
+} presence_types[] = {
+	{ "available", TP_CONNECTION_PRESENCE_TYPE_AVAILABLE },
+	{ "busy",      TP_CONNECTION_PRESENCE_TYPE_BUSY },
+	{ "away",      TP_CONNECTION_PRESENCE_TYPE_AWAY },
+	{ "ext_away",  TP_CONNECTION_PRESENCE_TYPE_EXTENDED_AWAY },
+	{ "hidden",    TP_CONNECTION_PRESENCE_TYPE_HIDDEN },
+	{ "offline",   TP_CONNECTION_PRESENCE_TYPE_OFFLINE },
+	{ "unset",     TP_CONNECTION_PRESENCE_TYPE_UNSET },
+	{ "unknown",   TP_CONNECTION_PRESENCE_TYPE_UNKNOWN },
+	{ "error",     TP_CONNECTION_PRESENCE_TYPE_ERROR },
+	/* alternative names */
+	{ "dnd",      TP_CONNECTION_PRESENCE_TYPE_BUSY },
+	{ "brb",      TP_CONNECTION_PRESENCE_TYPE_AWAY },
+	{ "xa",       TP_CONNECTION_PRESENCE_TYPE_EXTENDED_AWAY },
+	{ NULL, },
+};
+
 
 
 void
@@ -244,73 +267,51 @@ empathy_mission_control_dup_singleton (void)
 }
 
 const gchar *
-empathy_presence_get_default_message (McPresence presence)
+empathy_presence_get_default_message (TpConnectionPresenceType presence)
 {
 	switch (presence) {
-	case MC_PRESENCE_AVAILABLE:
+	case TP_CONNECTION_PRESENCE_TYPE_AVAILABLE:
 		return _("Available");
-	case MC_PRESENCE_DO_NOT_DISTURB:
+	case TP_CONNECTION_PRESENCE_TYPE_BUSY:
 		return _("Busy");
-	case MC_PRESENCE_AWAY:
-	case MC_PRESENCE_EXTENDED_AWAY:
+	case TP_CONNECTION_PRESENCE_TYPE_AWAY:
+	case TP_CONNECTION_PRESENCE_TYPE_EXTENDED_AWAY:
 		return _("Away");
-	case MC_PRESENCE_HIDDEN:
+	case TP_CONNECTION_PRESENCE_TYPE_HIDDEN:
 		return _("Hidden");
-	case MC_PRESENCE_OFFLINE:
-	case MC_PRESENCE_UNSET:
+	case TP_CONNECTION_PRESENCE_TYPE_OFFLINE:
 		return _("Offline");
-	default:
-		g_assert_not_reached ();
+	case TP_CONNECTION_PRESENCE_TYPE_UNSET:
+	case TP_CONNECTION_PRESENCE_TYPE_UNKNOWN:
+	case TP_CONNECTION_PRESENCE_TYPE_ERROR:
+		return NULL;
 	}
 
 	return NULL;
 }
 
 const gchar *
-empathy_presence_to_str (McPresence presence)
+empathy_presence_to_str (TpConnectionPresenceType presence)
 {
-	switch (presence) {
-	case MC_PRESENCE_AVAILABLE:
-		return "available";
-	case MC_PRESENCE_DO_NOT_DISTURB:
-		return "busy";
-	case MC_PRESENCE_AWAY:
-		return "away";
-	case MC_PRESENCE_EXTENDED_AWAY:
-		return "ext_away";
-	case MC_PRESENCE_HIDDEN:
-		return "hidden";
-	case MC_PRESENCE_OFFLINE:
-		return "offline";
-	case MC_PRESENCE_UNSET:
-		return "unset";
-	default:
-		g_assert_not_reached ();
-	}
+	int i;
+
+	for (i = 0 ; presence_types[i].name != NULL; i++)
+		if (presence == presence_types[i].type)
+			return presence_types[i].name;
 
 	return NULL;
 }
 
-McPresence
+TpConnectionPresenceType
 empathy_presence_from_str (const gchar *str)
 {
-	if (strcmp (str, "available") == 0) {
-		return MC_PRESENCE_AVAILABLE;
-	} else if ((strcmp (str, "dnd") == 0) || (strcmp (str, "busy") == 0)) {
-		return MC_PRESENCE_DO_NOT_DISTURB;
-	} else if ((strcmp (str, "away") == 0) || (strcmp (str, "brb") == 0)) {
-		return MC_PRESENCE_AWAY;
-	} else if ((strcmp (str, "xa") == 0) || (strcmp (str, "ext_away") == 0)) {
-		return MC_PRESENCE_EXTENDED_AWAY;
-	} else if (strcmp (str, "hidden") == 0) {
-		return MC_PRESENCE_HIDDEN;
-	} else if (strcmp (str, "offline") == 0) {
-		return MC_PRESENCE_OFFLINE;
-	} else if (strcmp (str, "unset") == 0) {
-		return MC_PRESENCE_UNSET;
-	}
+	int i;
 
-	return MC_PRESENCE_UNSET;
+	for (i = 0 ; presence_types[i].name != NULL; i++)
+		if (!tp_strdiff (str, presence_types[i].name))
+			return presence_types[i].type;
+
+	return TP_CONNECTION_PRESENCE_TYPE_UNSET;
 }
 
 gchar *
@@ -364,15 +365,15 @@ empathy_proxy_equal (gconstpointer a,
 gboolean
 empathy_check_available_state (void)
 {
-	McPresence presence;
+	TpConnectionPresenceType presence;
 	EmpathyIdle *idle;
 
 	idle = empathy_idle_dup_singleton ();
 	presence = empathy_idle_get_state (idle);
 	g_object_unref (idle);
 
-	if (presence != MC_PRESENCE_AVAILABLE &&
-		presence != MC_PRESENCE_UNSET) {
+	if (presence != TP_CONNECTION_PRESENCE_TYPE_AVAILABLE &&
+		presence != TP_CONNECTION_PRESENCE_TYPE_UNSET) {
 		return FALSE;
 	}
 

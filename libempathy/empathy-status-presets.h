@@ -23,21 +23,21 @@
 #ifndef __EMPATHY_STATUS_PRESETS_H__
 #define __EMPATHY_STATUS_PRESETS_H__
 
-#include <libmissioncontrol/mission-control.h>
+#include <telepathy-glib/enums.h>
 
 G_BEGIN_DECLS
 
 void          empathy_status_presets_get_all            (void);
-GList *       empathy_status_presets_get                (McPresence   state,
+GList *       empathy_status_presets_get                (TpConnectionPresenceType   state,
 							 gint         max_number);
-void          empathy_status_presets_set_last           (McPresence   state,
+void          empathy_status_presets_set_last           (TpConnectionPresenceType   state,
 							 const gchar *status);
-void          empathy_status_presets_remove             (McPresence   state,
+void          empathy_status_presets_remove             (TpConnectionPresenceType   state,
 							 const gchar *status);
 void          empathy_status_presets_reset              (void);
-McPresence    empathy_status_presets_get_default_state  (void);
+TpConnectionPresenceType    empathy_status_presets_get_default_state  (void);
 const gchar * empathy_status_presets_get_default_status (void);
-void          empathy_status_presets_set_default        (McPresence   state,
+void          empathy_status_presets_set_default        (TpConnectionPresenceType   state,
 							 const gchar *status);
 void          empathy_status_presets_clear_default      (void);
 

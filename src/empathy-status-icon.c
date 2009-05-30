@@ -195,7 +195,7 @@ status_icon_update_icon (EmpathyStatusIcon *icon)
 	if (priv->event && priv->showing_event_icon) {
 		icon_name = priv->event->icon_name;
 	} else {
-		McPresence state;
+		TpConnectionPresenceType state;
 
 		state = empathy_idle_get_state (priv->idle);
 		icon_name = empathy_icon_name_for_presence (state);

@@ -194,24 +194,25 @@ empathy_icon_name_from_account (McAccount *account)
 }
 
 const gchar *
-empathy_icon_name_for_presence (McPresence presence)
+empathy_icon_name_for_presence (TpConnectionPresenceType presence)
 {
 	switch (presence) {
-	case MC_PRESENCE_AVAILABLE:
+	case TP_CONNECTION_PRESENCE_TYPE_AVAILABLE:
 		return EMPATHY_IMAGE_AVAILABLE;
-	case MC_PRESENCE_DO_NOT_DISTURB:
+	case TP_CONNECTION_PRESENCE_TYPE_BUSY:
 		return EMPATHY_IMAGE_BUSY;
-	case MC_PRESENCE_AWAY:
+	case TP_CONNECTION_PRESENCE_TYPE_AWAY:
 		return EMPATHY_IMAGE_AWAY;
-	case MC_PRESENCE_EXTENDED_AWAY:
+	case TP_CONNECTION_PRESENCE_TYPE_EXTENDED_AWAY:
 		return EMPATHY_IMAGE_EXT_AWAY;
-	case MC_PRESENCE_HIDDEN:
+	case TP_CONNECTION_PRESENCE_TYPE_HIDDEN:
 		return EMPATHY_IMAGE_HIDDEN;
-	case MC_PRESENCE_OFFLINE:
-	case MC_PRESENCE_UNSET:
+	case TP_CONNECTION_PRESENCE_TYPE_OFFLINE:
+	case TP_CONNECTION_PRESENCE_TYPE_ERROR:
+	case TP_CONNECTION_PRESENCE_TYPE_UNKNOWN:
 		return EMPATHY_IMAGE_OFFLINE;
-	default:
-		g_assert_not_reached ();
+	case TP_CONNECTION_PRESENCE_TYPE_UNSET:
+		return NULL;
 	}
 
 	return NULL;
@@ -220,7 +221,7 @@ empathy_icon_name_for_presence (McPresence presence)
 const gchar *
 empathy_icon_name_for_contact (EmpathyContact *contact)
 {
-	McPresence presence;
+	TpConnectionPresenceType presence;
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact),
 			      EMPATHY_IMAGE_OFFLINE);

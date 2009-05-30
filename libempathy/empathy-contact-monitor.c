@@ -21,7 +21,6 @@
 #include "config.h"
 
 #include <glib-object.h>
-#include <libmissioncontrol/mc-enum-types.h>
 
 #include "empathy-contact-monitor.h"
 #include "empathy-contact-list.h"
@@ -61,9 +60,9 @@ G_DEFINE_TYPE (EmpathyContactMonitor, empathy_contact_monitor, G_TYPE_OBJECT);
 
 static void
 contact_monitor_presence_changed_cb (EmpathyContact *contact,
-                                     McPresence current_presence,
-                                     McPresence previous_presence,
-                                     EmpathyContactMonitor *self)
+    TpConnectionPresenceType current_presence,
+    TpConnectionPresenceType previous_presence,
+    EmpathyContactMonitor *self)
 {
   g_signal_emit (self, signals[CONTACT_PRESENCE_CHANGED], 0, contact,
                  current_presence, previous_presence);
@@ -335,11 +334,11 @@ empathy_contact_monitor_class_init (EmpathyContactMonitorClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  _empathy_marshal_VOID__OBJECT_ENUM_ENUM,
+                  _empathy_marshal_VOID__OBJECT_UINT_UINT,
                   G_TYPE_NONE,
                   3, EMPATHY_TYPE_CONTACT,
-                  MC_TYPE_PRESENCE,
-                  MC_TYPE_PRESENCE);
+                  G_TYPE_UINT,
+                  G_TYPE_UINT);
   signals[CONTACT_PRESENCE_MESSAGE_CHANGED] =
     g_signal_new ("contact-presence-message-changed",
                   G_TYPE_FROM_CLASS (klass),

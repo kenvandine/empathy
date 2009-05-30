@@ -563,8 +563,8 @@ main_window_connection_changed_cb (EmpathyAccountManager *manager,
 static void
 main_window_contact_presence_changed_cb (EmpathyContactMonitor *monitor,
 					 EmpathyContact *contact,
-					 McPresence current,
-					 McPresence previous,
+					 TpConnectionPresenceType current,
+					 TpConnectionPresenceType previous,
 					 EmpathyMainWindow *window)
 {
 	McAccount *account;
@@ -577,18 +577,25 @@ main_window_contact_presence_changed_cb (EmpathyContactMonitor *monitor,
 		return;
 	}
 
-	if (previous < MC_PRESENCE_AVAILABLE && current > MC_PRESENCE_OFFLINE) {
-		/* someone is logging in */
-		empathy_sound_play (GTK_WIDGET (window->window),
-				    EMPATHY_SOUND_CONTACT_CONNECTED);
-		return;
-	}
-
-	if (previous > MC_PRESENCE_OFFLINE && current < MC_PRESENCE_AVAILABLE) {
-		/* someone is logging off */
-		empathy_sound_play (GTK_WIDGET (window->window),
-				    EMPATHY_SOUND_CONTACT_DISCONNECTED);
-	}
+  if (tp_connection_presence_type_cmp_availability (previous,
+     TP_CONNECTION_PRESENCE_TYPE_OFFLINE) > 0)
+    {
+      /* contact was online */
+      if (tp_connection_presence_type_cmp_availability (current,
+          TP_CONNECTION_PRESENCE_TYPE_OFFLINE) <= 0)
+        /* someone is logging off */
+        empathy_sound_play (GTK_WIDGET (window->window),
+          EMPATHY_SOUND_CONTACT_DISCONNECTED);
+    }
+  else
+    {
+      /* contact was offline */
+      if (tp_connection_presence_type_cmp_availability (current,
+          TP_CONNECTION_PRESENCE_TYPE_OFFLINE) > 0)
+        /* someone is logging in */
+        empathy_sound_play (GTK_WIDGET (window->window),
+          EMPATHY_SOUND_CONTACT_CONNECTED);
+    }
 }
 
 static void

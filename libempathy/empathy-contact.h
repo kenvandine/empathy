@@ -80,9 +80,9 @@ void empathy_contact_set_avatar (EmpathyContact *contact,
     EmpathyAvatar *avatar);
 McAccount * empathy_contact_get_account (EmpathyContact *contact);
 TpConnection * empathy_contact_get_connection (EmpathyContact *contact);
-McPresence empathy_contact_get_presence (EmpathyContact *contact);
+TpConnectionPresenceType empathy_contact_get_presence (EmpathyContact *contact);
 void empathy_contact_set_presence (EmpathyContact *contact,
-    McPresence presence);
+    TpConnectionPresenceType presence);
 const gchar * empathy_contact_get_presence_message (EmpathyContact *contact);
 void empathy_contact_set_presence_message (EmpathyContact *contact,
     const gchar *message);

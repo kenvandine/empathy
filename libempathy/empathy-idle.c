@@ -45,14 +45,14 @@ typedef struct {
 	DBusGProxy     *gs_proxy;
 	DBusGProxy     *nm_proxy;
 
-	McPresence      state;
+	TpConnectionPresenceType      state;
 	gchar          *status;
-	McPresence      flash_state;
+	TpConnectionPresenceType      flash_state;
 	gboolean        auto_away;
 	gboolean        use_nm;
 
-	McPresence      away_saved_state;
-	McPresence      nm_saved_state;
+	TpConnectionPresenceType      away_saved_state;
+	TpConnectionPresenceType      nm_saved_state;
 	gchar          *nm_saved_status;
 
 	gboolean        is_idle;
@@ -83,7 +83,7 @@ static EmpathyIdle * idle_singleton = NULL;
 
 static void
 idle_presence_changed_cb (MissionControl *mc,
-			  McPresence      state,
+			  TpConnectionPresenceType state,
 			  gchar          *status,
 			  EmpathyIdle    *idle)
 {
@@ -112,7 +112,7 @@ idle_ext_away_cb (EmpathyIdle *idle)
 	priv = GET_PRIV (idle);
 
 	DEBUG ("Going to extended autoaway");
-	empathy_idle_set_state (idle, MC_PRESENCE_EXTENDED_AWAY);
+	empathy_idle_set_state (idle, TP_CONNECTION_PRESENCE_TYPE_EXTENDED_AWAY);
 	priv->ext_away_timeout = 0;
 
 	return FALSE;
@@ -160,9 +160,9 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 		is_idle ? "yes" : "no");
 
 	if (!priv->auto_away ||
-	    (priv->nm_saved_state == MC_PRESENCE_UNSET &&
-	     (priv->state <= MC_PRESENCE_OFFLINE ||
-	      priv->state == MC_PRESENCE_HIDDEN))) {
+	    (priv->nm_saved_state == TP_CONNECTION_PRESENCE_TYPE_UNSET &&
+	     (priv->state <= TP_CONNECTION_PRESENCE_TYPE_OFFLINE ||
+	      priv->state == TP_CONNECTION_PRESENCE_TYPE_HIDDEN))) {
 		/* We don't want to go auto away OR we explicitely asked to be
 		 * offline, nothing to do here */
 		priv->is_idle = is_idle;
@@ -170,12 +170,12 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 	}
 
 	if (is_idle && !priv->is_idle) {
-		McPresence new_state;
+		TpConnectionPresenceType new_state;
 		/* We are now idle */
 
 		idle_ext_away_start (idle);
 
-		if (priv->nm_saved_state != MC_PRESENCE_UNSET) {
+		if (priv->nm_saved_state != TP_CONNECTION_PRESENCE_TYPE_UNSET) {
 		    	/* We are disconnected, when coming back from away
 		    	 * we want to restore the presence before the
 		    	 * disconnection. */
@@ -184,9 +184,9 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 			priv->away_saved_state = priv->state;
 		}
 
-		new_state = MC_PRESENCE_AWAY;
-		if (priv->state == MC_PRESENCE_EXTENDED_AWAY) {
-			new_state = MC_PRESENCE_EXTENDED_AWAY;
+		new_state = TP_CONNECTION_PRESENCE_TYPE_AWAY;
+		if (priv->state == TP_CONNECTION_PRESENCE_TYPE_EXTENDED_AWAY) {
+			new_state = TP_CONNECTION_PRESENCE_TYPE_EXTENDED_AWAY;
 		}
 
 		DEBUG ("Going to autoaway. Saved state=%d, new state=%d",
@@ -198,9 +198,9 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 
 		idle_ext_away_stop (idle);
 
-		if (priv->away_saved_state == MC_PRESENCE_AWAY ||
-		    priv->away_saved_state == MC_PRESENCE_EXTENDED_AWAY) {
-			priv->away_saved_state = MC_PRESENCE_AVAILABLE;
+		if (priv->away_saved_state == TP_CONNECTION_PRESENCE_TYPE_AWAY ||
+		    priv->away_saved_state == TP_CONNECTION_PRESENCE_TYPE_EXTENDED_AWAY) {
+			priv->away_saved_state = TP_CONNECTION_PRESENCE_TYPE_AVAILABLE;
 			new_status = NULL;
 		} else {
 			new_status = priv->status;
@@ -213,7 +213,7 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 					   priv->away_saved_state,
 					   new_status);
 
-		priv->away_saved_state = MC_PRESENCE_UNSET;
+		priv->away_saved_state = TP_CONNECTION_PRESENCE_TYPE_UNSET;
 	}
 
 	priv->is_idle = is_idle;
@@ -248,7 +248,7 @@ idle_nm_state_change_cb (DBusGProxy  *proxy,
 		priv->nm_saved_state = priv->state;
 		g_free (priv->nm_saved_status);
 		priv->nm_saved_status = g_strdup (priv->status);
-		empathy_idle_set_state (idle, MC_PRESENCE_OFFLINE);
+		empathy_idle_set_state (idle, TP_CONNECTION_PRESENCE_TYPE_OFFLINE);
 	}
 	else if (!old_nm_connected && new_nm_connected) {
 		/* We are now connected */
@@ -257,7 +257,7 @@ idle_nm_state_change_cb (DBusGProxy  *proxy,
 		empathy_idle_set_presence (idle,
 				priv->nm_saved_state,
 				priv->nm_saved_status);
-		priv->nm_saved_state = MC_PRESENCE_UNSET;
+		priv->nm_saved_state = TP_CONNECTION_PRESENCE_TYPE_UNSET;
 		g_free (priv->nm_saved_status);
 		priv->nm_saved_status = NULL;
 	}
@@ -382,11 +382,11 @@ empathy_idle_class_init (EmpathyIdleClass *klass)
 
 	g_object_class_install_property (object_class,
 					 PROP_STATE,
-					 g_param_spec_enum ("state",
+					 g_param_spec_uint ("state",
 							    "state",
 							    "state",
-							    MC_TYPE_PRESENCE,
-							    MC_PRESENCE_AVAILABLE,
+							    0, NUM_TP_CONNECTION_PRESENCE_TYPES,
+							    TP_CONNECTION_PRESENCE_TYPE_UNSET,
 							    G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
 					 PROP_STATUS,
@@ -397,11 +397,11 @@ empathy_idle_class_init (EmpathyIdleClass *klass)
 							      G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
 					 PROP_FLASH_STATE,
-					 g_param_spec_enum ("flash-state",
+					 g_param_spec_uint ("flash-state",
 							    "flash-state",
 							    "flash-state",
-							    MC_TYPE_PRESENCE,
-							    MC_PRESENCE_UNSET,
+							    0, NUM_TP_CONNECTION_PRESENCE_TYPES,
+							    TP_CONNECTION_PRESENCE_TYPE_UNSET,
 							    G_PARAM_READWRITE));
 
 	 g_object_class_install_property (object_class,
@@ -423,6 +423,32 @@ empathy_idle_class_init (EmpathyIdleClass *klass)
 	g_type_class_add_private (object_class, sizeof (EmpathyIdlePriv));
 }
 
+static TpConnectionPresenceType
+empathy_idle_get_actual_presence (EmpathyIdle *idle, GError **error)
+{
+	McPresence presence;
+	EmpathyIdlePriv *priv = GET_PRIV (idle);
+
+	presence = mission_control_get_presence_actual (priv->mc, error);
+
+	switch (presence) {
+	case MC_PRESENCE_OFFLINE:
+		return TP_CONNECTION_PRESENCE_TYPE_OFFLINE;
+	case MC_PRESENCE_AVAILABLE:
+		return TP_CONNECTION_PRESENCE_TYPE_AVAILABLE;
+	case MC_PRESENCE_AWAY:
+		return TP_CONNECTION_PRESENCE_TYPE_AWAY;
+	case MC_PRESENCE_EXTENDED_AWAY:
+		return TP_CONNECTION_PRESENCE_TYPE_EXTENDED_AWAY;
+	case MC_PRESENCE_HIDDEN:
+		return TP_CONNECTION_PRESENCE_TYPE_HIDDEN;
+	case MC_PRESENCE_DO_NOT_DISTURB:
+		return TP_CONNECTION_PRESENCE_TYPE_BUSY;
+	default:
+		return TP_CONNECTION_PRESENCE_TYPE_UNSET;
+	}
+}
+
 static void
 empathy_idle_init (EmpathyIdle *idle)
 {
@@ -434,11 +460,11 @@ empathy_idle_init (EmpathyIdle *idle)
 	idle->priv = priv;
 	priv->is_idle = FALSE;
 	priv->mc = empathy_mission_control_dup_singleton ();
-	priv->state = mission_control_get_presence_actual (priv->mc, &error);
+	priv->state = empathy_idle_get_actual_presence (idle, &error);
 	if (error) {
 		DEBUG ("Error getting actual presence: %s", error->message);
 
-		priv->state = MC_PRESENCE_UNSET;
+		priv->state = TP_CONNECTION_PRESENCE_TYPE_UNSET;
 		g_clear_error (&error);
 	}
 	priv->status = mission_control_get_presence_message_actual (priv->mc, &error);
@@ -502,7 +528,7 @@ empathy_idle_dup_singleton (void)
 	return g_object_new (EMPATHY_TYPE_IDLE, NULL);
 }
 
-McPresence
+TpConnectionPresenceType
 empathy_idle_get_state (EmpathyIdle *idle)
 {
 	EmpathyIdlePriv *priv;
@@ -514,7 +540,7 @@ empathy_idle_get_state (EmpathyIdle *idle)
 
 void
 empathy_idle_set_state (EmpathyIdle *idle,
-			McPresence   state)
+			TpConnectionPresenceType   state)
 {
 	EmpathyIdlePriv *priv;
 
@@ -548,7 +574,7 @@ empathy_idle_set_status (EmpathyIdle *idle,
 	empathy_idle_set_presence (idle, priv->state, status);
 }
 
-McPresence
+TpConnectionPresenceType
 empathy_idle_get_flash_state (EmpathyIdle *idle)
 {
 	EmpathyIdlePriv *priv;
@@ -560,7 +586,7 @@ empathy_idle_get_flash_state (EmpathyIdle *idle)
 
 void
 empathy_idle_set_flash_state (EmpathyIdle *idle,
-			      McPresence   state)
+			      TpConnectionPresenceType   state)
 {
 	EmpathyIdlePriv *priv;
 
@@ -568,15 +594,49 @@ empathy_idle_set_flash_state (EmpathyIdle *idle,
 
 	priv->flash_state = state;
 
-	if (state == MC_PRESENCE_UNSET) {
+	if (state == TP_CONNECTION_PRESENCE_TYPE_UNSET) {
 	}
 
 	g_object_notify (G_OBJECT (idle), "flash-state");
 }
 
+static void
+empathy_idle_do_set_presence (EmpathyIdle *idle,
+			   TpConnectionPresenceType   state,
+			   const gchar *status)
+{
+	McPresence mc_state = MC_PRESENCE_UNSET;
+	EmpathyIdlePriv *priv = GET_PRIV (idle);
+
+	switch (state) {
+		case TP_CONNECTION_PRESENCE_TYPE_OFFLINE:
+			mc_state = MC_PRESENCE_OFFLINE;
+			break;
+		case TP_CONNECTION_PRESENCE_TYPE_AVAILABLE:
+			mc_state = MC_PRESENCE_AVAILABLE;
+			break;
+		case TP_CONNECTION_PRESENCE_TYPE_AWAY:
+			mc_state = MC_PRESENCE_AWAY;
+			break;
+		case TP_CONNECTION_PRESENCE_TYPE_EXTENDED_AWAY:
+			mc_state = MC_PRESENCE_EXTENDED_AWAY;
+			break;
+		case TP_CONNECTION_PRESENCE_TYPE_HIDDEN:
+			mc_state = MC_PRESENCE_HIDDEN;
+			break;
+		case TP_CONNECTION_PRESENCE_TYPE_BUSY:
+			mc_state = MC_PRESENCE_DO_NOT_DISTURB;
+			break;
+		default:
+			g_assert_not_reached ();
+	}
+
+	mission_control_set_presence (priv->mc, mc_state, status, NULL, NULL);
+}
+
 void
 empathy_idle_set_presence (EmpathyIdle *idle,
-			   McPresence   state,
+			   TpConnectionPresenceType   state,
 			   const gchar *status)
 {
 	EmpathyIdlePriv *priv;
@@ -608,7 +668,7 @@ empathy_idle_set_presence (EmpathyIdle *idle,
 		return;
 	}
 
-	mission_control_set_presence (priv->mc, state, status, NULL, NULL);
+	empathy_idle_do_set_presence (idle, state, status);
 }
 
 gboolean
@@ -669,10 +729,10 @@ empathy_idle_set_use_nm (EmpathyIdle *idle,
 		idle_nm_state_change_cb (priv->nm_proxy, nm_status, idle);
 	} else {
 		priv->nm_connected = TRUE;
-		if (priv->nm_saved_state != MC_PRESENCE_UNSET) {
+		if (priv->nm_saved_state != TP_CONNECTION_PRESENCE_TYPE_UNSET) {
 			empathy_idle_set_state (idle, priv->nm_saved_state);
 		}
-		priv->nm_saved_state = MC_PRESENCE_UNSET;
+		priv->nm_saved_state = TP_CONNECTION_PRESENCE_TYPE_UNSET;
 	}
 
 	g_object_notify (G_OBJECT (idle), "use-nm");

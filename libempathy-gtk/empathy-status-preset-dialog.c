@@ -39,8 +39,6 @@
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 
-#include <libmissioncontrol/mc-enum-types.h>
-
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-status-presets.h>
 
@@ -54,10 +52,10 @@
 
 G_DEFINE_TYPE (EmpathyStatusPresetDialog, empathy_status_preset_dialog, GTK_TYPE_DIALOG);
 
-static McPresence states[] = {
-	MC_PRESENCE_AVAILABLE,
-	MC_PRESENCE_DO_NOT_DISTURB,
-	MC_PRESENCE_AWAY
+static TpConnectionPresenceType states[] = {
+	TP_CONNECTION_PRESENCE_TYPE_AVAILABLE,
+	TP_CONNECTION_PRESENCE_TYPE_BUSY,
+	TP_CONNECTION_PRESENCE_TYPE_AWAY,
 };
 
 typedef struct _EmpathyStatusPresetDialogPriv EmpathyStatusPresetDialogPriv;
@@ -172,7 +170,7 @@ status_preset_dialog_setup_add_combobox (EmpathyStatusPresetDialog *self)
 	int i;
 
 	store = gtk_list_store_new (ADD_COMBO_N_COLS,
-			MC_TYPE_PRESENCE,	/* ADD_COMBO_STATE */
+			G_TYPE_UINT,		/* ADD_COMBO_STATE */
 			G_TYPE_STRING,		/* ADD_COMBO_ICON_NAME */
 			G_TYPE_STRING,		/* ADD_COMBO_STATUS */
 			G_TYPE_STRING);		/* ADD_COMBO_DEFAULT_TEXT */
@@ -222,7 +220,7 @@ status_preset_dialog_status_edited (GtkCellRendererText *renderer,
 	GtkTreeModel *model;
 	GtkTreePath *path;
 	GtkTreeIter iter;
-	McPresence state;
+	TpConnectionPresenceType state;
 	char *old_status;
 	gboolean valid;
 
@@ -269,7 +267,7 @@ status_preset_dialog_setup_presets_treeview (EmpathyStatusPresetDialog *self)
 	GtkCellRenderer *renderer;
 
 	store = gtk_list_store_new (PRESETS_STORE_N_COLS,
-			MC_TYPE_PRESENCE,	/* PRESETS_STORE_STATE */
+			G_TYPE_UINT,		/* PRESETS_STORE_STATE */
 			G_TYPE_STRING,		/* PRESETS_STORE_ICON_NAME */
 			G_TYPE_STRING);		/* PRESETS_STORE_STATUS */
 
@@ -315,7 +313,7 @@ status_preset_dialog_preset_remove (GtkButton *button,
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	McPresence state;
+	TpConnectionPresenceType state;
 	char *status;
 
 	selection = gtk_tree_view_get_selection (
@@ -418,7 +416,7 @@ status_preset_dialog_add_preset (GtkWidget *widget,
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	GtkWidget *entry;
-	McPresence state, cstate;
+	TpConnectionPresenceType state, cstate;
 	const char *status;
 	char *cstatus;
 	gboolean valid, match = FALSE;

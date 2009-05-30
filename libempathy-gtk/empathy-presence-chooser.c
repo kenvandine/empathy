@@ -34,7 +34,6 @@
 #include <gdk/gdkkeysyms.h>
 
 #include <telepathy-glib/util.h>
-#include <libmissioncontrol/mc-enum-types.h>
 
 #include <libempathy/empathy-idle.h>
 #include <libempathy/empathy-utils.h>
@@ -105,36 +104,40 @@ typedef struct {
 	int          block_changed;
 	guint        focus_out_idle_source;
 
-	McPresence   state;
+	TpConnectionPresenceType state;
 	PresenceChooserEntryType previous_type;
 
-	McPresence   flash_state_1;
-	McPresence   flash_state_2;
+	TpConnectionPresenceType   flash_state_1;
+	TpConnectionPresenceType   flash_state_2;
 	guint        flash_timeout_id;
 } EmpathyPresenceChooserPriv;
 
 /* States to be listed in the menu.
  * Each state has a boolean telling if it can have custom message */
-static guint states[] = {MC_PRESENCE_AVAILABLE, TRUE,
-			 MC_PRESENCE_DO_NOT_DISTURB, TRUE,
-			 MC_PRESENCE_AWAY, TRUE,
-			 MC_PRESENCE_HIDDEN, FALSE,
-			 MC_PRESENCE_OFFLINE, FALSE};
+static struct { TpConnectionPresenceType state;
+         gboolean customisable;
+} states[] = { { TP_CONNECTION_PRESENCE_TYPE_AVAILABLE, TRUE } ,
+			 { TP_CONNECTION_PRESENCE_TYPE_BUSY, TRUE },
+			 { TP_CONNECTION_PRESENCE_TYPE_AWAY, TRUE },
+			 { TP_CONNECTION_PRESENCE_TYPE_HIDDEN, FALSE },
+			 { TP_CONNECTION_PRESENCE_TYPE_OFFLINE, FALSE},
+			 { TP_CONNECTION_PRESENCE_TYPE_UNSET, },
+			};
 
 static void            presence_chooser_finalize               (GObject                    *object);
 static void            presence_chooser_presence_changed_cb    (EmpathyPresenceChooser      *chooser);
 static gboolean        presence_chooser_flash_timeout_cb       (EmpathyPresenceChooser      *chooser);
 static void            presence_chooser_flash_start            (EmpathyPresenceChooser      *chooser,
-								McPresence                  state_1,
-								McPresence                  state_2);
+								TpConnectionPresenceType                  state_1,
+								TpConnectionPresenceType                  state_2);
 static void            presence_chooser_flash_stop             (EmpathyPresenceChooser      *chooser,
-								McPresence                  state);
+								TpConnectionPresenceType                  state);
 static void            presence_chooser_menu_add_item          (GtkWidget                  *menu,
 								const gchar                *str,
-								McPresence                  state);
+								TpConnectionPresenceType                  state);
 static void            presence_chooser_noncustom_activate_cb  (GtkWidget                  *item,
 								gpointer                    user_data);
-static void            presence_chooser_set_state              (McPresence                  state,
+static void            presence_chooser_set_state              (TpConnectionPresenceType                  state,
 								const gchar                *status);
 static void            presence_chooser_custom_activate_cb     (GtkWidget                  *item,
 								gpointer                    user_data);
@@ -160,7 +163,7 @@ presence_chooser_create_model (EmpathyPresenceChooser *self)
 
 	store = gtk_list_store_new (N_COLUMNS,
 				    G_TYPE_STRING,    /* COL_STATE_ICON_NAME */
-				    MC_TYPE_PRESENCE, /* COL_STATE */
+				    G_TYPE_UINT,      /* COL_STATE */
 				    G_TYPE_STRING,    /* COL_STATUS_TEXT */
 				    G_TYPE_STRING,    /* COL_DISPLAY_MARKUP */
 				    G_TYPE_BOOLEAN,   /* COL_STATUS_CUSTOMISABLE */
@@ -168,26 +171,25 @@ presence_chooser_create_model (EmpathyPresenceChooser *self)
 
 	custom_message = g_strdup_printf ("<i>%s</i>", _("Custom Message..."));
 
-	for (i = 0; i < G_N_ELEMENTS (states); i += 2) {
+	for (i = 0; states[i].state != TP_CONNECTION_PRESENCE_TYPE_UNSET; i++) {
 		GList       *list, *l;
 		const char *status, *icon_name;
 
-		status = empathy_presence_get_default_message (states[i]);
-		icon_name = empathy_icon_name_for_presence (states[i]);
+		status = empathy_presence_get_default_message (states[i].state);
+		icon_name = empathy_icon_name_for_presence (states[i].state);
 
 		gtk_list_store_insert_with_values (store, NULL, -1,
 			COL_STATE_ICON_NAME, icon_name,
-			COL_STATE, states[i],
+			COL_STATE, states[i].state,
 			COL_STATUS_TEXT, status,
 			COL_DISPLAY_MARKUP, status,
-			COL_STATUS_CUSTOMISABLE, states[i+1],
+			COL_STATUS_CUSTOMISABLE, states[i].customisable,
 			COL_TYPE, ENTRY_TYPE_BUILTIN,
 			-1);
 
-		if (states[i+1]) {
-
+		if (states[i].customisable) {
 			/* Set custom messages if wanted */
-			list = empathy_status_presets_get (states[i], -1);
+			list = empathy_status_presets_get (states[i].state, -1);
 			list = g_list_sort (list, (GCompareFunc) g_utf8_collate);
 			for (l = list; l; l = l->next) {
 				gtk_list_store_insert_with_values (store,
@@ -279,7 +281,7 @@ static gboolean
 presence_chooser_is_preset (EmpathyPresenceChooser *self)
 {
 	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
-	McPresence state;
+	TpConnectionPresenceType state;
 	const char *status;
 	GList *presets, *l;
 	gboolean match = FALSE;
@@ -407,17 +409,14 @@ mc_set_custom_state (EmpathyPresenceChooser *self)
 	/* update the status with MC */
 	status = gtk_entry_get_text (GTK_ENTRY (entry));
 
-	DEBUG ("Sending state to MC-> %s (%s)\n",
-		g_enum_get_value (g_type_class_peek (MC_TYPE_PRESENCE),
-			priv->state)->value_name,
-		status);
+	DEBUG ("Sending state to MC-> %d (%s)\n", priv->state, status);
 
 	empathy_idle_set_presence (priv->idle, priv->state, status);
 }
 
 static void
 ui_set_custom_state (EmpathyPresenceChooser *self,
-		     McPresence state,
+		     TpConnectionPresenceType state,
 		     const char *status)
 {
 	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
@@ -462,7 +461,7 @@ presence_chooser_entry_icon_release_cb (EmpathyPresenceChooser *self,
 	}
 	else {
 		PresenceChooserEntryType type;
-		McPresence state;
+		TpConnectionPresenceType state;
 		const char *status;
 
 		type = presence_chooser_get_entry_type (self);
@@ -554,7 +553,7 @@ presence_chooser_changed_cb (GtkComboBox *self, gpointer user_data)
 	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
 	GtkTreeIter iter;
 	char *icon_name;
-	McPresence new_state;
+	TpConnectionPresenceType new_state;
 	gboolean customisable = TRUE;
 	PresenceChooserEntryType type = -1;
 	GtkWidget *entry;
@@ -823,8 +822,8 @@ static void
 presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 {
 	EmpathyPresenceChooserPriv *priv;
-	McPresence                  state;
-	McPresence                  flash_state;
+	TpConnectionPresenceType    state;
+	TpConnectionPresenceType    flash_state;
 	const gchar                *status;
 	GtkTreeModel               *model;
 	GtkTreeIter                 iter;
@@ -846,7 +845,7 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 	     valid;
 	     valid = gtk_tree_model_iter_next (model, &iter)) {
 		int m_type;
-		McPresence m_state;
+		TpConnectionPresenceType m_state;
 		char *m_status;
 
 		gtk_tree_model_get (model, &iter,
@@ -892,7 +891,7 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 		ui_set_custom_state (chooser, state, status);
 	}
 
-	if (flash_state != MC_PRESENCE_UNSET) {
+	if (flash_state != TP_CONNECTION_PRESENCE_TYPE_UNSET) {
 		presence_chooser_flash_start (chooser, state, flash_state);
 	}
 	else {
@@ -904,7 +903,7 @@ static gboolean
 presence_chooser_flash_timeout_cb (EmpathyPresenceChooser *chooser)
 {
 	EmpathyPresenceChooserPriv *priv;
-	McPresence                  state;
+	TpConnectionPresenceType    state;
 	static gboolean             on = FALSE;
 	GtkWidget                  *entry;
 
@@ -929,8 +928,8 @@ presence_chooser_flash_timeout_cb (EmpathyPresenceChooser *chooser)
 
 static void
 presence_chooser_flash_start (EmpathyPresenceChooser *chooser,
-			      McPresence              state_1,
-			      McPresence              state_2)
+			      TpConnectionPresenceType state_1,
+			      TpConnectionPresenceType state_2)
 {
 	EmpathyPresenceChooserPriv *priv;
 
@@ -950,7 +949,7 @@ presence_chooser_flash_start (EmpathyPresenceChooser *chooser,
 
 static void
 presence_chooser_flash_stop (EmpathyPresenceChooser *chooser,
-			     McPresence             state)
+			     TpConnectionPresenceType state)
 {
 	EmpathyPresenceChooserPriv *priv = GET_PRIV (chooser);
 	GtkWidget *entry;
@@ -984,21 +983,21 @@ empathy_presence_chooser_create_menu (void)
 
 	menu = gtk_menu_new ();
 
-	for (i = 0; i < G_N_ELEMENTS (states); i += 2) {
+	for (i = 0; states[i].state != TP_CONNECTION_PRESENCE_TYPE_UNSET; i++) {
 		GList       *list, *l;
 
-		status = empathy_presence_get_default_message (states[i]);
+		status = empathy_presence_get_default_message (states[i].state);
 		presence_chooser_menu_add_item (menu,
 						status,
-						states[i]);
+						states[i].state);
 
-		if (states[i+1]) {
+		if (states[i].customisable) {
 			/* Set custom messages if wanted */
-			list = empathy_status_presets_get (states[i], 5);
+			list = empathy_status_presets_get (states[i].state, 5);
 			for (l = list; l; l = l->next) {
 				presence_chooser_menu_add_item (menu,
 								l->data,
-								states[i]);
+								states[i].state);
 			}
 			g_list_free (list);
 		}
@@ -1029,7 +1028,7 @@ empathy_presence_chooser_create_menu (void)
 static void
 presence_chooser_menu_add_item (GtkWidget   *menu,
 				const gchar *str,
-				McPresence   state)
+				TpConnectionPresenceType state)
 {
 	GtkWidget   *item;
 	GtkWidget   *image;
@@ -1061,7 +1060,7 @@ static void
 presence_chooser_noncustom_activate_cb (GtkWidget *item,
 					gpointer   user_data)
 {
-	McPresence   state;
+	TpConnectionPresenceType state;
 	const gchar *status;
 
 	status = g_object_get_data (G_OBJECT (item), "status");
@@ -1071,7 +1070,7 @@ presence_chooser_noncustom_activate_cb (GtkWidget *item,
 }
 
 static void
-presence_chooser_set_state (McPresence   state,
+presence_chooser_set_state (TpConnectionPresenceType state,
 			    const gchar *status)
 {
 	EmpathyIdle *idle;

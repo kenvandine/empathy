@@ -77,7 +77,7 @@ GtkWidget     *empathy_builder_unref_and_keep_widget    (GtkBuilder       *gui,
 
 /* Pixbufs */
 const gchar * empathy_icon_name_from_account            (McAccount        *account);
-const gchar * empathy_icon_name_for_presence            (McPresence        presence);
+const gchar * empathy_icon_name_for_presence            (TpConnectionPresenceType  presence);
 const gchar * empathy_icon_name_for_contact             (EmpathyContact   *contact);
 GdkPixbuf *   empathy_pixbuf_from_data                  (gchar            *data,
 							 gsize             data_size);

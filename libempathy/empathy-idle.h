@@ -49,17 +49,17 @@ struct _EmpathyIdleClass {
 
 GType        empathy_idle_get_type            (void) G_GNUC_CONST;
 EmpathyIdle *empathy_idle_dup_singleton       (void);
-McPresence   empathy_idle_get_state           (EmpathyIdle *idle);
+TpConnectionPresenceType   empathy_idle_get_state           (EmpathyIdle *idle);
 void         empathy_idle_set_state           (EmpathyIdle *idle,
-					       McPresence   state);
+					       TpConnectionPresenceType   state);
 const gchar *empathy_idle_get_status          (EmpathyIdle *idle);
 void         empathy_idle_set_status          (EmpathyIdle *idle,
 					       const gchar *status);
-McPresence   empathy_idle_get_flash_state     (EmpathyIdle *idle);
+TpConnectionPresenceType   empathy_idle_get_flash_state     (EmpathyIdle *idle);
 void         empathy_idle_set_flash_state     (EmpathyIdle *idle,
-					       McPresence   state);
+					       TpConnectionPresenceType   state);
 void         empathy_idle_set_presence        (EmpathyIdle *idle,
-					       McPresence   state,
+					       TpConnectionPresenceType   state,
 					       const gchar *status);
 gboolean     empathy_idle_get_auto_away       (EmpathyIdle *idle);
 void         empathy_idle_set_auto_away       (EmpathyIdle *idle,
