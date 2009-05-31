@@ -213,6 +213,7 @@
   </network>
   <network name="FreeNode" id="freenode">
     <servers>
+      <server ssl="FALSE" port="6667" address="chat.freenode.net"/>
       <server ssl="FALSE" port="6667" address="irc.freenode.net"/>
     </servers>
   </network>
