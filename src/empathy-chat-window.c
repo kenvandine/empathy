@@ -72,7 +72,6 @@ typedef struct {
 	GtkWidget   *dialog;
 	GtkWidget   *notebook;
 	NotifyNotification *notification;
-	guint        notify_id;	/* show contacts' notification */
 
 	/* Menu items. */
 	GtkUIManager *ui_manager;
@@ -132,21 +131,6 @@ chat_window_accel_cb (GtkAccelGroup    *accelgroup,
 
 	if (num != -1) {
 		gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->notebook), num);
-	}
-}
-
-static void
-chat_window_notify_show_contacts_cb (EmpathyConf *conf,
-				     const gchar *key,
-				     gpointer     user_data)
-{
-	gboolean value;
-	EmpathyChatWindowPriv *priv;
-	
-	priv = GET_PRIV (user_data);
-
-	if (empathy_conf_get_bool (empathy_conf_get (), key, &value)) {
-		gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->menu_conv_toggle_contacts), value);
 	}
 }
 
@@ -564,6 +548,8 @@ chat_window_conv_activate_cb (GtkAction         *action,
 {
 	EmpathyChatWindowPriv *priv = GET_PRIV (window);
 	gboolean               is_room;
+	gboolean               active;
+	EmpathyContact        *remote_contact = NULL;
 
 	/* Favorite room menu */
 	is_room = empathy_chat_is_room (priv->current_chat);
@@ -582,7 +568,22 @@ chat_window_conv_activate_cb (GtkAction         *action,
 			GTK_TOGGLE_ACTION (priv->menu_conv_favorite), found);
 	}
 	gtk_action_set_visible (priv->menu_conv_favorite, is_room);
-	gtk_action_set_visible (priv->menu_conv_toggle_contacts, is_room);
+
+	/* Show contacts menu */
+	g_object_get (priv->current_chat,
+		      "remote-contact", &remote_contact,
+		      "show-contacts", &active,
+		      NULL);
+	if (remote_contact == NULL) {
+		gtk_toggle_action_set_active (
+			GTK_TOGGLE_ACTION (priv->menu_conv_toggle_contacts),
+					   active);
+	}
+	gtk_action_set_visible (priv->menu_conv_toggle_contacts,
+				(remote_contact == NULL));
+	if (remote_contact != NULL) {
+		g_object_unref (remote_contact);
+	}
 }
 
 static void
@@ -630,13 +631,14 @@ static void
 chat_window_contacts_toggled_cb (GtkToggleAction   *toggle_action,
 				 EmpathyChatWindow *window)
 {
+	EmpathyChatWindowPriv *priv = GET_PRIV (window);
 	gboolean               active;
 
 	active = gtk_toggle_action_get_active (toggle_action);
-	
-	empathy_conf_set_bool (empathy_conf_get (),
-			       EMPATHY_PREFS_CHAT_SHOW_CONTACTS_IN_ROOMS,
-			       active);
+
+	g_object_set (priv->current_chat,
+		      "show-contacts", active,
+		      NULL);
 }
 
 static const gchar *
@@ -1350,8 +1352,6 @@ chat_window_finalize (GObject *object)
 
 	chat_windows = g_list_remove (chat_windows, window);
 	gtk_widget_destroy (priv->dialog);
-	
-	empathy_conf_notify_remove (empathy_conf_get (), priv->notify_id);
 
 	G_OBJECT_CLASS (empathy_chat_window_parent_class)->finalize (object);
 }
@@ -1504,10 +1504,6 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 			  "page_removed",
 			  G_CALLBACK (chat_window_page_removed_cb),
 			  window);
-	priv->notify_id = empathy_conf_notify_add (empathy_conf_get (),
-				     EMPATHY_PREFS_CHAT_SHOW_CONTACTS_IN_ROOMS,
-				     chat_window_notify_show_contacts_cb,
-				     window);
 
 	/* Set up drag and drop */
 	gtk_drag_dest_set (GTK_WIDGET (priv->notebook),

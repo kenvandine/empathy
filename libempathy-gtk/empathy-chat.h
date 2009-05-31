@@ -82,6 +82,8 @@ void               empathy_chat_correct_word         (EmpathyChat   *chat,
 						      GtkTextIter   *end,
 						      const gchar   *new_word);
 gboolean           empathy_chat_is_room              (EmpathyChat   *chat);
+void               empathy_chat_set_show_contacts    (EmpathyChat *chat,
+                                                      gboolean     show);
 G_END_DECLS
 
 #endif /* __EMPATHY_CHAT_H__ */
