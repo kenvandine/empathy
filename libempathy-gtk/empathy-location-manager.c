@@ -305,7 +305,6 @@ address_changed_cb (GeoclueAddress *address,
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
       GValue *new_value;
-      /* do something with key and value */
       /* Discard street information if reduced accuracy is on */
       if (priv->reduce_accuracy && strcmp (key, EMPATHY_LOCATION_STREET) == 0)
         continue;
@@ -315,7 +314,6 @@ address_changed_cb (GeoclueAddress *address,
 
       DEBUG ("\t - %s: %s", (gchar *) key, (gchar *) value);
     }
-
 
   update_timestamp (location_manager);
   if (priv->timeout_id == 0)

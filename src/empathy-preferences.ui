@@ -478,7 +478,7 @@
                                   <object class="GtkLabel" id="label6">
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">&lt;small&gt;Reduced location accuracy means that nothing more precise than your city, state and country will be published.  GPS coordinates will have a random value added (&#xB1;0.5&#xB0;).&lt;/small&gt;</property>
+                                    <property name="label" translatable="yes">&lt;small&gt;Reduced location accuracy means that nothing more precise than your city, state and country will be published.  GPS coordinates will have a random value added (&#xB1;0.25&#xB0;).&lt;/small&gt;</property>
                                     <property name="use_markup">True</property>
                                     <property name="wrap">True</property>
                                   </object>
