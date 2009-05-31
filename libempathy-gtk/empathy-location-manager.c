@@ -100,8 +100,7 @@ location_manager_constructor (GType type,
 static void
 location_manager_dispose (GObject *object)
 {
-  EmpathyLocationManagerPriv *priv;
-  priv = GET_PRIV (object);
+  EmpathyLocationManagerPriv *priv = GET_PRIV (object);
 
   if (priv->account_manager != NULL)
   {
@@ -142,9 +141,7 @@ location_manager_get_property (GObject *object,
                       GValue *value,
                       GParamSpec *pspec)
 {
-  EmpathyLocationManagerPriv *priv;
-
-  priv = GET_PRIV (object);
+  EmpathyLocationManagerPriv *priv = GET_PRIV (object);
 
   switch (param_id)
     {
@@ -160,9 +157,7 @@ location_manager_set_property (GObject *object,
                       const GValue *value,
                       GParamSpec *pspec)
 {
-  EmpathyLocationManagerPriv *priv;
-
-  priv = GET_PRIV (object);
+  EmpathyLocationManagerPriv *priv = GET_PRIV (object);
 
   switch (param_id)
     {
@@ -192,14 +187,12 @@ publish_location (EmpathyLocationManager *location_manager,
                   McAccount *account,
                   gboolean force_publication)
 {
-  EmpathyLocationManagerPriv *priv;
+  EmpathyLocationManagerPriv *priv = GET_PRIV (location_manager);
   guint connection_status = -1;
   gboolean can_publish;
   EmpathyConf *conf = empathy_conf_get ();
   TpConnection *conn;
   EmpathyTpContactFactory *factory;
-
-  priv = GET_PRIV (location_manager);
 
   conn = mission_control_get_tpconnection (priv->mc, account, NULL);
   if (!conn)
@@ -296,14 +289,13 @@ address_changed_cb (GeoclueAddress *address,
                     gpointer location_manager)
 {
   GeoclueAccuracyLevel level;
-  geoclue_accuracy_get_details (accuracy, &level, NULL, NULL);
-  EmpathyLocationManagerPriv *priv;
+  EmpathyLocationManagerPriv *priv = GET_PRIV (location_manager);
   GHashTableIter iter;
   gpointer key, value;
 
   DEBUG ("New address (accuracy level %d):", level);
 
-  priv = GET_PRIV (location_manager);
+  geoclue_accuracy_get_details (accuracy, &level, NULL, NULL);
   g_hash_table_remove_all (priv->location);
 
   if (g_hash_table_size (details) == 0)
@@ -433,9 +425,7 @@ initial_position_cb (GeocluePosition *position,
 static void
 update_resources (EmpathyLocationManager *location_manager)
 {
-  EmpathyLocationManagerPriv *priv;
-
-  priv = GET_PRIV (location_manager);
+  EmpathyLocationManagerPriv *priv = GET_PRIV (location_manager);
 
   DEBUG ("Updating resources %d", priv->resources);
 
@@ -459,9 +449,7 @@ update_resources (EmpathyLocationManager *location_manager)
 static void
 setup_geoclue (EmpathyLocationManager *location_manager)
 {
-  EmpathyLocationManagerPriv *priv;
-
-  priv = GET_PRIV (location_manager);
+  EmpathyLocationManagerPriv *priv = GET_PRIV (location_manager);
 
   GeoclueMaster *master;
   GError *error = NULL;
@@ -508,11 +496,10 @@ publish_cb (EmpathyConf *conf,
             gpointer user_data)
 {
   EmpathyLocationManager *manager = EMPATHY_LOCATION_MANAGER (user_data);
-  EmpathyLocationManagerPriv *priv;
+  EmpathyLocationManagerPriv *priv = GET_PRIV (manager);
   gboolean can_publish;
 
   DEBUG ("Publish Conf changed");
-  priv = GET_PRIV (manager);
 
 
   if (empathy_conf_get_bool (conf, key, &can_publish) == FALSE)
@@ -548,11 +535,10 @@ resource_cb (EmpathyConf  *conf,
              gpointer user_data)
 {
   EmpathyLocationManager *manager = EMPATHY_LOCATION_MANAGER (user_data);
-  EmpathyLocationManagerPriv *priv;
+  EmpathyLocationManagerPriv *priv = GET_PRIV (manager);
   GeoclueResourceFlags resource = 0;
   gboolean resource_enabled;
 
-  priv = GET_PRIV (manager);
   DEBUG ("%s changed", key);
 
   if (!empathy_conf_get_bool (conf, key, &resource_enabled))
@@ -580,11 +566,10 @@ accuracy_cb (EmpathyConf  *conf,
              gpointer user_data)
 {
   EmpathyLocationManager *manager = EMPATHY_LOCATION_MANAGER (user_data);
-  EmpathyLocationManagerPriv *priv;
+  EmpathyLocationManagerPriv *priv = GET_PRIV (manager);
 
   gboolean enabled;
 
-  priv = GET_PRIV (manager);
   DEBUG ("%s changed", key);
 
   if (!empathy_conf_get_bool (conf, key, &enabled))
