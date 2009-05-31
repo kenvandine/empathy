@@ -46,6 +46,7 @@
 
 /* Seconds before updating the location */
 #define TIMEOUT 10
+static EmpathyLocationManager *location_manager = NULL;
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyLocationManager)
 typedef struct {
@@ -100,6 +101,29 @@ static gboolean publish_on_idle (gpointer user_data);
 
 G_DEFINE_TYPE (EmpathyLocationManager, empathy_location_manager, G_TYPE_OBJECT);
 
+static GObject *
+location_manager_constructor (GType type,
+    guint n_construct_params,
+    GObjectConstructParam *construct_params)
+{
+  GObject *retval;
+
+  if (location_manager == NULL)
+    {
+      retval = G_OBJECT_CLASS (empathy_location_manager_parent_class)->constructor
+          (type, n_construct_params, construct_params);
+
+      location_manager = EMPATHY_LOCATION_MANAGER (retval);
+      g_object_add_weak_pointer (retval, (gpointer) &location_manager);
+    }
+  else
+    {
+      retval = g_object_ref (location_manager);
+    }
+
+  return retval;
+}
+
 static void
 empathy_location_manager_class_init (EmpathyLocationManagerClass *class)
 {
@@ -107,6 +131,7 @@ empathy_location_manager_class_init (EmpathyLocationManagerClass *class)
 
   object_class = G_OBJECT_CLASS (class);
 
+  object_class->constructor = location_manager_constructor;
   object_class->dispose = location_manager_dispose;
   object_class->get_property = location_manager_get_property;
   object_class->set_property = location_manager_set_property;
@@ -314,16 +339,10 @@ location_manager_set_property (GObject *object,
 }
 
 EmpathyLocationManager *
-empathy_location_manager_dup_default (void)
+empathy_location_manager_dup_singleton (void)
 {
-  static EmpathyLocationManager *singleton = NULL;
-  if (singleton == NULL)
-    {
-      singleton = g_object_new (EMPATHY_TYPE_LOCATION_MANAGER, NULL);
-      g_object_add_weak_pointer (G_OBJECT (singleton), (gpointer *)&singleton);
-    }
-
-  return g_object_ref (singleton);
+  return EMPATHY_LOCATION_MANAGER (g_object_new (EMPATHY_TYPE_LOCATION_MANAGER,
+      NULL));
 }
 
 static void
