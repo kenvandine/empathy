@@ -275,16 +275,14 @@ account_connection_changed_cb (EmpathyAccountManager *manager,
 static void
 update_timestamp (EmpathyLocationManager *location_manager)
 {
-  EmpathyLocationManagerPriv *priv;
-  priv = GET_PRIV (location_manager);
+  EmpathyLocationManagerPriv *priv= GET_PRIV (location_manager);
   GValue *new_value;
   gint64 stamp64;
   time_t timestamp;
 
   timestamp = time (NULL);
   stamp64 = (gint64) timestamp;
-  new_value = tp_g_value_slice_new (G_TYPE_INT64);
-  g_value_set_int64 (new_value, stamp64);
+  new_value = tp_g_value_slice_new_int64 (stamp64);
   g_hash_table_insert (priv->location, g_strdup (EMPATHY_LOCATION_TIMESTAMP),
       new_value);
   DEBUG ("\t - Timestamp: %" G_GINT64_FORMAT, stamp64);
@@ -361,8 +359,7 @@ position_changed_cb (GeocluePosition *position,
                      GeoclueAccuracy *accuracy,
                      gpointer location_manager)
 {
-  EmpathyLocationManagerPriv *priv;
-  priv = GET_PRIV (location_manager);
+  EmpathyLocationManagerPriv *priv = GET_PRIV (location_manager);
   GeoclueAccuracyLevel level;
   gdouble mean, horizontal, vertical;
   GValue *new_value;
@@ -375,8 +372,7 @@ position_changed_cb (GeocluePosition *position,
   if (fields & GEOCLUE_POSITION_FIELDS_LONGITUDE)
     {
       longitude += priv->reduce_value;
-      new_value = tp_g_value_slice_new (G_TYPE_DOUBLE);
-      g_value_set_double (new_value, longitude);
+      new_value = tp_g_value_slice_new_double (longitude);
       g_hash_table_insert (priv->location, g_strdup (EMPATHY_LOCATION_LON),
           new_value);
       DEBUG ("\t - Longitude: %f", longitude);
@@ -384,16 +380,14 @@ position_changed_cb (GeocluePosition *position,
   if (fields & GEOCLUE_POSITION_FIELDS_LATITUDE)
     {
       latitude += priv->reduce_value;
-      new_value = tp_g_value_slice_new (G_TYPE_DOUBLE);
-      g_value_set_double (new_value, latitude);
+      new_value = tp_g_value_slice_new_double (latitude);
       g_hash_table_insert (priv->location, g_strdup (EMPATHY_LOCATION_LAT),
           new_value);
       DEBUG ("\t - Latitude: %f", latitude);
     }
   if (fields & GEOCLUE_POSITION_FIELDS_ALTITUDE)
     {
-      new_value = tp_g_value_slice_new (G_TYPE_DOUBLE);
-      g_value_set_double (new_value, altitude);
+      new_value = tp_g_value_slice_new_double (altitude);
       g_hash_table_insert (priv->location, g_strdup (EMPATHY_LOCATION_ALT),
           new_value);
       DEBUG ("\t - Altitude: %f", altitude);
@@ -402,8 +396,7 @@ position_changed_cb (GeocluePosition *position,
   if (level == GEOCLUE_ACCURACY_LEVEL_DETAILED)
     {
       mean = (horizontal + vertical) / 2.0;
-      new_value = tp_g_value_slice_new (G_TYPE_DOUBLE);
-      g_value_set_double (new_value, mean);
+      new_value = tp_g_value_slice_new_double (mean);
       g_hash_table_insert (priv->location,
           g_strdup (EMPATHY_LOCATION_ACCURACY), new_value);
       DEBUG ("\t - Accuracy: %f", mean);
