@@ -72,33 +72,6 @@ typedef struct {
     guint timeout_id;
 } EmpathyLocationManagerPriv;
 
-static void location_manager_dispose (GObject *object);
-static void location_manager_get_property (GObject *object, guint param_id,
-    GValue *value, GParamSpec *pspec);
-static void location_manager_set_property (GObject *object, guint param_id,
-    const GValue *value, GParamSpec *pspec);
-static void position_changed_cb (GeocluePosition *position,
-    GeocluePositionFields fields, int timestamp, double latitude,
-    double longitude, double altitude, GeoclueAccuracy *accuracy,
-    gpointer user_data);
-static void address_changed_cb (GeoclueAddress *address, int timestamp,
-    GHashTable *details, GeoclueAccuracy *accuracy, gpointer user_data);
-static void setup_geoclue (EmpathyLocationManager *location_manager);
-static void publish_cb (EmpathyConf  *conf, const gchar *key,
-    gpointer user_data);
-static void update_resources (EmpathyLocationManager *location_manager);
-static void resource_cb (EmpathyConf  *conf, const gchar *key,
-    gpointer user_data);
-static void accuracy_cb (EmpathyConf  *conf, const gchar *key,
-    gpointer user_data);
-static void account_connection_changed_cb (EmpathyAccountManager *manager,
-    McAccount *account, TpConnectionStatusReason reason,
-    TpConnectionStatus current, TpConnectionStatus previous,
-    gpointer *location_manager);
-static void publish_to_all_accounts (EmpathyLocationManager *location_manager,
-    gboolean force_publication);
-static gboolean publish_on_idle (gpointer user_data);
-
 G_DEFINE_TYPE (EmpathyLocationManager, empathy_location_manager, G_TYPE_OBJECT);
 
 static GObject *
@@ -122,145 +95,6 @@ location_manager_constructor (GType type,
     }
 
   return retval;
-}
-
-static void
-empathy_location_manager_class_init (EmpathyLocationManagerClass *class)
-{
-  GObjectClass *object_class;
-
-  object_class = G_OBJECT_CLASS (class);
-
-  object_class->constructor = location_manager_constructor;
-  object_class->dispose = location_manager_dispose;
-  object_class->get_property = location_manager_get_property;
-  object_class->set_property = location_manager_set_property;
-
-  g_type_class_add_private (object_class, sizeof (EmpathyLocationManagerPriv));
-}
-
-static gboolean
-publish_on_idle (gpointer user_data)
-{
-  EmpathyLocationManager *manager = EMPATHY_LOCATION_MANAGER (user_data);
-  EmpathyLocationManagerPriv *priv = GET_PRIV (manager);
-
-  priv->timeout_id = 0;
-  publish_to_all_accounts (manager, TRUE);
-  return FALSE;
-}
-
-static void
-publish_location (EmpathyLocationManager *location_manager,
-                  McAccount *account,
-                  gboolean force_publication)
-{
-  EmpathyLocationManagerPriv *priv;
-  guint connection_status = -1;
-  gboolean can_publish;
-  EmpathyConf *conf = empathy_conf_get ();
-  TpConnection *conn;
-  EmpathyTpContactFactory *factory;
-
-  priv = GET_PRIV (location_manager);
-
-  conn = mission_control_get_tpconnection (priv->mc, account, NULL);
-  if (!conn)
-    return;
-
-  if (force_publication == FALSE)
-    {
-      if (!empathy_conf_get_bool (conf, EMPATHY_PREFS_LOCATION_PUBLISH,
-            &can_publish))
-        return;
-
-      if (can_publish == FALSE)
-        return;
-    }
-
-  connection_status = mission_control_get_connection_status (priv->mc,
-      account, NULL);
-
-  if (connection_status != TP_CONNECTION_STATUS_CONNECTED)
-    return;
-
-  DEBUG ("Publishing %s location to account %s",
-      (g_hash_table_size (priv->location) == 0 ? "empty" : ""),
-      mc_account_get_display_name (account));
-
-  factory = empathy_tp_contact_factory_dup_singleton (conn);
-  empathy_tp_contact_factory_set_location (factory, priv->location);
-  g_object_unref (factory);
-}
-
-static void
-publish_to_all_accounts (EmpathyLocationManager *location_manager,
-                                  gboolean force_publication)
-{
-  GList *accounts = NULL, *l;
-
-  accounts = mc_accounts_list_by_enabled (TRUE);
-  for (l = accounts; l; l = l->next)
-    {
-      publish_location (location_manager, l->data, force_publication);
-    }
-
-  mc_accounts_list_free (accounts);
-}
-
-static void
-account_connection_changed_cb (EmpathyAccountManager *manager,
-                               McAccount *account,
-                               TpConnectionStatusReason reason,
-                               TpConnectionStatus current,
-                               TpConnectionStatus previous,
-                               gpointer *location_manager)
-{
-  DEBUG ("Account %s changed status from %d to %d", mc_account_get_display_name (account),
-      previous, current);
-
-  if (account && current == TP_CONNECTION_STATUS_CONNECTED)
-    publish_location (EMPATHY_LOCATION_MANAGER (location_manager), account,
-        FALSE);
-}
-
-static void
-empathy_location_manager_init (EmpathyLocationManager *location_manager)
-{
-  EmpathyConf               *conf;
-  EmpathyLocationManagerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (location_manager,
-      EMPATHY_TYPE_LOCATION_MANAGER, EmpathyLocationManagerPriv);
-
-  location_manager->priv = priv;
-  priv->geoclue_is_setup = FALSE;
-  priv->mc = empathy_mission_control_dup_singleton ();
-  priv->location = g_hash_table_new_full (g_direct_hash, g_direct_equal,
-      g_free, (GDestroyNotify) tp_g_value_slice_free);
-
-  /* Setup settings status callbacks */
-  conf = empathy_conf_get ();
-  empathy_conf_notify_add (conf, EMPATHY_PREFS_LOCATION_PUBLISH, publish_cb,
-      location_manager);
-  empathy_conf_notify_add (conf, EMPATHY_PREFS_LOCATION_RESOURCE_NETWORK,
-      resource_cb, location_manager);
-  empathy_conf_notify_add (conf, EMPATHY_PREFS_LOCATION_RESOURCE_CELL,
-      resource_cb, location_manager);
-  empathy_conf_notify_add (conf, EMPATHY_PREFS_LOCATION_RESOURCE_GPS,
-      resource_cb, location_manager);
-  empathy_conf_notify_add (conf, EMPATHY_PREFS_LOCATION_REDUCE_ACCURACY,
-      accuracy_cb, location_manager);
-
-  resource_cb (conf, EMPATHY_PREFS_LOCATION_RESOURCE_NETWORK, location_manager);
-  resource_cb (conf, EMPATHY_PREFS_LOCATION_RESOURCE_CELL, location_manager);
-  resource_cb (conf, EMPATHY_PREFS_LOCATION_RESOURCE_GPS, location_manager);
-  accuracy_cb (conf, EMPATHY_PREFS_LOCATION_REDUCE_ACCURACY, location_manager);
-  publish_cb (conf, EMPATHY_PREFS_LOCATION_PUBLISH, location_manager);
-
-  /* Setup account status callbacks */
-  priv->account_manager = empathy_account_manager_dup_singleton ();
-  g_signal_connect (priv->account_manager,
-    "account-connection-changed",
-    G_CALLBACK (account_connection_changed_cb), location_manager);
 }
 
 static void
@@ -338,11 +172,104 @@ location_manager_set_property (GObject *object,
     };
 }
 
-EmpathyLocationManager *
-empathy_location_manager_dup_singleton (void)
+static void
+empathy_location_manager_class_init (EmpathyLocationManagerClass *class)
 {
-  return EMPATHY_LOCATION_MANAGER (g_object_new (EMPATHY_TYPE_LOCATION_MANAGER,
-      NULL));
+  GObjectClass *object_class;
+
+  object_class = G_OBJECT_CLASS (class);
+
+  object_class->constructor = location_manager_constructor;
+  object_class->dispose = location_manager_dispose;
+  object_class->get_property = location_manager_get_property;
+  object_class->set_property = location_manager_set_property;
+
+  g_type_class_add_private (object_class, sizeof (EmpathyLocationManagerPriv));
+}
+
+static void
+publish_location (EmpathyLocationManager *location_manager,
+                  McAccount *account,
+                  gboolean force_publication)
+{
+  EmpathyLocationManagerPriv *priv;
+  guint connection_status = -1;
+  gboolean can_publish;
+  EmpathyConf *conf = empathy_conf_get ();
+  TpConnection *conn;
+  EmpathyTpContactFactory *factory;
+
+  priv = GET_PRIV (location_manager);
+
+  conn = mission_control_get_tpconnection (priv->mc, account, NULL);
+  if (!conn)
+    return;
+
+  if (force_publication == FALSE)
+    {
+      if (!empathy_conf_get_bool (conf, EMPATHY_PREFS_LOCATION_PUBLISH,
+            &can_publish))
+        return;
+
+      if (can_publish == FALSE)
+        return;
+    }
+
+  connection_status = mission_control_get_connection_status (priv->mc,
+      account, NULL);
+
+  if (connection_status != TP_CONNECTION_STATUS_CONNECTED)
+    return;
+
+  DEBUG ("Publishing %s location to account %s",
+      (g_hash_table_size (priv->location) == 0 ? "empty" : ""),
+      mc_account_get_display_name (account));
+
+  factory = empathy_tp_contact_factory_dup_singleton (conn);
+  empathy_tp_contact_factory_set_location (factory, priv->location);
+  g_object_unref (factory);
+}
+
+static void
+publish_to_all_accounts (EmpathyLocationManager *location_manager,
+                                  gboolean force_publication)
+{
+  GList *accounts = NULL, *l;
+
+  accounts = mc_accounts_list_by_enabled (TRUE);
+  for (l = accounts; l; l = l->next)
+    {
+      publish_location (location_manager, l->data, force_publication);
+    }
+
+  mc_accounts_list_free (accounts);
+}
+
+static gboolean
+publish_on_idle (gpointer user_data)
+{
+  EmpathyLocationManager *manager = EMPATHY_LOCATION_MANAGER (user_data);
+  EmpathyLocationManagerPriv *priv = GET_PRIV (manager);
+
+  priv->timeout_id = 0;
+  publish_to_all_accounts (manager, TRUE);
+  return FALSE;
+}
+
+static void
+account_connection_changed_cb (EmpathyAccountManager *manager,
+                               McAccount *account,
+                               TpConnectionStatusReason reason,
+                               TpConnectionStatus current,
+                               TpConnectionStatus previous,
+                               gpointer *location_manager)
+{
+  DEBUG ("Account %s changed status from %d to %d", mc_account_get_display_name (account),
+      previous, current);
+
+  if (account && current == TP_CONNECTION_STATUS_CONNECTED)
+    publish_location (EMPATHY_LOCATION_MANAGER (location_manager), account,
+        FALSE);
 }
 
 static void
@@ -364,15 +291,54 @@ update_timestamp (EmpathyLocationManager *location_manager)
 }
 
 static void
-initial_position_cb (GeocluePosition *position,
-                     GeocluePositionFields fields,
-                     int timestamp,
-                     double latitude,
-                     double longitude,
-                     double altitude,
-                     GeoclueAccuracy *accuracy,
-                     GError *error,
-                     gpointer location_manager)
+address_changed_cb (GeoclueAddress *address,
+                    int timestamp,
+                    GHashTable *details,
+                    GeoclueAccuracy *accuracy,
+                    gpointer location_manager)
+{
+  GeoclueAccuracyLevel level;
+  geoclue_accuracy_get_details (accuracy, &level, NULL, NULL);
+  EmpathyLocationManagerPriv *priv;
+  GHashTableIter iter;
+  gpointer key, value;
+
+  DEBUG ("New address (accuracy level %d):", level);
+
+  priv = GET_PRIV (location_manager);
+  g_hash_table_remove_all (priv->location);
+
+  if (g_hash_table_size (details) == 0)
+    return;
+
+  g_hash_table_iter_init (&iter, details);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      GValue *new_value;
+      /* do something with key and value */
+      /* Discard street information if reduced accuracy is on */
+      if (priv->reduce_accuracy && strcmp (key, EMPATHY_LOCATION_STREET) == 0)
+        continue;
+
+      new_value = tp_g_value_slice_new_string (value);
+      g_hash_table_insert (priv->location, g_strdup (key), new_value);
+
+      DEBUG ("\t - %s: %s", (gchar *) key, (gchar *) value);
+    }
+
+
+  update_timestamp (location_manager);
+  if (priv->timeout_id == 0)
+    priv->timeout_id = g_timeout_add_seconds (TIMEOUT, publish_on_idle, location_manager);
+}
+
+static void
+initial_address_cb (GeoclueAddress *address,
+                    int timestamp,
+                    GHashTable *details,
+                    GeoclueAccuracy *accuracy,
+                    GError *error,
+                    gpointer location_manager)
 {
   if (error)
     {
@@ -381,8 +347,7 @@ initial_position_cb (GeocluePosition *position,
     }
   else
     {
-      position_changed_cb (position, fields, timestamp, latitude, longitude,
-          altitude, accuracy, location_manager);
+      address_changed_cb (address, timestamp, details, accuracy, location_manager);
     }
 }
 
@@ -450,12 +415,15 @@ position_changed_cb (GeocluePosition *position,
 }
 
 static void
-initial_address_cb (GeoclueAddress *address,
-                    int timestamp,
-                    GHashTable *details,
-                    GeoclueAccuracy *accuracy,
-                    GError *error,
-                    gpointer location_manager)
+initial_position_cb (GeocluePosition *position,
+                     GeocluePositionFields fields,
+                     int timestamp,
+                     double latitude,
+                     double longitude,
+                     double altitude,
+                     GeoclueAccuracy *accuracy,
+                     GError *error,
+                     gpointer location_manager)
 {
   if (error)
     {
@@ -464,50 +432,9 @@ initial_address_cb (GeoclueAddress *address,
     }
   else
     {
-      address_changed_cb (address, timestamp, details, accuracy, location_manager);
+      position_changed_cb (position, fields, timestamp, latitude, longitude,
+          altitude, accuracy, location_manager);
     }
-}
-
-static void
-address_changed_cb (GeoclueAddress *address,
-                    int timestamp,
-                    GHashTable *details,
-                    GeoclueAccuracy *accuracy,
-                    gpointer location_manager)
-{
-  GeoclueAccuracyLevel level;
-  geoclue_accuracy_get_details (accuracy, &level, NULL, NULL);
-  EmpathyLocationManagerPriv *priv;
-  GHashTableIter iter;
-  gpointer key, value;
-
-  DEBUG ("New address (accuracy level %d):", level);
-
-  priv = GET_PRIV (location_manager);
-  g_hash_table_remove_all (priv->location);
-
-  if (g_hash_table_size (details) == 0)
-    return;
-
-  g_hash_table_iter_init (&iter, details);
-  while (g_hash_table_iter_next (&iter, &key, &value))
-    {
-      GValue *new_value;
-      /* do something with key and value */
-      /* Discard street information if reduced accuracy is on */
-      if (priv->reduce_accuracy && strcmp (key, EMPATHY_LOCATION_STREET) == 0)
-        continue;
-
-      new_value = tp_g_value_slice_new_string (value);
-      g_hash_table_insert (priv->location, g_strdup (key), new_value);
-
-      DEBUG ("\t - %s: %s", (gchar *) key, (gchar *) value);
-    }
-
-
-  update_timestamp (location_manager);
-  if (priv->timeout_id == 0)
-    priv->timeout_id = g_timeout_add_seconds (TIMEOUT, publish_on_idle, location_manager);
 }
 
 static void
@@ -623,6 +550,38 @@ publish_cb (EmpathyConf *conf,
 }
 
 static void
+resource_cb (EmpathyConf  *conf,
+             const gchar *key,
+             gpointer user_data)
+{
+  EmpathyLocationManager *manager = EMPATHY_LOCATION_MANAGER (user_data);
+  EmpathyLocationManagerPriv *priv;
+  GeoclueResourceFlags resource = 0;
+  gboolean resource_enabled;
+
+  priv = GET_PRIV (manager);
+  DEBUG ("%s changed", key);
+
+  if (!empathy_conf_get_bool (conf, key, &resource_enabled))
+    return;
+
+  if (strcmp (key, EMPATHY_PREFS_LOCATION_RESOURCE_NETWORK) == 0)
+    resource = GEOCLUE_RESOURCE_NETWORK;
+  if (strcmp (key, EMPATHY_PREFS_LOCATION_RESOURCE_CELL) == 0)
+    resource = GEOCLUE_RESOURCE_CELL;
+  if (strcmp (key, EMPATHY_PREFS_LOCATION_RESOURCE_GPS) == 0)
+    resource = GEOCLUE_RESOURCE_GPS;
+
+  if (resource_enabled)
+    priv->resources |= resource;
+  else
+    priv->resources &= ~resource;
+
+  if (priv->geoclue_is_setup)
+    update_resources (manager);
+}
+
+static void
 accuracy_cb (EmpathyConf  *conf,
              const gchar *key,
              gpointer user_data)
@@ -660,33 +619,47 @@ accuracy_cb (EmpathyConf  *conf,
 }
 
 static void
-resource_cb (EmpathyConf  *conf,
-             const gchar *key,
-             gpointer user_data)
+empathy_location_manager_init (EmpathyLocationManager *location_manager)
 {
-  EmpathyLocationManager *manager = EMPATHY_LOCATION_MANAGER (user_data);
-  EmpathyLocationManagerPriv *priv;
-  GeoclueResourceFlags resource = 0;
-  gboolean resource_enabled;
+  EmpathyConf               *conf;
+  EmpathyLocationManagerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (location_manager,
+      EMPATHY_TYPE_LOCATION_MANAGER, EmpathyLocationManagerPriv);
 
-  priv = GET_PRIV (manager);
-  DEBUG ("%s changed", key);
+  location_manager->priv = priv;
+  priv->geoclue_is_setup = FALSE;
+  priv->mc = empathy_mission_control_dup_singleton ();
+  priv->location = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+      g_free, (GDestroyNotify) tp_g_value_slice_free);
 
-  if (!empathy_conf_get_bool (conf, key, &resource_enabled))
-    return;
+  /* Setup settings status callbacks */
+  conf = empathy_conf_get ();
+  empathy_conf_notify_add (conf, EMPATHY_PREFS_LOCATION_PUBLISH, publish_cb,
+      location_manager);
+  empathy_conf_notify_add (conf, EMPATHY_PREFS_LOCATION_RESOURCE_NETWORK,
+      resource_cb, location_manager);
+  empathy_conf_notify_add (conf, EMPATHY_PREFS_LOCATION_RESOURCE_CELL,
+      resource_cb, location_manager);
+  empathy_conf_notify_add (conf, EMPATHY_PREFS_LOCATION_RESOURCE_GPS,
+      resource_cb, location_manager);
+  empathy_conf_notify_add (conf, EMPATHY_PREFS_LOCATION_REDUCE_ACCURACY,
+      accuracy_cb, location_manager);
 
-  if (strcmp (key, EMPATHY_PREFS_LOCATION_RESOURCE_NETWORK) == 0)
-    resource = GEOCLUE_RESOURCE_NETWORK;
-  if (strcmp (key, EMPATHY_PREFS_LOCATION_RESOURCE_CELL) == 0)
-    resource = GEOCLUE_RESOURCE_CELL;
-  if (strcmp (key, EMPATHY_PREFS_LOCATION_RESOURCE_GPS) == 0)
-    resource = GEOCLUE_RESOURCE_GPS;
+  resource_cb (conf, EMPATHY_PREFS_LOCATION_RESOURCE_NETWORK, location_manager);
+  resource_cb (conf, EMPATHY_PREFS_LOCATION_RESOURCE_CELL, location_manager);
+  resource_cb (conf, EMPATHY_PREFS_LOCATION_RESOURCE_GPS, location_manager);
+  accuracy_cb (conf, EMPATHY_PREFS_LOCATION_REDUCE_ACCURACY, location_manager);
+  publish_cb (conf, EMPATHY_PREFS_LOCATION_PUBLISH, location_manager);
 
-  if (resource_enabled)
-    priv->resources |= resource;
-  else
-    priv->resources &= ~resource;
+  /* Setup account status callbacks */
+  priv->account_manager = empathy_account_manager_dup_singleton ();
+  g_signal_connect (priv->account_manager,
+    "account-connection-changed",
+    G_CALLBACK (account_connection_changed_cb), location_manager);
+}
 
-  if (priv->geoclue_is_setup)
-    update_resources (manager);
+EmpathyLocationManager *
+empathy_location_manager_dup_singleton (void)
+{
+  return EMPATHY_LOCATION_MANAGER (g_object_new (EMPATHY_TYPE_LOCATION_MANAGER,
+      NULL));
 }
