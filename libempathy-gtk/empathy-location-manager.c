@@ -51,7 +51,6 @@ static EmpathyLocationManager *location_manager = NULL;
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyLocationManager)
 typedef struct {
     gboolean geoclue_is_setup;
-    MissionControl *mc;
     /* Contains the location to be sent to accounts.  Geoclue is used
      * to populate it.  This HashTable uses Telepathy's style (string,
      * GValue). Keys are defined in empathy-location.h
@@ -141,7 +140,7 @@ location_manager_get_property (GObject *object,
                       GValue *value,
                       GParamSpec *pspec)
 {
-  EmpathyLocationManagerPriv *priv = GET_PRIV (object);
+  /*EmpathyLocationManagerPriv *priv = GET_PRIV (object); */
 
   switch (param_id)
     {
@@ -157,7 +156,7 @@ location_manager_set_property (GObject *object,
                       const GValue *value,
                       GParamSpec *pspec)
 {
-  EmpathyLocationManagerPriv *priv = GET_PRIV (object);
+  /* EmpathyLocationManagerPriv *priv = GET_PRIV (object); */
 
   switch (param_id)
     {
@@ -184,17 +183,18 @@ empathy_location_manager_class_init (EmpathyLocationManagerClass *class)
 
 static void
 publish_location (EmpathyLocationManager *location_manager,
-                  McAccount *account,
-                  gboolean force_publication)
+    McAccount *account,
+    gboolean force_publication)
 {
   EmpathyLocationManagerPriv *priv = GET_PRIV (location_manager);
   guint connection_status = -1;
   gboolean can_publish;
-  EmpathyConf *conf = empathy_conf_get ();
   TpConnection *conn;
+  EmpathyConf *conf = empathy_conf_get ();
   EmpathyTpContactFactory *factory;
 
-  conn = mission_control_get_tpconnection (priv->mc, account, NULL);
+  conn = empathy_account_manager_get_connection (priv->account_manager,
+      account);
   if (!conn)
     return;
 
@@ -208,15 +208,14 @@ publish_location (EmpathyLocationManager *location_manager,
         return;
     }
 
-  connection_status = mission_control_get_connection_status (priv->mc,
-      account, NULL);
+  connection_status = tp_connection_get_status (conn, NULL);
 
   if (connection_status != TP_CONNECTION_STATUS_CONNECTED)
     return;
 
-  DEBUG ("Publishing %s location to account %s",
+  DEBUG ("Publishing %s location to connection %p",
       (g_hash_table_size (priv->location) == 0 ? "empty" : ""),
-      mc_account_get_display_name (account));
+      conn);
 
   factory = empathy_tp_contact_factory_dup_singleton (conn);
   empathy_tp_contact_factory_set_location (factory, priv->location);
@@ -603,7 +602,6 @@ empathy_location_manager_init (EmpathyLocationManager *location_manager)
 
   location_manager->priv = priv;
   priv->geoclue_is_setup = FALSE;
-  priv->mc = empathy_mission_control_dup_singleton ();
   priv->location = g_hash_table_new_full (g_direct_hash, g_direct_equal,
       g_free, (GDestroyNotify) tp_g_value_slice_free);
 
