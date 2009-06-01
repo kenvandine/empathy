@@ -1415,37 +1415,85 @@ empathy_dispatcher_create_channel (EmpathyDispatcher *dispatcher,
     G_OBJECT (request_data->dispatcher));
 }
 
-typedef struct {
-  gboolean mismatch;
-  gboolean not_generic;
-  const char *channel_namespace;
-  GArray *properties;
-} PropertiesMatcherData;
-
-static void
-match_with_properties (gpointer key,
-                       gpointer val,
-                       gpointer user_data)
+static gboolean
+channel_class_matches (GValueArray *class,
+                       const char *channel_type,
+                       guint handle_type,
+                       GArray *fixed_properties)
 {
-  int idx;
-  PropertiesMatcherData *data = user_data;
+  GHashTable *fprops;
+  GValue *v;
+  const char *c_type;
+  guint h_type;
+  gboolean valid;
 
-  if (data->mismatch)
-    return;
+  v = g_value_array_get_nth (class, 0);
 
-  /* discard generic properties, as we already checked them */
-  if (!g_str_has_prefix ((char *) key, data->channel_namespace))
-    return;
+  /* if the class doesn't match channel type discard it. */
+  fprops = g_value_get_boxed (v);
+  c_type = tp_asv_get_string (fprops, TP_IFACE_CHANNEL ".ChannelType");
 
-  data->not_generic = TRUE;
+  if (tp_strdiff (channel_type, c_type))
+    return FALSE;
 
-  for (idx = 0; idx < data->properties->len; idx++)
+  /* we have the right channel type, see if the handle type matches */
+  h_type = tp_asv_get_uint32 (fprops,
+                              TP_IFACE_CHANNEL ".TargetHandleType", &valid);
+
+  if (!valid || handle_type != h_type)
+    return FALSE;
+
+  if (fixed_properties != NULL)
     {
-      /* if |key| exists in the properties, it's fine */
-      if (!tp_strdiff ((char *) key, g_array_index (data->properties,
-          char *, idx)))
-        return;
+      gpointer h_key, h_val;
+      int idx;
+      GHashTableIter iter;
+      gboolean found;
+
+      g_hash_table_iter_init (&iter, fprops);
+
+      while (g_hash_table_iter_next (&iter, &h_key, &h_val))
+        {
+          /* discard ChannelType and TargetHandleType, as we already
+           * checked them.
+           */
+          if (!tp_strdiff ((char *) h_key, TP_IFACE_CHANNEL ".ChannelType") ||
+              !tp_strdiff
+                ((char *) h_key, TP_IFACE_CHANNEL ".TargetHandleType"))
+            continue;
+
+          found = FALSE;
+
+          for (idx = 0; idx < fixed_properties->len; idx++)
+            {
+              /* if |key| doesn't exist in |fixed_properties|, discard
+               * the class.
+               */
+              if (!tp_strdiff
+                    ((char *) h_key,
+                     g_array_index (fixed_properties, char *, idx)))
+                {
+                  found = TRUE;
+                  /* exit the for() loop */
+                  break;
+                }
+            }
+
+          if (!found)
+            return FALSE;
+        }
     }
+  else
+    {
+      /* if no fixed_properties are specified, discard the classes
+       * with some fixed properties other than the two we already
+       * checked.
+       */
+      if (g_hash_table_size (fprops) > 2)
+        return FALSE;
+    }
+
+  return TRUE;
 }
 
 static GList *
@@ -1457,13 +1505,8 @@ empathy_dispatcher_find_channel_classes (EmpathyDispatcher *dispatcher,
 {
   EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
   GValueArray *class;
-  GHashTable *fixed_props;
-  GValue *val;
   GPtrArray *classes;
   GList *matching_classes;
-  const gchar *c_type;
-  guint32 h_type;
-  gboolean valid, found;
   int i;
   ConnectionData *cd;
 
@@ -1479,59 +1522,20 @@ empathy_dispatcher_find_channel_classes (EmpathyDispatcher *dispatcher,
   if (classes == NULL)
     return NULL;
 
-  found = TRUE;
   matching_classes = NULL;
 
   for (i = 0; i < classes->len; i++)
     {
       class = g_ptr_array_index (classes, i);
-      val = g_value_array_get_nth (class, 0);
 
-      /* if the class doesn't match channel type discard it. */
-      fixed_props = g_value_get_boxed (val);
-      c_type = tp_asv_get_string (fixed_props,
-        TP_IFACE_CHANNEL ".ChannelType");
-
-      if (tp_strdiff (channel_type, c_type))
+      if (!channel_class_matches
+          (class, channel_type, handle_type, fixed_properties))
         continue;
-
-      /* we have the right channel type, see if the handle type matches */
-      h_type = tp_asv_get_uint32 (fixed_props,
-        TP_IFACE_CHANNEL ".TargetHandleType", &valid);
-
-      if (!valid || handle_type != h_type)
-        continue;
-
-      /* now we should ensure that the fixed props that we specified
-       * are the only values inside the hash table.
-       */
-      if (fixed_properties != NULL)
-        {
-          PropertiesMatcherData *data;
-
-          data = g_slice_new0 (PropertiesMatcherData);
-          data->mismatch = FALSE;
-          data->not_generic = FALSE;
-          data->channel_namespace = channel_type;
-          data->properties = fixed_properties;
-          g_hash_table_foreach (fixed_props, match_with_properties, data);
-
-          found = (!data->mismatch && data->not_generic);
-
-          g_slice_free (PropertiesMatcherData, data);
-
-          if (!found)
-            continue;
-        }
-
-      if (found)
-        matching_classes = g_list_prepend (matching_classes, class);
+      
+      matching_classes = g_list_prepend (matching_classes, class);
     }
 
-  if (matching_classes != NULL)
-    return g_list_reverse (matching_classes);
-  else
-    return NULL;
+  return matching_classes;
 }
 
 static gboolean
@@ -1593,7 +1597,7 @@ setup_varargs (va_list var_args,
 
   while (name != NULL)
     {
-      name_full = g_strconcat (channel_namespace, ".", name, NULL);
+      name_full = g_strdup (name);
       properties = g_array_append_val (properties, name_full);
       name = va_arg (var_args, char *);
     }
@@ -1613,16 +1617,17 @@ setup_varargs (va_list var_args,
  * Returns all the channel classes that a client can request for the connection
  * @connection, of the type identified by @channel_type, @handle_type and the
  * fixed properties list.
- * If @first_property_name is %NULL, no additional fixed properties will be
- * specified and the function will return all the requestable classes for
- * the specified channel type and handle type.
+ * If @first_property_name is %NULL, only the classes with no other fixed
+ * properties than ChannelType and TargetHandleType will be returned.
  * Note that this function may return %NULL without performing any lookup if
  * @connection is not ready. To ensure that @connection is always ready,
  * use the empathy_dispatcher_find_requestable_channel_classes_async() variant.
  *
  * Return value: a #GList of #GValueArray objects, where the first element in
  * the array is a #GHashTable of the fixed properties, and the second is
- * a #GStrv of the allowed properties for the class.
+ * a #GStrv of the allowed properties for the class. The list should be free'd
+ * with g_list_free() when done, but the objects inside the list are owned
+ * by the #EmpathyDispatcher and must not be modified.
  */
 GList *
 empathy_dispatcher_find_requestable_channel_classes
@@ -1656,14 +1661,17 @@ empathy_dispatcher_find_requestable_channel_classes
   retval = empathy_dispatcher_find_channel_classes (dispatcher, connection,
     channel_type, handle_type, properties);
 
-  /* free the properties array */
-  for (idx = 0; idx < properties->len ; idx++)
+  if (properties != NULL)
     {
-      str = g_array_index (properties, char *, idx);
-      g_free (str);
-    }
+      /* free the properties array */
+      for (idx = 0; idx < properties->len ; idx++)
+        {
+          str = g_array_index (properties, char *, idx);
+          g_free (str);
+        }
 
-  g_array_free (properties, TRUE);
+      g_array_free (properties, TRUE);
+    }
 
   return retval;
 }
