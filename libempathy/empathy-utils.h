@@ -78,6 +78,8 @@ gboolean     empathy_proxy_equal                    (gconstpointer    a,
 						     gconstpointer    b);
 guint        empathy_proxy_hash                     (gconstpointer    key);
 gboolean     empathy_check_available_state          (void);
+gint        empathy_uint_compare                    (gconstpointer a,
+						     gconstpointer b);
 
 G_END_DECLS
 

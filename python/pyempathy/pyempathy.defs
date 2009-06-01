@@ -77,6 +77,20 @@
   (gtype-id "EMPATHY_TYPE_DISPATCHER")
 )
 
+(define-object FTFactory
+  (in-module "Empathy")
+  (parent "GObject")
+  (c-name "EmpathyFTFactory")
+  (gtype-id "EMPATHY_TYPE_FT_FACTORY")
+)
+
+(define-object FTHandler
+  (in-module "Empathy")
+  (parent "GObject")
+  (c-name "EmpathyFTHandler")
+  (gtype-id "EMPATHY_TYPE_FT_HANDLER")
+)
+
 (define-object Idle
   (in-module "Empathy")
   (parent "GObject")
@@ -194,6 +208,7 @@
     '("audio" "EMPATHY_CAPABILITIES_AUDIO")
     '("video" "EMPATHY_CAPABILITIES_VIDEO")
     '("ft" "EMPATHY_CAPABILITIES_FT")
+    '("stream-tube" "EMPATHY_CAPABILITIES_STREAM_TUBE")
     '("unknown" "EMPATHY_CAPABILITIES_UNKNOWN")
   )
 )
@@ -238,6 +253,19 @@
     '("pending" "EMPATHY_TP_CALL_STATUS_PENDING")
     '("accepted" "EMPATHY_TP_CALL_STATUS_ACCEPTED")
     '("closed" "EMPATHY_TP_CALL_STATUS_CLOSED")
+  )
+)
+
+(define-enum FTErrorEnum
+  (in-module "Empathy")
+  (c-name "EmpathyFTErrorEnum")
+  (gtype-id "EMPATHY_TYPE_FT_ERROR_ENUM")
+  (values
+    '("failed" "EMPATHY_FT_ERROR_FAILED")
+    '("hash-mismatch" "EMPATHY_FT_ERROR_HASH_MISMATCH")
+    '("tp-error" "EMPATHY_FT_ERROR_TP_ERROR")
+    '("socket" "EMPATHY_FT_ERROR_SOCKET")
+    '("not-supported" "EMPATHY_FT_ERROR_NOT_SUPPORTED")
   )
 )
 
@@ -861,6 +889,12 @@
   (return-type "gboolean")
 )
 
+(define-method can_use_stream_tube
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_can_use_stream_tube")
+  (return-type "gboolean")
+)
+
 (define-function contact_hash
   (c-name "empathy_contact_hash")
   (return-type "guint")
@@ -1226,15 +1260,32 @@
   )
 )
 
-(define-method find_channel_class
+(define-method find_requestable_channel_classes_async
   (of-object "EmpathyDispatcher")
-  (c-name "empathy_dispatcher_find_channel_class")
-  (return-type "GStrv")
+  (c-name "empathy_dispatcher_find_requestable_channel_classes_async")
+  (return-type "none")
   (parameters
     '("TpConnection*" "connection")
     '("const-gchar*" "channel_type")
     '("guint" "handle_type")
+    '("EmpathyDispatcherFindChannelClassCb" "callback")
+    '("gpointer" "user_data")
+    '("const-char*" "first_property_name")
   )
+  (varargs #t)
+)
+
+(define-method find_requestable_channel_classes
+  (of-object "EmpathyDispatcher")
+  (c-name "empathy_dispatcher_find_requestable_channel_classes")
+  (return-type "GList*")
+  (parameters
+    '("TpConnection*" "connection")
+    '("const-gchar*" "channel_type")
+    '("guint" "handle_type")
+    '("const-char*" "first_property_name")
+  )
+  (varargs #t)
 )
 
 (define-function dispatcher_dup_singleton
@@ -1338,6 +1389,160 @@
 (define-method is_incoming
   (of-object "EmpathyDispatchOperation")
   (c-name "empathy_dispatch_operation_is_incoming")
+  (return-type "gboolean")
+)
+
+
+
+;; From empathy-ft-factory.h
+
+(define-function ft_factory_get_type
+  (c-name "empathy_ft_factory_get_type")
+  (return-type "GType")
+)
+
+(define-function ft_factory_dup_singleton
+  (c-name "empathy_ft_factory_dup_singleton")
+  (return-type "EmpathyFTFactory*")
+)
+
+(define-method new_transfer_outgoing
+  (of-object "EmpathyFTFactory")
+  (c-name "empathy_ft_factory_new_transfer_outgoing")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+    '("GFile*" "source")
+  )
+)
+
+(define-method claim_channel
+  (of-object "EmpathyFTFactory")
+  (c-name "empathy_ft_factory_claim_channel")
+  (return-type "none")
+  (parameters
+    '("EmpathyDispatchOperation*" "operation")
+  )
+)
+
+(define-method set_destination_for_incoming_handler
+  (of-object "EmpathyFTFactory")
+  (c-name "empathy_ft_factory_set_destination_for_incoming_handler")
+  (return-type "none")
+  (parameters
+    '("EmpathyFTHandler*" "handler")
+    '("GFile*" "destination")
+  )
+)
+
+
+
+;; From empathy-ft-handler.h
+
+(define-function ft_handler_get_type
+  (c-name "empathy_ft_handler_get_type")
+  (return-type "GType")
+)
+
+(define-function ft_handler_new_outgoing
+  (c-name "empathy_ft_handler_new_outgoing")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+    '("GFile*" "source")
+    '("EmpathyFTHandlerReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-function ft_handler_new_incoming
+  (c-name "empathy_ft_handler_new_incoming")
+  (return-type "none")
+  (parameters
+    '("EmpathyTpFile*" "tp_file")
+    '("EmpathyFTHandlerReadyCallback" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method incoming_set_destination
+  (of-object "EmpathyFTHandler")
+  (c-name "empathy_ft_handler_incoming_set_destination")
+  (return-type "none")
+  (parameters
+    '("GFile*" "destination")
+  )
+)
+
+(define-method start_transfer
+  (of-object "EmpathyFTHandler")
+  (c-name "empathy_ft_handler_start_transfer")
+  (return-type "none")
+)
+
+(define-method cancel_transfer
+  (of-object "EmpathyFTHandler")
+  (c-name "empathy_ft_handler_cancel_transfer")
+  (return-type "none")
+)
+
+(define-method get_filename
+  (of-object "EmpathyFTHandler")
+  (c-name "empathy_ft_handler_get_filename")
+  (return-type "const-char*")
+)
+
+(define-method get_content_type
+  (of-object "EmpathyFTHandler")
+  (c-name "empathy_ft_handler_get_content_type")
+  (return-type "const-char*")
+)
+
+(define-method get_contact
+  (of-object "EmpathyFTHandler")
+  (c-name "empathy_ft_handler_get_contact")
+  (return-type "EmpathyContact*")
+)
+
+(define-method get_gfile
+  (of-object "EmpathyFTHandler")
+  (c-name "empathy_ft_handler_get_gfile")
+  (return-type "GFile*")
+)
+
+(define-method get_use_hash
+  (of-object "EmpathyFTHandler")
+  (c-name "empathy_ft_handler_get_use_hash")
+  (return-type "gboolean")
+)
+
+(define-method is_incoming
+  (of-object "EmpathyFTHandler")
+  (c-name "empathy_ft_handler_is_incoming")
+  (return-type "gboolean")
+)
+
+(define-method get_transferred_bytes
+  (of-object "EmpathyFTHandler")
+  (c-name "empathy_ft_handler_get_transferred_bytes")
+  (return-type "guint64")
+)
+
+(define-method get_total_bytes
+  (of-object "EmpathyFTHandler")
+  (c-name "empathy_ft_handler_get_total_bytes")
+  (return-type "guint64")
+)
+
+(define-method is_completed
+  (of-object "EmpathyFTHandler")
+  (c-name "empathy_ft_handler_is_completed")
+  (return-type "gboolean")
+)
+
+(define-method is_cancelled
+  (of-object "EmpathyFTHandler")
+  (c-name "empathy_ft_handler_is_cancelled")
   (return-type "gboolean")
 )
 
@@ -2397,13 +2602,8 @@
   (return-type "EmpathyTpFile*")
   (parameters
     '("TpChannel*" "channel")
+    '("gboolean" "incoming")
   )
-)
-
-(define-method get_channel
-  (of-object "EmpathyTpFile")
-  (c-name "empathy_tp_file_get_channel")
-  (return-type "TpChannel*")
 )
 
 (define-method accept
@@ -2413,7 +2613,25 @@
   (parameters
     '("guint64" "offset")
     '("GFile*" "gfile")
-    '("GError**" "error")
+    '("GCancellable*" "cancellable")
+    '("EmpathyTpFileProgressCallback" "progress_callback")
+    '("gpointer" "progress_user_data")
+    '("EmpathyTpFileOperationCallback" "op_callback")
+    '("gpointer" "op_user_data")
+  )
+)
+
+(define-method offer
+  (of-object "EmpathyTpFile")
+  (c-name "empathy_tp_file_offer")
+  (return-type "none")
+  (parameters
+    '("GFile*" "gfile")
+    '("GCancellable*" "cancellable")
+    '("EmpathyTpFileProgressCallback" "progress_callback")
+    '("gpointer" "progress_user_data")
+    '("EmpathyTpFileOperationCallback" "op_callback")
+    '("gpointer" "op_user_data")
   )
 )
 
@@ -2423,76 +2641,15 @@
   (return-type "none")
 )
 
-(define-method offer
+(define-method close
   (of-object "EmpathyTpFile")
-  (c-name "empathy_tp_file_offer")
+  (c-name "empathy_tp_file_close")
   (return-type "none")
-  (parameters
-    '("GFile*" "gfile")
-    '("GError**" "error")
-  )
-)
-
-(define-method get_contact
-  (of-object "EmpathyTpFile")
-  (c-name "empathy_tp_file_get_contact")
-  (return-type "EmpathyContact*")
-)
-
-(define-method get_filename
-  (of-object "EmpathyTpFile")
-  (c-name "empathy_tp_file_get_filename")
-  (return-type "const-gchar*")
 )
 
 (define-method is_incoming
   (of-object "EmpathyTpFile")
   (c-name "empathy_tp_file_is_incoming")
-  (return-type "gboolean")
-)
-
-(define-method get_state
-  (of-object "EmpathyTpFile")
-  (c-name "empathy_tp_file_get_state")
-  (return-type "TpFileTransferState")
-  (parameters
-    '("TpFileTransferStateChangeReason*" "reason")
-  )
-)
-
-(define-method get_size
-  (of-object "EmpathyTpFile")
-  (c-name "empathy_tp_file_get_size")
-  (return-type "guint64")
-)
-
-(define-method get_transferred_bytes
-  (of-object "EmpathyTpFile")
-  (c-name "empathy_tp_file_get_transferred_bytes")
-  (return-type "guint64")
-)
-
-(define-method get_remaining_time
-  (of-object "EmpathyTpFile")
-  (c-name "empathy_tp_file_get_remaining_time")
-  (return-type "gint")
-)
-
-(define-method get_speed
-  (of-object "EmpathyTpFile")
-  (c-name "empathy_tp_file_get_speed")
-  (return-type "gdouble")
-)
-
-(define-method get_content_type
-  (of-object "EmpathyTpFile")
-  (c-name "empathy_tp_file_get_content_type")
-  (return-type "const-gchar*")
-)
-
-(define-method is_ready
-  (of-object "EmpathyTpFile")
-  (c-name "empathy_tp_file_is_ready")
   (return-type "gboolean")
 )
 
@@ -2777,6 +2934,15 @@
 (define-function check_available_state
   (c-name "empathy_check_available_state")
   (return-type "gboolean")
+)
+
+(define-function uint_compare
+  (c-name "empathy_uint_compare")
+  (return-type "gint")
+  (parameters
+    '("gconstpointer" "a")
+    '("gconstpointer" "b")
+  )
 )
 
 

@@ -50,6 +50,7 @@
 #include <libempathy/empathy-dispatcher.h>
 #include <libempathy/empathy-dispatch-operation.h>
 #include <libempathy/empathy-log-manager.h>
+#include <libempathy/empathy-ft-factory.h>
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-call.h>
 
@@ -129,15 +130,17 @@ dispatch_cb (EmpathyDispatcher *dispatcher,
 		factory = empathy_call_factory_get ();
 		empathy_call_factory_claim_channel (factory, operation);
 	} else if (channel_type == TP_IFACE_QUARK_CHANNEL_TYPE_FILE_TRANSFER) {
-		EmpathyFTManager *ft_manager;
-		EmpathyTpFile    *tp_file;
+		EmpathyFTFactory *factory;
 
-		ft_manager = empathy_ft_manager_dup_singleton ();
-		tp_file = EMPATHY_TP_FILE (
-			empathy_dispatch_operation_get_channel_wrapper (operation));
-		empathy_ft_manager_add_tp_file (ft_manager, tp_file);
-		empathy_dispatch_operation_claim (operation);
-		g_object_unref (ft_manager);
+		factory = empathy_ft_factory_dup_singleton ();
+
+		/* if the operation is not incoming, don't claim it,
+		 * as it might have been triggered by another client, and
+		 * we are observing it.
+		 */
+		if (empathy_dispatch_operation_is_incoming (operation)) {
+			empathy_ft_factory_claim_channel (factory, operation);
+		}
 	}
 }
 
@@ -409,13 +412,41 @@ show_version_cb (const char *option_name,
 }
 
 static void
+new_incoming_transfer_cb (EmpathyFTFactory *factory,
+			  EmpathyFTHandler *handler,
+                          GError *error,
+			  gpointer user_data)
+{
+	if (error) {
+		empathy_ft_manager_display_error (handler, error);
+	} else {
+		empathy_receive_file_with_file_chooser (handler);
+	}
+}
+
+static void
+new_ft_handler_cb (EmpathyFTFactory *factory,
+		   EmpathyFTHandler *handler,
+                   GError *error,
+		   gpointer user_data)
+{
+	if (error) {
+		empathy_ft_manager_display_error (handler, error);
+	} else {
+		empathy_ft_manager_add_handler (handler);
+	}
+
+	g_object_unref (handler);
+}
+
+static void
 new_call_handler_cb (EmpathyCallFactory *factory, EmpathyCallHandler *handler,
 	gboolean outgoing, gpointer user_data)
 {
-		EmpathyCallWindow *window;
+	EmpathyCallWindow *window;
 
-		window = empathy_call_window_new (handler);
-		gtk_widget_show (GTK_WIDGET (window));
+	window = empathy_call_window_new (handler);
+	gtk_widget_show (GTK_WIDGET (window));
 }
 
 int
@@ -429,8 +460,8 @@ main (int argc, char *argv[])
 	EmpathyDispatcher *dispatcher;
 	EmpathyLogManager *log_manager;
 	EmpathyChatroomManager *chatroom_manager;
-	EmpathyFTManager  *ft_manager;
 	EmpathyCallFactory *call_factory;
+	EmpathyFTFactory  *ft_factory;
 	GtkWidget         *window;
 	MissionControl    *mc;
 	EmpathyIdle       *idle;
@@ -578,13 +609,17 @@ main (int argc, char *argv[])
 	chatroom_manager = empathy_chatroom_manager_dup_singleton (NULL);
 	empathy_chatroom_manager_observe (chatroom_manager, dispatcher);
 
-	ft_manager = empathy_ft_manager_dup_singleton ();
-
 	notify_init (_(PACKAGE_NAME));
 	/* Create the call factory */
 	call_factory = empathy_call_factory_initialise ();
 	g_signal_connect (G_OBJECT (call_factory), "new-call-handler",
 		G_CALLBACK (new_call_handler_cb), NULL);
+	/* Create the FT factory */
+	ft_factory = empathy_ft_factory_dup_singleton ();
+	g_signal_connect (ft_factory, "new-ft-handler",
+		G_CALLBACK (new_ft_handler_cb), NULL);
+	g_signal_connect (ft_factory, "new-incoming-transfer",
+		G_CALLBACK (new_incoming_transfer_cb), NULL);
 
 	/* Location mananger */
 #if HAVE_GEOCLUE
@@ -601,10 +636,10 @@ main (int argc, char *argv[])
 	g_object_unref (log_manager);
 	g_object_unref (dispatcher);
 	g_object_unref (chatroom_manager);
-	g_object_unref (ft_manager);
 #if HAVE_GEOCLUE
 	g_object_unref (location_manager);
 #endif
+	g_object_unref (ft_factory);
 
 	notify_uninit ();
 

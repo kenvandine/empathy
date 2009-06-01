@@ -67,6 +67,7 @@ import empathy.ContactList as PyEmpathyContactList_Type
 import empathy.TpChat as PyEmpathyTpChat_Type
 import empathy.Message as PyEmpathyMessage_Type
 import empathy.TpCall as PyEmpathyTpCall_Type
+import empathy.FTHandler as PyEmpathyFTHandler_Type
 %%
 ignore-glob
 	*_get_type

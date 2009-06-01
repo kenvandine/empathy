@@ -1,4 +1,4 @@
-/* * Copyright (C) 2007-2008 Collabora Ltd.
+/* * Copyright (C) 2007-2009 Collabora Ltd.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,6 +15,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * Authors: Xavier Claessens <xclaesse@gmail.com>
+ *          Sjoerd Simons <sjoerd.simons@collabora.co.uk>
+ *          Cosimo Cecchi <cosimo.cecchi@collabora.co.uk>
  */
 
 #include <config.h>
@@ -39,7 +41,6 @@
 #include "empathy-tube-handler.h"
 #include "empathy-account-manager.h"
 #include "empathy-tp-contact-factory.h"
-#include "empathy-tp-file.h"
 #include "empathy-chatroom-manager.h"
 #include "empathy-utils.h"
 
@@ -53,11 +54,14 @@ typedef struct
   MissionControl *mc;
   /* connection to connection data mapping */
   GHashTable *connections;
+  GHashTable *outstanding_classes_requests;
   gpointer token;
   GSList *tubes;
 
   /* channels which the dispatcher is listening "invalidated" */
   GList *channels;
+
+  GHashTable *request_channel_class_async_ids;
 } EmpathyDispatcherPriv;
 
 G_DEFINE_TYPE (EmpathyDispatcher, empathy_dispatcher, G_TYPE_OBJECT);
@@ -72,6 +76,11 @@ enum
 
 static guint signals[LAST_SIGNAL];
 static EmpathyDispatcher *dispatcher = NULL;
+
+static GList * empathy_dispatcher_find_channel_classes
+  (EmpathyDispatcher *dispatcher, TpConnection *connection,
+   const gchar *channel_type, guint handle_type, GArray *fixed_properties);
+
 
 typedef struct
 {
@@ -110,6 +119,17 @@ typedef struct
   /* List of requestable channel classes */
   GPtrArray *requestable_channels;
 } ConnectionData;
+
+typedef struct
+{
+  EmpathyDispatcher *dispatcher;
+  TpConnection *connection;
+  char *channel_type;
+  guint handle_type;
+  GArray *properties;
+  EmpathyDispatcherFindChannelClassCb *callback;
+  gpointer user_data;
+} FindChannelRequest;
 
 static DispatchData *
 new_dispatch_data (TpChannel *channel,
@@ -218,6 +238,29 @@ free_connection_data (ConnectionData *cd)
             g_ptr_array_index (cd->requestable_channels, i));
       g_ptr_array_free (cd->requestable_channels, TRUE);
     }
+}
+
+static void
+free_find_channel_request (FindChannelRequest *r)
+{
+  int idx;
+  char *str;
+
+  g_object_unref (r->dispatcher);
+  g_free (r->channel_type);
+
+  if (r->properties != NULL)
+    {
+      for (idx = 0; idx < r->properties->len ; idx++)
+        {
+          str = g_array_index (r->properties, char *, idx);
+          g_free (str);
+        }
+
+      g_array_free (r->properties, TRUE);
+    }
+
+  g_slice_free (FindChannelRequest, r);
 }
 
 static void
@@ -713,12 +756,35 @@ dispatcher_connection_got_all (TpProxy *proxy,
   else
     {
       ConnectionData *cd;
+      GList *requests, *l;
+      FindChannelRequest *request;
+      GList *retval;
 
       cd = g_hash_table_lookup (priv->connections, proxy);
       g_assert (cd != NULL);
 
       cd->requestable_channels = g_boxed_copy (
         TP_ARRAY_TYPE_REQUESTABLE_CHANNEL_CLASS_LIST, requestable_channels);
+
+      requests = g_hash_table_lookup (priv->outstanding_classes_requests,
+          proxy);
+
+      for (l = requests; l != NULL; l = l->next)
+        {
+          request = l->data;
+
+          retval = empathy_dispatcher_find_channel_classes (dispatcher,
+              TP_CONNECTION (proxy), request->channel_type,
+              request->handle_type, request->properties);
+          request->callback (retval, request->user_data);
+
+          free_find_channel_request (request);
+          g_list_free (retval);
+        }
+
+      g_list_free (requests);
+
+      g_hash_table_remove (priv->outstanding_classes_requests, proxy);
     }
 }
 
@@ -832,6 +898,17 @@ dispatcher_new_connection_cb (EmpathyAccountManager *manager,
   g_ptr_array_free (capabilities, TRUE);
 }
 
+static void
+remove_idle_handlers (gpointer key,
+                      gpointer value,
+                      gpointer user_data)
+{
+  guint source_id;
+
+  source_id = GPOINTER_TO_UINT (value);
+  g_source_remove (source_id);
+}
+
 static GObject *
 dispatcher_constructor (GType type,
                         guint n_construct_params,
@@ -862,6 +939,14 @@ dispatcher_finalize (GObject *object)
   GList *l;
   GHashTableIter iter;
   gpointer connection;
+  GList *list;
+
+  if (priv->request_channel_class_async_ids != NULL)
+    {
+      g_hash_table_foreach (priv->request_channel_class_async_ids,
+        remove_idle_handlers, NULL);
+      g_hash_table_destroy (priv->request_channel_class_async_ids);
+    }
 
   g_signal_handlers_disconnect_by_func (priv->account_manager,
       dispatcher_new_connection_cb, object);
@@ -881,10 +966,18 @@ dispatcher_finalize (GObject *object)
           dispatcher_connection_invalidated_cb, object);
     }
 
+  g_hash_table_iter_init (&iter, priv->outstanding_classes_requests);
+  while (g_hash_table_iter_next (&iter, &connection, (gpointer *) &list))
+    {
+      g_list_foreach (list, (GFunc) free_find_channel_request, NULL);
+      g_list_free (list);
+    }
+
   g_object_unref (priv->account_manager);
   g_object_unref (priv->mc);
 
   g_hash_table_destroy (priv->connections);
+  g_hash_table_destroy (priv->outstanding_classes_requests);
 }
 
 static void
@@ -947,6 +1040,9 @@ empathy_dispatcher_init (EmpathyDispatcher *dispatcher)
   priv->connections = g_hash_table_new_full (g_direct_hash, g_direct_equal,
     g_object_unref, (GDestroyNotify) free_connection_data);
 
+  priv->outstanding_classes_requests = g_hash_table_new_full (g_direct_hash,
+    g_direct_equal, g_object_unref, NULL);
+
   priv->channels = NULL;
 
   connections = empathy_account_manager_dup_connections (priv->account_manager);
@@ -956,6 +1052,9 @@ empathy_dispatcher_init (EmpathyDispatcher *dispatcher)
       g_object_unref (l->data);
     }
   g_list_free (connections);
+
+  priv->request_channel_class_async_ids = g_hash_table_new (g_direct_hash,
+    g_direct_equal);
 }
 
 EmpathyDispatcher *
@@ -1318,93 +1417,100 @@ empathy_dispatcher_create_channel (EmpathyDispatcher *dispatcher,
     G_OBJECT (request_data->dispatcher));
 }
 
-void
-empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
-                                         const gchar *filename,
-                                         guint64 size,
-                                         guint64 date,
-                                         const gchar *content_type,
-                                         EmpathyDispatcherRequestCb *callback,
-                                         gpointer user_data)
+static gboolean
+channel_class_matches (GValueArray *class,
+                       const char *channel_type,
+                       guint handle_type,
+                       GArray *fixed_properties)
 {
-  EmpathyDispatcher *dispatcher = empathy_dispatcher_dup_singleton ();
-  EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
-  TpConnection *connection = empathy_contact_get_connection (contact);
-  ConnectionData *connection_data =
-    g_hash_table_lookup (priv->connections, connection);
-  DispatcherRequestData *request_data;
-  GValue *value;
-  GHashTable *request = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
-      (GDestroyNotify) tp_g_value_slice_free);
+  GHashTable *fprops;
+  GValue *v;
+  const char *c_type;
+  guint h_type;
+  gboolean valid;
 
-  g_return_if_fail (EMPATHY_IS_CONTACT (contact));
-  g_return_if_fail (!EMP_STR_EMPTY (filename));
-  g_return_if_fail (!EMP_STR_EMPTY (content_type));
+  v = g_value_array_get_nth (class, 0);
 
-  /* org.freedesktop.Telepathy.Channel.ChannelType */
-  value = tp_g_value_slice_new (G_TYPE_STRING);
-  g_value_set_string (value, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER);
-  g_hash_table_insert (request, TP_IFACE_CHANNEL ".ChannelType", value);
+  /* if the class doesn't match channel type discard it. */
+  fprops = g_value_get_boxed (v);
+  c_type = tp_asv_get_string (fprops, TP_IFACE_CHANNEL ".ChannelType");
 
-  /* org.freedesktop.Telepathy.Channel.TargetHandleType */
-  value = tp_g_value_slice_new (G_TYPE_UINT);
-  g_value_set_uint (value, TP_HANDLE_TYPE_CONTACT);
-  g_hash_table_insert (request, TP_IFACE_CHANNEL ".TargetHandleType", value);
+  if (tp_strdiff (channel_type, c_type))
+    return FALSE;
 
-  /* org.freedesktop.Telepathy.Channel.TargetHandle */
-  value = tp_g_value_slice_new (G_TYPE_UINT);
-  g_value_set_uint (value, empathy_contact_get_handle (contact));
-  g_hash_table_insert (request, TP_IFACE_CHANNEL ".TargetHandle", value);
+  /* we have the right channel type, see if the handle type matches */
+  h_type = tp_asv_get_uint32 (fprops,
+                              TP_IFACE_CHANNEL ".TargetHandleType", &valid);
 
-  /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.ContentType */
-  value = tp_g_value_slice_new (G_TYPE_STRING);
-  g_value_set_string (value, content_type);
-  g_hash_table_insert (request,
-    TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentType", value);
+  if (!valid || handle_type != h_type)
+    return FALSE;
 
-  /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Filename */
-  value = tp_g_value_slice_new (G_TYPE_STRING);
-  g_value_set_string (value, filename);
-  g_hash_table_insert (request,
-    TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Filename", value);
+  if (fixed_properties != NULL)
+    {
+      gpointer h_key, h_val;
+      int idx;
+      GHashTableIter iter;
+      gboolean found;
 
-  /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Size */
-  value = tp_g_value_slice_new (G_TYPE_UINT64);
-  g_value_set_uint64 (value, size);
-  g_hash_table_insert (request,
-    TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Size", value);
+      g_hash_table_iter_init (&iter, fprops);
 
-  /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Date */
-  value = tp_g_value_slice_new (G_TYPE_UINT64);
-  g_value_set_uint64 (value, date);
-  g_hash_table_insert (request,
-    TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Date", value);
+      while (g_hash_table_iter_next (&iter, &h_key, &h_val))
+        {
+          /* discard ChannelType and TargetHandleType, as we already
+           * checked them.
+           */
+          if (!tp_strdiff ((char *) h_key, TP_IFACE_CHANNEL ".ChannelType") ||
+              !tp_strdiff
+                ((char *) h_key, TP_IFACE_CHANNEL ".TargetHandleType"))
+            continue;
 
-  request_data = new_dispatcher_request_data (dispatcher, connection,
-    TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, TP_HANDLE_TYPE_CONTACT,
-    empathy_contact_get_handle (contact), request, contact, callback,
-    user_data);
-  connection_data->outstanding_requests = g_list_prepend
-    (connection_data->outstanding_requests, request_data);
+          found = FALSE;
 
-  tp_cli_connection_interface_requests_call_create_channel (
-    request_data->connection, -1,
-    request_data->request, dispatcher_create_channel_cb, request_data, NULL,
-    G_OBJECT (request_data->dispatcher));
+          for (idx = 0; idx < fixed_properties->len; idx++)
+            {
+              /* if |key| doesn't exist in |fixed_properties|, discard
+               * the class.
+               */
+              if (!tp_strdiff
+                    ((char *) h_key,
+                     g_array_index (fixed_properties, char *, idx)))
+                {
+                  found = TRUE;
+                  /* exit the for() loop */
+                  break;
+                }
+            }
 
-  g_object_unref (dispatcher);
+          if (!found)
+            return FALSE;
+        }
+    }
+  else
+    {
+      /* if no fixed_properties are specified, discard the classes
+       * with some fixed properties other than the two we already
+       * checked.
+       */
+      if (g_hash_table_size (fprops) > 2)
+        return FALSE;
+    }
+
+  return TRUE;
 }
 
-GStrv
-empathy_dispatcher_find_channel_class (EmpathyDispatcher *dispatcher,
-                                       TpConnection *connection,
-                                       const gchar *channel_type,
-                                       guint handle_type)
+static GList *
+empathy_dispatcher_find_channel_classes (EmpathyDispatcher *dispatcher,
+                                         TpConnection *connection,
+                                         const gchar *channel_type,
+                                         guint handle_type,
+                                         GArray *fixed_properties)
 {
   EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
-  ConnectionData *cd;
-  int i;
+  GValueArray *class;
   GPtrArray *classes;
+  GList *matching_classes;
+  int i;
+  ConnectionData *cd;
 
   g_return_val_if_fail (channel_type != NULL, NULL);
   g_return_val_if_fail (handle_type != 0, NULL);
@@ -1418,36 +1524,223 @@ empathy_dispatcher_find_channel_class (EmpathyDispatcher *dispatcher,
   if (classes == NULL)
     return NULL;
 
+  matching_classes = NULL;
+
   for (i = 0; i < classes->len; i++)
     {
-      GValueArray *class;
-      GValue *fixed;
-      GValue *allowed;
-      GHashTable *fprops;
-      const gchar *c_type;
-      guint32 h_type;
-      gboolean valid;
-
       class = g_ptr_array_index (classes, i);
-      fixed = g_value_array_get_nth (class, 0);
 
-      fprops = g_value_get_boxed (fixed);
-      c_type = tp_asv_get_string (fprops, TP_IFACE_CHANNEL ".ChannelType");
-
-      if (tp_strdiff (channel_type, c_type))
+      if (!channel_class_matches
+          (class, channel_type, handle_type, fixed_properties))
         continue;
-
-      h_type = tp_asv_get_uint32 (fprops,
-        TP_IFACE_CHANNEL ".TargetHandleType", &valid);
-
-      if (!valid || handle_type != h_type)
-        continue;
-
-      allowed = g_value_array_get_nth (class, 1);
-
-      return g_value_get_boxed (allowed);
+      
+      matching_classes = g_list_prepend (matching_classes, class);
     }
 
-  return NULL;
+  return matching_classes;
 }
 
+static gboolean
+find_channel_class_idle_cb (gpointer user_data)
+{
+  GList *retval;
+  GList *requests;
+  FindChannelRequest *request = user_data;
+  ConnectionData *cd;
+  gboolean is_ready = TRUE;
+  EmpathyDispatcherPriv *priv = GET_PRIV (request->dispatcher);
+
+  g_hash_table_remove (priv->request_channel_class_async_ids, request);
+
+  cd = g_hash_table_lookup (priv->connections, request->connection);
+
+  if (cd == NULL)
+    is_ready = FALSE;
+  else if (cd->requestable_channels == NULL)
+    is_ready = FALSE;
+
+  if (is_ready)
+    {
+      retval = empathy_dispatcher_find_channel_classes (request->dispatcher,
+          request->connection, request->channel_type, request->handle_type,
+          request->properties);
+
+      request->callback (retval, request->user_data);
+      free_find_channel_request (request);
+      g_list_free (retval);
+
+      return FALSE;
+    }
+
+  requests = g_hash_table_lookup (priv->outstanding_classes_requests,
+      request->connection);
+  requests = g_list_prepend (requests, request);
+
+  g_hash_table_insert (priv->outstanding_classes_requests,
+      request->connection, requests);
+
+  return FALSE;
+}
+
+static GArray *
+setup_varargs (va_list var_args,
+               const char *channel_namespace,
+               const char *first_property_name)
+{
+  const char *name;
+  char *name_full;
+  GArray *properties;
+
+  if (first_property_name == NULL)
+    return NULL;
+
+  name = first_property_name;
+  properties = g_array_new (TRUE, TRUE, sizeof (char *));
+
+  while (name != NULL)
+    {
+      name_full = g_strdup (name);
+      properties = g_array_append_val (properties, name_full);
+      name = va_arg (var_args, char *);
+    }
+
+  return properties;
+}
+
+/**
+ * empathy_dispatcher_find_requestable_channel_classes:
+ * @dispatcher: an #EmpathyDispatcher
+ * @connection: a #TpConnection
+ * @channel_type: a string identifying the type of the channel to lookup
+ * @handle_type: the handle type for the channel
+ * @first_property_name: %NULL, or the name of the first fixed property,
+ * followed optionally by more names, followed by %NULL.
+ *
+ * Returns all the channel classes that a client can request for the connection
+ * @connection, of the type identified by @channel_type, @handle_type and the
+ * fixed properties list.
+ * The classes which are compatible with a fixed properties list (i.e. those
+ * that will be returned by this function) are intended as those that do not
+ * contain any fixed property other than those in the list; note that this
+ * doesn't guarantee that all the classes compatible with the list will contain
+ * all the requested fixed properties, so the clients will have to filter
+ * the returned list themselves.
+ * If @first_property_name is %NULL, only the classes with no other fixed
+ * properties than ChannelType and TargetHandleType will be returned.
+ * Note that this function may return %NULL without performing any lookup if
+ * @connection is not ready. To ensure that @connection is always ready,
+ * use the empathy_dispatcher_find_requestable_channel_classes_async() variant.
+ *
+ * Return value: a #GList of #GValueArray objects, where the first element in
+ * the array is a #GHashTable of the fixed properties, and the second is
+ * a #GStrv of the allowed properties for the class. The list should be free'd
+ * with g_list_free() when done, but the objects inside the list are owned
+ * by the #EmpathyDispatcher and must not be modified.
+ */
+GList *
+empathy_dispatcher_find_requestable_channel_classes
+                                 (EmpathyDispatcher *dispatcher,
+                                  TpConnection *connection,
+                                  const gchar *channel_type,
+                                  guint handle_type,
+                                  const char *first_property_name,
+                                  ...)
+{
+  va_list var_args;
+  GArray *properties;
+  EmpathyDispatcherPriv *priv;
+  GList *retval;
+  int idx;
+  char *str;
+
+  g_return_val_if_fail (EMPATHY_IS_DISPATCHER (dispatcher), NULL);
+  g_return_val_if_fail (TP_IS_CONNECTION (connection), NULL);
+  g_return_val_if_fail (channel_type != NULL, NULL);
+  g_return_val_if_fail (handle_type != 0, NULL);
+
+  priv = GET_PRIV (dispatcher);
+
+  va_start (var_args, first_property_name);
+
+  properties = setup_varargs (var_args, channel_type, first_property_name);
+
+  va_end (var_args);
+
+  retval = empathy_dispatcher_find_channel_classes (dispatcher, connection,
+    channel_type, handle_type, properties);
+
+  if (properties != NULL)
+    {
+      /* free the properties array */
+      for (idx = 0; idx < properties->len ; idx++)
+        {
+          str = g_array_index (properties, char *, idx);
+          g_free (str);
+        }
+
+      g_array_free (properties, TRUE);
+    }
+
+  return retval;
+}
+
+/**
+ * empathy_dispatcher_find_requestable_channel_classes_async:
+ * @dispatcher: an #EmpathyDispatcher
+ * @connection: a #TpConnection
+ * @channel_type: a string identifying the type of the channel to lookup
+ * @handle_type: the handle type for the channel
+ * @callback: the callback to call when @connection is ready
+ * @user_data: the user data to pass to @callback
+ * @first_property_name: %NULL, or the name of the first fixed property,
+ * followed optionally by more names, followed by %NULL.
+ *
+ * Please see the documentation of
+ * empathy_dispatcher_find_requestable_channel_classes() for a detailed
+ * description of this function.
+ */
+void
+empathy_dispatcher_find_requestable_channel_classes_async
+                                 (EmpathyDispatcher *dispatcher,
+                                  TpConnection *connection,
+                                  const gchar *channel_type,
+                                  guint handle_type,
+                                  EmpathyDispatcherFindChannelClassCb callback,
+                                  gpointer user_data,
+                                  const char *first_property_name,
+                                  ...)
+{
+  va_list var_args;
+  GArray *properties;
+  FindChannelRequest *request;
+  EmpathyDispatcherPriv *priv;
+  guint source_id;
+
+  g_return_if_fail (EMPATHY_IS_DISPATCHER (dispatcher));
+  g_return_if_fail (TP_IS_CONNECTION (connection));
+  g_return_if_fail (channel_type != NULL);
+  g_return_if_fail (handle_type != 0);
+
+  priv = GET_PRIV (dispatcher);
+
+  va_start (var_args, first_property_name);
+
+  properties = setup_varargs (var_args, channel_type, first_property_name);
+
+  va_end (var_args);
+
+  /* append another request for this connection */
+  request = g_slice_new0 (FindChannelRequest);
+  request->dispatcher = dispatcher;
+  request->channel_type = g_strdup (channel_type);
+  request->handle_type = handle_type;
+  request->connection = connection;
+  request->callback = callback;
+  request->user_data = user_data;
+  request->properties = properties;
+
+  source_id = g_idle_add (find_channel_class_idle_cb, request);
+
+  g_hash_table_insert (priv->request_channel_class_async_ids,
+    request, GUINT_TO_POINTER (source_id));
+}

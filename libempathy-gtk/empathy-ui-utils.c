@@ -50,7 +50,7 @@
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-dispatcher.h>
 #include <libempathy/empathy-idle.h>
-#include <libempathy/empathy-tp-file.h>
+#include <libempathy/empathy-ft-factory.h>
 
 #define SCHEMES "(https?|s?ftps?|nntp|news|javascript|about|ghelp|apt|telnet|"\
 		"file|webcal|mailto)"
@@ -1402,86 +1402,31 @@ empathy_toggle_button_set_state_quietly (GtkWidget *widget,
 	g_signal_handlers_unblock_by_func (widget, callback, user_data);
 }
 
-/* Sending files with the file chooser */
-
-static void
-file_manager_send_file_request_cb (EmpathyDispatchOperation *operation,
-				   const GError *error, gpointer user_data)
-{
-	GFile *file = (GFile *) user_data;
-	EmpathyTpFile *tp_file;
-
-	if (error != NULL) {
-		DEBUG ("Couldn't request channel: %s", error->message);
-		g_object_unref (file);
-		return;
-	}
-
-	DEBUG ("Starting to send file");
-
-	tp_file = EMPATHY_TP_FILE (
-		empathy_dispatch_operation_get_channel_wrapper (operation));
-
-	empathy_tp_file_offer (tp_file, file, NULL);
-
-	g_object_unref (file);
-}
-
 static void
 file_manager_send_file_response_cb (GtkDialog      *widget,
 				    gint            response_id,
 				    EmpathyContact *contact)
 {
+	EmpathyFTFactory *factory;
+	GFile *file;
+	gchar *uri;
+	GtkRecentManager *manager;
+
 	if (response_id == GTK_RESPONSE_OK) {
-		GSList *list;
-		GSList *l;
+		file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (widget));
+		uri = g_file_get_uri (file);
 
-		list = gtk_file_chooser_get_uris (GTK_FILE_CHOOSER (widget));
+		factory = empathy_ft_factory_dup_singleton ();
 
-		DEBUG ("File chooser selected files:");
+		empathy_ft_factory_new_transfer_outgoing (factory, contact,
+		                                          file);
 
-		for (l = list; l; l = l->next) {
-			gchar            *uri;
-			GFile            *gfile;
-			GFileInfo        *info;
-			GtkRecentManager *manager;
-			gchar *filename;
-			GTimeVal mtime;
-			GError *error = NULL;
+		manager = gtk_recent_manager_get_default ();
+		gtk_recent_manager_add_item (manager, uri);
 
-			uri = l->data;
-			gfile = g_file_new_for_uri (uri);
-			info = g_file_query_info (gfile,
-				G_FILE_ATTRIBUTE_STANDARD_SIZE ","
-				G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE ","
-				G_FILE_ATTRIBUTE_TIME_MODIFIED,
-				0, NULL, &error);
-
-			if (error) {
-				DEBUG ("Can't get info about the file: %s", error->message);
-				g_clear_error (&error);
-				g_object_unref (gfile);
-				continue;
-			}
-
-			DEBUG ("\t%s", uri);
-			filename = g_file_get_basename (gfile);
-			g_file_info_get_modification_time (info, &mtime);
-
-			empathy_dispatcher_send_file_to_contact (contact,
-				filename, g_file_info_get_size (info), mtime.tv_sec,
-				g_file_info_get_content_type (info),
-				file_manager_send_file_request_cb, gfile);
-
-			g_free (filename);
-			g_object_unref (info);
-
-			manager = gtk_recent_manager_get_default ();
-			gtk_recent_manager_add_item (manager, uri);
-
-			g_free (uri);
-		}
-		g_slist_free (list);
+		g_free (uri);
+		g_object_unref (factory);
+		g_object_unref (file);
 	}
 
 	gtk_widget_destroy (GTK_WIDGET (widget));
@@ -1519,6 +1464,57 @@ empathy_send_file_with_file_chooser (EmpathyContact *contact)
 	g_signal_connect (widget, "response",
 			  G_CALLBACK (file_manager_send_file_response_cb),
 			  contact);
+
+	gtk_widget_show (widget);
+}
+
+static void
+file_manager_receive_file_response_cb (GtkDialog *dialog,
+				       GtkResponseType response,
+				       EmpathyFTHandler *handler)
+{
+	EmpathyFTFactory *factory;
+	GFile *file;
+
+	if (response == GTK_RESPONSE_OK) {
+		factory = empathy_ft_factory_dup_singleton ();
+		file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+
+		empathy_ft_factory_set_destination_for_incoming_handler
+			(factory, handler, file);
+
+		g_object_unref (factory);
+		g_object_unref (file);
+	} else {
+		/* unref the handler, as we dismissed the file chooser,
+		 * and refused the transfer.
+		 */
+		g_object_unref (handler);
+	}
+
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+void
+empathy_receive_file_with_file_chooser (EmpathyFTHandler *handler)
+{
+	GtkWidget *widget;
+
+	widget = gtk_file_chooser_dialog_new (_("Select a destination"),
+					      NULL,
+					      GTK_FILE_CHOOSER_ACTION_SAVE,
+					      GTK_STOCK_CANCEL,
+					      GTK_RESPONSE_CANCEL,
+					      GTK_STOCK_SAVE,
+					      GTK_RESPONSE_OK,
+					      NULL);
+	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (widget),
+		empathy_ft_handler_get_filename (handler));
+	gtk_file_chooser_set_do_overwrite_confirmation
+		(GTK_FILE_CHOOSER (widget), TRUE);
+
+	g_signal_connect (widget, "response",
+		G_CALLBACK (file_manager_receive_file_response_cb), handler);
 
 	gtk_widget_show (widget);
 }

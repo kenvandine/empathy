@@ -4,7 +4,9 @@
 data/empathy.desktop.in.in
 data/empathy.schemas.in
 
+libempathy/empathy-ft-handler.c
 libempathy/empathy-tp-contact-list.c
+libempathy/empathy-tp-file.c
 libempathy/empathy-utils.c
 libempathy/empathy-time.c
 

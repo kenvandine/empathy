@@ -529,7 +529,7 @@ empathy_call_handler_start_call (EmpathyCallHandler *handler)
   EmpathyCallHandlerPriv *priv = GET_PRIV (handler);
   EmpathyDispatcher *dispatcher;
   TpConnection *connection;
-  GStrv allowed;
+  GList *classes;
   GValue *value;
   GHashTable *request;
 
@@ -544,12 +544,14 @@ empathy_call_handler_start_call (EmpathyCallHandler *handler)
 
   dispatcher = empathy_dispatcher_dup_singleton ();
   connection = empathy_contact_get_connection (priv->contact);
-  allowed = empathy_dispatcher_find_channel_class (dispatcher, connection,
-    TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA, TP_HANDLE_TYPE_CONTACT);
+  classes = empathy_dispatcher_find_requestable_channel_classes
+    (dispatcher, connection, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
+     TP_HANDLE_TYPE_CONTACT, NULL);
 
-  if (!tp_strv_contains ((const gchar * const *) allowed,
-      TP_IFACE_CHANNEL ".TargetHandle"))
+  if (classes == NULL)
     return;
+
+  g_list_free (classes);
 
   request = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
       (GDestroyNotify) tp_g_value_slice_free);

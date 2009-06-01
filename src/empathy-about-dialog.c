@@ -44,6 +44,7 @@ static const char *authors[] = {
 	"Aurelien Naldi",
 	"Bastien Nocera",
 	"Christoffer Olsen",
+	"Cosimo Cecchi",
 	"Elliot Fairweather",
 	"Frederic Crozat",
 	"Frederic Peters",
