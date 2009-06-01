@@ -1088,6 +1088,7 @@ find_ft_channel_classes_cb (GList *channel_classes,
 {
   CallbacksData *data = user_data;
   EmpathyFTHandler *handler = data->handler;
+  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
   GError *myerr = NULL;
 
   if (channel_classes == NULL)
@@ -1095,6 +1096,9 @@ find_ft_channel_classes_cb (GList *channel_classes,
       g_set_error_literal (&myerr, EMPATHY_FT_ERROR_QUARK,
           EMPATHY_FT_ERROR_NOT_SUPPORTED,
           _("File transfer not supported by remote contact"));
+
+      if (!g_cancellable_is_cancelled (priv->cancellable))
+        g_cancellable_cancel (priv->cancellable);
 
       data->callback (handler, myerr, data->user_data);
       g_clear_error (&myerr);
@@ -1161,9 +1165,8 @@ out:
       if (!g_cancellable_is_cancelled (priv->cancellable))
         g_cancellable_cancel (priv->cancellable);
 
-      cb_data->callback (NULL, error, cb_data->user_data);
+      cb_data->callback (cb_data->handler, error, cb_data->user_data);
       g_error_free (error);
-      g_object_unref (cb_data->handler);
 
       callbacks_data_free (cb_data);
     }
@@ -1194,8 +1197,8 @@ contact_factory_contact_cb (EmpathyTpContactFactory *factory,
       if (!g_cancellable_is_cancelled (priv->cancellable))
         g_cancellable_cancel (priv->cancellable);
 
-      cb_data->callback (NULL, (GError *) error, cb_data->user_data);
-      g_object_unref (handler);
+      cb_data->callback (handler, (GError *) error, cb_data->user_data);
+      callbacks_data_free (cb_data);
       return;
     }
 
@@ -1222,8 +1225,9 @@ channel_get_all_properties_cb (TpProxy *proxy,
       if (!g_cancellable_is_cancelled (priv->cancellable))
         g_cancellable_cancel (priv->cancellable);
 
-      cb_data->callback (NULL, (GError *) error, cb_data->user_data);
-      g_object_unref (handler);
+      cb_data->callback (handler, (GError *) error, cb_data->user_data);
+
+      callbacks_data_free (cb_data);
       return;
     }
 
