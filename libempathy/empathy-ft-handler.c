@@ -1047,6 +1047,17 @@ set_content_hash_type_from_classes (EmpathyFTHandler *handler,
         g_array_append_val (possible_values, value);
     }
 
+  if (possible_values->len == 0)
+    {
+      /* there are no channel classes with hash support, disable it. */
+      priv->use_hash = FALSE;
+      priv->content_hash_type = TP_FILE_HASH_TYPE_NONE;
+
+      goto out;
+    }
+
+  priv->use_hash = TRUE;
+
   if (possible_values->len == 1)
     {
       priv->content_hash_type = g_array_index (possible_values, guint, 0);
@@ -1064,19 +1075,20 @@ set_content_hash_type_from_classes (EmpathyFTHandler *handler,
         priv->content_hash_type = g_array_index (possible_values, guint, 0);
     }
 
-  DEBUG ("Setting content hash type as %u", priv->content_hash_type);
+out:
+  g_array_free (possible_values, TRUE);
+
+  DEBUG ("Hash enabled %s; setting content hash type as %u",
+         priv->use_hash ? "True" : "False", priv->content_hash_type);
 }
 
 static void
-find_ft_channel_class_cb (GList *channel_classes,
+find_ft_channel_classes_cb (GList *channel_classes,
     gpointer user_data)
 {
   CallbacksData *data = user_data;
   EmpathyFTHandler *handler = data->handler;
   GError *myerr = NULL;
-
-  DEBUG ("check if FT without hash is allowed: %s", (channel_classes != NULL) ?
-      "True" : "False");
 
   if (channel_classes == NULL)
     {
@@ -1089,44 +1101,14 @@ find_ft_channel_class_cb (GList *channel_classes,
     }
   else
     {
-      data->callback (handler, NULL, data->user_data);
-    }
-
-  callbacks_data_free (data);
-}
-
-static void
-find_hash_channel_class_cb (GList *channel_classes,
-    gpointer user_data)
-{
-  CallbacksData *data = user_data;
-  EmpathyFTHandler *handler = data->handler;
-  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
-
-  DEBUG ("check if FT with hash is allowed: %s", (channel_classes != NULL) ?
-      "True" : "False");
-
-  if (channel_classes == NULL)
-    {
-      /* see if we support FT without hash instead */
-      empathy_dispatcher_find_requestable_channel_classes_async
-          (priv->dispatcher, empathy_contact_get_connection (priv->contact),
-           TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, TP_HANDLE_TYPE_CONTACT,
-           find_ft_channel_class_cb, data, NULL);
-
-      return;
-    }
-  else
-    {
-      priv->use_hash = TRUE;
-
-      /* pick a value for the ContentHashType */
+      /* set whether we support hash and the type of it */
       set_content_hash_type_from_classes (handler, channel_classes);
 
       /* get back to the caller now */
       data->callback (handler, NULL, data->user_data);
-      callbacks_data_free (data);
     }
+
+  callbacks_data_free (data);
 }
 
 static void
@@ -1191,7 +1173,8 @@ out:
       empathy_dispatcher_find_requestable_channel_classes_async
           (priv->dispatcher, empathy_contact_get_connection (priv->contact),
            TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, TP_HANDLE_TYPE_CONTACT,
-           find_hash_channel_class_cb, cb_data, "ContentHashType", NULL);
+           find_ft_channel_classes_cb, cb_data,
+           TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentHashType", NULL);
     }
 }
 
