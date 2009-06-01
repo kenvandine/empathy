@@ -636,7 +636,6 @@ main (int argc, char *argv[])
 	g_object_unref (log_manager);
 	g_object_unref (dispatcher);
 	g_object_unref (chatroom_manager);
-	g_object_unref (ft_manager);
 #if HAVE_GEOCLUE
 	g_object_unref (location_manager);
 #endif
