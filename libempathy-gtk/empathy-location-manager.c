@@ -293,7 +293,12 @@ address_changed_cb (GeoclueAddress *address,
   DEBUG ("New address (accuracy level %d):", level);
 
   geoclue_accuracy_get_details (accuracy, &level, NULL, NULL);
-  g_hash_table_remove_all (priv->location);
+  g_hash_table_remove (priv->location, EMPATHY_LOCATION_STREET);
+  g_hash_table_remove (priv->location, EMPATHY_LOCATION_AREA);
+  g_hash_table_remove (priv->location, EMPATHY_LOCATION_REGION);
+  g_hash_table_remove (priv->location, EMPATHY_LOCATION_COUNTRY);
+  g_hash_table_remove (priv->location, EMPATHY_LOCATION_COUNTRY_CODE);
+  g_hash_table_remove (priv->location, EMPATHY_LOCATION_POSTAL_CODE);
 
   if (g_hash_table_size (details) == 0)
     return;
@@ -351,6 +356,7 @@ position_changed_cb (GeocluePosition *position,
   gdouble mean, horizontal, vertical;
   GValue *new_value;
 
+
   geoclue_accuracy_get_details (accuracy, &level, &horizontal, &vertical);
   DEBUG ("New position (accuracy level %d)", level);
   if (level == GEOCLUE_ACCURACY_LEVEL_NONE)
@@ -364,29 +370,47 @@ position_changed_cb (GeocluePosition *position,
           new_value);
       DEBUG ("\t - Longitude: %f", longitude);
     }
+  else
+    {
+      g_hash_table_remove (priv->location, EMPATHY_LOCATION_LON);
+    }
+
   if (fields & GEOCLUE_POSITION_FIELDS_LATITUDE)
     {
       latitude += priv->reduce_value;
       new_value = tp_g_value_slice_new_double (latitude);
-      g_hash_table_insert (priv->location, g_strdup (EMPATHY_LOCATION_LAT),
+      g_hash_table_replace (priv->location, g_strdup (EMPATHY_LOCATION_LAT),
           new_value);
       DEBUG ("\t - Latitude: %f", latitude);
     }
+  else
+    {
+      g_hash_table_remove (priv->location, EMPATHY_LOCATION_LAT);
+    }
+
   if (fields & GEOCLUE_POSITION_FIELDS_ALTITUDE)
     {
       new_value = tp_g_value_slice_new_double (altitude);
-      g_hash_table_insert (priv->location, g_strdup (EMPATHY_LOCATION_ALT),
+      g_hash_table_replace (priv->location, g_strdup (EMPATHY_LOCATION_ALT),
           new_value);
       DEBUG ("\t - Altitude: %f", altitude);
+    }
+  else
+    {
+      g_hash_table_remove (priv->location, EMPATHY_LOCATION_ALT);
     }
 
   if (level == GEOCLUE_ACCURACY_LEVEL_DETAILED)
     {
       mean = (horizontal + vertical) / 2.0;
       new_value = tp_g_value_slice_new_double (mean);
-      g_hash_table_insert (priv->location,
+      g_hash_table_replace (priv->location,
           g_strdup (EMPATHY_LOCATION_ACCURACY), new_value);
       DEBUG ("\t - Accuracy: %f", mean);
+    }
+  else
+    {
+      g_hash_table_remove (priv->location, EMPATHY_LOCATION_ACCURACY);
     }
 
   update_timestamp (location_manager);
