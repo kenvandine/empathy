@@ -183,18 +183,15 @@ empathy_location_manager_class_init (EmpathyLocationManagerClass *class)
 
 static void
 publish_location (EmpathyLocationManager *location_manager,
-    McAccount *account,
+    TpConnection *conn,
     gboolean force_publication)
 {
   EmpathyLocationManagerPriv *priv = GET_PRIV (location_manager);
   guint connection_status = -1;
   gboolean can_publish;
-  TpConnection *conn;
   EmpathyConf *conf = empathy_conf_get ();
   EmpathyTpContactFactory *factory;
 
-  conn = empathy_account_manager_get_connection (priv->account_manager,
-      account);
   if (!conn)
     return;
 
@@ -223,18 +220,20 @@ publish_location (EmpathyLocationManager *location_manager,
 }
 
 static void
-publish_to_all_accounts (EmpathyLocationManager *location_manager,
-                                  gboolean force_publication)
+publish_to_all_connections (EmpathyLocationManager *location_manager,
+    gboolean force_publication)
 {
-  GList *accounts = NULL, *l;
+  EmpathyLocationManagerPriv *priv = GET_PRIV (location_manager);
+  GList *connections = NULL, *l;
 
-  accounts = mc_accounts_list_by_enabled (TRUE);
-  for (l = accounts; l; l = l->next)
+  connections = empathy_account_manager_dup_connections (priv->account_manager);
+  for (l = connections; l; l = l->next)
     {
       publish_location (location_manager, l->data, force_publication);
+      g_object_unref (l->data);
     }
+  g_list_free (connections);
 
-  mc_accounts_list_free (accounts);
 }
 
 static gboolean
@@ -244,24 +243,24 @@ publish_on_idle (gpointer user_data)
   EmpathyLocationManagerPriv *priv = GET_PRIV (manager);
 
   priv->timeout_id = 0;
-  publish_to_all_accounts (manager, TRUE);
+  publish_to_all_connections (manager, TRUE);
   return FALSE;
 }
 
 static void
-account_connection_changed_cb (EmpathyAccountManager *manager,
-                               McAccount *account,
-                               TpConnectionStatusReason reason,
-                               TpConnectionStatus current,
-                               TpConnectionStatus previous,
-                               gpointer *location_manager)
+new_connection_cb (EmpathyAccountManager *manager,
+    TpConnection *conn,
+    gpointer *location_manager)
 {
-  DEBUG ("Account %s changed status from %d to %d", mc_account_get_display_name (account),
-      previous, current);
+  EmpathyLocationManagerPriv *priv = GET_PRIV (manager);
+  DEBUG ("New connection %p", conn);
 
-  if (account && current == TP_CONNECTION_STATUS_CONNECTED)
-    publish_location (EMPATHY_LOCATION_MANAGER (location_manager), account,
-        FALSE);
+  /* Don't publish if it is already planned (ie startup) */
+  if (priv->timeout_id == 0)
+    {
+      publish_location (EMPATHY_LOCATION_MANAGER (location_manager), conn,
+          FALSE);
+    }
 }
 
 static void
@@ -521,7 +520,7 @@ publish_cb (EmpathyConf *conf,
        * location from the servers
        */
       g_hash_table_remove_all (priv->location);
-      publish_to_all_accounts (manager, TRUE);
+      publish_to_all_connections (manager, TRUE);
     }
 
 }
@@ -627,8 +626,8 @@ empathy_location_manager_init (EmpathyLocationManager *location_manager)
   /* Setup account status callbacks */
   priv->account_manager = empathy_account_manager_dup_singleton ();
   g_signal_connect (priv->account_manager,
-    "account-connection-changed",
-    G_CALLBACK (account_connection_changed_cb), location_manager);
+    "new-connection",
+    G_CALLBACK (new_connection_cb), location_manager);
 }
 
 EmpathyLocationManager *
