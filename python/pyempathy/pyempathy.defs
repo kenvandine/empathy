@@ -208,6 +208,7 @@
     '("audio" "EMPATHY_CAPABILITIES_AUDIO")
     '("video" "EMPATHY_CAPABILITIES_VIDEO")
     '("ft" "EMPATHY_CAPABILITIES_FT")
+    '("stream-tube" "EMPATHY_CAPABILITIES_STREAM_TUBE")
     '("unknown" "EMPATHY_CAPABILITIES_UNKNOWN")
   )
 )
@@ -888,6 +889,12 @@
   (return-type "gboolean")
 )
 
+(define-method can_use_stream_tube
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_can_use_stream_tube")
+  (return-type "gboolean")
+)
+
 (define-function contact_hash
   (c-name "empathy_contact_hash")
   (return-type "guint")
@@ -1253,15 +1260,32 @@
   )
 )
 
-(define-method find_channel_class
+(define-method find_requestable_channel_classes_async
   (of-object "EmpathyDispatcher")
-  (c-name "empathy_dispatcher_find_channel_class")
-  (return-type "GStrv")
+  (c-name "empathy_dispatcher_find_requestable_channel_classes_async")
+  (return-type "none")
   (parameters
     '("TpConnection*" "connection")
     '("const-gchar*" "channel_type")
     '("guint" "handle_type")
+    '("EmpathyDispatcherFindChannelClassCb" "callback")
+    '("gpointer" "user_data")
+    '("const-char*" "first_property_name")
   )
+  (varargs #t)
+)
+
+(define-method find_requestable_channel_classes
+  (of-object "EmpathyDispatcher")
+  (c-name "empathy_dispatcher_find_requestable_channel_classes")
+  (return-type "GList*")
+  (parameters
+    '("TpConnection*" "connection")
+    '("const-gchar*" "channel_type")
+    '("guint" "handle_type")
+    '("const-char*" "first_property_name")
+  )
+  (varargs #t)
 )
 
 (define-function dispatcher_dup_singleton
@@ -1389,7 +1413,6 @@
   (parameters
     '("EmpathyContact*" "contact")
     '("GFile*" "source")
-    '("gboolean" "use_hash")
   )
 )
 
@@ -1409,7 +1432,6 @@
   (parameters
     '("EmpathyFTHandler*" "handler")
     '("GFile*" "destination")
-    '("gboolean" "use_hash")
   )
 )
 
@@ -1428,7 +1450,6 @@
   (parameters
     '("EmpathyContact*" "contact")
     '("GFile*" "source")
-    '("gboolean" "use_hash")
     '("EmpathyFTHandlerReadyCallback" "callback")
     '("gpointer" "user_data")
   )
@@ -1450,7 +1471,6 @@
   (return-type "none")
   (parameters
     '("GFile*" "destination")
-    '("gboolean" "use_hash")
   )
 )
 
@@ -2914,6 +2934,15 @@
 (define-function check_available_state
   (c-name "empathy_check_available_state")
   (return-type "gboolean")
+)
+
+(define-function uint_compare
+  (c-name "empathy_uint_compare")
+  (return-type "gint")
+  (parameters
+    '("gconstpointer" "a")
+    '("gconstpointer" "b")
+  )
 )
 
 
