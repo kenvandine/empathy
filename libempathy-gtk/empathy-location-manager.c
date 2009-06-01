@@ -56,7 +56,6 @@ typedef struct {
      * GValue). Keys are defined in empathy-location.h
      */
     GHashTable *location;
-    gpointer token;
 
     GeoclueResourceFlags resources;
     GeoclueMasterClient *gc_client;
