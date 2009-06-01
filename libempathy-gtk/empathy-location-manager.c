@@ -290,9 +290,10 @@ address_changed_cb (GeoclueAddress *address,
   GHashTableIter iter;
   gpointer key, value;
 
-  DEBUG ("New address (accuracy level %d):", level);
-
   geoclue_accuracy_get_details (accuracy, &level, NULL, NULL);
+  DEBUG ("New address (accuracy level %d):", level);
+  /* FIXME: Publish accuracy level also considering the position's */
+
   g_hash_table_remove (priv->location, EMPATHY_LOCATION_STREET);
   g_hash_table_remove (priv->location, EMPATHY_LOCATION_AREA);
   g_hash_table_remove (priv->location, EMPATHY_LOCATION_REGION);
