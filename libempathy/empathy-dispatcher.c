@@ -1617,6 +1617,12 @@ setup_varargs (va_list var_args,
  * Returns all the channel classes that a client can request for the connection
  * @connection, of the type identified by @channel_type, @handle_type and the
  * fixed properties list.
+ * The classes which are compatible with a fixed properties list (i.e. those
+ * that will be returned by this function) are intended as those that do not
+ * contain any fixed property other than those in the list; note that this
+ * doesn't guarantee that all the classes compatible with the list will contain
+ * all the requested fixed properties, so the clients will have to filter
+ * the returned list themselves.
  * If @first_property_name is %NULL, only the classes with no other fixed
  * properties than ChannelType and TargetHandleType will be returned.
  * Note that this function may return %NULL without performing any lookup if
