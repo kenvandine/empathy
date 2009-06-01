@@ -628,6 +628,12 @@ empathy_location_manager_init (EmpathyLocationManager *location_manager)
   priv->location = g_hash_table_new_full (g_direct_hash, g_direct_equal,
       g_free, (GDestroyNotify) tp_g_value_slice_free);
 
+  /* Setup account status callbacks */
+  priv->account_manager = empathy_account_manager_dup_singleton ();
+  g_signal_connect (priv->account_manager,
+    "new-connection",
+    G_CALLBACK (new_connection_cb), location_manager);
+
   /* Setup settings status callbacks */
   conf = empathy_conf_get ();
   empathy_conf_notify_add (conf, EMPATHY_PREFS_LOCATION_PUBLISH, publish_cb,
@@ -646,12 +652,6 @@ empathy_location_manager_init (EmpathyLocationManager *location_manager)
   resource_cb (conf, EMPATHY_PREFS_LOCATION_RESOURCE_GPS, location_manager);
   accuracy_cb (conf, EMPATHY_PREFS_LOCATION_REDUCE_ACCURACY, location_manager);
   publish_cb (conf, EMPATHY_PREFS_LOCATION_PUBLISH, location_manager);
-
-  /* Setup account status callbacks */
-  priv->account_manager = empathy_account_manager_dup_singleton ();
-  g_signal_connect (priv->account_manager,
-    "new-connection",
-    G_CALLBACK (new_connection_cb), location_manager);
 }
 
 EmpathyLocationManager *
