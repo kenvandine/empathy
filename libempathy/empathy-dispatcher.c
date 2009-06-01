@@ -1,4 +1,4 @@
-/* * Copyright (C) 2007-2008 Collabora Ltd.
+/* * Copyright (C) 2007-2009 Collabora Ltd.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,6 +15,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * Authors: Xavier Claessens <xclaesse@gmail.com>
+ *          Sjoerd Simons <sjoerd.simons@collabora.co.uk>
+ *          Cosimo Cecchi <cosimo.cecchi@collabora.co.uk>
  */
 
 #include <config.h>
