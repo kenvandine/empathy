@@ -662,7 +662,7 @@ static void
 ft_handler_hashing_started_cb (EmpathyFTHandler *handler,
                                EmpathyFTManager *manager)
 {
-  char *message;
+  char *message, *first_line, *second_line;
   GtkTreeRowReference *row_ref;
 
   DEBUG ("Hashing started");
@@ -675,15 +675,21 @@ ft_handler_hashing_started_cb (EmpathyFTHandler *handler,
   row_ref = ft_manager_get_row_from_handler (manager, handler);
   g_return_if_fail (row_ref != NULL);
 
+  first_line = ft_manager_format_contact_info (handler);
+
   if (empathy_ft_handler_is_incoming (handler))
-      message = g_strdup_printf (_("Checking integrity of \"%s\""),
+      second_line = g_strdup_printf (_("Checking integrity of \"%s\""),
           empathy_ft_handler_get_filename (handler));
   else
-      message =  g_strdup_printf (_("Hashing \"%s\""),
+      second_line = g_strdup_printf (_("Hashing \"%s\""),
           empathy_ft_handler_get_filename (handler));
+
+  message = g_strdup_printf ("%s\n%s", first_line, second_line);
 
   ft_manager_update_handler_message (manager, row_ref, message);
 
+  g_free (first_line);
+  g_free (second_line);
   g_free (message);
 }
 
