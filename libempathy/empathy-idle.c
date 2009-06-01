@@ -230,7 +230,8 @@ idle_nm_state_change_cb (DBusGProxy  *proxy,
 
 	priv = GET_PRIV (idle);
 
-	if (!priv->use_nm) {
+	if (!priv->use_nm
+	    || priv->nm_saved_state == TP_CONNECTION_PRESENCE_TYPE_UNSET) {
 		return;
 	}
 
