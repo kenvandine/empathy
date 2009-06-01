@@ -51,6 +51,7 @@ typedef struct {
 	guint           avatar_max_height;
 	guint           avatar_max_size;
 	gboolean        can_request_ft;
+	gboolean        can_request_st;
 } EmpathyTpContactFactoryPriv;
 
 G_DEFINE_TYPE (EmpathyTpContactFactory, empathy_tp_contact_factory, G_TYPE_OBJECT);
@@ -618,6 +619,7 @@ get_requestable_channel_classes_cb (TpProxy *connection,
 	EmpathyTpContactFactoryPriv *priv = GET_PRIV (self);
 	GPtrArray                   *classes;
 	guint                        i;
+	GList                       *l;
 
 	if (error != NULL) {
 		DEBUG ("Error: %s", error->message);
@@ -629,39 +631,46 @@ get_requestable_channel_classes_cb (TpProxy *connection,
 		GValueArray *class_struct;
 		GHashTable *fixed_prop;
 		GValue *chan_type, *handle_type;
-		GList *l;
 
 		class_struct = g_ptr_array_index (classes, i);
 		fixed_prop = g_value_get_boxed (g_value_array_get_nth (class_struct, 0));
 
-		chan_type = g_hash_table_lookup (fixed_prop,
-			TP_IFACE_CHANNEL ".ChannelType");
-		if (chan_type == NULL ||
-		    tp_strdiff (g_value_get_string (chan_type),
-		    		TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER)) {
-			continue;
-		}
-
 		handle_type = g_hash_table_lookup (fixed_prop,
 			TP_IFACE_CHANNEL ".TargetHandleType");
 		if (handle_type == NULL ||
-		    g_value_get_uint (handle_type) != TP_HANDLE_TYPE_CONTACT) {
+		    g_value_get_uint (handle_type) != TP_HANDLE_TYPE_CONTACT)
 			continue;
-		}
 
-		/* We can request file transfer channel to contacts. */
-		priv->can_request_ft = TRUE;
+		chan_type = g_hash_table_lookup (fixed_prop,
+			TP_IFACE_CHANNEL ".ChannelType");
+		if (chan_type == NULL)
+			continue;
 
-		/* Update the capabilities of all contacts */
-		for (l = priv->contacts; l != NULL; l = g_list_next (l)) {
-			EmpathyContact *contact = l->data;
-			EmpathyCapabilities caps;
+		if (!tp_strdiff (g_value_get_string (chan_type),
+		    TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER))
+			priv->can_request_ft = TRUE;
+		else if (!tp_strdiff (g_value_get_string (chan_type),
+		         TP_IFACE_CHANNEL_TYPE_STREAM_TUBE))
+			priv->can_request_st = TRUE;
+	}
 
-			caps = empathy_contact_get_capabilities (contact);
-			empathy_contact_set_capabilities (contact, caps |
-				EMPATHY_CAPABILITIES_FT);
-		}
-		break;
+	if (!priv->can_request_ft && !priv->can_request_st)
+		return ;
+
+	/* Update the capabilities of all contacts */
+	for (l = priv->contacts; l != NULL; l = g_list_next (l)) {
+		EmpathyContact *contact = l->data;
+		EmpathyCapabilities caps;
+
+		caps = empathy_contact_get_capabilities (contact);
+
+		if (priv->can_request_ft)
+			caps |= EMPATHY_CAPABILITIES_FT;
+
+		if (priv->can_request_st)
+			caps |= EMPATHY_CAPABILITIES_STREAM_TUBE;
+
+		empathy_contact_set_capabilities (contact, caps);
 	}
 }
 
@@ -706,6 +715,7 @@ tp_contact_factory_add_contact (EmpathyTpContactFactory *tp_factory,
 	GHashTable *tokens;
 	GPtrArray *capabilities;
 	GError *error = NULL;
+	EmpathyCapabilities caps;
 
 	/* Keep a weak ref to that contact */
 	g_object_weak_ref (G_OBJECT (contact),
@@ -718,15 +728,19 @@ tp_contact_factory_add_contact (EmpathyTpContactFactory *tp_factory,
 				g_object_ref (tp_factory),
 				g_object_unref);
 
+	caps = empathy_contact_get_capabilities (contact);
+
 	/* Set the FT capability */
 	if (priv->can_request_ft) {
-		EmpathyCapabilities caps;
-
-		caps = empathy_contact_get_capabilities (contact);
 		caps |= EMPATHY_CAPABILITIES_FT;
-
-		empathy_contact_set_capabilities (contact, caps);
 	}
+
+	/* Set the Stream Tube capability */
+	if (priv->can_request_st) {
+		caps |= EMPATHY_CAPABILITIES_STREAM_TUBE;
+	}
+
+	empathy_contact_set_capabilities (contact, caps);
 
 	/* Set is-user property. Note that it could still be the handle is
 	 * different from the connection's self handle, in the case the handle
@@ -1391,6 +1405,7 @@ empathy_tp_contact_factory_init (EmpathyTpContactFactory *tp_factory)
 
 	tp_factory->priv = priv;
 	priv->can_request_ft = FALSE;
+	priv->can_request_st = FALSE;
 }
 
 static GHashTable *factories = NULL;
