@@ -22,7 +22,7 @@
           <object class="GtkAction" id="view_history">
             <property name="icon-name">document-open-recent</property>
             <property name="name">view_history</property>
-            <property name="label" translatable="yes">_View Previous Conversations</property>
+            <property name="label" translatable="yes">_Previous Conversations</property>
           </object>
           <accelerator key="F3" modifiers=""/>
         </child>
@@ -37,20 +37,20 @@
           <object class="GtkAction" id="view_show_ft_manager">
             <property name="icon-name">document-send</property>
             <property name="name">view_show_ft_manager</property>
-            <property name="label" translatable="yes">Show _File Transfers</property>
+            <property name="label" translatable="yes">_File Transfers</property>
           </object>
         </child>
         <child>
           <object class="GtkToggleAction" id="view_show_offline">
             <property name="name">view_show_offline</property>
-            <property name="label" translatable="yes">Show _Offline Contacts</property>
+            <property name="label" translatable="yes">_Offline Contacts</property>
           </object>
           <accelerator key="H" modifiers="GDK_CONTROL_MASK"/>
         </child>
         <child>
           <object class="GtkAction" id="view_show_map">
             <property name="name">view_show_map</property>
-            <property name="label" translatable="yes">Show Contacts on a Map</property>
+            <property name="label" translatable="yes">Contacts on a _Map</property>
           </object>
         </child>
         <child>
