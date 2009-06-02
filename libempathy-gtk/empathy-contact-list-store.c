@@ -1354,7 +1354,7 @@ contact_list_store_state_sort_func (GtkTreeModel *model,
 	/* If we managed to get this far, we can start looking at
 	 * the presences.
 	 */
-	ret_val = tp_connection_presence_type_cmp_availability (
+	ret_val = -tp_connection_presence_type_cmp_availability (
 		empathy_contact_get_presence (EMPATHY_CONTACT (contact_a)),
 		empathy_contact_get_presence (EMPATHY_CONTACT (contact_b)));
 
