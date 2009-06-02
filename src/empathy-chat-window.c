@@ -192,7 +192,8 @@ chat_tab_style_set_cb (GtkWidget *hbox,
 
 static GtkWidget *
 chat_window_create_label (EmpathyChatWindow *window,
-			  EmpathyChat       *chat)
+			  EmpathyChat       *chat,
+			  gboolean           is_tab_label)
 {
 	EmpathyChatWindowPriv *priv;
 	GtkWidget            *hbox;
@@ -214,7 +215,8 @@ chat_window_create_label (EmpathyChatWindow *window,
 	gtk_event_box_set_visible_window (GTK_EVENT_BOX (event_box), FALSE);
 
 	name_label = gtk_label_new (NULL);
-	gtk_label_set_ellipsize (GTK_LABEL (name_label), PANGO_ELLIPSIZE_END);
+	if (is_tab_label)
+		gtk_label_set_ellipsize (GTK_LABEL (name_label), PANGO_ELLIPSIZE_END);
 
 	attr_list = pango_attr_list_new ();
 	attr = pango_attr_scale_new (1/1.2);
@@ -226,7 +228,9 @@ chat_window_create_label (EmpathyChatWindow *window,
 
 	gtk_misc_set_padding (GTK_MISC (name_label), 2, 0);
 	gtk_misc_set_alignment (GTK_MISC (name_label), 0.0, 0.5);
-	g_object_set_data (G_OBJECT (chat), "chat-window-tab-label", name_label);
+	g_object_set_data (G_OBJECT (chat),
+		is_tab_label ? "chat-window-tab-label" : "chat-window-menu-label",
+		name_label);
 
 	status_image = gtk_image_new ();
 
@@ -236,40 +240,47 @@ chat_window_create_label (EmpathyChatWindow *window,
 	gtk_box_pack_start (GTK_BOX (event_box_hbox), status_image, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (event_box_hbox), name_label, TRUE, TRUE, 0);
 
-	g_object_set_data (G_OBJECT (chat), "chat-window-tab-image", status_image);
-	g_object_set_data (G_OBJECT (chat), "chat-window-tab-tooltip-widget", event_box);
-
-	close_button = gtk_button_new ();
-	gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
-	g_object_set_data (G_OBJECT (chat), "chat-window-tab-close-button", close_button);
-
-	/* We don't want focus/keynav for the button to avoid clutter, and
-	 * Ctrl-W works anyway.
-	 */
-	GTK_WIDGET_UNSET_FLAGS (close_button, GTK_CAN_FOCUS);
-	GTK_WIDGET_UNSET_FLAGS (close_button, GTK_CAN_DEFAULT);
-
-	/* Set the name to make the special rc style match. */
-	gtk_widget_set_name (close_button, "empathy-close-button");
-
-	close_image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
-
-	gtk_container_add (GTK_CONTAINER (close_button), close_image);
+	g_object_set_data (G_OBJECT (chat),
+		is_tab_label ? "chat-window-tab-image" : "chat-window-menu-image",
+		status_image);
+	g_object_set_data (G_OBJECT (chat),
+		is_tab_label ? "chat-window-tab-tooltip-widget" : "chat-window-menu-tooltip-widget",
+		event_box);
 
 	gtk_container_add (GTK_CONTAINER (event_box), event_box_hbox);
 	gtk_box_pack_start (GTK_BOX (hbox), event_box, TRUE, TRUE, 0);
-	gtk_box_pack_end (GTK_BOX (hbox), close_button, FALSE, FALSE, 0);
 
-	/* React to theme changes and also setup the size correctly.  */
-	g_signal_connect (hbox,
-			  "style-set",
-			  G_CALLBACK (chat_tab_style_set_cb),
-			  chat);
+	if (is_tab_label) {
+		close_button = gtk_button_new ();
+		gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
+		g_object_set_data (G_OBJECT (chat), "chat-window-tab-close-button", close_button);
 
-	g_signal_connect (close_button,
-			  "clicked",
-			  G_CALLBACK (chat_window_close_clicked_cb),
-			  chat);
+		/* We don't want focus/keynav for the button to avoid clutter, and
+		 * Ctrl-W works anyway.
+		 */
+		GTK_WIDGET_UNSET_FLAGS (close_button, GTK_CAN_FOCUS);
+		GTK_WIDGET_UNSET_FLAGS (close_button, GTK_CAN_DEFAULT);
+
+		/* Set the name to make the special rc style match. */
+		gtk_widget_set_name (close_button, "empathy-close-button");
+
+		close_image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
+
+		gtk_container_add (GTK_CONTAINER (close_button), close_image);
+
+		gtk_box_pack_end (GTK_BOX (hbox), close_button, FALSE, FALSE, 0);
+
+		g_signal_connect (close_button,
+				  "clicked",
+				  G_CALLBACK (chat_window_close_clicked_cb),
+				  chat);
+
+		/* React to theme changes and also setup the size correctly.  */
+		g_signal_connect (hbox,
+				  "style-set",
+				  G_CALLBACK (chat_tab_style_set_cb),
+				  chat);
+	}
 
 	gtk_widget_show_all (hbox);
 
@@ -413,6 +424,8 @@ chat_window_update_chat_tab (EmpathyChat *chat)
 	}
 	widget = g_object_get_data (G_OBJECT (chat), "chat-window-tab-image");
 	gtk_image_set_from_icon_name (GTK_IMAGE (widget), icon_name, GTK_ICON_SIZE_MENU);
+	widget = g_object_get_data (G_OBJECT (chat), "chat-window-menu-image");
+	gtk_image_set_from_icon_name (GTK_IMAGE (widget), icon_name, GTK_ICON_SIZE_MENU);
 
 	/* Update tab tooltip */
 	tooltip = g_string_new (NULL);
@@ -446,10 +459,14 @@ chat_window_update_chat_tab (EmpathyChat *chat)
 	markup = g_string_free (tooltip, FALSE);
 	widget = g_object_get_data (G_OBJECT (chat), "chat-window-tab-tooltip-widget");
 	gtk_widget_set_tooltip_markup (widget, markup);
+	widget = g_object_get_data (G_OBJECT (chat), "chat-window-menu-tooltip-widget");
+	gtk_widget_set_tooltip_markup (widget, markup);
 	g_free (markup);
 
-	/* Update tab label */
+	/* Update tab and menu label */
 	widget = g_object_get_data (G_OBJECT (chat), "chat-window-tab-label");
+	gtk_label_set_text (GTK_LABEL (widget), name);
+	widget = g_object_get_data (G_OBJECT (chat), "chat-window-menu-label");
 	gtk_label_set_text (GTK_LABEL (widget), name);
 
 	/* Update the window if it's the current chat */
@@ -1370,6 +1387,7 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 	priv->notebook = gtk_notebook_new ();
 	gtk_notebook_set_group (GTK_NOTEBOOK (priv->notebook), "EmpathyChatWindow");
 	gtk_notebook_set_scrollable (GTK_NOTEBOOK (priv->notebook), TRUE);
+	gtk_notebook_popup_enable (GTK_NOTEBOOK (priv->notebook));
 	gtk_box_pack_start (GTK_BOX (chat_vbox), priv->notebook, TRUE, TRUE, 0);
 	gtk_widget_show (priv->notebook);
 
@@ -1515,6 +1533,7 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 {
 	EmpathyChatWindowPriv *priv;
 	GtkWidget             *label;
+	GtkWidget             *popup_label;
 	GtkWidget             *child;
 	gint                   x, y, w, h;
 
@@ -1546,7 +1565,8 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 	}
 
 	child = GTK_WIDGET (chat);
-	label = chat_window_create_label (window, chat);
+	label = chat_window_create_label (window, chat, TRUE);
+	popup_label = chat_window_create_label (window, chat, FALSE);
 	gtk_widget_show (child);
 
 	g_signal_connect (chat, "notify::name",
@@ -1560,7 +1580,7 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 			  NULL);
 	chat_window_chat_notify_cb (chat);
 
-	gtk_notebook_append_page (GTK_NOTEBOOK (priv->notebook), child, label);
+	gtk_notebook_append_page_menu (GTK_NOTEBOOK (priv->notebook), child, label, popup_label);
 	gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (priv->notebook), child, TRUE);
 	gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (priv->notebook), child, TRUE);
 	gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (priv->notebook), child,
