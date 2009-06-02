@@ -128,18 +128,6 @@ tp_file_get_state_cb (TpProxy *proxy,
   priv->state = g_value_get_uint (value);
 }
 
-static gint
-uint_compare (gconstpointer a, gconstpointer b)
-{
-  const guint *uinta = a;
-  const guint *uintb = b;
-
-  if (*uinta == *uintb)
-    return 0;
-
-  return (*uinta > *uintb) ? 1 : -1;
-}
-
 static void
 tp_file_get_available_socket_types_cb (TpProxy *proxy,
     const GValue *value,
@@ -175,7 +163,7 @@ tp_file_get_available_socket_types_cb (TpProxy *proxy,
       GUINT_TO_POINTER (TP_SOCKET_ADDRESS_TYPE_IPV4))) != NULL)
     {
       priv->socket_address_type = TP_SOCKET_ADDRESS_TYPE_IPV4;
-      g_array_sort (access_controls, uint_compare);
+      g_array_sort (access_controls, empathy_uint_compare);
 
       /* here port is preferred over localhost */
       if ((g_array_index (access_controls, guint, 0) ==
