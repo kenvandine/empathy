@@ -856,7 +856,8 @@ debug_dialog_copy_clicked_cb (GtkToolButton *tool_button,
       gtk_widget_get_display (GTK_WIDGET (tool_button)),
       GDK_SELECTION_CLIPBOARD);
 
-  DEBUG ("Copying text to clipboard (length: %u)", strlen (text));
+  DEBUG ("Copying text to clipboard (length: %" G_GSIZE_FORMAT ")",
+      strlen (text));
 
   gtk_clipboard_set_text (clipboard, text, -1);
 
