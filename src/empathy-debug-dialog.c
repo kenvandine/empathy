@@ -1195,12 +1195,6 @@ debug_dialog_dispose (GObject *object)
   if (priv->store != NULL)
     g_object_unref (priv->store);
 
-  if (priv->scrolled_win != NULL)
-    g_object_unref (priv->scrolled_win);
-
-  if (priv->view != NULL)
-    g_object_unref (priv->view);
-
   if (priv->name_owner_changed_signal != NULL)
     tp_proxy_signal_connection_disconnect (priv->name_owner_changed_signal);
 
