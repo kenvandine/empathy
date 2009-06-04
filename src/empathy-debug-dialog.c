@@ -464,6 +464,7 @@ debug_dialog_list_connection_names_cb (const gchar * const *names,
   if (error2 != NULL)
     {
       DEBUG ("Failed to dup TpDBusDaemon.");
+      g_error_free (error2);
       return;
     }
 
