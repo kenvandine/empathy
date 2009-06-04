@@ -763,7 +763,7 @@ empathy_contact_is_online (EmpathyContact *contact)
 {
   g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), FALSE);
 
-  switch (empathy_contact_get_presence(contact))
+  switch (empathy_contact_get_presence (contact))
     {
       case TP_CONNECTION_PRESENCE_TYPE_OFFLINE:
       case TP_CONNECTION_PRESENCE_TYPE_UNKNOWN:

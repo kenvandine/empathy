@@ -1533,7 +1533,7 @@ empathy_dispatcher_find_channel_classes (EmpathyDispatcher *dispatcher,
       if (!channel_class_matches
           (class, channel_type, handle_type, fixed_properties))
         continue;
-      
+
       matching_classes = g_list_prepend (matching_classes, class);
     }
 
