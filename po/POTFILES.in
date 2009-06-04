@@ -80,4 +80,5 @@ src/empathy-preferences.c
 src/empathy-status-icon.c
 [type: gettext/glade]src/empathy-status-icon.ui
 src/empathy-tube-dispatch.c
+src/empathy-debug-dialog.c
 
