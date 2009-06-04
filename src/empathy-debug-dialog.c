@@ -962,7 +962,6 @@ debug_dialog_constructor (GType type,
   gtk_widget_show (GTK_WIDGET (item));
   gtk_container_add (GTK_CONTAINER (item), priv->cm_chooser);
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
-  debug_dialog_fill_cm_chooser (EMPATHY_DEBUG_DIALOG (object));
   g_signal_connect (priv->cm_chooser, "changed",
       G_CALLBACK (debug_dialog_cm_chooser_changed_cb), object);
   gtk_widget_show (GTK_WIDGET (priv->cm_chooser));
@@ -1127,15 +1126,18 @@ debug_dialog_constructor (GType type,
   gtk_container_add (GTK_CONTAINER (priv->scrolled_win), priv->view);
 
   gtk_widget_show (priv->scrolled_win);
-  gtk_box_pack_start (GTK_BOX (vbox), priv->scrolled_win, TRUE, TRUE, 0);
 
   /* Not supported label */
   priv->not_supported_label = g_object_ref (gtk_label_new (
           _("The selected connection manager does not support the remote "
               "debugging extension.")));
   gtk_widget_show (priv->not_supported_label);
+  gtk_box_pack_start (GTK_BOX (vbox), priv->not_supported_label, TRUE, TRUE, 0);
 
-  priv->view_visible = TRUE;
+  priv->view_visible = FALSE;
+
+  debug_dialog_set_toolbar_sensitivity (EMPATHY_DEBUG_DIALOG (object), FALSE);
+  debug_dialog_fill_cm_chooser (EMPATHY_DEBUG_DIALOG (object));
   gtk_widget_show (GTK_WIDGET (object));
 
   return object;
