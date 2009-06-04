@@ -55,6 +55,7 @@
 #include "ephy-spinner.h"
 #include "empathy-preferences.h"
 #include "empathy-about-dialog.h"
+#include "empathy-debug-dialog.h"
 #include "empathy-new-chatroom-dialog.h"
 #include "empathy-map-view.h"
 #include "empathy-chatrooms-window.h"
@@ -946,6 +947,13 @@ main_window_help_about_cb (GtkAction         *action,
 }
 
 static void
+main_window_help_debug_cb (GtkAction         *action,
+			   EmpathyMainWindow *window)
+{
+	empathy_debug_dialog_new (GTK_WINDOW (window->window));
+}
+
+static void
 main_window_help_contents_cb (GtkAction         *action,
 			      EmpathyMainWindow *window)
 {
@@ -1157,6 +1165,7 @@ empathy_main_window_show (void)
 			      "edit_personal_information", "activate", main_window_edit_personal_information_cb,
 			      "edit_preferences", "activate", main_window_edit_preferences_cb,
 			      "help_about", "activate", main_window_help_about_cb,
+			      "help_debug", "activate", main_window_help_debug_cb,
 			      "help_contents", "activate", main_window_help_contents_cb,
 			      NULL);
 

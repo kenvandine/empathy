@@ -139,6 +139,12 @@
           <accelerator key="F1" modifiers=""/>
         </child>
         <child>
+          <object class="GtkAction" id="help_debug">
+            <property name="name">help_debug</property>
+            <property name="label" translatable="yes">_Debug</property>
+          </object>
+        </child>
+        <child>
           <object class="GtkAction" id="help_about">
             <property name="stock_id">gtk-about</property>
             <property name="name">help_about</property>
@@ -179,6 +185,7 @@
         </menu>
         <menu action="help">
           <menuitem action="help_contents"/>
+          <menuitem action="help_debug"/>
           <menuitem action="help_about"/>
         </menu>
       </menubar>

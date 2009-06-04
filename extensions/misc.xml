@@ -7,5 +7,6 @@
 <xi:include href="Channel_Handler.xml"/>
 <xi:include href="Tube_Handler.xml"/>
 <xi:include href="Connection_Interface_Location.xml"/>
+<xi:include href="Debug.xml" />
 
 </tp:spec>

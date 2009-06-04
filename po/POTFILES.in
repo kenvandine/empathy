@@ -84,3 +84,4 @@ src/empathy-tube-dispatch.c
 [type: gettext/glade]src/empathy-call-window-fullscreen.ui
 src/empathy-map-view.c
 [type: gettext/glade]src/empathy-map-view.ui
+src/empathy-debug-dialog.c
