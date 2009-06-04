@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /*
  * Copyright (C) 2007-2008 Collabora Ltd.
  *
@@ -26,9 +26,9 @@
 
 G_BEGIN_DECLS
 
-GtkWidget * empathy_profile_chooser_new          (void);
+GtkWidget * empathy_profile_chooser_new (void);
 McProfile * empathy_profile_chooser_dup_selected (GtkWidget *widget);
-gint        empathy_profile_chooser_n_profiles   (GtkWidget *widget);
+gint empathy_profile_chooser_n_profiles (GtkWidget *widget);
 
 G_END_DECLS
 #endif /*  __EMPATHY_PROTOCOL_CHOOSER_H__ */
