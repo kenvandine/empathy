@@ -71,7 +71,11 @@ typedef struct
 {
   /* Toolbar items */
   GtkWidget *cm_chooser;
-  GtkWidget *filter;
+  GtkToolItem *save_button;
+  GtkToolItem *copy_button;
+  GtkToolItem *clear_button;
+  GtkToolItem *pause_button;
+  GtkWidget *level_filter;
 
   /* TreeView */
   GtkListStore *store;
@@ -564,8 +568,8 @@ debug_dialog_visible_func (GtkTreeModel *model,
   GtkTreeModel *filter_model;
   GtkTreeIter filter_iter;
 
-  filter_model = gtk_combo_box_get_model (GTK_COMBO_BOX (priv->filter));
-  gtk_combo_box_get_active_iter (GTK_COMBO_BOX (priv->filter),
+  filter_model = gtk_combo_box_get_model (GTK_COMBO_BOX (priv->level_filter));
+  gtk_combo_box_get_active_iter (GTK_COMBO_BOX (priv->level_filter),
       &filter_iter);
 
   gtk_tree_model_get (model, iter, COL_DEBUG_LEVEL_VALUE, &level, -1);
@@ -929,28 +933,28 @@ debug_dialog_constructor (GType type,
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
   /* Save */
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_SAVE);
-  g_signal_connect (item, "clicked",
+  priv->save_button = gtk_tool_button_new_from_stock (GTK_STOCK_SAVE);
+  g_signal_connect (priv->save_button, "clicked",
       G_CALLBACK (debug_dialog_save_clicked_cb), object);
-  gtk_widget_show (GTK_WIDGET (item));
-  gtk_tool_item_set_is_important (GTK_TOOL_ITEM (item), TRUE);
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_widget_show (GTK_WIDGET (priv->save_button));
+  gtk_tool_item_set_is_important (GTK_TOOL_ITEM (priv->save_button), TRUE);
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), priv->save_button, -1);
 
   /* Copy */
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_COPY);
-  g_signal_connect (item, "clicked",
+  priv->copy_button = gtk_tool_button_new_from_stock (GTK_STOCK_COPY);
+  g_signal_connect (priv->copy_button, "clicked",
       G_CALLBACK (debug_dialog_copy_clicked_cb), object);
-  gtk_widget_show (GTK_WIDGET (item));
-  gtk_tool_item_set_is_important (GTK_TOOL_ITEM (item), TRUE);
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_widget_show (GTK_WIDGET (priv->copy_button));
+  gtk_tool_item_set_is_important (GTK_TOOL_ITEM (priv->copy_button), TRUE);
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), priv->copy_button, -1);
 
   /* Clear */
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_CLEAR);
-  g_signal_connect (item, "clicked",
+  priv->clear_button = gtk_tool_button_new_from_stock (GTK_STOCK_CLEAR);
+  g_signal_connect (priv->clear_button, "clicked",
       G_CALLBACK (debug_dialog_clear_clicked_cb), object);
-  gtk_widget_show (GTK_WIDGET (item));
-  gtk_tool_item_set_is_important (GTK_TOOL_ITEM (item), TRUE);
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_widget_show (GTK_WIDGET (priv->clear_button));
+  gtk_tool_item_set_is_important (GTK_TOOL_ITEM (priv->clear_button), TRUE);
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), priv->clear_button, -1);
 
   item = gtk_separator_tool_item_new ();
   gtk_widget_show (GTK_WIDGET (item));
@@ -961,16 +965,17 @@ debug_dialog_constructor (GType type,
   image = gtk_image_new_from_stock (GTK_STOCK_MEDIA_PAUSE,
       GTK_ICON_SIZE_MENU);
   gtk_widget_show (image);
-  item = gtk_toggle_tool_button_new ();
-  gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (item),
-      priv->paused);
-  g_signal_connect (item, "toggled",
+  priv->pause_button = gtk_toggle_tool_button_new ();
+  gtk_toggle_tool_button_set_active (
+      GTK_TOGGLE_TOOL_BUTTON (priv->pause_button), priv->paused);
+  g_signal_connect (priv->pause_button, "toggled",
       G_CALLBACK (debug_dialog_pause_toggled_cb), object);
-  gtk_widget_show (GTK_WIDGET (item));
-  gtk_tool_item_set_is_important (GTK_TOOL_ITEM (item), TRUE);
-  gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), _("Pause"));
-  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (item), image);
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_widget_show (GTK_WIDGET (priv->pause_button));
+  gtk_tool_item_set_is_important (GTK_TOOL_ITEM (priv->pause_button), TRUE);
+  gtk_tool_button_set_label (GTK_TOOL_BUTTON (priv->pause_button), _("Pause"));
+  gtk_tool_button_set_icon_widget (
+      GTK_TOOL_BUTTON (priv->pause_button), image);
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), priv->pause_button, -1);
 
   item = gtk_separator_tool_item_new ();
   gtk_widget_show (GTK_WIDGET (item));
@@ -984,17 +989,17 @@ debug_dialog_constructor (GType type,
   gtk_container_add (GTK_CONTAINER (item), label);
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
-  priv->filter = gtk_combo_box_new_text ();
-  gtk_widget_show (priv->filter);
+  priv->level_filter = gtk_combo_box_new_text ();
+  gtk_widget_show (priv->level_filter);
 
   item = gtk_tool_item_new ();
   gtk_widget_show (GTK_WIDGET (item));
-  gtk_container_add (GTK_CONTAINER (item), priv->filter);
+  gtk_container_add (GTK_CONTAINER (item), priv->level_filter);
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
   level_store = gtk_list_store_new (NUM_COLS_LEVEL,
       G_TYPE_STRING, G_TYPE_UINT);
-  gtk_combo_box_set_model (GTK_COMBO_BOX (priv->filter),
+  gtk_combo_box_set_model (GTK_COMBO_BOX (priv->level_filter),
       GTK_TREE_MODEL (level_store));
 
   gtk_list_store_append (level_store, &iter);
@@ -1033,8 +1038,8 @@ debug_dialog_constructor (GType type,
       COL_LEVEL_VALUE, EMP_DEBUG_LEVEL_ERROR,
       -1);
 
-  gtk_combo_box_set_active (GTK_COMBO_BOX (priv->filter), 0);
-  g_signal_connect (priv->filter, "changed",
+  gtk_combo_box_set_active (GTK_COMBO_BOX (priv->level_filter), 0);
+  g_signal_connect (priv->level_filter, "changed",
       G_CALLBACK (debug_dialog_filter_changed_cb), object);
 
   /* Debug treeview */
