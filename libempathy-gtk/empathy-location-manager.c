@@ -251,7 +251,7 @@ new_connection_cb (EmpathyAccountManager *manager,
     TpConnection *conn,
     gpointer *location_manager)
 {
-  EmpathyLocationManagerPriv *priv = GET_PRIV (manager);
+  EmpathyLocationManagerPriv *priv = GET_PRIV (location_manager);
   DEBUG ("New connection %p", conn);
 
   /* Don't publish if it is already planned (ie startup) */
