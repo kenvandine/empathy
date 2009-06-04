@@ -79,6 +79,7 @@ typedef struct
   GtkWidget *view;
 
   /* Connection */
+  TpDBusDaemon *dbus;
   TpProxy *proxy;
   TpProxySignalConnection *new_debug_message_signal;
   TpProxySignalConnection *name_owner_changed_signal;
@@ -522,10 +523,9 @@ static void
 debug_dialog_fill_cm_chooser (EmpathyDebugDialog *debug_dialog)
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
-  TpDBusDaemon *dbus;
   GError *error = NULL;
 
-  dbus = tp_dbus_daemon_dup (&error);
+  priv->dbus = tp_dbus_daemon_dup (&error);
 
   if (error != NULL)
     {
@@ -534,14 +534,12 @@ debug_dialog_fill_cm_chooser (EmpathyDebugDialog *debug_dialog)
       return;
     }
 
-  tp_list_connection_names (dbus, debug_dialog_list_connection_names_cb,
+  tp_list_connection_names (priv->dbus, debug_dialog_list_connection_names_cb,
       debug_dialog, NULL, NULL);
 
   priv->name_owner_changed_signal =
-      tp_cli_dbus_daemon_connect_to_name_owner_changed (dbus,
+      tp_cli_dbus_daemon_connect_to_name_owner_changed (priv->dbus,
       debug_dialog_name_owner_changed_cb, debug_dialog, NULL, NULL, NULL);
-
-  g_object_unref (dbus);
 }
 
 static void
@@ -1160,6 +1158,9 @@ debug_dialog_dispose (GObject *object)
 
   if (priv->cms != NULL)
     g_object_unref (priv->cms);
+
+  if (priv->dbus != NULL)
+    g_object_unref (priv->dbus);
 
   (G_OBJECT_CLASS (empathy_debug_dialog_parent_class)->dispose) (object);
 }
