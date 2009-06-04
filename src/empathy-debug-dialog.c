@@ -75,6 +75,7 @@ typedef struct
   GtkToolItem *copy_button;
   GtkToolItem *clear_button;
   GtkToolItem *pause_button;
+  GtkToolItem *level_label;
   GtkWidget *level_filter;
 
   /* TreeView */
@@ -982,12 +983,12 @@ debug_dialog_constructor (GType type,
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
   /* Level */
-  item = gtk_tool_item_new ();
-  gtk_widget_show (GTK_WIDGET (item));
+  priv->level_label = gtk_tool_item_new ();
+  gtk_widget_show (GTK_WIDGET (priv->level_label));
   label = gtk_label_new (_("Level "));
   gtk_widget_show (label);
-  gtk_container_add (GTK_CONTAINER (item), label);
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_container_add (GTK_CONTAINER (priv->level_label), label);
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), priv->level_label, -1);
 
   priv->level_filter = gtk_combo_box_new_text ();
   gtk_widget_show (priv->level_filter);
