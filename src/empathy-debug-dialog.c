@@ -82,6 +82,9 @@ typedef struct
   GtkListStore *store;
   GtkTreeModel *store_filter;
   GtkWidget *view;
+  GtkWidget *scrolled_win;
+  GtkWidget *not_supported_label;
+  gboolean view_visible;
 
   /* Connection */
   TpDBusDaemon *dbus;
@@ -205,6 +208,38 @@ debug_dialog_set_enabled (EmpathyDebugDialog *debug_dialog,
 }
 
 static void
+debug_dialog_set_toolbar_sensitivity (EmpathyDebugDialog *debug_dialog,
+    gboolean sensitive)
+{
+  EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
+  GtkWidget *vbox = GTK_DIALOG (debug_dialog)->vbox;
+
+  gtk_widget_set_sensitive (GTK_WIDGET (priv->save_button), sensitive);
+  gtk_widget_set_sensitive (GTK_WIDGET (priv->copy_button), sensitive);
+  gtk_widget_set_sensitive (GTK_WIDGET (priv->clear_button), sensitive);
+  gtk_widget_set_sensitive (GTK_WIDGET (priv->pause_button), sensitive);
+  gtk_widget_set_sensitive (GTK_WIDGET (priv->level_label), sensitive);
+  gtk_widget_set_sensitive (GTK_WIDGET (priv->level_filter), sensitive);
+  gtk_widget_set_sensitive (GTK_WIDGET (priv->view), sensitive);
+
+  if (sensitive && !priv->view_visible)
+    {
+      /* Add view and remove label */
+      gtk_container_remove (GTK_CONTAINER (vbox), priv->not_supported_label);
+      gtk_box_pack_start (GTK_BOX (vbox), priv->scrolled_win, TRUE, TRUE, 0);
+      priv->view_visible = TRUE;
+    }
+  else if (!sensitive && priv->view_visible)
+    {
+      /* Add label and remove view */
+      gtk_container_remove (GTK_CONTAINER (vbox), priv->scrolled_win);
+      gtk_box_pack_start (GTK_BOX (vbox), priv->not_supported_label,
+          TRUE, TRUE, 0);
+      priv->view_visible = FALSE;
+    }
+}
+
+static void
 debug_dialog_get_messages_cb (TpProxy *proxy,
     const GPtrArray *messages,
     const GError *error,
@@ -218,8 +253,11 @@ debug_dialog_get_messages_cb (TpProxy *proxy,
   if (error != NULL)
     {
       DEBUG ("GetMessages failed: %s", error->message);
+      debug_dialog_set_toolbar_sensitivity (debug_dialog, FALSE);
       return;
     }
+
+  debug_dialog_set_toolbar_sensitivity (debug_dialog, TRUE);
 
   for (i = 0; i < messages->len; i++)
     {
@@ -891,7 +929,6 @@ debug_dialog_constructor (GType type,
   GtkWidget *label;
   GtkToolItem *item;
   GtkCellRenderer *renderer;
-  GtkWidget *scrolled_win;
   GtkListStore *level_store;
   GtkTreeIter iter;
 
@@ -1081,16 +1118,23 @@ debug_dialog_constructor (GType type,
   gtk_tree_view_set_model (GTK_TREE_VIEW (priv->view), priv->store_filter);
 
   /* Scrolled window */
-  scrolled_win = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
+  priv->scrolled_win = g_object_ref (gtk_scrolled_window_new (NULL, NULL));
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->scrolled_win),
       GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
   gtk_widget_show (priv->view);
-  gtk_container_add (GTK_CONTAINER (scrolled_win), priv->view);
+  gtk_container_add (GTK_CONTAINER (priv->scrolled_win), priv->view);
 
-  gtk_widget_show (scrolled_win);
-  gtk_box_pack_start (GTK_BOX (vbox), scrolled_win, TRUE, TRUE, 0);
+  gtk_widget_show (priv->scrolled_win);
+  gtk_box_pack_start (GTK_BOX (vbox), priv->scrolled_win, TRUE, TRUE, 0);
 
+  /* Not supported label */
+  priv->not_supported_label = g_object_ref (gtk_label_new (
+          _("The selected connection manager does not support the remote "
+              "debugging extension.")));
+  gtk_widget_show (priv->not_supported_label);
+
+  priv->view_visible = TRUE;
   gtk_widget_show (GTK_WIDGET (object));
 
   return object;
@@ -1149,6 +1193,12 @@ debug_dialog_dispose (GObject *object)
 
   if (priv->store != NULL)
     g_object_unref (priv->store);
+
+  if (priv->scrolled_win != NULL)
+    g_object_unref (priv->scrolled_win);
+
+  if (priv->view != NULL)
+    g_object_unref (priv->view);
 
   if (priv->name_owner_changed_signal != NULL)
     tp_proxy_signal_connection_disconnect (priv->name_owner_changed_signal);
