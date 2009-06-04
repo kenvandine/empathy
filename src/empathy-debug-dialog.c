@@ -69,16 +69,27 @@ enum
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyDebugDialog)
 typedef struct
 {
-  GtkWidget *filter;
-  GtkWidget *view;
+  /* Toolbar items */
   GtkWidget *cm_chooser;
+  GtkWidget *filter;
+
+  /* TreeView */
   GtkListStore *store;
   GtkTreeModel *store_filter;
+  GtkWidget *view;
+
+  /* Connection */
   TpProxy *proxy;
-  TpProxySignalConnection *signal_connection;
+  TpProxySignalConnection *new_debug_message_signal;
   TpProxySignalConnection *name_owner_changed_signal;
+
+  /* Whether NewDebugMessage will be fired */
   gboolean paused;
+
+  /* CM chooser store */
   GtkListStore *cms;
+
+  /* Misc. */
   gboolean dispose_run;
 } EmpathyDebugDialogPriv;
 
@@ -216,7 +227,7 @@ debug_dialog_get_messages_cb (TpProxy *proxy,
     }
 
   /* Connect to NewDebugMessage */
-  priv->signal_connection = emp_cli_debug_connect_to_new_debug_message (
+  priv->new_debug_message_signal = emp_cli_debug_connect_to_new_debug_message (
       proxy, debug_dialog_new_debug_message_cb, debug_dialog,
       NULL, NULL, NULL);
 
@@ -272,10 +283,10 @@ debug_dialog_cm_chooser_changed_cb (GtkComboBox *cm_chooser,
     debug_dialog_set_enabled (debug_dialog, FALSE);
 
   /* Disconnect from previous NewDebugMessage signal */
-  if (priv->signal_connection != NULL)
+  if (priv->new_debug_message_signal != NULL)
     {
-      tp_proxy_signal_connection_disconnect (priv->signal_connection);
-      priv->signal_connection = NULL;
+      tp_proxy_signal_connection_disconnect (priv->new_debug_message_signal);
+      priv->new_debug_message_signal = NULL;
     }
 
   if (priv->proxy != NULL)
@@ -1144,8 +1155,8 @@ debug_dialog_dispose (GObject *object)
       g_object_unref (priv->proxy);
     }
 
-  if (priv->signal_connection != NULL)
-    tp_proxy_signal_connection_disconnect (priv->signal_connection);
+  if (priv->new_debug_message_signal != NULL)
+    tp_proxy_signal_connection_disconnect (priv->new_debug_message_signal);
 
   if (priv->cms != NULL)
     g_object_unref (priv->cms);
