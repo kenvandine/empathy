@@ -904,7 +904,7 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
     }
   else
     {
-      DEBUG ("Unknown channel type, ignoring..");
+      DEBUG ("Unknown channel type (%s), ignoring..", channel_type);
     }
 }
 
