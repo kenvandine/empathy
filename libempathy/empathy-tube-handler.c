@@ -31,7 +31,6 @@
 
 #include <extensions/extensions.h>
 
-#include "empathy-tp-tube.h"
 #include "empathy-tube-handler.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
@@ -59,19 +58,8 @@ typedef struct
   gchar *channel;
   guint handle_type;
   guint handle;
-  EmpathyTpTube *tube;
+  TpChannel *tube;
 } IdleData;
-
-static void
-tube_ready_cb (EmpathyTpTube *tube,
-    const GError *error,
-    gpointer user_data,
-    GObject *weak_object)
-{
-  IdleData *idle_data = user_data;
-
-  g_signal_emit (idle_data->thandler, signals[NEW_TUBE], 0, tube);
-}
 
 static void
 tube_ready_destroy_notify (gpointer data)
@@ -100,9 +88,7 @@ channel_ready_cb (TpChannel *channel,
       return;
     }
 
-  idle_data->tube = empathy_tp_tube_new (channel);
-  empathy_tp_tube_call_when_ready (idle_data->tube, tube_ready_cb, idle_data,
-      tube_ready_destroy_notify, NULL);
+  g_signal_emit (idle_data->thandler, signals[NEW_TUBE], 0, idle_data->tube);
 
   g_object_unref (channel);
 }
@@ -183,7 +169,7 @@ empathy_tube_handler_class_init (EmpathyTubeHandlerClass *klass)
   signals[NEW_TUBE] =
       g_signal_new ("new-tube", G_OBJECT_CLASS_TYPE (klass),
       G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__OBJECT,
-      G_TYPE_NONE, 1, EMPATHY_TYPE_TP_TUBE);
+      G_TYPE_NONE, 1, TP_TYPE_CHANNEL);
 }
 
 static void
