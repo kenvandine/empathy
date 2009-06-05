@@ -31,6 +31,5 @@ empathy_tp_contact_factory_get_type
 empathy_tp_contact_list_get_type
 empathy_tp_file_get_type
 empathy_tp_roomlist_get_type
-empathy_tp_tube_get_type
 empathy_tube_handler_get_type
 
