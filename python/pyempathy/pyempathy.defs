@@ -183,13 +183,6 @@
   (gtype-id "EMPATHY_TYPE_TP_ROOMLIST")
 )
 
-(define-object TpTube
-  (in-module "Empathy")
-  (parent "GObject")
-  (c-name "EmpathyTpTube")
-  (gtype-id "EMPATHY_TYPE_TP_TUBE")
-)
-
 (define-object TubeHandler
   (in-module "Empathy")
   (parent "GObject")
@@ -2687,60 +2680,6 @@
   (of-object "EmpathyTpRoomlist")
   (c-name "empathy_tp_roomlist_stop")
   (return-type "none")
-)
-
-
-
-;; From empathy-tp-tube.h
-
-(define-function tp_tube_get_type
-  (c-name "empathy_tp_tube_get_type")
-  (return-type "GType")
-)
-
-(define-function tp_tube_new
-  (c-name "empathy_tp_tube_new")
-  (is-constructor-of "EmpathyTpTube")
-  (return-type "EmpathyTpTube*")
-  (parameters
-    '("TpChannel*" "channel")
-  )
-)
-
-(define-function tp_tube_new_stream_tube
-  (c-name "empathy_tp_tube_new_stream_tube")
-  (return-type "EmpathyTpTube*")
-  (parameters
-    '("EmpathyContact*" "contact")
-    '("TpSocketAddressType" "type")
-    '("const-gchar*" "hostname")
-    '("guint" "port")
-    '("const-gchar*" "service")
-    '("GHashTable*" "parameters")
-  )
-)
-
-(define-method accept_stream_tube
-  (of-object "EmpathyTpTube")
-  (c-name "empathy_tp_tube_accept_stream_tube")
-  (return-type "none")
-  (parameters
-    '("TpSocketAddressType" "type")
-    '("EmpathyTpTubeAcceptStreamTubeCb*" "callback")
-    '("gpointer" "user_data")
-  )
-)
-
-(define-method call_when_ready
-  (of-object "EmpathyTpTube")
-  (c-name "empathy_tp_tube_call_when_ready")
-  (return-type "none")
-  (parameters
-    '("EmpathyTpTubeReadyCb*" "callback")
-    '("gpointer" "user_data")
-    '("GDestroyNotify" "destroy")
-    '("GObject*" "weak_object")
-  )
 )
 
 
