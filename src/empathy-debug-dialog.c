@@ -464,6 +464,7 @@ debug_dialog_list_connection_names_cb (const gchar * const *names,
   if (error2 != NULL)
     {
       DEBUG ("Failed to dup TpDBusDaemon.");
+      g_error_free (error2);
       return;
     }
 
@@ -961,7 +962,6 @@ debug_dialog_constructor (GType type,
   gtk_widget_show (GTK_WIDGET (item));
   gtk_container_add (GTK_CONTAINER (item), priv->cm_chooser);
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
-  debug_dialog_fill_cm_chooser (EMPATHY_DEBUG_DIALOG (object));
   g_signal_connect (priv->cm_chooser, "changed",
       G_CALLBACK (debug_dialog_cm_chooser_changed_cb), object);
   gtk_widget_show (GTK_WIDGET (priv->cm_chooser));
@@ -1126,15 +1126,18 @@ debug_dialog_constructor (GType type,
   gtk_container_add (GTK_CONTAINER (priv->scrolled_win), priv->view);
 
   gtk_widget_show (priv->scrolled_win);
-  gtk_box_pack_start (GTK_BOX (vbox), priv->scrolled_win, TRUE, TRUE, 0);
 
   /* Not supported label */
   priv->not_supported_label = g_object_ref (gtk_label_new (
           _("The selected connection manager does not support the remote "
               "debugging extension.")));
   gtk_widget_show (priv->not_supported_label);
+  gtk_box_pack_start (GTK_BOX (vbox), priv->not_supported_label, TRUE, TRUE, 0);
 
-  priv->view_visible = TRUE;
+  priv->view_visible = FALSE;
+
+  debug_dialog_set_toolbar_sensitivity (EMPATHY_DEBUG_DIALOG (object), FALSE);
+  debug_dialog_fill_cm_chooser (EMPATHY_DEBUG_DIALOG (object));
   gtk_widget_show (GTK_WIDGET (object));
 
   return object;
@@ -1193,12 +1196,6 @@ debug_dialog_dispose (GObject *object)
 
   if (priv->store != NULL)
     g_object_unref (priv->store);
-
-  if (priv->scrolled_win != NULL)
-    g_object_unref (priv->scrolled_win);
-
-  if (priv->view != NULL)
-    g_object_unref (priv->view);
 
   if (priv->name_owner_changed_signal != NULL)
     tp_proxy_signal_connection_disconnect (priv->name_owner_changed_signal);
