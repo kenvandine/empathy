@@ -288,7 +288,24 @@ empathy_import_pidgin_load (void)
       /* If we have the needed settings, add the account data to the list,
        * otherwise free the data */
       if (data->profile != NULL && g_hash_table_size (data->settings) > 0)
-        accounts = g_list_prepend (accounts, data);
+        {
+          /* Special-case XMPP:
+           * http://bugzilla.gnome.org/show_bug.cgi?id=579992 */
+          if (!tp_strdiff (
+                  mc_profile_get_protocol_name (data->profile), "jabber"))
+            {
+              GValue *server;
+              server = g_hash_table_lookup (data->settings, "server");
+
+              if (!server || EMP_STR_EMPTY (g_value_get_string (server)))
+                {
+                  g_hash_table_remove (data->settings, "port");
+                  g_hash_table_remove (data->settings, "server");
+                }
+            }
+
+          accounts = g_list_prepend (accounts, data);
+        }
       else
         empathy_import_account_data_free (data);
     }
