@@ -297,7 +297,8 @@ empathy_import_pidgin_load (void)
               GValue *server;
               server = g_hash_table_lookup (data->settings, "server");
 
-              if (!server || EMP_STR_EMPTY (g_value_get_string (server)))
+              if (server == NULL
+                  || EMP_STR_EMPTY (g_value_get_string (server)))
                 {
                   g_hash_table_remove (data->settings, "port");
                   g_hash_table_remove (data->settings, "server");
