@@ -36,7 +36,6 @@ python /usr/share/pygobject/2.0/codegen/h2def.py	\
 	empathy-tp-contact-list.h		\
 	empathy-tp-file.h			\
 	empathy-tp-roomlist.h			\
-	empathy-tp-tube.h			\
 	empathy-tube-handler.h			\
 	empathy-types.h				\
 	empathy-utils.h				\

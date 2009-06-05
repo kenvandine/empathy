@@ -31,7 +31,6 @@ headers
 #include "empathy-tp-contact-list.h"
 #include "empathy-tp-file.h"
 #include "empathy-tp-roomlist.h"
-#include "empathy-tp-tube.h"
 #include "empathy-tube-handler.h"
 #include "empathy-utils.h"
 
