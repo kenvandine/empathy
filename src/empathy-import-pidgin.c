@@ -30,6 +30,7 @@
 
 #include <libmissioncontrol/mc-account.h>
 #include <telepathy-glib/util.h>
+#include <telepathy-glib/dbus.h>
 
 #include "empathy-import-dialog.h"
 #include "empathy-import-pidgin.h"
@@ -294,11 +295,7 @@ empathy_import_pidgin_load (void)
           if (!tp_strdiff (
                   mc_profile_get_protocol_name (data->profile), "jabber"))
             {
-              GValue *server;
-              server = g_hash_table_lookup (data->settings, "server");
-
-              if (server == NULL
-                  || EMP_STR_EMPTY (g_value_get_string (server)))
+              if (EMP_STR_EMPTY (tp_asv_get_string (data->settings, "server")))
                 {
                   g_hash_table_remove (data->settings, "port");
                   g_hash_table_remove (data->settings, "server");
