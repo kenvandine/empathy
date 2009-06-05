@@ -304,6 +304,16 @@ empathy_import_pidgin_load (void)
                 }
             }
 
+          /* If there is no password then MC treats the account as not
+           * ready and doesn't display it. */
+          if (!g_hash_table_lookup (data->settings, "password"))
+            {
+              GValue *value;
+              value = tp_g_value_slice_new (G_TYPE_STRING);
+              g_value_set_string (value, "");
+              g_hash_table_insert (data->settings, "password", value);
+            }
+
           accounts = g_list_prepend (accounts, data);
         }
       else
