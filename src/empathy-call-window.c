@@ -90,7 +90,6 @@ struct _EmpathyCallWindowPriv
   gboolean connected;
 
   GtkUIManager *ui_manager;
-  GtkWidget *self_user_output_frame;
   GtkWidget *video_output;
   GtkWidget *video_preview;
   GtkWidget *remote_user_avatar_widget;
@@ -579,22 +578,13 @@ empathy_call_window_setup_self_frame (GstBus *bus, EmpathyCallWindow *self)
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
 
   /* Initializing all the content (UI and input gst elements) related to the
-     self contact*/
-  priv->video_tee = gst_element_factory_make ("tee", NULL);
-  gst_object_ref (priv->video_tee);
-  gst_object_sink (priv->video_tee);
-
+     self contact, except for the video preview widget. This widget is only
+     initialized when the "show video preview" option is activated */
   priv->self_user_output_hbox = gtk_hbox_new (FALSE, 0);
 
   priv->self_user_avatar_widget = gtk_image_new ();
   gtk_box_pack_start (GTK_BOX (priv->self_user_output_hbox),
       priv->self_user_avatar_widget, TRUE, TRUE, 0);
-
-  priv->video_preview = empathy_video_widget_new_with_size (bus,
-      SELF_VIDEO_SECTION_WIDTH, SELF_VIDEO_SECTION_HEIGTH);
-  g_object_set (priv->video_preview, "sync", FALSE, "async", TRUE, NULL);
-  gtk_box_pack_start (GTK_BOX (priv->self_user_output_hbox),
-      priv->video_preview, TRUE, TRUE, 0);
 
   gtk_container_add (GTK_CONTAINER (priv->self_user_output_frame),
       priv->self_user_output_hbox);
@@ -614,14 +604,32 @@ empathy_call_window_setup_self_frame (GstBus *bus, EmpathyCallWindow *self)
 static void
 empathy_call_window_setup_video_preview (EmpathyCallWindow *window)
 {
+  GstElement *preview;
   EmpathyCallWindowPriv *priv = GET_PRIV (window);
+  GstBus *bus = gst_pipeline_get_bus (GST_PIPELINE (priv->pipeline));
 
-  GstElement *preview = empathy_video_widget_get_element (
+  priv->video_tee = gst_element_factory_make ("tee", NULL);
+  gst_object_ref (priv->video_tee);
+  gst_object_sink (priv->video_tee);
+
+  priv->video_preview = empathy_video_widget_new_with_size (bus,
+      SELF_VIDEO_SECTION_WIDTH, SELF_VIDEO_SECTION_HEIGTH);
+  g_object_set (priv->video_preview, "sync", FALSE, "async", TRUE, NULL);
+  gtk_box_pack_start (GTK_BOX (priv->self_user_output_hbox),
+      priv->video_preview, TRUE, TRUE, 0);
+
+  g_object_unref (bus);
+
+  preview = empathy_video_widget_get_element (
       EMPATHY_VIDEO_WIDGET (priv->video_preview));
   gst_bin_add_many (GST_BIN (priv->pipeline), priv->video_input,
       priv->video_tee, preview, NULL);
   gst_element_link_many (priv->video_input, priv->video_tee,
       preview, NULL);
+
+  gst_element_set_state (preview, GST_STATE_PLAYING);
+  gst_element_set_state (priv->video_input, GST_STATE_PLAYING);
+  gst_element_set_state (priv->video_tee, GST_STATE_PLAYING);
 }
 
 static void
@@ -829,14 +837,12 @@ empathy_call_window_got_self_contact_cb (EmpathyTpContactFactory *factory,
 }
 
 static void
-empathy_call_window_constructed (GObject *object)
+empathy_call_window_setup_avatars (EmpathyCallWindow *self,
+    EmpathyCallHandler *handler)
 {
-  EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (object);
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
 
-  g_assert (priv->handler != NULL);
-
-  g_object_get (priv->handler, "contact", &(priv->contact), NULL);
+  g_object_get (handler, "contact", &(priv->contact), NULL);
 
   if (priv->contact != NULL)
     {
@@ -876,13 +882,41 @@ empathy_call_window_constructed (GObject *object)
       priv->remote_user_avatar_widget, MIN (REMOTE_CONTACT_AVATAR_DEFAULT_WIDTH,
       REMOTE_CONTACT_AVATAR_DEFAULT_HEIGHT));
 
-  /* We hide the self avatar. It will be shown if a problem is
-     encountered when we try to send video. As for the remote avatar, it
-     is shown by default and will be hidden when we receive video from
-     the remote side. */
-  gtk_widget_hide (priv->self_user_avatar_widget);
+  /* The remote avatar is shown by default and will be hidden when we receive
+     video from the remote side. */
   gtk_widget_hide (priv->video_output);
   gtk_widget_show (priv->remote_user_avatar_widget);
+}
+
+static void
+empathy_call_window_setup_video_preview_visibility (EmpathyCallWindow *self,
+    EmpathyCallHandler *handler)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
+  gboolean initial_video = empathy_call_handler_has_initial_video (priv->handler);
+
+  if (initial_video)
+    {
+      empathy_call_window_setup_video_preview (self);
+      gtk_widget_hide (priv->self_user_avatar_widget);
+      gtk_widget_show (priv->video_preview);
+    }
+  else
+      gtk_widget_show (priv->self_user_avatar_widget);
+
+  gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->show_preview),
+      initial_video);
+}
+
+static void
+empathy_call_window_constructed (GObject *object)
+{
+  EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (object);
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
+
+  g_assert (priv->handler != NULL);
+  empathy_call_window_setup_avatars (self, priv->handler);
+  empathy_call_window_setup_video_preview_visibility (self, priv->handler);
 }
 
 static void empathy_call_window_dispose (GObject *object);
@@ -1226,18 +1260,14 @@ empathy_call_window_connected (gpointer user_data)
   if (empathy_tp_call_has_dtmf (call))
     gtk_widget_set_sensitive (priv->dtmf_panel, TRUE);
 
-
   priv->sending_video = empathy_tp_call_is_sending_video (call);
 
-  if (priv->sending_video)
-      {
-        gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->show_preview),
-            TRUE);
-        gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->send_video),
-            TRUE);
-        gtk_toggle_tool_button_set_active (
-            GTK_TOGGLE_TOOL_BUTTON (priv->camera_button), TRUE);
-      }
+  gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->show_preview),
+      priv->sending_video);
+  gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->send_video),
+      priv->sending_video);
+  gtk_toggle_tool_button_set_active (
+            GTK_TOGGLE_TOOL_BUTTON (priv->camera_button), priv->sending_video);
 
   if (priv->video_input != NULL)
     {
@@ -1326,6 +1356,14 @@ empathy_call_window_sink_added_cb (EmpathyCallHandler *handler,
       case TP_MEDIA_STREAM_TYPE_VIDEO:
         if (priv->video_input != NULL)
           {
+            if (priv->video_tee == NULL)
+              empathy_call_window_setup_video_preview (self);
+
+            gtk_toggle_action_set_active (
+                GTK_TOGGLE_ACTION (priv->show_preview),TRUE);
+            gtk_widget_show (priv->video_preview);
+            gtk_widget_hide (priv->self_user_avatar_widget);
+
             pad = gst_element_get_request_pad (priv->video_tee, "src%d");
             gst_pad_link (pad, sink);
           }
@@ -1480,15 +1518,18 @@ empathy_call_window_update_avatars_visibility (EmpathyTpCall *call,
       gtk_widget_show (priv->remote_user_avatar_widget);
     }
 
-  if (empathy_tp_call_is_sending_video (call))
+  if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (priv->show_preview)))
     {
-      gtk_widget_hide (priv->self_user_avatar_widget);
-      gtk_widget_show (priv->video_preview);
-    }
-  else
-    {
-      gtk_widget_hide (priv->video_preview);
-      gtk_widget_show (priv->self_user_avatar_widget);
+      if (empathy_tp_call_is_sending_video (call))
+        {
+          gtk_widget_hide (priv->self_user_avatar_widget);
+          gtk_widget_show (priv->video_preview);
+        }
+      else
+        {
+          gtk_widget_hide (priv->video_preview);
+          gtk_widget_show (priv->self_user_avatar_widget);
+        }
     }
 }
 
@@ -1523,8 +1564,6 @@ empathy_call_window_realized_cb (GtkWidget *widget, EmpathyCallWindow *window)
   g_signal_connect (priv->handler, "video-stream-changed",
     G_CALLBACK (empathy_call_window_video_stream_changed_cb), window);
 
-  empathy_call_window_setup_video_preview (window);
-
   gst_element_set_state (priv->pipeline, GST_STATE_PAUSED);
 }
 
@@ -1534,7 +1573,8 @@ empathy_call_window_delete_cb (GtkWidget *widget, GdkEvent*event,
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (window);
 
-  gst_element_set_state (priv->pipeline, GST_STATE_NULL);
+  if (priv->pipeline != NULL)
+    gst_element_set_state (priv->pipeline, GST_STATE_NULL);
 
   return FALSE;
 }
@@ -1680,6 +1720,19 @@ empathy_call_window_set_send_video (EmpathyCallWindow *window,
   EmpathyCallWindowPriv *priv = GET_PRIV (window);
   EmpathyTpCall *call;
 
+  priv->sending_video = send;
+
+  /* When we start sending video, we want to show the video preview by
+     default. */
+  if (send)
+    {
+      if (priv->video_preview == NULL)
+        empathy_call_window_setup_video_preview (window);
+
+      gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->show_preview),
+          TRUE);
+    }
+
   g_object_get (priv->handler, "tp-call", &call, NULL);
   empathy_tp_call_request_video_stream_direction (call, send);
   g_object_unref (call);
@@ -1696,12 +1749,6 @@ empathy_call_window_camera_toggled_cb (GtkToggleToolButton *toggle,
 
   if (priv->sending_video == active)
     return;
-  priv->sending_video = active;
-
-  /* When we start sending video, we want to show the video preview by
-     default. */
-  if (priv->sending_video)
-    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->show_preview), TRUE);
 
   empathy_call_window_set_send_video (window, active);
   gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->send_video), active);
@@ -1718,12 +1765,6 @@ empathy_call_window_send_video_toggled_cb (GtkToggleAction *toggle,
 
   if (priv->sending_video == active)
     return;
-  priv->sending_video = active;
-
-  /* When we start sending video, we want to show the video preview by
-     default. */
-  if (priv->sending_video)
-    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->show_preview), TRUE);
 
   empathy_call_window_set_send_video (window, active);
   gtk_toggle_tool_button_set_active (
