@@ -195,7 +195,7 @@ presence_chooser_create_model (EmpathyPresenceChooser *self)
 				gtk_list_store_insert_with_values (store,
 					NULL, -1,
 					COL_STATE_ICON_NAME, icon_name,
-					COL_STATE, states[i],
+					COL_STATE, states[i].state,
 					COL_STATUS_TEXT, l->data,
 					COL_DISPLAY_MARKUP, l->data,
 					COL_STATUS_CUSTOMISABLE, TRUE,
@@ -206,7 +206,7 @@ presence_chooser_create_model (EmpathyPresenceChooser *self)
 
 			gtk_list_store_insert_with_values (store, NULL, -1,
 				COL_STATE_ICON_NAME, icon_name,
-				COL_STATE, states[i],
+				COL_STATE, states[i].state,
 				COL_STATUS_TEXT, "",
 				COL_DISPLAY_MARKUP, custom_message,
 				COL_STATUS_CUSTOMISABLE, TRUE,
