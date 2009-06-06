@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=empathy&component=general\n"
-"POT-Creation-Date: 2009-06-02 18:22+0000\n"
-"PO-Revision-Date: 2009-06-03 19:57+0200\n"
+"POT-Creation-Date: 2009-06-04 16:15+0000\n"
+"PO-Revision-Date: 2009-06-06 12:46+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -98,7 +98,6 @@ msgid "Empathy should auto-connect on startup"
 msgstr "Empathy se debería autoconectar al inicio"
 
 #: ../data/empathy.schemas.in.h:17
-#| msgid "Empathy should auto-connect on startup"
 msgid "Empathy should reduce the location's accuracy"
 msgstr "Empathy debería reducir la precisión de la ubicación"
 
@@ -214,23 +213,15 @@ msgid "Use theme for chat rooms"
 msgstr "Usar tema para salas de chat"
 
 #: ../data/empathy.schemas.in.h:45
-#| msgid ""
-#| "Whether or not to show contacts that are offline in the contact list."
 msgid "Whether or not Empathy can publish the user's location to his contacts."
 msgstr ""
 "Indica si Empathy puede publicar la ubicación del usuario a sus contactos."
 
 #: ../data/empathy.schemas.in.h:46
-#| msgid ""
-#| "Whether or not Empathy should use the avatar of the contact as the chat "
-#| "window icon."
 msgid "Whether or not Empathy can use the GPS to guess the location."
 msgstr "Indica si Empathy puede usar el GPS para deducir la ubicación."
 
 #: ../data/empathy.schemas.in.h:47
-#| msgid ""
-#| "Whether or not Empathy should use the avatar of the contact as the chat "
-#| "window icon."
 msgid ""
 "Whether or not Empathy can use the cellular network to guess the location."
 msgstr ""
@@ -238,9 +229,6 @@ msgstr ""
 "ubicación."
 
 #: ../data/empathy.schemas.in.h:48
-#| msgid ""
-#| "Whether or not Empathy should use the avatar of the contact as the chat "
-#| "window icon."
 msgid "Whether or not Empathy can use the network to guess the location."
 msgstr "Indica si Empathy puede usar la red para deducir la ubicación."
 
@@ -261,9 +249,6 @@ msgstr ""
 "inicio."
 
 #: ../data/empathy.schemas.in.h:51
-#| msgid ""
-#| "Whether or not Empathy should use the avatar of the contact as the chat "
-#| "window icon."
 msgid ""
 "Whether or not Empathy should reduce the location's accuracy for privacy "
 "reasons."
@@ -914,7 +899,7 @@ msgid "Infor_mation"
 msgstr "Infor_mación"
 
 #: ../libempathy-gtk/empathy-contact-menu.c:314
-#: ../src/empathy-main-window.ui.h:10
+#: ../src/empathy-main-window.ui.h:11
 msgid "_Edit"
 msgstr "_Editar"
 
@@ -943,7 +928,7 @@ msgid "Select"
 msgstr "Seleccionar"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:988
-#: ../src/empathy-main-window.c:904
+#: ../src/empathy-main-window.c:905
 msgid "Group"
 msgstr "Grupo"
 
@@ -1021,11 +1006,11 @@ msgstr "Velocidad:"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:1275
 msgid "Bearing:"
-msgstr ""
+msgstr "Retardo:"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:1277
 msgid "Climb Speed:"
-msgstr ""
+msgstr "Velocidad de ascenso:"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:1279
 msgid "Last Updated on:"
@@ -1276,7 +1261,6 @@ msgid "Select a file"
 msgstr "Seleccionar un archivo"
 
 #: ../libempathy-gtk/empathy-ui-utils.c:1503
-#| msgid "Select a contact"
 msgid "Select a destination"
 msgstr "Seleccionar un destino"
 
@@ -1520,7 +1504,7 @@ msgid "_Information"
 msgstr "_Información"
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:3
-#: ../src/empathy-main-window.ui.h:17
+#: ../src/empathy-main-window.ui.h:18
 msgid "_Preferences"
 msgstr "Prefere_ncias"
 
@@ -1746,24 +1730,24 @@ msgstr "Vista preliminar de vídeo"
 msgid "_Call"
 msgstr "_Llamar"
 
-#: ../src/empathy-call-window.ui.h:6 ../src/empathy-main-window.ui.h:20
+#: ../src/empathy-call-window.ui.h:6 ../src/empathy-main-window.ui.h:21
 msgid "_View"
 msgstr "_Ver"
 
-#: ../src/empathy-chat-window.c:331
+#: ../src/empathy-chat-window.c:342
 #, c-format
 msgid "Conversations (%d)"
 msgstr "Conversaciones (%d)"
 
-#: ../src/empathy-chat-window.c:436
+#: ../src/empathy-chat-window.c:449
 msgid "Topic:"
 msgstr "Tema:"
 
-#: ../src/empathy-chat-window.c:441
+#: ../src/empathy-chat-window.c:454
 msgid "Typing a message."
 msgstr "Tecleando un mensaje."
 
-#: ../src/empathy-chat-window.c:900 ../src/empathy-event-manager.c:429
+#: ../src/empathy-chat-window.c:917 ../src/empathy-event-manager.c:429
 #, c-format
 msgid "New message from %s"
 msgstr "Nuevo mensaje de %s"
@@ -1885,7 +1869,6 @@ msgstr "%s de %s en %s/s"
 
 #: ../src/empathy-ft-manager.c:276
 #, c-format
-#| msgid "%s of %s at %s/s"
 msgid "%s of %s"
 msgstr "%s de %s"
 
@@ -1905,7 +1888,6 @@ msgstr "Enviando «%s» a %s"
 #. * is the contact name
 #: ../src/empathy-ft-manager.c:340
 #, c-format
-#| msgid "Receiving \"%s\" from %s"
 msgid "Error receiving \"%s\" from %s"
 msgstr "Error al recibir «%s» de %s"
 
@@ -1915,12 +1897,10 @@ msgstr "Error al recibir un archivo"
 
 #: ../src/empathy-ft-manager.c:348
 #, c-format
-#| msgid "Sending \"%s\" to %s"
 msgid "Error sending \"%s\" to %s"
 msgstr "Error al enviar «%s» a %s"
 
 #: ../src/empathy-ft-manager.c:351
-#| msgid "Error sending message '%s': %s"
 msgid "Error sending a file"
 msgstr "Error al enviar un archivo"
 
@@ -2003,71 +1983,71 @@ msgstr ""
 msgid "Import Accounts"
 msgstr "Importar cuentas"
 
-#: ../src/empathy-main-window.c:394
+#: ../src/empathy-main-window.c:395
 msgid "_Edit account"
 msgstr "_Editar cuenta"
 
-#: ../src/empathy-main-window.c:497
+#: ../src/empathy-main-window.c:498
 msgid "No error specified"
 msgstr "No se especificó el error"
 
-#: ../src/empathy-main-window.c:500
+#: ../src/empathy-main-window.c:501
 msgid "Network error"
 msgstr "Error de red"
 
-#: ../src/empathy-main-window.c:503
+#: ../src/empathy-main-window.c:504
 msgid "Authentication failed"
 msgstr "Falló la autenticación"
 
-#: ../src/empathy-main-window.c:506
+#: ../src/empathy-main-window.c:507
 msgid "Encryption error"
 msgstr "Error de cifrado"
 
-#: ../src/empathy-main-window.c:509
+#: ../src/empathy-main-window.c:510
 msgid "Name in use"
 msgstr "Nombre en uso"
 
-#: ../src/empathy-main-window.c:512
+#: ../src/empathy-main-window.c:513
 msgid "Certificate not provided"
 msgstr "No se proporcionó el certificado"
 
-#: ../src/empathy-main-window.c:515
+#: ../src/empathy-main-window.c:516
 msgid "Certificate untrusted"
 msgstr "Certificado sin confianza"
 
-#: ../src/empathy-main-window.c:518
+#: ../src/empathy-main-window.c:519
 msgid "Certificate expired"
 msgstr "El certificado ha expirado"
 
-#: ../src/empathy-main-window.c:521
+#: ../src/empathy-main-window.c:522
 msgid "Certificate not activated"
 msgstr "El certificado no está activado"
 
-#: ../src/empathy-main-window.c:524
+#: ../src/empathy-main-window.c:525
 msgid "Certificate hostname mismatch"
 msgstr "El nombre del equipo del certificado no coincide"
 
-#: ../src/empathy-main-window.c:527
+#: ../src/empathy-main-window.c:528
 msgid "Certificate fingerprint mismatch"
 msgstr "La huella del certificado no coincide"
 
-#: ../src/empathy-main-window.c:530
+#: ../src/empathy-main-window.c:531
 msgid "Certificate self-signed"
 msgstr "Certificado firmado consigo mismo"
 
-#: ../src/empathy-main-window.c:533
+#: ../src/empathy-main-window.c:534
 msgid "Certificate error"
 msgstr "Error del certificado"
 
-#: ../src/empathy-main-window.c:536
+#: ../src/empathy-main-window.c:537
 msgid "Unknown error"
 msgstr "Error desconocido"
 
-#: ../src/empathy-main-window.c:887
+#: ../src/empathy-main-window.c:888
 msgid "Contact"
 msgstr "Contacto"
 
-#: ../src/empathy-main-window.c:1211
+#: ../src/empathy-main-window.c:1220
 msgid "Show and edit accounts"
 msgstr "Mostrar y editar cuentas"
 
@@ -2076,7 +2056,6 @@ msgid "Contact List"
 msgstr "Lista de contactos"
 
 #: ../src/empathy-main-window.ui.h:2
-#| msgid "Show Contacts on a Map"
 msgid "Contacts on a _Map"
 msgstr "Contactos en el _mapa"
 
@@ -2104,38 +2083,39 @@ msgstr "_Añadir contacto…"
 msgid "_Contents"
 msgstr "Índ_ice"
 
-#: ../src/empathy-main-window.ui.h:11
-#| msgid "File transfers"
+#: ../src/empathy-main-window.ui.h:10
+msgid "_Debug"
+msgstr "_Depurar"
+
+#: ../src/empathy-main-window.ui.h:12
 msgid "_File Transfers"
 msgstr "_Transferencias de archivos"
 
-#: ../src/empathy-main-window.ui.h:12
+#: ../src/empathy-main-window.ui.h:13
 msgid "_Help"
 msgstr "Ay_uda"
 
-#: ../src/empathy-main-window.ui.h:13
+#: ../src/empathy-main-window.ui.h:14
 msgid "_Join..."
 msgstr "_Unirse…"
 
-#: ../src/empathy-main-window.ui.h:14 ../src/empathy-status-icon.ui.h:2
+#: ../src/empathy-main-window.ui.h:15 ../src/empathy-status-icon.ui.h:2
 msgid "_New Conversation..."
 msgstr "_Conversación nueva…"
 
-#: ../src/empathy-main-window.ui.h:15
-#| msgid "Show _Offline Contacts"
+#: ../src/empathy-main-window.ui.h:16
 msgid "_Offline Contacts"
 msgstr "Contactos _desconectados"
 
-#: ../src/empathy-main-window.ui.h:16
+#: ../src/empathy-main-window.ui.h:17
 msgid "_Personal Information"
 msgstr "Información p_ersonal"
 
-#: ../src/empathy-main-window.ui.h:18
-#| msgid "Previous Conversations"
+#: ../src/empathy-main-window.ui.h:19
 msgid "_Previous Conversations"
 msgstr "Conversaciones an_teriores"
 
-#: ../src/empathy-main-window.ui.h:19
+#: ../src/empathy-main-window.ui.h:20
 msgid "_Room"
 msgstr "_Sala"
 
@@ -2261,7 +2241,6 @@ msgid "<b>Enable spell checking for languages:</b>"
 msgstr "<b>Activar la revisión ortográfica para idiomas:</b>"
 
 #: ../src/empathy-preferences.ui.h:5
-#| msgid "<b>Settings</b>"
 msgid "<b>Geoclue Settings</b>"
 msgstr "<b>Configuración de Geoclue</b>"
 
@@ -2270,7 +2249,6 @@ msgid "<b>Play sound for events</b>"
 msgstr "<b>Reproducir sonido para eventos</b>"
 
 #: ../src/empathy-preferences.ui.h:7
-#| msgid "<b>Advanced</b>"
 msgid "<b>Privacy</b>"
 msgstr "<b>Privacidad</b>"
 
@@ -2280,6 +2258,9 @@ msgid ""
 "city, state and country will be published.  GPS coordinates will have a "
 "random value added (&#xB1;0.25&#xB0;).</small>"
 msgstr ""
+"<small>Reducir la precisión de la ubicación significa que no se publicará "
+"nada más preciso que su ciudad, estado y país. Las coordenadas GPS tendrán "
+"un valor aleatorio añadido (&#xB1;0.25&#xB0;).</small>"
 
 #: ../src/empathy-preferences.ui.h:9
 msgid ""
@@ -2332,7 +2313,6 @@ msgid "General"
 msgstr "General"
 
 #: ../src/empathy-preferences.ui.h:20
-#| msgid "<b>Location</b>"
 msgid "Location"
 msgstr "Ubicación"
 
@@ -2430,6 +2410,78 @@ msgstr "gtk-leave-fullscreen"
 msgid "Contact Map View"
 msgstr "Vista del mapa de contactos"
 
+#: ../src/empathy-debug-dialog.c:111 ../src/empathy-debug-dialog.c:1075
+#| msgid "Error:"
+msgid "Error"
+msgstr "Error"
+
+#: ../src/empathy-debug-dialog.c:114 ../src/empathy-debug-dialog.c:1069
+#| msgid "Croatian"
+msgid "Critical"
+msgstr "Crítico"
+
+#: ../src/empathy-debug-dialog.c:117 ../src/empathy-debug-dialog.c:1063
+#| msgid "Remaining"
+msgid "Warning"
+msgstr "Advertencia"
+
+#: ../src/empathy-debug-dialog.c:120 ../src/empathy-debug-dialog.c:1057
+#: ../src/empathy-debug-dialog.c:1105
+#| msgid "Message:"
+msgid "Message"
+msgstr "Mensaje"
+
+#: ../src/empathy-debug-dialog.c:123 ../src/empathy-debug-dialog.c:1051
+msgid "Info"
+msgstr "Información"
+
+#: ../src/empathy-debug-dialog.c:126 ../src/empathy-debug-dialog.c:1045
+msgid "Debug"
+msgstr "Depurar"
+
+#: ../src/empathy-debug-dialog.c:836
+#| msgid "State:"
+msgid "Save"
+msgstr "Guardar"
+
+#: ../src/empathy-debug-dialog.c:939
+msgid "Debug Window"
+msgstr "Depurar ventana"
+
+#: ../src/empathy-debug-dialog.c:1013
+msgid "Pause"
+msgstr "Pausar"
+
+#: ../src/empathy-debug-dialog.c:1025
+msgid "Level "
+msgstr "Nivel "
+
+#: ../src/empathy-debug-dialog.c:1094
+#| msgid "Simple"
+msgid "Time"
+msgstr "Hora"
+
+#: ../src/empathy-debug-dialog.c:1096
+#| msgid "Romanian"
+msgid "Domain"
+msgstr "Dominio"
+
+#: ../src/empathy-debug-dialog.c:1098
+msgid "Category"
+msgstr "Categoría"
+
+#: ../src/empathy-debug-dialog.c:1100
+msgid "Level"
+msgstr "Nivel"
+
+#: ../src/empathy-debug-dialog.c:1133
+msgid ""
+"The selected connection manager does not support the remote debugging "
+"extension."
+msgstr ""
+"El gestor de conexiones seleccionado no soporta la extensión de depuración "
+"remota."
+
 #~ msgctxt "file size"
 #~ msgid "Unknown"
 #~ msgstr "Desconocido"
@@ -2490,9 +2542,6 @@ msgstr "Vista del mapa de contactos"
 
 #~ msgid "Custom message"
 #~ msgstr "Mensaje personalizado…"
-
-#~ msgid "Message:"
-#~ msgstr "Mensaje:"
 
 #~ msgid "Word"
 #~ msgstr "Palabra"
