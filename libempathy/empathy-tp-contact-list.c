@@ -70,11 +70,8 @@ G_DEFINE_TYPE_WITH_CODE (EmpathyTpContactList, empathy_tp_contact_list, G_TYPE_O
 						tp_contact_list_iface_init));
 
 static void
-tp_contact_list_group_invalidated_cb (TpChannel *channel,
-				      guint      domain,
-				      gint       code,
-				      gchar     *message,
-				      EmpathyTpContactList *list)
+tp_contact_list_forget_group (EmpathyTpContactList *list,
+			      TpChannel *channel)
 {
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
 	const TpIntSet *members;
@@ -82,7 +79,6 @@ tp_contact_list_group_invalidated_cb (TpChannel *channel,
 	const gchar *group_name;
 
 	group_name = tp_channel_get_identifier (channel);
-	DEBUG ("Group %s invalidated. Message: %s", group_name, message);
 
 	/* Signal that all members are not in that group anymore */
 	members = tp_channel_group_get_members (channel);
@@ -103,6 +99,22 @@ tp_contact_list_group_invalidated_cb (TpChannel *channel,
 				       group_name,
 				       FALSE);
 	}
+}
+
+static void
+tp_contact_list_group_invalidated_cb (TpChannel *channel,
+				      guint      domain,
+				      gint       code,
+				      gchar     *message,
+				      EmpathyTpContactList *list)
+{
+	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	const gchar *group_name;
+
+	group_name = tp_channel_get_identifier (channel);
+	DEBUG ("Group %s invalidated. Message: %s", group_name, message);
+
+	tp_contact_list_forget_group (list, channel);
 
 	g_hash_table_remove (priv->groups, group_name);
 }
@@ -113,6 +125,7 @@ tp_contact_list_group_ready_cb (TpChannel *channel,
 				gpointer list)
 {
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	TpChannel *old_group;
 	const gchar *group_name;
 
 	if (error) {
@@ -120,8 +133,25 @@ tp_contact_list_group_ready_cb (TpChannel *channel,
 		g_object_unref (channel);
 		return;
 	}
-	
+
 	group_name = tp_channel_get_identifier (channel);
+
+	/* If there's already a group with this name in the table, we can't
+	 * just let it be replaced. Replacing it causes it to be unreffed,
+	 * which causes it to be invalidated (see
+	 * <https://bugs.freedesktop.org/show_bug.cgi?id=22119>), which causes
+	 * it to be removed from the hash table again, which causes it to be
+	 * unreffed again.
+	 */
+	old_group = g_hash_table_lookup (priv->groups, group_name);
+
+	if (old_group != NULL) {
+		DEBUG ("Discarding old group %s (%p)", group_name, old_group);
+		g_hash_table_steal (priv->groups, group_name);
+		tp_contact_list_forget_group (list, old_group);
+		g_object_unref (old_group);
+	}
+
 	g_hash_table_insert (priv->groups, (gpointer) group_name, channel);
 	DEBUG ("Group %s added", group_name);
 
