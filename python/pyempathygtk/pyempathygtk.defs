@@ -118,6 +118,13 @@
   (gtype-id "EMPATHY_TYPE_PRESENCE_CHOOSER")
 )
 
+(define-object ProfileChooser
+  (in-module "Empathy")
+  (parent "GtkComboBox")
+  (c-name "EmpathyProfileChooser")
+  (gtype-id "EMPATHY_TYPE_PROFILE_CHOOSER")
+)
+
 (define-object SmileyManager
   (in-module "Empathy")
   (parent "GObject")
@@ -1557,26 +1564,27 @@
 
 ;; From empathy-profile-chooser.h
 
+(define-function profile_chooser_get_type
+  (c-name "empathy_profile_chooser_get_type")
+  (return-type "GType")
+)
+
 (define-function profile_chooser_new
   (c-name "empathy_profile_chooser_new")
   (is-constructor-of "EmpathyProfileChooser")
   (return-type "GtkWidget*")
 )
 
-(define-function profile_chooser_dup_selected
+(define-method dup_selected
+  (of-object "EmpathyProfileChooser")
   (c-name "empathy_profile_chooser_dup_selected")
   (return-type "McProfile*")
-  (parameters
-    '("GtkWidget*" "widget")
-  )
 )
 
-(define-function profile_chooser_n_profiles
+(define-method n_profiles
+  (of-object "EmpathyProfileChooser")
   (c-name "empathy_profile_chooser_n_profiles")
   (return-type "gint")
-  (parameters
-    '("GtkWidget*" "widget")
-  )
 )
 
 

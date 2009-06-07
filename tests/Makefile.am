@@ -26,12 +26,14 @@ noinst_PROGRAMS =			\
 	contact-manager			\
 	empetit				\
 	test-empathy-presence-chooser	\
-	test-empathy-status-preset-dialog
+	test-empathy-status-preset-dialog \
+	test-empathy-profile-chooser
 
 contact_manager_SOURCES = contact-manager.c
 empetit_SOURCES = empetit.c
 test_empathy_presence_chooser_SOURCES = test-empathy-presence-chooser.c
 test_empathy_status_preset_dialog_SOURCES = test-empathy-status-preset-dialog.c
+test_empathy_profile_chooser_SOURCES = test-empathy-profile-chooser.c
 
 check_PROGRAMS = check-main
 TESTS = check-main

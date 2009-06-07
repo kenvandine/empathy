@@ -183,7 +183,8 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 			accounts_dialog_model_select_first (dialog);
 			return;
 		}
-		if (empathy_profile_chooser_n_profiles (dialog->combobox_profile) > 0) {
+		if (empathy_profile_chooser_n_profiles (
+			EMPATHY_PROFILE_CHOOSER (dialog->combobox_profile)) > 0) {
 			/* We have no account configured but we have some
 			 * profiles instsalled. The user obviously wants to add
 			 * an account. Click on the Add button for him. */
@@ -819,7 +820,8 @@ accounts_dialog_button_create_clicked_cb (GtkWidget             *button,
 	gchar     *str;
 	McProfileCapabilityFlags cap;
 
-	profile = empathy_profile_chooser_dup_selected (dialog->combobox_profile);
+	profile = empathy_profile_chooser_dup_selected (
+	    EMPATHY_PROFILE_CHOOSER (dialog->combobox_profile));
 
 	/* Create account */
 	account = mc_account_create (profile);
@@ -870,7 +872,8 @@ accounts_dialog_profile_changed_cb (GtkWidget             *widget,
 	McProfile *profile;
 	McProfileCapabilityFlags cap;
 
-	profile = empathy_profile_chooser_dup_selected (dialog->combobox_profile);
+	profile = empathy_profile_chooser_dup_selected (
+	    EMPATHY_PROFILE_CHOOSER (dialog->combobox_profile));
 	cap = mc_profile_get_capabilities (profile);
 
 	if (cap & MC_PROFILE_CAPABILITY_REGISTRATION_UI) {
