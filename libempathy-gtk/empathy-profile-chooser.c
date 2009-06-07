@@ -37,7 +37,7 @@
  * SECTION:empathy-profile-chooser
  * @title: EmpathyProfileChooser
  * @short_description: A widget used to choose from a list of profiles
- * @include: libempathy-gtk/empathy-account-chooser.h
+ * @include: libempathy-gtk/empathy-profile-chooser.h
  *
  * #EmpathyProfileChooser is a widget which extends #GtkComboBox to provides a
  * chooser of available profiles.
