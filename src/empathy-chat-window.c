@@ -382,6 +382,23 @@ chat_window_update (EmpathyChatWindow *window)
 }
 
 static void
+append_markup_printf (GString    *string,
+		      const char *format,
+		      ...)
+{
+	gchar *tmp;
+	va_list args;
+
+	va_start (args, format);
+
+	tmp = g_markup_vprintf_escaped (format, args);
+	g_string_append (string, tmp);
+	g_free (tmp);
+
+	va_end (args);
+}
+
+static void
 chat_window_update_chat_tab (EmpathyChat *chat)
 {
 	EmpathyChatWindow     *window;
@@ -432,36 +449,30 @@ chat_window_update_chat_tab (EmpathyChat *chat)
 	tooltip = g_string_new (NULL);
 
 	if (remote_contact) {
-		markup = g_markup_printf_escaped ("<b>%s</b><small> (%s)</small>",
-						  empathy_contact_get_id (remote_contact),
-						  mc_account_get_display_name (account));
-		g_string_append (tooltip, markup);
-		g_free (markup);
+		append_markup_printf (tooltip,
+				      "<b>%s</b><small> (%s)</small>",
+				      empathy_contact_get_id (remote_contact),
+				      mc_account_get_display_name (account));
 
 		status = empathy_contact_get_status (remote_contact);
 
 		if (status) {
-			markup = g_markup_printf_escaped ("\n%s", status);
-			g_string_append (tooltip, markup);
-			g_free (markup);
+			append_markup_printf (tooltip, "\n%s", status);
 		}
 	}
 	else {
-		markup = g_markup_printf_escaped ("<b>%s</b><small>  (%s)</small>", name,
-						  mc_account_get_display_name (account));
-		g_string_append (tooltip, markup);
-		g_free (markup);
+		append_markup_printf (tooltip,
+				      "<b>%s</b><small>  (%s)</small>", name,
+				      mc_account_get_display_name (account));
 	}
 
 	if (subject) {
-		markup = g_markup_printf_escaped ("\n<b>%s</b> %s", _("Topic:"), subject);
-		g_string_append (tooltip, markup);
-		g_free (markup);
+		append_markup_printf (tooltip, "\n<b>%s</b> %s",
+				      _("Topic:"), subject);
 	}
+
 	if (g_list_find (priv->chats_composing, chat)) {
-		markup = g_markup_printf_escaped ("\n%s", _("Typing a message."));
-		g_string_append (tooltip, markup);
-		g_free (markup);
+		append_markup_printf (tooltip, "\n%s", _("Typing a message."));
 	}
 
 	markup = g_string_free (tooltip, FALSE);
