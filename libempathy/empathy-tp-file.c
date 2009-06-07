@@ -178,7 +178,7 @@ tp_file_get_available_socket_types_cb (TpProxy *proxy,
 
 out:
   DEBUG ("Socket address type: %u, access control %u",
-      priv->socket_address_type, priv->socket_access_control);  
+      priv->socket_address_type, priv->socket_access_control);
 }
 
 static void
