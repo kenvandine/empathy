@@ -266,13 +266,30 @@ tp_file_start_transfer (EmpathyTpFile *tp_file)
 {
   gint fd, domain, res = 0;
   GError *error = NULL;
+  struct sockaddr *my_addr = NULL;
+  size_t my_size = 0;
   EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
 
   if (priv->socket_address_type == TP_SOCKET_ADDRESS_TYPE_UNIX)
-    domain = AF_UNIX;
+    {
+      domain = AF_UNIX;
+    }
+  else if (priv->socket_address_type == TP_SOCKET_ADDRESS_TYPE_IPV4)
+    {
+      domain = AF_INET;
+    }
+  else
+    {
+      error = g_error_new_literal (EMPATHY_FT_ERROR_QUARK,
+          EMPATHY_FT_ERROR_NOT_SUPPORTED, _("Socket type not supported"));
 
-  if (priv->socket_address_type == TP_SOCKET_ADDRESS_TYPE_IPV4)
-    domain = AF_INET;
+      DEBUG ("Socket not supported, closing channel");
+
+      ft_operation_close_with_error (tp_file, error);
+      g_clear_error (&error);
+
+      return;
+    }
 
   fd = socket (domain, SOCK_STREAM, 0);
 
@@ -300,7 +317,8 @@ tp_file_start_transfer (EmpathyTpFile *tp_file)
       strncpy (addr.sun_path, priv->socket_address->data,
           priv->socket_address->len);
 
-      res = connect (fd, (struct sockaddr*) &addr, sizeof (addr));
+      my_addr = (struct sockaddr *) &addr;
+      my_size = sizeof (addr);
     }
   else if (priv->socket_address_type == TP_SOCKET_ADDRESS_TYPE_IPV4)
     {
@@ -311,8 +329,11 @@ tp_file_start_transfer (EmpathyTpFile *tp_file)
       inet_pton (AF_INET, priv->socket_address->data, &addr.sin_addr);
       addr.sin_port = htons (priv->port);
 
-      res = connect (fd, (struct sockaddr*) &addr, sizeof (addr));
+      my_addr = (struct sockaddr *) &addr;
+      my_size = sizeof (addr);
     }
+
+  res = connect (fd, my_addr, my_size);
 
   if (res < 0)
     {
