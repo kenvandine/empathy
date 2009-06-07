@@ -215,6 +215,9 @@ profile_chooser_constructed (GObject *object)
     gtk_combo_box_set_active_iter (GTK_COMBO_BOX (object), &iter);
 
   mc_profiles_free_list (profiles);
+
+  if (G_OBJECT_CLASS (empathy_profile_chooser_parent_class)->constructed)
+    G_OBJECT_CLASS (empathy_profile_chooser_parent_class)->constructed (object);
 }
 
 static void
