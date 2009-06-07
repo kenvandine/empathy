@@ -123,12 +123,9 @@ profile_chooser_sort_func (GtkTreeModel *model,
   return cmp;
 }
 
-static GObject *
-profile_chooser_constructor (GType type,
-    guint n_construct_params,
-    GObjectConstructParam *construct_params)
+static void
+profile_chooser_constructed (GObject *object)
 {
-  GObject *object;
   EmpathyProfileChooser *profile_chooser;
   EmpathyProfileChooserPriv *priv;
 
@@ -138,8 +135,6 @@ profile_chooser_constructor (GType type,
   gboolean iter_set = FALSE;
   McManager *btf_cm;
 
-  object = G_OBJECT_CLASS (empathy_profile_chooser_parent_class)->constructor (
-      type, n_construct_params, construct_params);
   priv = GET_PRIV (object);
   profile_chooser = EMPATHY_PROFILE_CHOOSER (object);
 
@@ -220,8 +215,6 @@ profile_chooser_constructor (GType type,
     gtk_combo_box_set_active_iter (GTK_COMBO_BOX (object), &iter);
 
   mc_profiles_free_list (profiles);
-
-  return object;
 }
 
 static void
@@ -261,7 +254,7 @@ empathy_profile_chooser_class_init (EmpathyProfileChooserClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->constructor = profile_chooser_constructor;
+  object_class->constructed = profile_chooser_constructed;
   object_class->dispose = profile_chooser_dispose;
 
   g_type_class_add_private (object_class, sizeof (EmpathyProfileChooserPriv));
