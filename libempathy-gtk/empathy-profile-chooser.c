@@ -58,7 +58,8 @@ typedef struct
   gboolean dispose_run;
 } EmpathyProfileChooserPriv;
 
-enum {
+enum
+{
   COL_ICON,
   COL_LABEL,
   COL_PROFILE,
