@@ -24,7 +24,7 @@
 #define __EMPATHY_PROFILE_CHOOSER_H__
 
 #include <glib-object.h>
-#include <gtk/gtkcombobox.h>
+#include <gtk/gtk.h>
 
 #include <libmissioncontrol/mc-profile.h>
 
