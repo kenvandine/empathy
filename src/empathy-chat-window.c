@@ -405,9 +405,10 @@ chat_window_update_chat_tab (EmpathyChat *chat)
 	EmpathyChatWindowPriv *priv;
 	EmpathyContact        *remote_contact;
 	const gchar           *name;
+	const gchar           *id;
 	McAccount             *account;
 	const gchar           *subject;
-	const gchar           *status;
+	const gchar           *status = NULL;
 	GtkWidget             *widget;
 	GString               *tooltip;
 	gchar                 *markup;
@@ -449,21 +450,19 @@ chat_window_update_chat_tab (EmpathyChat *chat)
 	tooltip = g_string_new (NULL);
 
 	if (remote_contact) {
-		append_markup_printf (tooltip,
-				      "<b>%s</b><small> (%s)</small>",
-				      empathy_contact_get_id (remote_contact),
-				      mc_account_get_display_name (account));
-
+		id = empathy_contact_get_id (remote_contact);
 		status = empathy_contact_get_presence_message (remote_contact);
-
-		if (!EMP_STR_EMPTY (status)) {
-			append_markup_printf (tooltip, "\n<i>%s</i>", status);
-		}
+	} else {
+		id = name;
 	}
-	else {
-		append_markup_printf (tooltip,
-				      "<b>%s</b><small>  (%s)</small>", name,
-				      mc_account_get_display_name (account));
+
+	append_markup_printf (tooltip,
+			      "<b>%s</b><small> (%s)</small>",
+			      id,
+			      mc_account_get_display_name (account));
+
+	if (!EMP_STR_EMPTY (status)) {
+		append_markup_printf (tooltip, "\n<i>%s</i>", status);
 	}
 
 	if (subject) {
