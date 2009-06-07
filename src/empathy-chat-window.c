@@ -457,7 +457,7 @@ chat_window_update_chat_tab (EmpathyChat *chat)
 		status = empathy_contact_get_presence_message (remote_contact);
 
 		if (!EMP_STR_EMPTY (status)) {
-			append_markup_printf (tooltip, "\n%s", status);
+			append_markup_printf (tooltip, "\n<i>%s</i>", status);
 		}
 	}
 	else {
