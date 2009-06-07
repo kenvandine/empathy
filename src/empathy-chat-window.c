@@ -454,9 +454,9 @@ chat_window_update_chat_tab (EmpathyChat *chat)
 				      empathy_contact_get_id (remote_contact),
 				      mc_account_get_display_name (account));
 
-		status = empathy_contact_get_status (remote_contact);
+		status = empathy_contact_get_presence_message (remote_contact);
 
-		if (status) {
+		if (!EMP_STR_EMPTY (status)) {
 			append_markup_printf (tooltip, "\n%s", status);
 		}
 	}
