@@ -302,7 +302,10 @@ address_changed_cb (GeoclueAddress *address,
   g_hash_table_remove (priv->location, EMPATHY_LOCATION_POSTAL_CODE);
 
   if (g_hash_table_size (details) == 0)
-    return;
+    {
+      DEBUG ("\t - (Empty)");
+      return;
+    }
 
   g_hash_table_iter_init (&iter, details);
   while (g_hash_table_iter_next (&iter, &key, &value))
@@ -449,8 +452,11 @@ update_resources (EmpathyLocationManager *location_manager)
 
   DEBUG ("Updating resources %d", priv->resources);
 
+  /* As per Geoclue bug #15126, using NONE results in no address
+   * being found as geoclue-manual report an empty address with 
+   * accuracy = NONE */
   if (!geoclue_master_client_set_requirements (priv->gc_client,
-          GEOCLUE_ACCURACY_LEVEL_NONE, 0, TRUE, priv->resources,
+          GEOCLUE_ACCURACY_LEVEL_COUNTRY, 0, TRUE, priv->resources,
           NULL))
     {
       DEBUG ("set_requirements failed");
