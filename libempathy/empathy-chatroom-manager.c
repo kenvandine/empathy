@@ -662,13 +662,16 @@ chatroom_manager_chat_destroyed_cb (EmpathyTpChat *chat,
         continue;
 
       empathy_chatroom_set_tp_chat (chatroom, NULL);
+
       if (!empathy_chatroom_is_favorite (chatroom))
         {
           /* Remove the chatroom from the list, unless it's in the list of
            * favourites..
            * FIXME this policy should probably not be in libempathy */
-          empathy_chatroom_manager_remove (manager, chatroom);
+          chatroom_manager_remove_link (manager, l);
         }
+
+      break;
     }
 }
 
