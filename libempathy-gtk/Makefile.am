@@ -118,14 +118,6 @@ libempathy_gtk_headers =			\
 	empathy-theme-manager.h			\
 	empathy-ui-utils.h
 
-if HAVE_GEOCLUE
-libempathy_gtk_handwritten_source +=		\
-	empathy-location-manager.c
-
-libempathy_gtk_headers +=			\
-	empathy-location-manager.h
-endif
-
 check_c_sources = \
     $(libempathy_gtk_handwritten_source) \
     $(libempathy_gtk_headers)
@@ -217,6 +209,18 @@ pkgconfig_DATA = libempathy-gtk.pc
 
 EXTRA_DIST =			\
 	$(ui_DATA)
+
+if HAVE_GEOCLUE
+libempathy_gtk_handwritten_source +=		\
+	empathy-location-manager.c
+
+libempathy_gtk_headers +=			\
+	empathy-location-manager.h
+else
+EXTRA_DIST +=					\
+	empathy-location-manager.c		\
+	empathy-location-manager.h
+endif
 
 CLEANFILES =				\
 	$(BUILT_SOURCES)		\

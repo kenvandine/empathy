@@ -75,11 +75,21 @@ ui_DATA = 					\
 	empathy-preferences.ui			\
 	empathy-status-icon.ui
 
+EXTRA_DIST =			\
+	$(autostart_DATA)	\
+	$(ui_DATA)
+
 if HAVE_LIBCHAMPLAIN
 empathy_SOURCES += 				\
-	empathy-map-view.c empathy-map-view.h
+	empathy-map-view.c			\
+	empathy-map-view.h
 
 ui_DATA += 					\
+	empathy-map-view.ui
+else
+EXTRA_DIST +=					\
+	empathy-map-view.c			\
+	empathy-map-view.h			\
 	empathy-map-view.ui
 endif
 
@@ -103,10 +113,6 @@ dist_man_MANS =			\
 	--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@VALUENAME@\" }," \
 	--vtail "      { 0, NULL, NULL }\n    };\n    etype = g_@type@_register_static (\"@EnumName@\", values);\n  }\n  return etype;\n}\n" \
 	$< > $@
-
-EXTRA_DIST =			\
-	$(autostart_DATA)	\
-	$(ui_DATA)
 
 CLEANFILES = $(BUILT_SOURCES)
 
