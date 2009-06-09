@@ -837,10 +837,10 @@ contact_get_avatar_filename (EmpathyContact *contact,
   gchar *token_escaped;
   gchar *contact_escaped;
 
-  if (EMP_STR_EMPTY (priv->id))
+  if (EMP_STR_EMPTY (empathy_contact_get_id (contact)))
     return NULL;
 
-  contact_escaped = tp_escape_as_identifier (priv->id);
+  contact_escaped = tp_escape_as_identifier (empathy_contact_get_id (contact));
   token_escaped = tp_escape_as_identifier (token);
   account = empathy_contact_get_account (contact);
 
