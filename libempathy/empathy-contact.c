@@ -830,7 +830,6 @@ static gchar *
 contact_get_avatar_filename (EmpathyContact *contact,
                              const gchar *token)
 {
-  EmpathyContactPriv *priv = GET_PRIV (contact);
   McAccount *account;
   gchar *avatar_path;
   gchar *avatar_file;
