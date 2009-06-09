@@ -506,6 +506,27 @@ empathy_chatroom_manager_add (EmpathyChatroomManager *manager,
   return FALSE;
 }
 
+static void
+chatroom_manager_remove_link (EmpathyChatroomManager *manager,
+                              GList *l)
+{
+  EmpathyChatroomManagerPriv *priv;
+  EmpathyChatroom *chatroom;
+
+  priv = GET_PRIV (manager);
+
+  chatroom = l->data;
+
+  if (empathy_chatroom_is_favorite (chatroom))
+    reset_save_timeout (manager);
+
+  g_signal_emit (manager, signals[CHATROOM_REMOVED], 0, chatroom);
+  g_signal_handlers_disconnect_by_func (chatroom, chatroom_changed_cb, manager);
+
+  priv->chatrooms = g_list_delete_link (priv->chatrooms, l);
+  g_object_unref (chatroom);
+}
+
 void
 empathy_chatroom_manager_remove (EmpathyChatroomManager *manager,
                                  EmpathyChatroom        *chatroom)
@@ -527,15 +548,7 @@ empathy_chatroom_manager_remove (EmpathyChatroomManager *manager,
       if (this_chatroom == chatroom ||
           empathy_chatroom_equal (chatroom, this_chatroom))
         {
-          priv->chatrooms = g_list_delete_link (priv->chatrooms, l);
-          if (empathy_chatroom_is_favorite (this_chatroom))
-            reset_save_timeout (manager);
-
-          g_signal_emit (manager, signals[CHATROOM_REMOVED], 0, this_chatroom);
-          g_signal_handlers_disconnect_by_func (this_chatroom, chatroom_changed_cb,
-              manager);
-
-          g_object_unref (this_chatroom);
+          chatroom_manager_remove_link (manager, l);
           break;
         }
     }
