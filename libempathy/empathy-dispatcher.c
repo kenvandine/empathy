@@ -532,8 +532,8 @@ dispatcher_flush_outstanding_operations (EmpathyDispatcher *self,
 
       if (dispatcher_operation_can_start (self, operation, cd))
         {
-          dispatcher_start_dispatching (dispatcher, operation, cd);
           g_hash_table_iter_remove (&iter);
+          dispatcher_start_dispatching (dispatcher, operation, cd);
         }
     }
 }
