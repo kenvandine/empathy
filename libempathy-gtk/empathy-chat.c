@@ -1217,7 +1217,7 @@ chat_set_show_contacts (EmpathyChat *chat, gboolean show)
 
 		store = empathy_contact_list_store_new (EMPATHY_CONTACT_LIST (priv->tp_chat));
 		priv->contact_list_view = GTK_WIDGET (empathy_contact_list_view_new (store,
-			EMPATHY_CONTACT_LIST_FEATURE_NONE,
+			EMPATHY_CONTACT_LIST_FEATURE_CONTACT_TOOLTIP,
 			EMPATHY_CONTACT_FEATURE_CHAT |
 			EMPATHY_CONTACT_FEATURE_CALL |
 			EMPATHY_CONTACT_FEATURE_LOG |
