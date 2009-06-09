@@ -25,6 +25,14 @@
           </object>
         </child>
         <child>
+          <object class="GtkAction" id="menuredial">
+            <property name="stock_id">gtk-refresh</property>
+            <property name="name">menuredial</property>
+            <property name="label" translatable="yes">Redial</property>
+            <property name="sensitive">False</property>
+          </object>
+        </child>
+        <child>
           <object class="GtkAction" id="view">
             <property name="name">view</property>
             <property name="label" translatable="yes">_View</property>
@@ -50,6 +58,7 @@
         <menu action="call">
           <menuitem action="send_video"/>
           <menuitem action="menuhangup"/>
+          <menuitem action="menuredial"/>
         </menu>
         <menu action="view">
           <menuitem action="show_preview"/>
@@ -80,6 +89,18 @@
                 <property name="is_important">True</property>
                 <property name="label" translatable="yes">Hang up</property>
                 <property name="stock_id">gtk-cancel</property>
+              </object>
+              <packing>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="redial">
+                <property name="visible">True</property>
+                <property name="is_important">True</property>
+                <property name="label" translatable="yes">Redial</property>
+                <property name="stock_id">gtk-refresh</property>
+                <property name="sensitive">False</property>
               </object>
               <packing>
                 <property name="homogeneous">True</property>
