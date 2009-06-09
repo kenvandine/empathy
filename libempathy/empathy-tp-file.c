@@ -407,13 +407,14 @@ ft_operation_provide_or_accept_file_cb (TpChannel *proxy,
           * report the method error.
           */
           g_clear_error (&myerr);
-          myerr = g_error_copy (error);
         }
+
+      myerr = g_error_copy (error);
     }
 
   if (myerr != NULL)
     {
-      DEBUG ("Error: %s", error->message);
+      DEBUG ("Error: %s", myerr->message);
       ft_operation_close_with_error (tp_file, myerr);
       g_clear_error (&myerr);
       return;
