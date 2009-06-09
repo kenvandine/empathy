@@ -112,7 +112,16 @@ typedef struct
   GHashTable *dispatched_channels;
   /* ObjectPath -> EmpathyDispatchOperations */
   GHashTable *dispatching_channels;
-  /* ObjectPath -> EmpathyDispatchOperations */
+
+  /* ObjectPath -> EmpathyDispatchOperations
+   *
+   * This holds channels which were announced with NewChannel while we have an
+   * outstanding channel request for a channel of this type. On the Requests
+   * interface, CreateChannel and EnsureChannel are guaranteed by the spec to
+   * return before NewChannels is emitted, but there was no guarantee of the
+   * ordering of RequestChannel vs. NewChannel. So if necessary, channels are
+   * held in limbo here until we know whether they were requested.
+   */
   GHashTable *outstanding_channels;
   /* List of DispatcherRequestData */
   GList *outstanding_requests;
