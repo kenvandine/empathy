@@ -255,14 +255,38 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkCheckButton" id="checkbutton_register">
-                                <property name="label" translatable="yes">I already have an account I want to use</property>
+                              <object class="GtkVBox" id="vbox2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="active">True</property>
-                                <property name="draw_indicator">True</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkRadioButton" id="radiobutton_reuse">
+                                    <property name="label" translatable="yes">_Reuse an existing account</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkRadioButton" id="radiobutton_register">
+                                    <property name="label" translatable="yes">_Create a new account</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                    <property name="group">radiobutton_reuse</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="position">2</property>

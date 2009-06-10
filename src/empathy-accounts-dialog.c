@@ -72,7 +72,8 @@ typedef struct {
 	GtkWidget        *hbox_type;
 	GtkWidget        *button_create;
 	GtkWidget        *button_back;
-	GtkWidget        *checkbutton_register;
+	GtkWidget        *radiobutton_reuse;
+	GtkWidget        *radiobutton_register;
 
 	GtkWidget        *image_type;
 	GtkWidget        *label_name;
@@ -842,8 +843,8 @@ accounts_dialog_button_create_clicked_cb (GtkWidget             *button,
 	if (cap & MC_PROFILE_CAPABILITY_REGISTRATION_UI) {
 		gboolean active;
 
-		active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->checkbutton_register));
-		if (!active) {
+		active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->radiobutton_register));
+		if (active) {
 			mc_account_set_param_boolean (account, "register", TRUE);
 		}
 	}
@@ -877,9 +878,11 @@ accounts_dialog_profile_changed_cb (GtkWidget             *widget,
 	cap = mc_profile_get_capabilities (profile);
 
 	if (cap & MC_PROFILE_CAPABILITY_REGISTRATION_UI) {
-		gtk_widget_show (dialog->checkbutton_register);
+		gtk_widget_show (dialog->radiobutton_register);
+		gtk_widget_show (dialog->radiobutton_reuse);
 	} else {
-		gtk_widget_hide (dialog->checkbutton_register);
+		gtk_widget_hide (dialog->radiobutton_register);
+		gtk_widget_hide (dialog->radiobutton_reuse);
 	}
 	g_object_unref (profile);
 }
@@ -910,8 +913,8 @@ accounts_dialog_button_add_clicked_cb (GtkWidget             *button,
 		gtk_widget_hide (dialog->button_back);
 	}
 
-	accounts_dialog_profile_changed_cb (dialog->checkbutton_register, dialog);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->checkbutton_register),
+	accounts_dialog_profile_changed_cb (dialog->radiobutton_register, dialog);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->radiobutton_reuse),
 				      TRUE);
 	gtk_combo_box_set_active (GTK_COMBO_BOX (dialog->combobox_profile), 0);
 	gtk_widget_grab_focus (dialog->combobox_profile);
@@ -1071,7 +1074,8 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 				       "hbox_type", &dialog->hbox_type,
 				       "button_create", &dialog->button_create,
 				       "button_back", &dialog->button_back,
-				       "checkbutton_register", &dialog->checkbutton_register,
+				       "radiobutton_reuse", &dialog->radiobutton_reuse,
+				       "radiobutton_register", &dialog->radiobutton_register,
 				       "image_type", &dialog->image_type,
 				       "label_name", &dialog->label_name,
 				       "button_add", &dialog->button_add,
