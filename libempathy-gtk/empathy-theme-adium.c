@@ -84,8 +84,10 @@ theme_adium_load (EmpathyThemeAdium *theme)
 	gchar                 *css_path;
 	guint                  len = 0;
 	guint                  i = 0;
+	gchar                 *basedir_uri;
 
 	priv->basedir = g_strconcat (priv->path, G_DIR_SEPARATOR_S "Contents" G_DIR_SEPARATOR_S "Resources" G_DIR_SEPARATOR_S, NULL);
+	basedir_uri = g_strconcat ("file://", priv->basedir, NULL);
 
 	/* Load html files */
 	file = g_build_filename (priv->basedir, "Incoming", "Content.html", NULL);
@@ -156,8 +158,9 @@ theme_adium_load (EmpathyThemeAdium *theme)
 
 	/* Load the template */
 	webkit_web_view_load_html_string (WEBKIT_WEB_VIEW (theme),
-					  priv->template_html, priv->basedir);
+					  priv->template_html, basedir_uri);
 
+	g_free (basedir_uri);
 	g_free (template_html);
 	g_free (css_path);
 	g_strfreev (strv);
@@ -575,10 +578,13 @@ static void
 theme_adium_clear (EmpathyChatView *view)
 {
 	EmpathyThemeAdiumPriv *priv = GET_PRIV (view);
+	gchar *basedir_uri;
 
 	priv->page_loaded = FALSE;
+	basedir_uri = g_strconcat ("file://", priv->basedir, NULL);
 	webkit_web_view_load_html_string (WEBKIT_WEB_VIEW (view),
-					  priv->template_html, priv->basedir);
+					  priv->template_html, basedir_uri);
+	g_free (basedir_uri);
 }
 
 static gboolean

@@ -39,6 +39,7 @@ LIBCHAMPLAIN_REQUIRED=0.3.0
 LIBCHAMPLAIN_GTK_REQUIRED=0.3.0
 CLUTTER_GTK_REQUIRED=0.8.2
 GEOCLUE_REQUIRED=0.11
+WEBKIT_REQUIRED=1.1.7
 
 # Use --enable-maintainer-mode to disabled deprecated symbols
 GNOME_MAINTAINER_MODE_DEFINES
@@ -166,7 +167,7 @@ AC_ARG_ENABLE(webkit,
 if test "x$enable_webkit" != "xno"; then
    PKG_CHECK_MODULES(WEBKIT, 
    [
-      webkit-1.0
+      webkit-1.0 >= $WEBKIT_REQUIRED
    ], have_webkit="yes", have_webkit="no")
 
    if test "x$have_webkit" = "xyes"; then
