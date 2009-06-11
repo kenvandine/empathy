@@ -1059,7 +1059,6 @@ static gboolean
 empathy_call_window_reset_pipeline (EmpathyCallWindow *self)
 {
   GstStateChangeReturn state_change_return;
-  gboolean could_reset_pipeline = FALSE;
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
 
   if (priv->pipeline == NULL)
@@ -1447,7 +1446,6 @@ static void
 empathy_call_window_realized_cb (GtkWidget *widget, EmpathyCallWindow *window)
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (window);
-  GstElement *preview;
 
   g_signal_connect (priv->handler, "conference-added",
     G_CALLBACK (empathy_call_window_conference_added_cb), window);
@@ -1716,7 +1714,6 @@ static void
 empathy_call_window_hangup_cb (gpointer object,
                                EmpathyCallWindow *window)
 {
-  EmpathyCallWindowPriv *priv = GET_PRIV (window);
   if (empathy_call_window_disconnected (window))
     gtk_widget_destroy (GTK_WIDGET (window));
 }
