@@ -131,11 +131,6 @@ libempathy_gtk_include_HEADERS =		\
 	$(libempathy_gtk_headers)		\
 	empathy-gtk-enum-types.h
 
-if HAVE_WEBKIT
-libempathy_gtk_headers += empathy-theme-adium.h
-libempathy_gtk_la_SOURCES += empathy-theme-adium.c
-endif
-
 uidir = $(datadir)/empathy
 ui_DATA = 					\
 	empathy-contact-widget.ui		\
@@ -227,6 +222,17 @@ else
 EXTRA_DIST +=					\
 	empathy-location-manager.c		\
 	empathy-location-manager.h
+endif
+
+if HAVE_WEBKIT
+libempathy_gtk_handwritten_source +=		\
+	empathy-theme-adium.c
+libempathy_gtk_headers +=			\
+	empathy-theme-adium.h
+else
+EXTRA_DIST +=					\
+	empathy-theme-adium.c			\
+	empathy-theme-adium.h
 endif
 
 CLEANFILES =				\
