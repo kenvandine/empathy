@@ -452,6 +452,7 @@ Configure summary:
 	Spell checking (enchant)....:  ${have_enchant}
 	Display maps (libchamplain).:  ${have_libchamplain}
 	Location awareness (Geoclue):  ${have_geoclue}
+	Adium themes (Webkit).......:  ${have_webkit}
 
     Extras:
 	Documentation...............:  ${enable_gtk_doc}
