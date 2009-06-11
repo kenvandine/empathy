@@ -405,16 +405,18 @@ theme_adium_append_html (EmpathyThemeAdium *theme,
 			gchar *format = NULL;
 			gchar *end;
 
-			/* Extract the time format if provided. */
-			if (*cur == '{') {
-				end = strstr (cur + 1, "}%");
+			/* Time can be in 2 formats:
+			 * %time% or %time{strftime format}%
+			 * Extract the time format if provided. */
+			if (cur[1] == '{') {
+				cur += 2;
+				end = strstr (cur, "}%");
 				if (!end) {
 					/* Invalid string */
 					continue;
 				}
-				cur++;
 				format = g_strndup (cur, end - cur);
-				cur = end;
+				cur = end + 1;
 			} else {
 				cur++;
 			}
