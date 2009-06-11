@@ -40,6 +40,7 @@
 #include <libempathy-gtk/empathy-ui-utils.h>
 
 #include "empathy-map-view.h"
+#include "ephy-spinner.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_LOCATION
 #include <libempathy/empathy-debug.h>
@@ -50,6 +51,7 @@ typedef struct {
   GtkWidget *window;
   GtkWidget *zoom_in;
   GtkWidget *zoom_out;
+  GtkWidget *throbber;
   ChamplainView *map_view;
   ChamplainLayer *layer;
 } EmpathyMapView;
@@ -68,6 +70,20 @@ static void map_view_contact_location_notify (GObject *gobject,
     GParamSpec *arg1,
     gpointer user_data);
 
+static void
+map_view_state_changed (ChamplainView *view,
+    GParamSpec *gobject,
+    EmpathyMapView *window)
+{
+  ChamplainState state;
+
+  g_object_get (G_OBJECT (view), "state", &state, NULL);
+  if (state == CHAMPLAIN_STATE_LOADING)
+    ephy_spinner_start (EPHY_SPINNER (window->throbber));
+  else
+    ephy_spinner_stop (EPHY_SPINNER (window->throbber));
+}
+
 GtkWidget *
 empathy_map_view_show (void)
 {
@@ -75,6 +91,7 @@ empathy_map_view_show (void)
   GtkBuilder *gui;
   GtkWidget *sw;
   GtkWidget *embed;
+  GtkWidget *throbber_holder;
   gchar *filename;
   GtkTreeModel *model;
   EmpathyContactList *list_iface;
@@ -95,6 +112,7 @@ empathy_map_view_show (void)
      "zoom_in", &window->zoom_in,
      "zoom_out", &window->zoom_out,
      "map_scrolledwindow", &sw,
+     "throbber", &throbber_holder,
      NULL);
   g_free (filename);
 
@@ -115,6 +133,12 @@ empathy_map_view_show (void)
   empathy_contact_list_store_set_show_avatars (list_store, TRUE);
   g_object_unref (list_iface);
 
+  window->throbber = ephy_spinner_new ();
+  ephy_spinner_set_size (EPHY_SPINNER (window->throbber),
+      GTK_ICON_SIZE_LARGE_TOOLBAR);
+  gtk_widget_show (window->throbber);
+  gtk_container_add (GTK_CONTAINER (throbber_holder), window->throbber);
+
   window->list_store = list_store;
 
   /* Set up map view */
@@ -130,6 +154,9 @@ empathy_map_view_show (void)
 
   window->layer = g_object_ref (champlain_layer_new ());
   champlain_view_add_layer (window->map_view, window->layer);
+
+  g_signal_connect (window->map_view, "notify::state",
+      G_CALLBACK (map_view_state_changed), window);
 
   /* Set up contact list. */
   model = GTK_TREE_MODEL (window->list_store);
