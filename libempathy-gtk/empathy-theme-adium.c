@@ -691,13 +691,26 @@ theme_adium_finalize (GObject *object)
 	g_free (priv->out_nextcontent_html);
 	g_free (priv->default_avatar_filename);
 	g_free (priv->path);
-	g_object_unref (priv->smiley_manager);
+
+	G_OBJECT_CLASS (empathy_theme_adium_parent_class)->finalize (object);
+}
+
+static void
+theme_adium_dispose (GObject *object)
+{
+	EmpathyThemeAdiumPriv *priv = GET_PRIV (object);
+
+	if (priv->smiley_manager) {
+		g_object_unref (priv->smiley_manager);
+		priv->smiley_manager = NULL;
+	}
 
 	if (priv->last_contact) {
 		g_object_unref (priv->last_contact);
+		priv->last_contact = NULL;
 	}
 
-	G_OBJECT_CLASS (empathy_theme_adium_parent_class)->finalize (object);
+	G_OBJECT_CLASS (empathy_theme_adium_parent_class)->dispose (object);
 }
 
 static void
@@ -749,6 +762,7 @@ empathy_theme_adium_class_init (EmpathyThemeAdiumClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	
 	object_class->finalize = theme_adium_finalize;
+	object_class->dispose = theme_adium_dispose;
 	object_class->constructed = theme_adium_constructed;
 	object_class->get_property = theme_adium_get_property;
 	object_class->set_property = theme_adium_set_property;
