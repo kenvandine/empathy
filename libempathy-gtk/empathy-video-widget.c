@@ -300,6 +300,9 @@ empathy_video_widget_dispose (GObject *object)
 
   priv->dispose_has_run = TRUE;
 
+  g_signal_handlers_disconnect_by_func (priv->bus,
+    empathy_video_widget_sync_message_cb, object);
+
   if (priv->bus != NULL)
     g_object_unref (priv->bus);
 
