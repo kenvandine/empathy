@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=empathy&component=general\n"
-"POT-Creation-Date: 2009-06-04 16:15+0000\n"
-"PO-Revision-Date: 2009-06-06 12:46+0200\n"
+"POT-Creation-Date: 2009-06-09 13:35+0000\n"
+"PO-Revision-Date: 2009-06-11 09:32+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -411,7 +411,7 @@ msgstr "El «hash» del archivo recibido y del enviado no coinciden"
 msgid "File transfer not supported by remote contact"
 msgstr "El contacto remoto no soporta la transferencia de archivos"
 
-#: ../libempathy/empathy-tp-contact-list.c:727 ../src/empathy.c:286
+#: ../libempathy/empathy-tp-contact-list.c:757 ../src/empathy.c:286
 msgid "People nearby"
 msgstr "Gente cerca"
 
@@ -796,7 +796,7 @@ msgstr "%s ha entrado en la sala"
 msgid "%s has left the room"
 msgstr "%s ha dejado la sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1289 ../src/empathy-call-window.c:1014
+#: ../libempathy-gtk/empathy-chat.c:1289 ../src/empathy-call-window.c:1108
 msgid "Disconnected"
 msgstr "Desconectado"
 
@@ -1583,21 +1583,21 @@ msgstr "Un cliente de mensajería instantánea para GNOME"
 msgid "translator-credits"
 msgstr "Jorge González <jorgegonz@svn.gnome.org>, 2007-2009"
 
-#: ../src/empathy-accounts-dialog.c:391
+#: ../src/empathy-accounts-dialog.c:392
 msgid "Enabled"
 msgstr "Activado"
 
-#: ../src/empathy-accounts-dialog.c:401 ../src/empathy-accounts-dialog.ui.h:4
+#: ../src/empathy-accounts-dialog.c:402 ../src/empathy-accounts-dialog.ui.h:4
 msgid "Accounts"
 msgstr "Cuentas"
 
 #. To translator: %s is the protocol name
-#: ../src/empathy-accounts-dialog.c:834
+#: ../src/empathy-accounts-dialog.c:836
 #, c-format
 msgid "New %s account"
 msgstr "Cuenta de %s nueva"
 
-#: ../src/empathy-accounts-dialog.c:944
+#: ../src/empathy-accounts-dialog.c:947
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -1606,7 +1606,7 @@ msgstr ""
 "Va a eliminar su cuenta %s\n"
 "¿Seguro que quiere continuar?"
 
-#: ../src/empathy-accounts-dialog.c:950
+#: ../src/empathy-accounts-dialog.c:953
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -1659,53 +1659,53 @@ msgstr "Tipo:"
 msgid "_Add..."
 msgstr "_Añadir…"
 
-#: ../src/empathy-call-window.c:382
-msgid "Contrast"
-msgstr "Contraste"
-
-#: ../src/empathy-call-window.c:385
-msgid "Brightness"
-msgstr "Brillo"
-
-#: ../src/empathy-call-window.c:388
-msgid "Gamma"
-msgstr "Gamma"
-
-#: ../src/empathy-call-window.c:492
-msgid "Volume"
-msgstr "Volumen"
-
-#: ../src/empathy-call-window.c:638
-msgid "_Sidebar"
-msgstr "Barra _lateral"
-
-#: ../src/empathy-call-window.c:657
-msgid "Dialpad"
-msgstr "Teclado de llamada"
-
-#: ../src/empathy-call-window.c:663
-msgid "Audio input"
-msgstr "Entrada de sonido"
-
-#: ../src/empathy-call-window.c:667
-msgid "Video input"
-msgstr "Entrada de vídeo"
-
-#: ../src/empathy-call-window.c:691
+#: ../src/empathy-call-window.c:63
 msgid "Connecting..."
 msgstr "Conectando…"
 
-#: ../src/empathy-call-window.c:730
+#: ../src/empathy-call-window.c:405
+msgid "Contrast"
+msgstr "Contraste"
+
+#: ../src/empathy-call-window.c:408
+msgid "Brightness"
+msgstr "Brillo"
+
+#: ../src/empathy-call-window.c:411
+msgid "Gamma"
+msgstr "Gamma"
+
+#: ../src/empathy-call-window.c:516
+msgid "Volume"
+msgstr "Volumen"
+
+#: ../src/empathy-call-window.c:697
+msgid "_Sidebar"
+msgstr "Barra _lateral"
+
+#: ../src/empathy-call-window.c:716
+msgid "Dialpad"
+msgstr "Teclado de llamada"
+
+#: ../src/empathy-call-window.c:722
+msgid "Audio input"
+msgstr "Entrada de sonido"
+
+#: ../src/empathy-call-window.c:726
+msgid "Video input"
+msgstr "Entrada de vídeo"
+
+#: ../src/empathy-call-window.c:789
 #, c-format
 msgid "Call with %s"
 msgstr "Llamar con %s"
 
-#: ../src/empathy-call-window.c:801
+#: ../src/empathy-call-window.c:860
 msgid "Call"
 msgstr "Llamar"
 
 #. Translators: number of minutes:seconds the caller has been connected
-#: ../src/empathy-call-window.c:1096
+#: ../src/empathy-call-window.c:1204
 #, c-format
 msgid "Connected — %d:%02dm"
 msgstr "Conectado — %d:%02dm"
@@ -1715,22 +1715,26 @@ msgid "Hang up"
 msgstr "Colgar"
 
 #: ../src/empathy-call-window.ui.h:2
+msgid "Redial"
+msgstr "Volver a llamar"
+
+#: ../src/empathy-call-window.ui.h:3
 msgid "Send Audio"
 msgstr "Enviar sonido"
 
-#: ../src/empathy-call-window.ui.h:3
+#: ../src/empathy-call-window.ui.h:4
 msgid "Send video"
 msgstr "Enviar vídeo"
 
-#: ../src/empathy-call-window.ui.h:4
+#: ../src/empathy-call-window.ui.h:5
 msgid "Video preview"
 msgstr "Vista preliminar de vídeo"
 
-#: ../src/empathy-call-window.ui.h:5
+#: ../src/empathy-call-window.ui.h:6
 msgid "_Call"
 msgstr "_Llamar"
 
-#: ../src/empathy-call-window.ui.h:6 ../src/empathy-main-window.ui.h:21
+#: ../src/empathy-call-window.ui.h:7 ../src/empathy-main-window.ui.h:21
 msgid "_View"
 msgstr "_Ver"
 
@@ -1739,15 +1743,15 @@ msgstr "_Ver"
 msgid "Conversations (%d)"
 msgstr "Conversaciones (%d)"
 
-#: ../src/empathy-chat-window.c:449
+#: ../src/empathy-chat-window.c:470
 msgid "Topic:"
 msgstr "Tema:"
 
-#: ../src/empathy-chat-window.c:454
+#: ../src/empathy-chat-window.c:474
 msgid "Typing a message."
 msgstr "Tecleando un mensaje."
 
-#: ../src/empathy-chat-window.c:917 ../src/empathy-event-manager.c:429
+#: ../src/empathy-chat-window.c:935 ../src/empathy-event-manager.c:429
 #, c-format
 msgid "New message from %s"
 msgstr "Nuevo mensaje de %s"
@@ -2411,23 +2415,19 @@ msgid "Contact Map View"
 msgstr "Vista del mapa de contactos"
 
 #: ../src/empathy-debug-dialog.c:111 ../src/empathy-debug-dialog.c:1075
-#| msgid "Error:"
 msgid "Error"
 msgstr "Error"
 
 #: ../src/empathy-debug-dialog.c:114 ../src/empathy-debug-dialog.c:1069
-#| msgid "Croatian"
 msgid "Critical"
 msgstr "Crítico"
 
 #: ../src/empathy-debug-dialog.c:117 ../src/empathy-debug-dialog.c:1063
-#| msgid "Remaining"
 msgid "Warning"
 msgstr "Advertencia"
 
 #: ../src/empathy-debug-dialog.c:120 ../src/empathy-debug-dialog.c:1057
 #: ../src/empathy-debug-dialog.c:1105
-#| msgid "Message:"
 msgid "Message"
 msgstr "Mensaje"
 
@@ -2439,12 +2439,11 @@ msgstr "Información"
 msgid "Debug"
 msgstr "Depurar"
 
-#: ../src/empathy-debug-dialog.c:836
-#| msgid "State:"
+#: ../src/empathy-debug-dialog.c:837
 msgid "Save"
 msgstr "Guardar"
 
-#: ../src/empathy-debug-dialog.c:939
+#: ../src/empathy-debug-dialog.c:940
 msgid "Debug Window"
 msgstr "Depurar ventana"
 
@@ -2457,12 +2456,10 @@ msgid "Level "
 msgstr "Nivel "
 
 #: ../src/empathy-debug-dialog.c:1094
-#| msgid "Simple"
 msgid "Time"
 msgstr "Hora"
 
 #: ../src/empathy-debug-dialog.c:1096
-#| msgid "Romanian"
 msgid "Domain"
 msgstr "Dominio"
 
@@ -2474,7 +2471,7 @@ msgstr "Categoría"
 msgid "Level"
 msgstr "Nivel"
 
-#: ../src/empathy-debug-dialog.c:1133
+#: ../src/empathy-debug-dialog.c:1132
 msgid ""
 "The selected connection manager does not support the remote debugging "
 "extension."
