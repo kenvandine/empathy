@@ -145,7 +145,7 @@ map_view_destroy_cb (GtkWidget *widget,
 {
   GList *item;
 
-  item = clutter_container_get_children (window->layer);
+  item = clutter_container_get_children (CLUTTER_CONTAINER (window->layer));
   while (item != NULL)
   {
     EmpathyContact *contact;
