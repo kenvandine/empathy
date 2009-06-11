@@ -161,6 +161,16 @@ class Project:
 			translations += format % (lang, authors)
 		return translations
 
+	def get_bug_author(self, bug_number):
+		cmd = 'git log %s.. | grep -B 20 "#%s"' \
+		      ' | tac | grep ^Author: | head -1' \
+		      % (self.last_tag, bug_number)
+		line = self.exec_cmd (cmd)
+		p1 = line.find(" ")
+		p2 = line.find("<")
+
+		return line[p1:p2].strip()
+
 	def get_bugs(self):
 		commit_str = self.exec_cmd('git show %s' % (self.last_tag))
 		for line in commit_str.splitlines():
@@ -196,7 +206,11 @@ class Project:
 		for row in reader:
 			bug_number = row[col_bug_id]
 			description = row[col_description]
-			bugs += ' - Fixed #%s, %s\n' % (bug_number, description)
+			author = self.get_bug_author(bug_number)
+			bugs += ' - Fixed #%s, %s' % (bug_number, description)
+			if author != '':
+				bugs += ' (%s)' % (author)
+			bugs += '\n'
 		return bugs
 
 	def generate_news(self):
