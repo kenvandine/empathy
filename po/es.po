@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=empathy&component=general\n"
-"POT-Creation-Date: 2009-06-09 13:35+0000\n"
-"PO-Revision-Date: 2009-06-11 09:32+0200\n"
+"POT-Creation-Date: 2009-06-11 11:12+0000\n"
+"PO-Revision-Date: 2009-06-11 14:30+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1583,21 +1583,21 @@ msgstr "Un cliente de mensajería instantánea para GNOME"
 msgid "translator-credits"
 msgstr "Jorge González <jorgegonz@svn.gnome.org>, 2007-2009"
 
-#: ../src/empathy-accounts-dialog.c:392
+#: ../src/empathy-accounts-dialog.c:393
 msgid "Enabled"
 msgstr "Activado"
 
-#: ../src/empathy-accounts-dialog.c:402 ../src/empathy-accounts-dialog.ui.h:4
+#: ../src/empathy-accounts-dialog.c:403 ../src/empathy-accounts-dialog.ui.h:4
 msgid "Accounts"
 msgstr "Cuentas"
 
 #. To translator: %s is the protocol name
-#: ../src/empathy-accounts-dialog.c:836
+#: ../src/empathy-accounts-dialog.c:837
 #, c-format
 msgid "New %s account"
 msgstr "Cuenta de %s nueva"
 
-#: ../src/empathy-accounts-dialog.c:947
+#: ../src/empathy-accounts-dialog.c:950
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -1606,7 +1606,7 @@ msgstr ""
 "Va a eliminar su cuenta %s\n"
 "¿Seguro que quiere continuar?"
 
-#: ../src/empathy-accounts-dialog.c:953
+#: ../src/empathy-accounts-dialog.c:956
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -1620,8 +1620,9 @@ msgstr ""
 "Si decidiera volver a añadir la cuenta más tarde, estarán aún disponibles."
 
 #: ../src/empathy-accounts-dialog.ui.h:1
-msgid "<b>New Account</b>"
-msgstr "<b>Nueva cuenta</b>"
+#| msgid "<b>New Account</b>"
+msgid "<b>Add Account</b>"
+msgstr "<b>Añadir cuenta</b>"
 
 #: ../src/empathy-accounts-dialog.ui.h:2
 msgid "<b>No protocol installed</b>"
@@ -1636,14 +1637,10 @@ msgid "Cr_eate"
 msgstr "Cr_ear"
 
 #: ../src/empathy-accounts-dialog.ui.h:6
-msgid "I already have an account I want to use"
-msgstr "Ya tengo una cuenta que quiero usar"
-
-#: ../src/empathy-accounts-dialog.ui.h:7
 msgid "Import Accounts..."
 msgstr "Importar cuentas…"
 
-#: ../src/empathy-accounts-dialog.ui.h:8
+#: ../src/empathy-accounts-dialog.ui.h:7
 msgid ""
 "To add a new account, you first have to install a backend for each protocol "
 "you want to use."
@@ -1651,13 +1648,23 @@ msgstr ""
 "Para añadir una nueva cuenta debe instalar primero un «backend» para cada "
 "protocolo que quiera usar."
 
-#: ../src/empathy-accounts-dialog.ui.h:9
+#: ../src/empathy-accounts-dialog.ui.h:8
 msgid "Type:"
 msgstr "Tipo:"
 
-#: ../src/empathy-accounts-dialog.ui.h:10
+#: ../src/empathy-accounts-dialog.ui.h:9
 msgid "_Add..."
 msgstr "_Añadir…"
+
+#: ../src/empathy-accounts-dialog.ui.h:10
+#| msgid "Create a new IRC network"
+msgid "_Create a new account"
+msgstr "_Crear una cuenta nueva"
+
+#: ../src/empathy-accounts-dialog.ui.h:11
+#| msgid "Show and edit accounts"
+msgid "_Reuse an existing account"
+msgstr "_Usar una cuenta ya existente"
 
 #: ../src/empathy-call-window.c:63
 msgid "Connecting..."
@@ -2479,6 +2486,9 @@ msgstr ""
 "El gestor de conexiones seleccionado no soporta la extensión de depuración "
 "remota."
 
+#~ msgid "I already have an account I want to use"
+#~ msgstr "Ya tengo una cuenta que quiero usar"
+
 #~ msgctxt "file size"
 #~ msgid "Unknown"
 #~ msgstr "Desconocido"
@@ -2554,9 +2564,6 @@ msgstr ""
 
 #~ msgid "Forget password and clear the entry."
 #~ msgstr "Olvidar la contraseña y limpiar la entrada."
-
-#~ msgid "Create a new IRC network"
-#~ msgstr "Crear una red IRC nueva"
 
 #~ msgid "Edit the selected IRC network"
 #~ msgstr "Editar la red IRC seleccionada"
