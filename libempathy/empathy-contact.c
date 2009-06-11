@@ -950,6 +950,19 @@ empathy_avatar_get_type (void)
   return type_id;
 }
 
+/**
+ * empathy_avatar_new:
+ * @data: the avatar data
+ * @len: the size of avatar data
+ * @format: the mime type of the avatar image
+ * @token: the token of the avatar
+ * @filename: the filename where the avatar is stored in cache
+ *
+ * Create a #EmpathyAvatar from the provided data. This function takes the
+ * ownership of @data, @format, @token and @filename.
+ *
+ * Returns: a new #EmpathyAvatar
+ */
 EmpathyAvatar *
 empathy_avatar_new (guchar *data,
                     gsize len,
