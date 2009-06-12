@@ -611,41 +611,39 @@ static void
 empathy_call_window_setup_video_preview (EmpathyCallWindow *window)
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (window);
+  GstElement *preview;
+  GstBus *bus = gst_pipeline_get_bus (GST_PIPELINE (priv->pipeline));
+
+  /* Since the video preview and the video tee are initialized and freed at
+     the same time, if one is initialized, then the other one should be too. */
+  g_assert ((priv->video_preview != NULL && priv->video_tee != NULL)
+             || (priv->video_preview == NULL && priv->video_tee == NULL));
 
   if (priv->video_preview != NULL)
-    {
-      /* Since the video preview and the video tee are initialized and freed
-         at the same time, if one is initialized, then the other one should
-         be too. */
-      g_assert (priv->video_tee != NULL);
-      return;
-    }
+    return;
 
-    GstElement *preview;
-    GstBus *bus = gst_pipeline_get_bus (GST_PIPELINE (priv->pipeline));
+  priv->video_tee = gst_element_factory_make ("tee", NULL);
+  gst_object_ref (priv->video_tee);
+  gst_object_sink (priv->video_tee);
 
-    priv->video_tee = gst_element_factory_make ("tee", NULL);
-    gst_object_ref (priv->video_tee);
-    gst_object_sink (priv->video_tee);
+  priv->video_preview = empathy_video_widget_new_with_size (bus,
+      SELF_VIDEO_SECTION_WIDTH, SELF_VIDEO_SECTION_HEIGTH);
+  g_object_set (priv->video_preview, "sync", FALSE, "async", TRUE, NULL);
+  gtk_box_pack_start (GTK_BOX (priv->self_user_output_hbox),
+      priv->video_preview, TRUE, TRUE, 0);
 
-    priv->video_preview = empathy_video_widget_new_with_size (bus,
-        SELF_VIDEO_SECTION_WIDTH, SELF_VIDEO_SECTION_HEIGTH);
-    g_object_set (priv->video_preview, "sync", FALSE, "async", TRUE, NULL);
-    gtk_box_pack_start (GTK_BOX (priv->self_user_output_hbox),
-        priv->video_preview, TRUE, TRUE, 0);
+  preview = empathy_video_widget_get_element (
+      EMPATHY_VIDEO_WIDGET (priv->video_preview));
+  gst_bin_add_many (GST_BIN (priv->pipeline), priv->video_input,
+      priv->video_tee, preview, NULL);
+  gst_element_link_many (priv->video_input, priv->video_tee,
+      preview, NULL);
 
-    preview = empathy_video_widget_get_element (
-        EMPATHY_VIDEO_WIDGET (priv->video_preview));
-    gst_bin_add_many (GST_BIN (priv->pipeline), priv->video_input,
-        priv->video_tee, preview, NULL);
-    gst_element_link_many (priv->video_input, priv->video_tee,
-        preview, NULL);
+  g_object_unref (bus);
 
-    g_object_unref (bus);
-
-    gst_element_set_state (preview, GST_STATE_PLAYING);
-    gst_element_set_state (priv->video_input, GST_STATE_PLAYING);
-    gst_element_set_state (priv->video_tee, GST_STATE_PLAYING);
+  gst_element_set_state (preview, GST_STATE_PLAYING);
+  gst_element_set_state (priv->video_input, GST_STATE_PLAYING);
+  gst_element_set_state (priv->video_tee, GST_STATE_PLAYING);
 }
 
 static void
@@ -1547,6 +1545,28 @@ empathy_call_window_bus_message (GstBus *bus, GstMessage *message,
 }
 
 static void
+empathy_call_window_update_self_avatar_visibility (EmpathyCallWindow *window)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+
+  if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (priv->show_preview)))
+    {
+      if (priv->video_preview != NULL)
+        {
+          gtk_widget_hide (priv->self_user_avatar_widget);
+          gtk_widget_show (priv->video_preview);
+        }
+      else
+        {
+          if (priv->video_preview != NULL)
+            gtk_widget_hide (priv->video_preview);
+
+          gtk_widget_show (priv->self_user_avatar_widget);
+        }
+    }
+}
+
+static void
 empathy_call_window_update_avatars_visibility (EmpathyTpCall *call,
     EmpathyCallWindow *window)
 {
@@ -1563,22 +1583,7 @@ empathy_call_window_update_avatars_visibility (EmpathyTpCall *call,
       gtk_widget_show (priv->remote_user_avatar_widget);
     }
 
-  if (gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (priv->show_preview)))
-    {
-      if (priv->video_preview != NULL
-          && empathy_tp_call_is_sending_video (call))
-        {
-          gtk_widget_hide (priv->self_user_avatar_widget);
-          gtk_widget_show (priv->video_preview);
-        }
-      else
-        {
-          if (priv->video_preview != NULL)
-            gtk_widget_hide (priv->video_preview);
-
-          gtk_widget_show (priv->self_user_avatar_widget);
-        }
-    }
+  empathy_call_window_update_self_avatar_visibility (window);
 }
 
 static void
@@ -1812,9 +1817,15 @@ empathy_call_window_show_preview_toggled_cb (GtkToggleAction *toggle,
   show_preview_toggled = gtk_toggle_action_get_active (toggle);
 
   if (show_preview_toggled)
-    gtk_widget_show (priv->self_user_output_frame);
+    {
+      empathy_call_window_setup_video_preview (window);
+      gtk_widget_show (priv->self_user_output_frame);
+      empathy_call_window_update_self_avatar_visibility (window);
+    }
   else
-    gtk_widget_hide (priv->self_user_output_frame);
+    {
+      gtk_widget_hide (priv->self_user_output_frame);
+    }
 }
 
 static void
