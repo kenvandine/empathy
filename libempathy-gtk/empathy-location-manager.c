@@ -453,7 +453,7 @@ update_resources (EmpathyLocationManager *location_manager)
   DEBUG ("Updating resources %d", priv->resources);
 
   /* As per Geoclue bug #15126, using NONE results in no address
-   * being found as geoclue-manual report an empty address with 
+   * being found as geoclue-manual report an empty address with
    * accuracy = NONE */
   if (!geoclue_master_client_set_requirements (priv->gc_client,
           GEOCLUE_ACCURACY_LEVEL_COUNTRY, 0, TRUE, priv->resources,
