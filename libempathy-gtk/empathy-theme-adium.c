@@ -475,7 +475,7 @@ theme_adium_append_message (EmpathyChatView *view,
 	name = empathy_contact_get_name (sender);
 
 	/* If this is a /me, append an event */
-	if (empathy_message_get_tptype(msg) == TP_CHANNEL_TEXT_MESSAGE_TYPE_ACTION) {
+	if (empathy_message_get_tptype (msg) == TP_CHANNEL_TEXT_MESSAGE_TYPE_ACTION) {
 		gchar *str;
 
 		str = g_strdup_printf ("%s %s", name, body);
@@ -560,7 +560,7 @@ static void
 theme_adium_scroll (EmpathyChatView *view,
 		    gboolean         allow_scrolling)
 {
-	/* FIXME: Is it possible? I guess we need a js function, but I don't 
+	/* FIXME: Is it possible? I guess we need a js function, but I don't
 	 * see any... */
 }
 

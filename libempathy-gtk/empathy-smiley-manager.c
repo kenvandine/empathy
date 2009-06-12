@@ -122,7 +122,7 @@ smiley_manager_finalize (GObject *object)
 		EmpathySmiley *smiley = l->data;
 
 		/* The smiley got the ownership of the path */
-		g_free ((gchar*) smiley->path);
+		g_free ((gchar *) smiley->path);
 		empathy_smiley_free (smiley);
 	}
 	g_slist_free (priv->smileys);
