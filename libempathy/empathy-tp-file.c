@@ -163,17 +163,12 @@ tp_file_get_available_socket_types_cb (TpProxy *proxy,
       GUINT_TO_POINTER (TP_SOCKET_ADDRESS_TYPE_IPV4))) != NULL)
     {
       priv->socket_address_type = TP_SOCKET_ADDRESS_TYPE_IPV4;
-      g_array_sort (access_controls, empathy_uint_compare);
 
-      /* here port is preferred over localhost */
-      if ((g_array_index (access_controls, guint, 0) ==
-          TP_SOCKET_ACCESS_CONTROL_LOCALHOST) &&
-          (g_array_index (access_controls, guint, 1) ==
-          TP_SOCKET_ACCESS_CONTROL_PORT))
-        priv->socket_access_control = TP_SOCKET_ACCESS_CONTROL_PORT;
-      else
-        priv->socket_access_control =
-            g_array_index (access_controls, guint, 0);
+      /* TODO: we should prefer PORT over LOCALHOST when the CM will
+       * support it.
+       */
+
+      priv->socket_access_control = TP_SOCKET_ACCESS_CONTROL_LOCALHOST;
     }
 
 out:
@@ -571,14 +566,11 @@ static void
 initialize_empty_ac_variant (TpSocketAccessControl ac,
     GValue *val)
 {
+  /* TODO: we will add more types here once we support PORT access control. */
   if (ac == TP_SOCKET_ACCESS_CONTROL_LOCALHOST)
     {
       g_value_init (val, G_TYPE_STRING);
       g_value_set_static_string (val, "");
-    }
-  else if (ac == TP_SOCKET_ACCESS_CONTROL_PORT)
-    {
-      g_value_init (val, TP_STRUCT_TYPE_SOCKET_ADDRESS_IPV4);
     }
 }
 
