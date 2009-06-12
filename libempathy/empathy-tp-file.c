@@ -26,6 +26,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <errno.h>
+#include <arpa/inet.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/un.h>
@@ -36,6 +37,7 @@
 #include <gio/gunixinputstream.h>
 #include <gio/gunixoutputstream.h>
 
+#include <telepathy-glib/gtypes.h>
 #include <telepathy-glib/proxy-subclass.h>
 #include <telepathy-glib/util.h>
 
@@ -71,11 +73,14 @@ typedef struct {
   /* org.freedesktop.Telepathy.Channel.Type.FileTransfer D-Bus properties */
   TpFileTransferState state;
   TpFileTransferStateChangeReason state_change_reason;
+  TpSocketAddressType socket_address_type;
+  TpSocketAccessControl socket_access_control;
 
   /* transfer properties */
   gboolean incoming;
   time_t start_time;
-  GArray *unix_socket_path;
+  GArray *socket_address;
+  guint port;
   guint64 offset;
 
   /* GCancellable we're passed when offering/accepting the transfer */
@@ -121,6 +126,54 @@ tp_file_get_state_cb (TpProxy *proxy,
     }
 
   priv->state = g_value_get_uint (value);
+}
+
+static void
+tp_file_get_available_socket_types_cb (TpProxy *proxy,
+    const GValue *value,
+    const GError *error,
+    gpointer user_data,
+    GObject *weak_object)
+{
+  EmpathyTpFilePriv *priv = GET_PRIV (weak_object);
+  GHashTable *socket_types;
+  GArray *access_controls;
+
+  if (error != NULL ||
+      !G_VALUE_HOLDS (value, TP_HASH_TYPE_SUPPORTED_SOCKET_MAP))
+    {
+      /* set a default value */
+      priv->socket_address_type = TP_SOCKET_ADDRESS_TYPE_UNIX;
+      priv->socket_access_control = TP_SOCKET_ACCESS_CONTROL_LOCALHOST;
+      goto out;
+    }
+
+  socket_types = g_value_get_boxed (value);
+
+  /* here UNIX is preferred to IPV4 */
+  if ((access_controls = g_hash_table_lookup (socket_types,
+      GUINT_TO_POINTER (TP_SOCKET_ADDRESS_TYPE_UNIX))) != NULL)
+    {
+      priv->socket_address_type = TP_SOCKET_ADDRESS_TYPE_UNIX;
+      priv->socket_access_control = TP_SOCKET_ACCESS_CONTROL_LOCALHOST;
+      goto out;
+    }
+
+  if ((access_controls = g_hash_table_lookup (socket_types,
+      GUINT_TO_POINTER (TP_SOCKET_ADDRESS_TYPE_IPV4))) != NULL)
+    {
+      priv->socket_address_type = TP_SOCKET_ADDRESS_TYPE_IPV4;
+
+      /* TODO: we should prefer PORT over LOCALHOST when the CM will
+       * support it.
+       */
+
+      priv->socket_access_control = TP_SOCKET_ACCESS_CONTROL_LOCALHOST;
+    }
+
+out:
+  DEBUG ("Socket address type: %u, access control %u",
+      priv->socket_address_type, priv->socket_access_control);
 }
 
 static void
@@ -206,12 +259,35 @@ splice_stream_ready_cb (GObject *source,
 static void
 tp_file_start_transfer (EmpathyTpFile *tp_file)
 {
-  gint fd;
-  struct sockaddr_un addr;
+  gint fd, domain, res = 0;
   GError *error = NULL;
+  struct sockaddr *my_addr = NULL;
+  size_t my_size = 0;
   EmpathyTpFilePriv *priv = GET_PRIV (tp_file);
 
-  fd = socket (PF_UNIX, SOCK_STREAM, 0);
+  if (priv->socket_address_type == TP_SOCKET_ADDRESS_TYPE_UNIX)
+    {
+      domain = AF_UNIX;
+    }
+  else if (priv->socket_address_type == TP_SOCKET_ADDRESS_TYPE_IPV4)
+    {
+      domain = AF_INET;
+    }
+  else
+    {
+      error = g_error_new_literal (EMPATHY_FT_ERROR_QUARK,
+          EMPATHY_FT_ERROR_NOT_SUPPORTED, _("Socket type not supported"));
+
+      DEBUG ("Socket not supported, closing channel");
+
+      ft_operation_close_with_error (tp_file, error);
+      g_clear_error (&error);
+
+      return;
+    }
+
+  fd = socket (domain, SOCK_STREAM, 0);
+
   if (fd < 0)
     {
       int code = errno;
@@ -227,12 +303,34 @@ tp_file_start_transfer (EmpathyTpFile *tp_file)
       return;
     }
 
-  memset (&addr, 0, sizeof (addr));
-  addr.sun_family = AF_UNIX;
-  strncpy (addr.sun_path, priv->unix_socket_path->data,
-      priv->unix_socket_path->len);
+  if (priv->socket_address_type == TP_SOCKET_ADDRESS_TYPE_UNIX)
+    {
+      struct sockaddr_un addr;
 
-  if (connect (fd, (struct sockaddr*) &addr, sizeof (addr)) < 0)
+      memset (&addr, 0, sizeof (addr));
+      addr.sun_family = domain;
+      strncpy (addr.sun_path, priv->socket_address->data,
+          priv->socket_address->len);
+
+      my_addr = (struct sockaddr *) &addr;
+      my_size = sizeof (addr);
+    }
+  else if (priv->socket_address_type == TP_SOCKET_ADDRESS_TYPE_IPV4)
+    {
+      struct sockaddr_in addr;
+
+      memset (&addr, 0, sizeof (addr));
+      addr.sin_family = domain;
+      inet_pton (AF_INET, priv->socket_address->data, &addr.sin_addr);
+      addr.sin_port = htons (priv->port);
+
+      my_addr = (struct sockaddr *) &addr;
+      my_size = sizeof (addr);
+    }
+
+  res = connect (fd, my_addr, my_size);
+
+  if (res < 0)
     {
       int code = errno;
 
@@ -354,7 +452,7 @@ tp_file_state_changed_cb (TpChannel *proxy,
    * data transfer but are just an observer for the channel.
    */
   if (state == TP_FILE_TRANSFER_STATE_OPEN &&
-      priv->unix_socket_path != NULL)
+      priv->socket_address != NULL)
     tp_file_start_transfer (EMPATHY_TP_FILE (weak_object));
 
   if (state == TP_FILE_TRANSFER_STATE_COMPLETED)
@@ -422,7 +520,7 @@ ft_operation_provide_or_accept_file_cb (TpChannel *proxy,
 
   if (G_VALUE_TYPE (address) == DBUS_TYPE_G_UCHAR_ARRAY)
     {
-      priv->unix_socket_path = g_value_dup_boxed (address);
+      priv->socket_address = g_value_dup_boxed (address);
     }
   else if (G_VALUE_TYPE (address) == G_TYPE_STRING)
     {
@@ -431,18 +529,50 @@ ft_operation_provide_or_accept_file_cb (TpChannel *proxy,
       const gchar *path;
 
       path = g_value_get_string (address);
-      priv->unix_socket_path = g_array_sized_new (TRUE, FALSE, sizeof (gchar),
-                                                  strlen (path));
-      g_array_insert_vals (priv->unix_socket_path, 0, path, strlen (path));
+      priv->socket_address = g_array_sized_new (TRUE, FALSE, sizeof (gchar),
+          strlen (path));
+      g_array_insert_vals (priv->socket_address, 0, path, strlen (path));
+    }
+  else if (G_VALUE_TYPE (address) == TP_STRUCT_TYPE_SOCKET_ADDRESS_IPV4)
+    {
+      GValueArray *val_array;
+      GValue *v;
+      const char *addr;
+
+      val_array = g_value_get_boxed (address);
+
+      /* IPV4 address */
+      v = g_value_array_get_nth (val_array, 0);
+      addr = g_value_get_string (v);
+      priv->socket_address = g_array_sized_new (TRUE, FALSE, sizeof (gchar),
+          strlen (addr));
+      g_array_insert_vals (priv->socket_address, 0, addr, strlen (addr));
+
+      /* port number */
+      v = g_value_array_get_nth (val_array, 1);
+      priv->port = g_value_get_uint (v);
     }
 
-  DEBUG ("Got unix socket path: %s", priv->unix_socket_path->data);
+  DEBUG ("Got socket address: %s, port (not zero if IPV4): %d",
+      priv->socket_address->data, priv->port);
 
   /* if the channel is already open, start the transfer now, otherwise,
    * wait for the state change signal.
    */
   if (priv->state == TP_FILE_TRANSFER_STATE_OPEN)
     tp_file_start_transfer (tp_file);
+}
+
+static void
+initialize_empty_ac_variant (TpSocketAccessControl ac,
+    GValue *val)
+{
+  /* TODO: we will add more types here once we support PORT access control. */
+  if (ac == TP_SOCKET_ACCESS_CONTROL_LOCALHOST)
+    {
+      g_value_init (val, G_TYPE_STRING);
+      g_value_set_static_string (val, "");
+    }
 }
 
 static void
@@ -469,12 +599,14 @@ file_read_async_cb (GObject *source,
 
   priv->in_stream = G_INPUT_STREAM (in_stream);
 
-  g_value_init (&nothing, G_TYPE_STRING);
-  g_value_set_static_string (&nothing, "");
+  /* we don't impose specific interface/port requirements even
+   * if we're not using UNIX sockets.
+   */
+  initialize_empty_ac_variant (priv->socket_access_control, &nothing);
 
   tp_cli_channel_type_file_transfer_call_provide_file (
       priv->channel, -1,
-      TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
+      priv->socket_address_type, priv->socket_access_control,
       &nothing, ft_operation_provide_or_accept_file_cb,
       NULL, NULL, G_OBJECT (tp_file));
 }
@@ -504,11 +636,13 @@ file_replace_async_cb (GObject *source,
 
   priv->out_stream = G_OUTPUT_STREAM (out_stream);
 
-  g_value_init (&nothing, G_TYPE_STRING);
-  g_value_set_static_string (&nothing, "");
+  /* we don't impose specific interface/port requirements even
+   * if we're not using UNIX sockets.
+   */
+  initialize_empty_ac_variant (priv->socket_access_control, &nothing);
 
   tp_cli_channel_type_file_transfer_call_accept_file (priv->channel,
-      -1, TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
+      -1, priv->socket_address_type, priv->socket_access_control,
       &nothing, priv->offset,
       ft_operation_provide_or_accept_file_cb, NULL, NULL, G_OBJECT (tp_file));
 }
@@ -593,10 +727,10 @@ do_finalize (GObject *object)
 
   DEBUG ("%p", object);
 
-  if (priv->unix_socket_path != NULL)
+  if (priv->socket_address != NULL)
     {
-      g_array_free (priv->unix_socket_path, TRUE);
-      priv->unix_socket_path = NULL;
+      g_array_free (priv->socket_address, TRUE);
+      priv->socket_address = NULL;
     }
 
   G_OBJECT_CLASS (empathy_tp_file_parent_class)->finalize (object);
@@ -667,6 +801,10 @@ do_constructed (GObject *object)
   tp_cli_dbus_properties_call_get (priv->channel,
       -1, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, "State", tp_file_get_state_cb,
       NULL, NULL, object);
+
+  tp_cli_dbus_properties_call_get (priv->channel,
+      -1, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, "AvailableSocketTypes",
+      tp_file_get_available_socket_types_cb, NULL, NULL, object);
 
   priv->state_change_reason =
       TP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE;
