@@ -142,14 +142,13 @@ empathy_map_view_show (void)
   window->list_store = list_store;
 
   /* Set up map view */
-  window->map_view = CHAMPLAIN_VIEW (champlain_view_new ());
+  embed = gtk_champlain_embed_new ();
+  window->map_view = gtk_champlain_embed_get_view (GTK_CHAMPLAIN_EMBED (embed));
   g_object_set (G_OBJECT (window->map_view), "zoom-level", 1,
      "scroll-mode", CHAMPLAIN_SCROLL_MODE_KINETIC, NULL);
   champlain_view_center_on (window->map_view, 36, 0);
 
-  embed = champlain_view_embed_new (window->map_view);
-  gtk_container_add (GTK_CONTAINER (sw),
-     GTK_WIDGET (embed));
+  gtk_container_add (GTK_CONTAINER (sw), embed);
   gtk_widget_show_all (embed);
 
   window->layer = g_object_ref (champlain_layer_new ());

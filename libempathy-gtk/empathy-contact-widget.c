@@ -105,7 +105,7 @@ typedef struct
 #if HAVE_LIBCHAMPLAIN
   GtkWidget *viewport_map;
   GtkWidget *map_view_embed;
-  ClutterActor *map_view;
+  ChamplainView *map_view;
 #endif
 
   /* Groups */
@@ -1420,9 +1420,9 @@ contact_widget_location_update (EmpathyContactWidget *information)
       ClutterActor *marker;
       ChamplainLayer *layer;
 
-      information->map_view = champlain_view_new ();
-      information->map_view_embed = champlain_view_embed_new (
-          CHAMPLAIN_VIEW (information->map_view));
+      information->map_view_embed = gtk_champlain_embed_new ();
+      information->map_view = gtk_champlain_embed_get_view (
+          GTK_CHAMPLAIN_EMBED (information->map_view_embed));
 
       gtk_container_add (GTK_CONTAINER (information->viewport_map),
           information->map_view_embed);
@@ -1431,14 +1431,14 @@ contact_widget_location_update (EmpathyContactWidget *information)
           NULL);
 
       layer = champlain_layer_new ();
-      champlain_view_add_layer (CHAMPLAIN_VIEW (information->map_view), layer);
+      champlain_view_add_layer (information->map_view, layer);
 
       marker = champlain_marker_new_with_text (
           empathy_contact_get_name (information->contact), NULL, NULL, NULL);
       champlain_base_marker_set_position (CHAMPLAIN_BASE_MARKER (marker), lat, lon);
       clutter_container_add (CLUTTER_CONTAINER (layer), marker, NULL);
 
-      champlain_view_center_on (CHAMPLAIN_VIEW(information->map_view), lat, lon);
+      champlain_view_center_on (information->map_view, lat, lon);
       gtk_widget_show_all (information->viewport_map);
     }
 #endif
