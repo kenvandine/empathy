@@ -614,13 +614,16 @@ empathy_call_window_setup_video_preview (EmpathyCallWindow *window)
   GstElement *preview;
   GstBus *bus = gst_pipeline_get_bus (GST_PIPELINE (priv->pipeline));
 
-  /* Since the video preview and the video tee are initialized and freed at
-     the same time, if one is initialized, then the other one should be too. */
-  g_assert ((priv->video_preview != NULL && priv->video_tee != NULL)
-             || (priv->video_preview == NULL && priv->video_tee == NULL));
-
   if (priv->video_preview != NULL)
-    return;
+    {
+      /* Since the video preview and the video tee are initialized and freed
+         at the same time, if one is initialized, then the other one should
+         be too. */
+      g_assert (priv->video_tee != NULL);
+      return;
+    }
+
+  g_assert (priv->video_tee == NULL);
 
   priv->video_tee = gst_element_factory_make ("tee", NULL);
   gst_object_ref (priv->video_tee);
@@ -908,19 +911,6 @@ empathy_call_window_setup_video_preview_visibility (EmpathyCallWindow *self,
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
   gboolean initial_video = empathy_call_handler_has_initial_video (priv->handler);
-
-  if (initial_video)
-    {
-      empathy_call_window_setup_video_preview (self);
-      gtk_widget_hide (priv->self_user_avatar_widget);
-
-      if (priv->video_preview != NULL)
-        gtk_widget_show (priv->video_preview);
-    }
-  else
-    {
-      gtk_widget_show (priv->self_user_avatar_widget);
-    }
 
   gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->show_preview),
       initial_video);
@@ -1327,7 +1317,8 @@ empathy_call_window_connected (gpointer user_data)
   priv->sending_video = empathy_tp_call_is_sending_video (call);
 
   gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->show_preview),
-      priv->sending_video);
+      priv->sending_video
+      || gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (priv->show_preview)));
   gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->send_video),
       priv->sending_video && priv->video_input != NULL);
   gtk_toggle_tool_button_set_active (
@@ -1903,6 +1894,9 @@ empathy_call_window_restart_call (EmpathyCallWindow *window)
   g_object_unref (bus);
 
   gtk_widget_show_all (priv->content_hbox);
+
+  gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->show_preview),
+      gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (priv->show_preview)));
 
   empathy_call_window_status_message (window, CONNECTING_STATUS_TEXT);
   priv->call_started = TRUE;
