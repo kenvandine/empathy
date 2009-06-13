@@ -21,7 +21,7 @@
 #ifndef __EMPATHY_ACCOUNT_WIDGET_IRC_H__
 #define __EMPATHY_ACCOUNT_WIDGET_IRC_H__
 
-#include <gtk/gtkwidget.h>
+#include <gtk/gtk.h>
 #include <libmissioncontrol/mc-account.h>
 
 G_BEGIN_DECLS

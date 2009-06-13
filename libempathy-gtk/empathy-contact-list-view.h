@@ -26,7 +26,7 @@
 #ifndef __EMPATHY_CONTACT_LIST_VIEW_H__
 #define __EMPATHY_CONTACT_LIST_VIEW_H__
 
-#include <gtk/gtktreeview.h>
+#include <gtk/gtk.h>
 
 #include <libempathy/empathy-contact.h>
 

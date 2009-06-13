@@ -25,7 +25,7 @@
 #ifndef __EMPATHY_ACCOUNTS_DIALOG_H__
 #define __EMPATHY_ACCOUNTS_DIALOG_H__
 
-#include <gtk/gtkwidget.h>
+#include <gtk/gtk.h>
 
 #include <libmissioncontrol/mc-account.h>
 

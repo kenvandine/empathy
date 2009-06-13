@@ -22,7 +22,7 @@
 #ifndef __EMPATHY_NEW_MESSAGE_DIALOG_H__
 #define __EMPATHY_NEW_MESSAGE_DIALOG_H__
 
-#include <gtk/gtkwidget.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

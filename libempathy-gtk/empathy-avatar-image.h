@@ -24,7 +24,7 @@
 #ifndef __EMPATHY_AVATAR_IMAGE_H__
 #define __EMPATHY_AVATAR_IMAGE_H__
 
-#include <gtk/gtkeventbox.h>
+#include <gtk/gtk.h>
 
 #include <libempathy/empathy-contact.h>
 

@@ -25,7 +25,7 @@
 #ifndef __EMPATHY_ACCOUNT_CHOOSER_H__
 #define __EMPATHY_ACCOUNT_CHOOSER_H__
 
-#include <gtk/gtkcombobox.h>
+#include <gtk/gtk.h>
 
 #include <libmissioncontrol/mc-account.h>
 

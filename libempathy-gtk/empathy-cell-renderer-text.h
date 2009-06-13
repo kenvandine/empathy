@@ -23,7 +23,7 @@
 #ifndef __EMPATHY_CELL_RENDERER_TEXT_H__
 #define __EMPATHY_CELL_RENDERER_TEXT_H__
 
-#include <gtk/gtkcellrenderertext.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

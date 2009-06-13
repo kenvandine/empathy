@@ -24,7 +24,7 @@
 #ifndef __EMPATHY_MAIN_WINDOW_H__
 #define __EMPATHY_MAIN_WINDOW_H__
 
-#include <gtk/gtkwidget.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

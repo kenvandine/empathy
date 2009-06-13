@@ -24,7 +24,7 @@
 #ifndef __EMPATHY_AVATAR_CHOOSER_H__
 #define __EMPATHY_AVATAR_CHOOSER_H__
 
-#include <gtk/gtkbutton.h>
+#include <gtk/gtk.h>
 
 #include <libempathy/empathy-contact.h>
 

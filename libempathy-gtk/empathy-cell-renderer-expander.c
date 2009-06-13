@@ -29,7 +29,7 @@
  *     start the new one).
  */
 
-#include <gtk/gtktreeview.h>
+#include <gtk/gtk.h>
 
 #include <libempathy/empathy-utils.h>
 #include "empathy-cell-renderer-expander.h"

@@ -27,7 +27,7 @@
 #ifndef __EMPATHY_CHAT_TEXT_VIEW_H__
 #define __EMPATHY_CHAT_TEXT_VIEW_H__
 
-#include <gtk/gtktextview.h>
+#include <gtk/gtk.h>
 
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-message.h>

@@ -25,7 +25,7 @@
 #ifndef __EMPATHY_ABOUT_DIALOG_H__
 #define __EMPATHY_ABOUT_DIALOG_H__
 
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

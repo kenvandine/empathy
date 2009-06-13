@@ -28,7 +28,7 @@
 #ifndef __EMPATHY_CHAT_H__
 #define __EMPATHY_CHAT_H__
 
-#include <gtk/gtkbin.h>
+#include <gtk/gtk.h>
 
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-message.h>

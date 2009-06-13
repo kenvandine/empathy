@@ -26,7 +26,7 @@
 #ifndef __EMPATHY_CONTACT_LIST_STORE_H__
 #define __EMPATHY_CONTACT_LIST_STORE_H__
 
-#include <gtk/gtktreestore.h>
+#include <gtk/gtk.h>
 
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-contact.h>

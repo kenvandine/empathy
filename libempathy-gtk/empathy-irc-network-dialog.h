@@ -21,7 +21,7 @@
 #ifndef __EMPATHY_IRC_NETWORK_DIALOG_H__
 #define __EMPATHY_IRC_NETWORK_DIALOG_H__
 
-#include <gtk/gtkwidget.h>
+#include <gtk/gtk.h>
 
 #include <libempathy/empathy-irc-network.h>
 

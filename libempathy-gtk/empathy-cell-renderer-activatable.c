@@ -20,7 +20,7 @@
  * Authors: Raphael Slinckx <raphael@slinckx.net>
  */
 
-#include <gtk/gtktreeview.h>
+#include <gtk/gtk.h>
 
 #include "empathy-cell-renderer-activatable.h"
 

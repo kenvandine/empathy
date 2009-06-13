@@ -25,7 +25,7 @@
 #ifndef __EMPATHY_PREFERENCES_H__
 #define __EMPATHY_PREFERENCES_H__
 
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

@@ -29,7 +29,7 @@
 #define __EMPATHY_CHAT_WINDOW_H__
 
 #include <glib-object.h>
-#include <gtk/gtkwidget.h>
+#include <gtk/gtk.h>
 
 #include <libmissioncontrol/mc-account.h>
 #include <libempathy-gtk/empathy-chat.h>

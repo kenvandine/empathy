@@ -21,7 +21,7 @@
 #ifndef __EMPATHY_MAP_VIEW_H__
 #define __EMPATHY_MAP_VIEW_H__
 
-#include <gtk/gtkwidget.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

@@ -22,7 +22,7 @@
 #ifndef __EMPATHY_CONTACT_MENU_H__
 #define __EMPATHY_CONTACT_MENU_H__
 
-#include <gtk/gtkmenu.h>
+#include <gtk/gtk.h>
 
 #include <libempathy/empathy-contact.h>
 
