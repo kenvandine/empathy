@@ -66,9 +66,9 @@ static void map_view_zoom_in_cb (GtkWidget *widget,
     EmpathyMapView *window);
 static void map_view_zoom_out_cb (GtkWidget *widget,
     EmpathyMapView *window);
-static void map_view_contact_location_notify (GObject *gobject,
+static void map_view_contact_location_notify (EmpathyContact *contact,
     GParamSpec *arg1,
-    gpointer user_data);
+    ChamplainMarker *marker);
 
 static void
 map_view_state_changed (ChamplainView *view,
@@ -227,12 +227,10 @@ map_view_marker_update_position (ChamplainMarker *marker,
 }
 
 static void
-map_view_contact_location_notify (GObject *gobject,
+map_view_contact_location_notify (EmpathyContact *contact,
     GParamSpec *arg1,
-    gpointer user_data)
+    ChamplainMarker *marker)
 {
-  ChamplainMarker *marker = CHAMPLAIN_MARKER (user_data);
-  EmpathyContact *contact = EMPATHY_CONTACT (gobject);
   map_view_marker_update_position (marker, contact);
 }
 
@@ -299,7 +297,8 @@ map_view_contacts_foreach (GtkTreeModel *model,
 
   g_signal_connect (contact, "notify::location",
       G_CALLBACK (map_view_contact_location_notify), marker);
-  g_object_set_data_full (G_OBJECT (marker), "contact", g_object_ref (contact), g_object_unref);
+  g_object_set_data_full (G_OBJECT (marker), "contact",
+      g_object_ref (contact), g_object_unref);
 
   map_view_marker_update_position (CHAMPLAIN_MARKER (marker), contact);
 
