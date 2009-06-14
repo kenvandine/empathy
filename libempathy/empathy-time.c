@@ -152,6 +152,11 @@ empathy_time_to_string_relative (time_t then)
 			return g_strdup_printf (ngettext ("%d day ago",
 				"%d days ago", seconds), seconds);
 		}
+		else if (seconds < (60 * 60 * 24 * 30)) {
+			seconds /= 60 * 60 * 24 * 7;
+			return g_strdup_printf (ngettext ("%d week ago",
+				"%d weeks ago", seconds), seconds);
+		}
 		else {
 			seconds /= 60 * 60 * 24 * 30;
 			return g_strdup_printf (ngettext ("%d month ago",
