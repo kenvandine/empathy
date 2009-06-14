@@ -465,7 +465,10 @@ empathy_idle_init (EmpathyIdle *idle)
 	if (error) {
 		DEBUG ("Error getting actual presence: %s", error->message);
 
-		priv->state = TP_CONNECTION_PRESENCE_TYPE_UNSET;
+		/* Fallback to OFFLINE as that's what mission_control_get_presence_actual
+		does. This also ensure to always display the status icon (there is no
+		unset presence icon). */
+		priv->state = TP_CONNECTION_PRESENCE_TYPE_OFFLINE;
 		g_clear_error (&error);
 	}
 	priv->status = mission_control_get_presence_message_actual (priv->mc, &error);
