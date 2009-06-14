@@ -235,6 +235,32 @@ map_view_contact_location_notify (EmpathyContact *contact,
 }
 
 static gboolean
+marker_clicked_cb (ChamplainMarker *marker,
+    ClutterButtonEvent *event,
+    EmpathyContact *contact)
+{
+  GtkWidget *menu;
+
+  if (event->button != 3)
+    return FALSE;
+
+  menu = empathy_contact_menu_new (contact,
+      EMPATHY_CONTACT_FEATURE_CHAT |
+      EMPATHY_CONTACT_FEATURE_CALL |
+      EMPATHY_CONTACT_FEATURE_LOG |
+      EMPATHY_CONTACT_FEATURE_INFO);
+
+  if (menu == NULL)
+    return FALSE;
+
+  gtk_widget_show (menu);
+  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
+      event->button, event->time);
+
+  return FALSE;
+}
+
+static gboolean
 map_view_contacts_foreach (GtkTreeModel *model,
     GtkTreePath *path,
     GtkTreeIter *iter,
@@ -292,6 +318,10 @@ map_view_contacts_foreach (GtkTreeModel *model,
   champlain_marker_set_use_markup (CHAMPLAIN_MARKER (marker), TRUE);
   champlain_marker_set_text (CHAMPLAIN_MARKER (marker), label);
   g_free (label);
+
+  clutter_actor_set_reactive (CLUTTER_ACTOR (marker), TRUE);
+  g_signal_connect (marker, "button-release-event",
+      G_CALLBACK (marker_clicked_cb), contact);
 
   clutter_container_add (CLUTTER_CONTAINER (window->layer), marker, NULL);
 
