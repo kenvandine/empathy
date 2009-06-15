@@ -131,16 +131,17 @@ status_presets_file_parse (const gchar *filename)
 
 			if (state_str) {
 				state = empathy_presence_from_str (state_str);
+				if (empathy_status_presets_is_valid (state)) {
+					if (is_default) {
+						DEBUG ("Default status preset state is:"
+							" '%s', status:'%s'", state_str,
+							status);
 
-				if (is_default) {
-					DEBUG ("Default status preset state is:"
-						" '%s', status:'%s'", state_str,
-						status);
-
-					status_presets_set_default (state, status);
-				} else {
-					preset = status_preset_new (state, status);
-					presets = g_list_append (presets, preset);
+						status_presets_set_default (state, status);
+					} else {
+						preset = status_preset_new (state, status);
+						presets = g_list_append (presets, preset);
+					}
 				}
 			}
 
