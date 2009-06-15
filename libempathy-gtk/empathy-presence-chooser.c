@@ -293,7 +293,7 @@ presence_chooser_is_preset (EmpathyPresenceChooser *self)
 	for (l = presets; l; l = l->next) {
 		char *preset = (char *) l->data;
 
-		if (!strcmp (status, preset)) {
+		if (!tp_strdiff (status, preset)) {
 			match = TRUE;
 			break;
 		}
