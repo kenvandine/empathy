@@ -69,6 +69,8 @@ typedef struct {
 	GtkWidget *checkbutton_notifications_enabled;
 	GtkWidget *checkbutton_notifications_disabled_away;
 	GtkWidget *checkbutton_notifications_focus;
+	GtkWidget *checkbutton_notifications_contact_signin;
+	GtkWidget *checkbutton_notifications_contact_signout;
 
 	GtkWidget *treeview_spell_checker;
 
@@ -200,6 +202,12 @@ preferences_setup_widgets (EmpathyPreferences *preferences)
 	preferences_hookup_toggle_button (preferences,
 					  EMPATHY_PREFS_NOTIFICATIONS_FOCUS,
 					  preferences->checkbutton_notifications_focus);
+	preferences_hookup_toggle_button (preferences,
+					  EMPATHY_PREFS_NOTIFICATIONS_CONTACT_SIGNIN,
+					  preferences->checkbutton_notifications_contact_signin);
+	preferences_hookup_toggle_button (preferences,
+					  EMPATHY_PREFS_NOTIFICATIONS_CONTACT_SIGNOUT,
+					  preferences->checkbutton_notifications_contact_signout);
 
 	preferences_hookup_sensitivity (preferences,
 					EMPATHY_PREFS_NOTIFICATIONS_ENABLED,
@@ -207,6 +215,12 @@ preferences_setup_widgets (EmpathyPreferences *preferences)
 	preferences_hookup_sensitivity (preferences,
 					EMPATHY_PREFS_NOTIFICATIONS_ENABLED,
 					preferences->checkbutton_notifications_focus);
+	preferences_hookup_sensitivity (preferences,
+					EMPATHY_PREFS_NOTIFICATIONS_ENABLED,
+					preferences->checkbutton_notifications_contact_signin);
+	preferences_hookup_sensitivity (preferences,
+					EMPATHY_PREFS_NOTIFICATIONS_ENABLED,
+					preferences->checkbutton_notifications_contact_signout);
 
 	preferences_hookup_toggle_button (preferences,
 					  EMPATHY_PREFS_SOUNDS_ENABLED,
@@ -1207,6 +1221,8 @@ empathy_preferences_show (GtkWindow *parent)
 		"checkbutton_notifications_enabled", &preferences->checkbutton_notifications_enabled,
 		"checkbutton_notifications_disabled_away", &preferences->checkbutton_notifications_disabled_away,
 		"checkbutton_notifications_focus", &preferences->checkbutton_notifications_focus,
+		"checkbutton_notifications_contact_signin", &preferences->checkbutton_notifications_contact_signin,
+		"checkbutton_notifications_contact_signout", &preferences->checkbutton_notifications_contact_signout,
 		"checkbutton_sounds_enabled", &preferences->checkbutton_sounds_enabled,
 		"checkbutton_sounds_disabled_away", &preferences->checkbutton_sounds_disabled_away,
 		"treeview_sounds", &preferences->treeview_sounds,

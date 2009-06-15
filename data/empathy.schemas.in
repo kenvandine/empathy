@@ -261,6 +261,36 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/empathy/notifications/notifications_contact_signin</key>
+      <applyto>/apps/empathy/notifications/notifications_contact_signin</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+         <short>Popup notifications when a contact sign in</short>
+         <long>
+         Whether or not to show a popup notification when a contact goes
+         online.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/notifications/notifications_contact_signout</key>
+      <applyto>/apps/empathy/notifications/notifications_contact_signout</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+         <short>Popup notifications when a contact sign out</short>
+         <long>
+         Whether or not to show a popup notification when a contact goes
+         offline.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
        <key>/schemas/apps/empathy/ui/separate_chat_windows</key>
        <applyto>/apps/empathy/ui/separate_chat_windows</applyto>
        <owner>empathy</owner>

@@ -26,6 +26,7 @@
 
 #include <telepathy-glib/util.h>
 
+#include <libempathy/empathy-account-manager.h>
 #include <libempathy/empathy-dispatcher.h>
 #include <libempathy/empathy-tp-contact-factory.h>
 #include <libempathy/empathy-contact-manager.h>
@@ -37,6 +38,7 @@
 
 #include <extensions/extensions.h>
 
+#include <libempathy-gtk/empathy-conf.h>
 #include <libempathy-gtk/empathy-images.h>
 #include <libempathy-gtk/empathy-contact-dialogs.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
@@ -956,6 +958,66 @@ event_manager_pendings_changed_cb (EmpathyContactList  *list,
   g_free (header);
 }
 
+static void
+event_manager_presence_changed_cb (EmpathyContactMonitor *monitor,
+                                   EmpathyContact *contact,
+                                   TpConnectionPresenceType current,
+                                   TpConnectionPresenceType previous,
+                                   EmpathyEventManager *manager)
+{
+  McAccount *account;
+  gboolean just_connected;
+  EmpathyAccountManager *account_manager;
+  gchar *header = NULL;
+  gboolean preference = FALSE;
+
+  account = empathy_contact_get_account (contact);
+  account_manager = empathy_account_manager_dup_singleton ();
+  just_connected = empathy_account_manager_is_account_just_connected (
+                  account_manager, account);
+
+  g_object_unref (account_manager);
+  if (just_connected) {
+    return;
+  }
+
+  if (tp_connection_presence_type_cmp_availability (previous,
+     TP_CONNECTION_PRESENCE_TYPE_OFFLINE) > 0)
+    {
+      /* contact was online */
+      empathy_conf_get_bool (empathy_conf_get (),
+                      EMPATHY_PREFS_NOTIFICATIONS_CONTACT_SIGNOUT, &preference);
+      if (preference && tp_connection_presence_type_cmp_availability (current,
+          TP_CONNECTION_PRESENCE_TYPE_OFFLINE) <= 0)
+        {
+          /* someone is logging off */
+          header = g_strdup_printf (_("%s signed out."),
+            empathy_contact_get_name (contact));
+
+          event_manager_add (manager, contact, GTK_STOCK_DIALOG_INFO, header,
+                             NULL, NULL, NULL, NULL);
+        }
+    }
+  else
+    {
+      /* contact was offline */
+      empathy_conf_get_bool (empathy_conf_get (),
+                      EMPATHY_PREFS_NOTIFICATIONS_CONTACT_SIGNIN, &preference);
+      if (preference && tp_connection_presence_type_cmp_availability (current,
+          TP_CONNECTION_PRESENCE_TYPE_OFFLINE) > 0)
+        {
+          /* someone is logging in */
+          header = g_strdup_printf (_("%s signed in."),
+            empathy_contact_get_name (contact));
+
+          event_manager_add (manager, contact, GTK_STOCK_DIALOG_INFO, header,
+                             NULL, NULL, NULL, NULL);
+        }
+    }
+  g_free (header);
+}
+
+
 static GObject *
 event_manager_constructor (GType type,
 			   guint n_props,
@@ -1034,6 +1096,12 @@ empathy_event_manager_init (EmpathyEventManager *manager)
 {
   EmpathyEventManagerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
     EMPATHY_TYPE_EVENT_MANAGER, EmpathyEventManagerPriv);
+  EmpathyContactMonitor   *monitor;
+  EmpathyContactList      *list_iface;
+
+  list_iface = EMPATHY_CONTACT_LIST (empathy_contact_manager_dup_singleton ());
+  monitor = empathy_contact_list_get_monitor (list_iface);
+  g_object_unref (list_iface);
 
   manager->priv = priv;
 
@@ -1043,6 +1111,8 @@ empathy_event_manager_init (EmpathyEventManager *manager)
     G_CALLBACK (event_manager_approve_channel_cb), manager);
   g_signal_connect (priv->contact_manager, "pendings-changed",
     G_CALLBACK (event_manager_pendings_changed_cb), manager);
+  g_signal_connect (monitor, "contact-presence-changed",
+    G_CALLBACK (event_manager_presence_changed_cb), manager);
 }
 
 EmpathyEventManager *
