@@ -5,7 +5,7 @@
     <property name="width_request">620</property>
     <property name="height_request">250</property>
     <property name="border_width">5</property>
-    <property name="title" translatable="yes">File transfers</property>
+    <property name="title" translatable="yes">File Transfers</property>
     <property name="role">empathy-ft-manager</property>
     <property name="icon_name">document-send</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
