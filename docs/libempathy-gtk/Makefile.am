@@ -10,6 +10,7 @@ DOC_MAIN_SGML_FILE=libempathy-gtk-docs.sgml
 
 # Extra options to supply to gtkdoc-scan
 SCAN_OPTIONS=--deprecated-guards="G_DISABLE_DEPRECATED"
+SCANGOBJ_OPTIONS=--type-init-func="g_type_init();g_thread_init(NULL);"
 
 # The directory containing the source code. Relative to $(srcdir)
 DOC_SOURCE_DIR=$(top_srcdir)/libempathy-gtk
