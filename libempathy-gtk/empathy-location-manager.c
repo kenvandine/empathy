@@ -452,6 +452,9 @@ update_resources (EmpathyLocationManager *location_manager)
 
   DEBUG ("Updating resources %d", priv->resources);
 
+  if (!priv->geoclue_is_setup)
+    return;
+
   /* As per Geoclue bug #15126, using NONE results in no address
    * being found as geoclue-manual report an empty address with
    * accuracy = NONE */
@@ -462,9 +465,6 @@ update_resources (EmpathyLocationManager *location_manager)
       DEBUG ("set_requirements failed");
       return;
     }
-
-  if (!priv->geoclue_is_setup)
-    return;
 
   geoclue_address_get_address_async (priv->gc_address,
       initial_address_cb, location_manager);
@@ -482,8 +482,15 @@ setup_geoclue (EmpathyLocationManager *location_manager)
 
   DEBUG ("Setting up Geoclue");
   master = geoclue_master_get_default ();
-  priv->gc_client = geoclue_master_create_client (master, NULL, NULL);
+  priv->gc_client = geoclue_master_create_client (master, NULL, &error);
   g_object_unref (master);
+
+  if (priv->gc_client == NULL)
+    {
+      DEBUG ("Failed to GeoclueMasterClient: %s", error->message);
+      g_error_free (error);
+      return;
+    }
 
   update_resources (location_manager);
 
