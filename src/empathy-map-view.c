@@ -56,20 +56,6 @@ typedef struct {
   ChamplainLayer *layer;
 } EmpathyMapView;
 
-static void map_view_destroy_cb (GtkWidget *widget,
-    EmpathyMapView *window);
-static gboolean map_view_contacts_foreach (GtkTreeModel *model,
-    GtkTreePath *path,
-    GtkTreeIter *iter,
-    gpointer user_data);
-static void map_view_zoom_in_cb (GtkWidget *widget,
-    EmpathyMapView *window);
-static void map_view_zoom_out_cb (GtkWidget *widget,
-    EmpathyMapView *window);
-static void map_view_contact_location_notify (EmpathyContact *contact,
-    GParamSpec *arg1,
-    ChamplainMarker *marker);
-
 static void
 map_view_state_changed (ChamplainView *view,
     GParamSpec *gobject,
@@ -82,111 +68,6 @@ map_view_state_changed (ChamplainView *view,
     ephy_spinner_start (EPHY_SPINNER (window->throbber));
   else
     ephy_spinner_stop (EPHY_SPINNER (window->throbber));
-}
-
-GtkWidget *
-empathy_map_view_show (void)
-{
-  static EmpathyMapView *window = NULL;
-  GtkBuilder *gui;
-  GtkWidget *sw;
-  GtkWidget *embed;
-  GtkWidget *throbber_holder;
-  gchar *filename;
-  GtkTreeModel *model;
-  EmpathyContactList *list_iface;
-  EmpathyContactListStore *list_store;
-
-  if (window)
-    {
-      empathy_window_present (GTK_WINDOW (window->window), TRUE);
-      return window->window;
-    }
-
-  window = g_slice_new0 (EmpathyMapView);
-
-  /* Set up interface */
-  filename = empathy_file_lookup ("empathy-map-view.ui", "src");
-  gui = empathy_builder_get_file (filename,
-     "map_view", &window->window,
-     "zoom_in", &window->zoom_in,
-     "zoom_out", &window->zoom_out,
-     "map_scrolledwindow", &sw,
-     "throbber", &throbber_holder,
-     NULL);
-  g_free (filename);
-
-  empathy_builder_connect (gui, window,
-      "map_view", "destroy", map_view_destroy_cb,
-      "zoom_in", "clicked", map_view_zoom_in_cb,
-      "zoom_out", "clicked", map_view_zoom_out_cb,
-      NULL);
-
-  g_object_unref (gui);
-
-  /* Clear the static pointer to window if the dialog is destroyed */
-  g_object_add_weak_pointer (G_OBJECT (window->window), (gpointer *) &window);
-
-  list_iface = EMPATHY_CONTACT_LIST (empathy_contact_manager_dup_singleton ());
-  list_store = empathy_contact_list_store_new (list_iface);
-  empathy_contact_list_store_set_show_groups (list_store, FALSE);
-  empathy_contact_list_store_set_show_avatars (list_store, TRUE);
-  g_object_unref (list_iface);
-
-  window->throbber = ephy_spinner_new ();
-  ephy_spinner_set_size (EPHY_SPINNER (window->throbber),
-      GTK_ICON_SIZE_LARGE_TOOLBAR);
-  gtk_widget_show (window->throbber);
-  gtk_container_add (GTK_CONTAINER (throbber_holder), window->throbber);
-
-  window->list_store = list_store;
-
-  /* Set up map view */
-  embed = gtk_champlain_embed_new ();
-  window->map_view = gtk_champlain_embed_get_view (GTK_CHAMPLAIN_EMBED (embed));
-  g_object_set (G_OBJECT (window->map_view), "zoom-level", 1,
-     "scroll-mode", CHAMPLAIN_SCROLL_MODE_KINETIC, NULL);
-  champlain_view_center_on (window->map_view, 36, 0);
-
-  gtk_container_add (GTK_CONTAINER (sw), embed);
-  gtk_widget_show_all (embed);
-
-  window->layer = g_object_ref (champlain_layer_new ());
-  champlain_view_add_layer (window->map_view, window->layer);
-
-  g_signal_connect (window->map_view, "notify::state",
-      G_CALLBACK (map_view_state_changed), window);
-
-  /* Set up contact list. */
-  model = GTK_TREE_MODEL (window->list_store);
-  gtk_tree_model_foreach (model, map_view_contacts_foreach, window);
-
-  empathy_window_present (GTK_WINDOW (window->window), TRUE);
-  return window->window;
-}
-
-static void
-map_view_destroy_cb (GtkWidget *widget,
-    EmpathyMapView *window)
-{
-  GList *item;
-
-  item = clutter_container_get_children (CLUTTER_CONTAINER (window->layer));
-  while (item != NULL)
-  {
-    EmpathyContact *contact;
-    ChamplainMarker *marker;
-
-    marker = CHAMPLAIN_MARKER (item->data);
-    contact = g_object_get_data (G_OBJECT (marker), "contact");
-    g_signal_handlers_disconnect_by_func (contact, map_view_contact_location_notify, marker);
-
-    item = g_list_next (item);
-  }
-
-  g_object_unref (window->list_store);
-  g_object_unref (window->layer);
-  g_slice_free (EmpathyMapView, window);
 }
 
 static void
@@ -232,6 +113,20 @@ map_view_contact_location_notify (EmpathyContact *contact,
     ChamplainMarker *marker)
 {
   map_view_marker_update_position (marker, contact);
+}
+
+static void
+map_view_zoom_in_cb (GtkWidget *widget,
+    EmpathyMapView *window)
+{
+  champlain_view_zoom_in (window->map_view);
+}
+
+static void
+map_view_zoom_out_cb (GtkWidget *widget,
+    EmpathyMapView *window)
+{
+  champlain_view_zoom_out (window->map_view);
 }
 
 static gboolean
@@ -337,15 +232,108 @@ map_view_contacts_foreach (GtkTreeModel *model,
 }
 
 static void
-map_view_zoom_in_cb (GtkWidget *widget,
+map_view_destroy_cb (GtkWidget *widget,
     EmpathyMapView *window)
 {
-  champlain_view_zoom_in (window->map_view);
+  GList *item;
+
+  item = clutter_container_get_children (CLUTTER_CONTAINER (window->layer));
+  while (item != NULL)
+  {
+    EmpathyContact *contact;
+    ChamplainMarker *marker;
+
+    marker = CHAMPLAIN_MARKER (item->data);
+    contact = g_object_get_data (G_OBJECT (marker), "contact");
+    g_signal_handlers_disconnect_by_func (contact,
+        map_view_contact_location_notify, marker);
+
+    item = g_list_next (item);
+  }
+
+  g_object_unref (window->list_store);
+  g_object_unref (window->layer);
+  g_slice_free (EmpathyMapView, window);
 }
 
-static void
-map_view_zoom_out_cb (GtkWidget *widget,
-    EmpathyMapView *window)
+GtkWidget *
+empathy_map_view_show (void)
 {
-  champlain_view_zoom_out (window->map_view);
+  static EmpathyMapView *window = NULL;
+  GtkBuilder *gui;
+  GtkWidget *sw;
+  GtkWidget *embed;
+  GtkWidget *throbber_holder;
+  gchar *filename;
+  GtkTreeModel *model;
+  EmpathyContactList *list_iface;
+  EmpathyContactListStore *list_store;
+
+  if (window)
+    {
+      empathy_window_present (GTK_WINDOW (window->window), TRUE);
+      return window->window;
+    }
+
+  window = g_slice_new0 (EmpathyMapView);
+
+  /* Set up interface */
+  filename = empathy_file_lookup ("empathy-map-view.ui", "src");
+  gui = empathy_builder_get_file (filename,
+     "map_view", &window->window,
+     "zoom_in", &window->zoom_in,
+     "zoom_out", &window->zoom_out,
+     "map_scrolledwindow", &sw,
+     "throbber", &throbber_holder,
+     NULL);
+  g_free (filename);
+
+  empathy_builder_connect (gui, window,
+      "map_view", "destroy", map_view_destroy_cb,
+      "zoom_in", "clicked", map_view_zoom_in_cb,
+      "zoom_out", "clicked", map_view_zoom_out_cb,
+      NULL);
+
+  g_object_unref (gui);
+
+  /* Clear the static pointer to window if the dialog is destroyed */
+  g_object_add_weak_pointer (G_OBJECT (window->window), (gpointer *) &window);
+
+  list_iface = EMPATHY_CONTACT_LIST (empathy_contact_manager_dup_singleton ());
+  list_store = empathy_contact_list_store_new (list_iface);
+  empathy_contact_list_store_set_show_groups (list_store, FALSE);
+  empathy_contact_list_store_set_show_avatars (list_store, TRUE);
+  g_object_unref (list_iface);
+
+  window->throbber = ephy_spinner_new ();
+  ephy_spinner_set_size (EPHY_SPINNER (window->throbber),
+      GTK_ICON_SIZE_LARGE_TOOLBAR);
+  gtk_widget_show (window->throbber);
+  gtk_container_add (GTK_CONTAINER (throbber_holder), window->throbber);
+
+  window->list_store = list_store;
+
+  /* Set up map view */
+  embed = gtk_champlain_embed_new ();
+  window->map_view = gtk_champlain_embed_get_view (GTK_CHAMPLAIN_EMBED (embed));
+  g_object_set (G_OBJECT (window->map_view), "zoom-level", 1,
+     "scroll-mode", CHAMPLAIN_SCROLL_MODE_KINETIC, NULL);
+  champlain_view_center_on (window->map_view, 36, 0);
+
+  gtk_container_add (GTK_CONTAINER (sw), embed);
+  gtk_widget_show_all (embed);
+
+  window->layer = g_object_ref (champlain_layer_new ());
+  champlain_view_add_layer (window->map_view, window->layer);
+
+  g_signal_connect (window->map_view, "notify::state",
+      G_CALLBACK (map_view_state_changed), window);
+
+  /* Set up contact list. */
+  model = GTK_TREE_MODEL (window->list_store);
+  gtk_tree_model_foreach (model, map_view_contacts_foreach, window);
+
+  empathy_window_present (GTK_WINDOW (window->window), TRUE);
+  return window->window;
 }
+
