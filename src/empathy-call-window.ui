@@ -42,6 +42,7 @@
           <object class="GtkToggleAction" id="show_preview">
             <property name="name">show_preview</property>
             <property name="label" translatable="yes">Video preview</property>
+            <property name="active">True</property>
           </object>
         </child>
         <child>

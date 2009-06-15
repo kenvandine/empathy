@@ -73,6 +73,8 @@ EmpathyCallHandler * empathy_call_handler_new_for_channel (
 void empathy_call_handler_start_call (EmpathyCallHandler *handler);
 void empathy_call_handler_stop_call (EmpathyCallHandler *handler);
 
+gboolean empathy_call_handler_has_initial_video (EmpathyCallHandler *handler);
+
 void empathy_call_handler_bus_message (EmpathyCallHandler *handler,
   GstBus *bus, GstMessage *message);
 

@@ -596,3 +596,20 @@ empathy_call_handler_stop_call (EmpathyCallHandler *handler)
 
   priv->call = NULL;
 }
+
+/**
+ * empathy_call_handler_has_initial_video:
+ * @handler: an #EmpathyCallHandler
+ *
+ * Return %TRUE if the call managed by this #EmpathyCallHandler was
+ * created with video enabled
+ *
+ * Return value: %TRUE if the call was created as a video conversation.
+ */
+gboolean
+empathy_call_handler_has_initial_video (EmpathyCallHandler *handler)
+{
+  EmpathyCallHandlerPriv *priv = GET_PRIV (handler);
+
+  return priv->initial_video;
+}
