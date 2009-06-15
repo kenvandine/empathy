@@ -52,6 +52,7 @@ typedef struct {
 	GtkWidget *checkbutton_show_avatars;
 	GtkWidget *checkbutton_compact_contact_list;
 	GtkWidget *checkbutton_show_smileys;
+	GtkWidget *checkbutton_use_libindicate;
 	GtkWidget *combobox_chat_theme;
 	GtkWidget *hbox_adium_theme;
 	GtkWidget *filechooserbutton_adium_theme;
@@ -228,6 +229,14 @@ preferences_setup_widgets (EmpathyPreferences *preferences)
 	preferences_hookup_toggle_button (preferences,
 					  EMPATHY_PREFS_UI_SHOW_AVATARS,
 					  preferences->checkbutton_show_avatars);
+
+#ifdef HAVE_LIBINDICATE
+	preferences_hookup_toggle_button (preferences,
+					  EMPATHY_PREFS_UI_USE_LIBINDICATE,
+					  preferences->checkbutton_use_libindicate);
+#else
+	gtk_widget_hide(GTK_WIDGET(preferences->checkbutton_use_libindicate));
+#endif
 
 	preferences_hookup_toggle_button (preferences,
 					  EMPATHY_PREFS_UI_COMPACT_CONTACT_LIST,
@@ -1190,6 +1199,7 @@ empathy_preferences_show (GtkWindow *parent)
 		"checkbutton_show_avatars", &preferences->checkbutton_show_avatars,
 		"checkbutton_compact_contact_list", &preferences->checkbutton_compact_contact_list,
 		"checkbutton_show_smileys", &preferences->checkbutton_show_smileys,
+		"checkbutton_use_libindicate", &preferences->checkbutton_use_libindicate,
 		"combobox_chat_theme", &preferences->combobox_chat_theme,
 		"hbox_adium_theme", &preferences->hbox_adium_theme,
 		"filechooserbutton_adium_theme", &preferences->filechooserbutton_adium_theme,

@@ -261,6 +261,21 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/empathy/notifications/use_libindicate</key>
+      <applyto>/apps/empathy/notifications/use_libindicate</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+         <short>Use the messaging indicator</short>
+         <long>
+         Whether or not to use the messaging indicator, if false 
+	 the icon in the notification area will be displayed.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
        <key>/schemas/apps/empathy/ui/separate_chat_windows</key>
        <applyto>/apps/empathy/ui/separate_chat_windows</applyto>
        <owner>empathy</owner>

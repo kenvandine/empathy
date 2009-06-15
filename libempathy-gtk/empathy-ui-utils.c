@@ -1272,24 +1272,30 @@ empathy_window_iconify (GtkWindow *window, GtkStatusIcon *status_icon)
 	Display      *dpy;
 	GdkWindow    *gdk_window;
 
-	gtk_status_icon_get_geometry (status_icon, NULL, &icon_location, NULL);
-	gdk_window = GTK_WIDGET (window)->window;
-	dpy = gdk_x11_drawable_get_xdisplay (gdk_window);
-
-	data[0] = icon_location.x;
-	data[1] = icon_location.y;
-	data[2] = icon_location.width;
-	data[3] = icon_location.height;
-
-	XChangeProperty (dpy,
-			 GDK_WINDOW_XID (gdk_window),
-			 gdk_x11_get_xatom_by_name_for_display (gdk_drawable_get_display (gdk_window),
-			 "_NET_WM_ICON_GEOMETRY"),
-			 XA_CARDINAL, 32, PropModeReplace,
-			 (guchar *)&data, 4);
+	if (gtk_status_icon_get_visible (status_icon)) {
+		gtk_status_icon_get_geometry (status_icon, NULL, &icon_location, NULL);
+		gdk_window = GTK_WIDGET (window)->window;
+		dpy = gdk_x11_drawable_get_xdisplay (gdk_window);
+	
+		data[0] = icon_location.x;
+		data[1] = icon_location.y;
+		data[2] = icon_location.width;
+		data[3] = icon_location.height;
+	
+		XChangeProperty (dpy,
+				 GDK_WINDOW_XID (gdk_window),
+				 gdk_x11_get_xatom_by_name_for_display (gdk_drawable_get_display (gdk_window),
+				 "_NET_WM_ICON_GEOMETRY"),
+				 XA_CARDINAL, 32, PropModeReplace,
+				 (guchar *)&data, 4);
+	}
 
 	gtk_window_set_skip_taskbar_hint (window, TRUE);
-	gtk_window_iconify (window);
+	if (gtk_status_icon_get_visible (status_icon)) {
+		gtk_window_iconify (window);
+	} else {
+		gtk_widget_hide (GTK_WIDGET(window));
+	}
 }
 
 /* Takes care of moving the window to the current workspace. */

@@ -26,6 +26,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
+#include <libnotify/notify.h>
 #include <libnotify/notification.h>
 
 #include <libempathy/empathy-utils.h>
@@ -43,6 +44,10 @@
 #include "empathy-preferences.h"
 #include "empathy-event-manager.h"
 #include "empathy-misc.h"
+
+#ifdef HAVE_LIBINDICATE
+#include "empathy-indicator-manager.h"
+#endif
 
 #define DEBUG_FLAG EMPATHY_DEBUG_DISPATCHER
 #include <libempathy/empathy-debug.h>
@@ -67,9 +72,16 @@ typedef struct {
 	GtkAction           *show_window_item;
 	GtkAction           *new_message_item;
 	GtkAction           *status_item;
+#ifdef HAVE_LIBINDICATE
+       EmpathyIndicatorManager *indicator_manager;
+#endif
 } EmpathyStatusIconPriv;
 
 G_DEFINE_TYPE (EmpathyStatusIcon, empathy_status_icon, G_TYPE_OBJECT);
+
+#ifdef HAVE_LIBINDICATE
+static void indicate_server_activate_cb (EmpathyIndicatorManager *, EmpathyStatusIcon   *);
+#endif
 
 static gboolean
 activate_event (EmpathyEvent *event)
@@ -77,6 +89,29 @@ activate_event (EmpathyEvent *event)
 	empathy_event_activate (event);
 
 	return FALSE;
+}
+
+static gboolean
+notification_server_supports_actions (void)
+{
+	GList * caps = notify_get_server_caps();
+	GList * l;
+	gboolean ret = FALSE;
+
+	for (l = caps; l; l = l->next) {
+		gchar *cap = (gchar *)l->data;
+		if (!cap) {
+			continue;
+		}
+		if (!strcmp(cap, "actions")) {
+			ret = TRUE;
+			break;
+		}
+	}
+	g_list_foreach(caps, (GFunc)g_free, NULL);
+	g_list_free(caps);
+
+	return ret;
 }
 
 static void
@@ -108,8 +143,9 @@ status_icon_notification_closed_cb (NotifyNotification *notification,
 		 */
 		g_idle_add ((GSourceFunc) activate_event, priv->event);
 	} else {
-		/* inhibit other updates for this event */
-		empathy_event_inhibit_updates (priv->event);
+		if (notification_server_supports_actions ()) {
+			empathy_event_inhibit_updates (priv->event);
+		}
 	}
 }
 
@@ -317,6 +353,25 @@ status_icon_set_visibility (EmpathyStatusIcon *icon,
 	}
 }
 
+#ifdef HAVE_LIBINDICATE
+static void
+status_icon_set_use_libindicate (EmpathyStatusIcon *icon,
+			    gboolean           use_libindicate)
+{
+	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
+
+	if (use_libindicate) {
+		empathy_indicator_manager_set_server_visible (priv->indicator_manager,
+				TRUE);
+		gtk_status_icon_set_visible(priv->icon, FALSE);
+	} else {
+		empathy_indicator_manager_set_server_visible (priv->indicator_manager,
+				FALSE);
+		gtk_status_icon_set_visible(priv->icon, TRUE);
+	}
+}
+#endif
+
 static void
 status_icon_notify_visibility_cb (EmpathyConf *conf,
 				  const gchar *key,
@@ -330,15 +385,50 @@ status_icon_notify_visibility_cb (EmpathyConf *conf,
 	}
 }
 
+#ifdef HAVE_LIBINDICATE
+static void
+status_icon_notify_libindicate_cb (EmpathyConf *conf,
+				  const gchar *key,
+				  gpointer     user_data)
+{
+	EmpathyStatusIcon *icon = user_data;
+	gboolean           use_libindicate = FALSE;
+
+	if (empathy_conf_get_bool (conf, key, &use_libindicate)) {
+		status_icon_set_use_libindicate (icon, use_libindicate);
+	}
+}
+#endif
+
 static void
 status_icon_toggle_visibility (EmpathyStatusIcon *icon)
 {
 	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
 	gboolean               visible;
+#ifdef HAVE_LIBINDICATE
+	gboolean               use_libindicate;
+#endif
 
 	visible = gtk_window_is_active (priv->window);
+#ifdef HAVE_LIBINDICATE
+	empathy_conf_get_bool (empathy_conf_get (),
+			       EMPATHY_PREFS_UI_USE_LIBINDICATE,
+		               &use_libindicate);
+	if (use_libindicate) {
+		visible = GTK_WIDGET_VISIBLE (priv->window);
+	}
+#endif
 	status_icon_set_visibility (icon, !visible, TRUE);
 }
+
+#ifdef HAVE_LIBINDICATE
+static void
+indicate_server_activate_cb (EmpathyIndicatorManager *manager,
+				  EmpathyStatusIcon *icon)
+{
+	status_icon_toggle_visibility(icon);
+}
+#endif
 
 static void
 status_icon_idle_notify_cb (EmpathyStatusIcon *icon)
@@ -554,6 +644,13 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 				 status_icon_notify_visibility_cb,
 				 icon);
 
+#ifdef HAVE_LIBINDICATE
+	empathy_conf_notify_add (empathy_conf_get (),
+				 EMPATHY_PREFS_UI_USE_LIBINDICATE,
+				 status_icon_notify_libindicate_cb,
+				 icon);
+#endif
+
 	status_icon_create_menu (icon);
 	status_icon_idle_notify_cb (icon);
 
@@ -583,6 +680,9 @@ empathy_status_icon_new (GtkWindow *window, gboolean hide_contact_list)
 	EmpathyStatusIconPriv *priv;
 	EmpathyStatusIcon     *icon;
 	gboolean               should_hide;
+#ifdef HAVE_LIBINDICATE
+	gboolean               use_libindicate;
+#endif
 
 	g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
 
@@ -590,6 +690,12 @@ empathy_status_icon_new (GtkWindow *window, gboolean hide_contact_list)
 	priv = GET_PRIV (icon);
 
 	priv->window = g_object_ref (window);
+#ifdef HAVE_LIBINDICATE
+	priv->indicator_manager = empathy_indicator_manager_dup_singleton ();
+	g_signal_connect (priv->indicator_manager, "server-activate",
+			  G_CALLBACK (indicate_server_activate_cb),
+			  icon);
+#endif
 
 	g_signal_connect_after (priv->window, "key-press-event",
 			  G_CALLBACK (status_icon_key_press_event_cb),
@@ -606,6 +712,13 @@ empathy_status_icon_new (GtkWindow *window, gboolean hide_contact_list)
 	} else {
 		should_hide = TRUE;
 	}
+
+#ifdef HAVE_LIBINDICATE
+	empathy_conf_get_bool (empathy_conf_get (),
+			       EMPATHY_PREFS_UI_USE_LIBINDICATE,
+		               &use_libindicate);
+	status_icon_set_use_libindicate (icon, use_libindicate);
+#endif
 
 	if (gtk_window_is_active (priv->window) == should_hide) {
 		status_icon_set_visibility (icon, !should_hide, FALSE);

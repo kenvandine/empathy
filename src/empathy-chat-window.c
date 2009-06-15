@@ -56,6 +56,11 @@
 #include "empathy-about-dialog.h"
 #include "empathy-misc.h"
 
+#ifdef HAVE_LIBINDICATE
+#include "empathy-indicator.h"
+#include "empathy-indicator-manager.h"
+#endif
+
 #define DEBUG_FLAG EMPATHY_DEBUG_CHAT
 #include <libempathy/empathy-debug.h>
 
@@ -72,6 +77,10 @@ typedef struct {
 	GtkWidget   *dialog;
 	GtkWidget   *notebook;
 	NotifyNotification *notification;
+#ifdef HAVE_LIBINDICATE
+	EmpathyIndicatorManager *indicator_manager;
+	GHashTable  *indicators;
+#endif
 
 	/* Menu items. */
 	GtkUIManager *ui_manager;
@@ -904,6 +913,77 @@ chat_window_notification_closed_cb (NotifyNotification *notify,
 	g_slice_free (NotificationData, cb_data);
 }
 
+#ifdef HAVE_LIBINDICATE
+static void
+chat_window_indicator_activate_cb (EmpathyIndicator *indicator,
+				    NotificationData *cb_data)
+{
+	empathy_chat_window_present_chat (cb_data->chat);
+
+	empathy_indicator_hide (indicator);
+	g_object_unref (indicator);
+	g_object_unref (cb_data->chat);
+	g_slice_free (NotificationData, cb_data);
+}
+
+static void
+chat_window_add_indicator (EmpathyChatWindow *window,
+					 EmpathyMessage *message,
+					 EmpathyChat    *chat)
+{
+	EmpathyChatWindowPriv *priv = GET_PRIV (window);
+	EmpathyContact *sender;
+	const char *body;
+	NotificationData *cb_data;
+	gboolean use_libindicate;
+	EmpathyIndicator *indicator;
+
+	empathy_conf_get_bool (empathy_conf_get (),
+			       EMPATHY_PREFS_UI_USE_LIBINDICATE,
+		               &use_libindicate);
+
+	if (!use_libindicate) {
+		return;
+	}
+
+	cb_data = g_slice_new0 (NotificationData);
+	cb_data->chat = g_object_ref (chat);
+	cb_data->window = window;
+
+	sender = empathy_message_get_sender (message);
+	body = empathy_message_get_body (message);
+
+	indicator = g_hash_table_lookup (priv->indicators, chat);
+	if (indicator) {
+		empathy_indicator_update (indicator, body);
+	} else {
+		indicator = empathy_indicator_manager_add_indicator (priv->indicator_manager,
+			sender, body);
+		g_signal_connect (indicator, "activate",
+				  G_CALLBACK (chat_window_indicator_activate_cb), cb_data);
+		g_hash_table_insert(priv->indicators, chat, g_object_ref(indicator));
+	}
+	empathy_indicator_show (indicator);
+}
+
+static void
+chat_window_remove_indicator (EmpathyChatWindow *window, EmpathyChat *chat)
+{
+	EmpathyIndicator *indicator;
+	EmpathyChatWindowPriv *priv = GET_PRIV (window);
+
+	indicator = g_hash_table_lookup (priv->indicators, chat);
+
+	if (!indicator) {
+		return;
+	}
+
+	empathy_indicator_hide (indicator);
+	g_hash_table_remove (priv->indicators, chat);
+	g_object_unref (indicator);
+}
+#endif
+
 static void
 chat_window_show_or_update_notification (EmpathyChatWindow *window,
 					 EmpathyMessage *message,
@@ -1010,6 +1090,9 @@ chat_window_new_message_cb (EmpathyChat       *chat,
 		empathy_sound_play (GTK_WIDGET (priv->dialog),
 		    EMPATHY_SOUND_MESSAGE_INCOMING);
 		chat_window_show_or_update_notification (window, message, chat);
+#ifdef HAVE_LIBINDICATE
+		chat_window_add_indicator (window, message, chat);
+#endif
 	}
 
 	if (!g_list_find (priv->chats_new_msg, chat)) {
@@ -1074,6 +1157,10 @@ chat_window_page_switched_cb (GtkNotebook      *notebook,
 	priv->chats_new_msg = g_list_remove (priv->chats_new_msg, chat);
 
 	chat_window_update_chat_tab (chat);
+
+#ifdef HAVE_LIBINDICATE
+	chat_window_remove_indicator (window, chat);
+#endif
 }
 
 static void
@@ -1183,6 +1270,11 @@ chat_window_focus_in_event_cb (GtkWidget        *widget,
 	
 	/* Update the title, since we now mark all unread messages as read. */
 	chat_window_update_chat_tab (priv->current_chat);
+
+#ifdef HAVE_LIBINDICATE
+	/* Remove the indicator for the active chat */
+	chat_window_remove_indicator (window, priv->current_chat);
+#endif
 
 	return FALSE;
 }
@@ -1401,6 +1493,10 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 	g_object_unref (gui);
 
 	priv->chatroom_manager = empathy_chatroom_manager_dup_singleton (NULL);
+#ifdef HAVE_LIBINDICATE
+	priv->indicator_manager = empathy_indicator_manager_dup_singleton ();
+	priv->indicators = g_hash_table_new (NULL, NULL);
+#endif
 
 	priv->notebook = gtk_notebook_new ();
 	gtk_notebook_set_group (GTK_NOTEBOOK (priv->notebook), "EmpathyChatWindow");

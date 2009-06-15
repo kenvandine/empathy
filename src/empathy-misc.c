@@ -30,6 +30,29 @@
 /* public methods */
 
 GdkPixbuf *
+empathy_misc_get_pixbuf_for_indicator (EmpathyContact *contact)
+{
+	GdkPixbuf *pixbuf = NULL;
+	GtkIconTheme *icon_theme;
+
+	if (contact != NULL) {
+		pixbuf = empathy_pixbuf_avatar_from_contact_scaled (contact,
+								    16, 16);
+	}
+
+	if (!pixbuf) {
+		icon_theme = gtk_icon_theme_get_default ();
+		/* TODO: connect to icon theme changes */
+		if (icon_theme) {
+		pixbuf = gtk_icon_theme_load_icon (icon_theme, "stock_person",
+				16, 0, NULL);
+		}
+	}
+
+	return pixbuf;
+}
+
+GdkPixbuf *
 empathy_misc_get_pixbuf_for_notification (EmpathyContact *contact,
 					  const char *icon_name)
 {

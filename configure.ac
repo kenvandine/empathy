@@ -334,6 +334,33 @@ fi
 AM_CONDITIONAL(HAVE_NOTHERE, test "x$have_nothere" = "xyes")
 
 # -----------------------------------------------------------
+# libindicate
+# -----------------------------------------------------------
+AC_ARG_ENABLE(libindicate,
+              AS_HELP_STRING([--enable-libindicate=@<:@no/yes/auto@:>@],
+                             [build libindicate support]), ,
+                             enable_libindicate=auto)
+
+if test "x$enable_libindicate" != "xno"; then
+   PKG_CHECK_MODULES(INDICATE, 
+   [
+     indicate
+   ], have_libindicate="yes", have_libindicate="no")
+else
+   have_libindicate=no
+fi
+
+if test "x$enable_libindicate" = "xyes" -a "x$have_libindicate" != "xyes"; then
+   AC_MSG_ERROR([Couldn't find libindicate.])
+fi
+
+if test "x$enable_libindicate" = "xyes"; then
+   AC_DEFINE(HAVE_LIBINDICATE, 1, [Define if you have libindicate])
+fi
+
+AM_CONDITIONAL(HAVE_LIBINDICATE, test "x$have_libindicate" = "xyes")
+
+# -----------------------------------------------------------
 # Tests
 # -----------------------------------------------------------
 AC_ARG_ENABLE(tests,
@@ -442,22 +469,23 @@ AC_OUTPUT([
 echo "
 Configure summary:
 
-	Compiler....................:  ${CC}
-	Compiler Flags..............:  ${CFLAGS}
-	Prefix......................:  ${prefix}
-	Shaved build................:  ${enable_shave}
-	Tests.......................:  ${have_check}
-	Coding style checks.........:  ${ENABLE_CODING_STYLE_CHECKS}
+	Compiler...............................:  ${CC}
+	Compiler Flags.........................:  ${CFLAGS}
+	Prefix.................................:  ${prefix}
+	Shaved build...........................:  ${enable_shave}
+	Tests..................................:  ${have_check}
+	Coding style checks....................:  ${ENABLE_CODING_STYLE_CHECKS}
 
     Features:
-	Spell checking (enchant)....:  ${have_enchant}
-	Display maps (libchamplain).:  ${have_libchamplain}
-	Location awareness (Geoclue):  ${have_geoclue}
-	Adium themes (Webkit).......:  ${have_webkit}
+	Spell checking (enchant)...............:  ${have_enchant}
+	Display maps (libchamplain)............:  ${have_libchamplain}
+	Location awareness (Geoclue)...........:  ${have_geoclue}
+	Adium themes (Webkit)..................:  ${have_webkit}
+	Message indicator support (libindicate):  ${have_libindicate}
 
     Extras:
-	Documentation...............:  ${enable_gtk_doc}
-	Python bindings.............:  ${have_python}
-	Megaphone applet............:  ${have_megaphone}
-	Nothere applet..............:  ${have_nothere}
+	Documentation..........................:  ${enable_gtk_doc}
+	Python bindings........................:  ${have_python}
+	Megaphone applet.......................:  ${have_megaphone}
+	Nothere applet.........................:  ${have_nothere}
 "

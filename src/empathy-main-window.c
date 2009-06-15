@@ -62,6 +62,14 @@
 #include "empathy-event-manager.h"
 #include "empathy-ft-manager.h"
 
+#ifdef HAVE_LIBINDICATE
+#include "empathy-indicator-manager.h"
+#endif
+
+#ifdef HAVE_LIBINDICATE
+#include "empathy-indicator-manager.h"
+#endif
+
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include <libempathy/empathy-debug.h>
 
@@ -107,6 +115,10 @@ typedef struct {
 
 	/* Actions that are enabled when there are connected accounts */
 	GList                  *actions_connected;
+#ifdef HAVE_LIBINDICATE
+	EmpathyIndicatorManager *indicator_manager;
+      	GHashTable              *indicator_timeouts;
+#endif
 } EmpathyMainWindow;
 
 static EmpathyMainWindow *window = NULL;
@@ -596,6 +608,10 @@ main_window_contact_presence_changed_cb (EmpathyContactMonitor *monitor,
         /* someone is logging in */
         empathy_sound_play (GTK_WIDGET (window->window),
           EMPATHY_SOUND_CONTACT_CONNECTED);
+#ifdef HAVE_LIBINDICATE
+        empathy_indicator_manager_add_login_indicator (window->indicator_manager,
+          contact);
+#endif
     }
 }
 
@@ -1168,6 +1184,10 @@ empathy_main_window_show (void)
 			      "help_debug", "activate", main_window_help_debug_cb,
 			      "help_contents", "activate", main_window_help_contents_cb,
 			      NULL);
+
+#ifdef HAVE_LIBINDICATE
+	window->indicator_manager = empathy_indicator_manager_dup_singleton ();
+#endif
 
 	/* Set up connection related widgets. */
 	main_window_connection_items_setup (window, gui);

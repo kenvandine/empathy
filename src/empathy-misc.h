@@ -43,6 +43,7 @@ typedef enum {
 gboolean    empathy_notification_is_enabled  (void);
 GdkPixbuf * empathy_misc_get_pixbuf_for_notification (EmpathyContact *contact,
                                                       const char *icon_name);
+GdkPixbuf * empathy_misc_get_pixbuf_for_indicator (EmpathyContact *contact);
 
 G_END_DECLS
 

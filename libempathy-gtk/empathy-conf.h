@@ -70,6 +70,7 @@ struct _EmpathyConfClass {
 #define EMPATHY_PREFS_UI_AVATAR_DIRECTORY          EMPATHY_PREFS_PATH "/ui/avatar_directory"
 #define EMPATHY_PREFS_UI_SHOW_AVATARS              EMPATHY_PREFS_PATH "/ui/show_avatars"
 #define EMPATHY_PREFS_UI_COMPACT_CONTACT_LIST      EMPATHY_PREFS_PATH "/ui/compact_contact_list"
+#define EMPATHY_PREFS_UI_USE_LIBINDICATE           EMPATHY_PREFS_PATH "/notifications/use_libindicate"
 #define EMPATHY_PREFS_CONTACTS_SHOW_OFFLINE        EMPATHY_PREFS_PATH "/contacts/show_offline"
 #define EMPATHY_PREFS_CONTACTS_SORT_CRITERIUM      EMPATHY_PREFS_PATH "/contacts/sort_criterium"
 #define EMPATHY_PREFS_HINTS_CLOSE_MAIN_WINDOW      EMPATHY_PREFS_PATH "/hints/close_main_window"
