@@ -1,3 +1,64 @@
+NEW in 2.27.3
+==============
+Bugs fixed:
+ - Fixed #522069, Improve message styles with themes/plugins (ala Adium)
+ - Fixed #548707, "New Account" title and "I already have an account" checkbox are contradictory (Guillaume Desmottes)
+ - Fixed #548716, First text field when adding account (e.g. "Login ID") isn't focused by default (Dimitris Zenios)
+ - Fixed #560787, Should support IPv4 file transfer
+ - Fixed #562981, make sametime support official (Guillaume Desmottes)
+ - Fixed #563675, Does not show any error messages when FT channel request fails
+ - Fixed #563896, "Conditional jump or move depends on uninitialised value" when sending a file
+ - Fixed #564259, Tooltips in the MUC user list
+ - Fixed #574478, Conversation not showing up in taskbar
+ - Fixed #574878, can't rename account while the account is connecting
+ - Fixed #574980, Audio/Video Chat windows don't show contact name
+ - Fixed #575415, Should switch from libglade to GtkBuilder
+ - Fixed #576405, Crash when a FT was cancelled
+ - Fixed #578497, failure to cancel file transfer
+ - Fixed #579725, Implement debug dialog using o.fd.Tp.Debug
+ - Fixed #579992, Import of XMPP accounts sets port (Jonny Lamb)
+ - Fixed #580921, Weird behaviour with MUC members in current master
+ - Fixed #582191, The call windows should have a "redial" button.
+ - Fixed #582736, Merge ft_rework branch
+ - Fixed #582773, Empathy puts cheesy strings in my subscription requests
+ - Fixed #582774, When no video is being sent, the video output and preview should show an icon instead of being black.
+ - Fixed #583548, Python exemple is broken
+ - Fixed #583785, Display a summary at the end of configure
+ - Fixed #584061, IRC server for FreeNode is out of date (Guillaume Desmottes)
+ - Fixed #584102, New tube API is now stable
+ - Fixed #584147, The Map View doesn't have a loading throbber
+ - Fixed #584206, Add the method empathy_contact_can_stream_tubes in the empathy-tp-contact-factory
+ - Fixed #584462, user list stays empty
+ - Fixed #584463, Contact menu is empty
+ - Fixed #584518, Critical error in publish_to_all_connections
+ - Fixed #584635, Sorting contacts by State doesn't place Available as top
+ - Fixed #584639, Remove "View"/"Show" prefixes from View menu items
+ - Fixed #584672, Add a right-click menu to conversation window tabs
+ - Fixed #584755, Empathy doesn't show buddy list in IRC
+ - Fixed #584807, EmpathyTpTube must die
+ - Fixed #584830, Invalid read in new_connection_cb
+ - Fixed #584924, GObjectify EmpathyProfileChooser
+ - Fixed #584989, Asserts if a new group appears with the same name as an old one.
+ - Fixed #585055, make distcheck is broken
+ - Fixed #585078, Doesn't use address from Hostip
+ - Fixed #585080, Lot of contacts are missing avatars
+ - Fixed #585092, Tab tooltips show "(null)" for contacts without presence
+ - Fixed #585201, Crashed when I disconnected
+ - Fixed #585231, Asserts in dispatcher_start_dispatching when I reconnect to IRC (Will Thompson)
+ - Fixed #585279, Crashed when accepting a FT failed
+ - Fixed #585640, Only English should be used for i18n
+ - Fixed #585669, GNOME Goal: Clean up GLib and GTK+ includes in empathy (Luis Menina)
+ - Fixed #585788, Capitalisation incorrect (Guillaume Desmottes)
+ - Fixed #571666, [2/3] Empathy should publish my geolocation
+ - Fixed #571667, [3/3] Empathy should display my location
+
+Translations:
+ - Updated es Translation (Jorge Gonzalez)
+ - Updated he Translation (Mark Krapivner)
+ - Updated hu Translation (Gabor Kelemen)
+ - Updated nb Translation (Kjartan Maraas)
+ - Updated pa Translation (A S Alam)
+
 NEW in 2.27.2
 ==============
 Bugs fixed:
