@@ -229,13 +229,14 @@ status_icon_event_added_cb (EmpathyEventManager *manager,
 	DEBUG ("New event %p", event);
 
 	priv->event = event;
-	priv->showing_event_icon = TRUE;
-
-	status_icon_update_icon (icon);
-	status_icon_update_tooltip (icon);
+	if (event->must_ack) {
+		priv->showing_event_icon = TRUE;
+		status_icon_update_icon (icon);
+		status_icon_update_tooltip (icon);
+	}
 	status_icon_update_notification (icon);
 
-	if (!priv->blink_timeout) {
+	if (!priv->blink_timeout && priv->showing_event_icon) {
 		priv->blink_timeout = g_timeout_add (BLINK_TIMEOUT,
 						     (GSourceFunc) status_icon_blink_timeout_cb,
 						     icon);
