@@ -249,6 +249,13 @@ event_remove (EventPriv *event)
   event_free (event);
 }
 
+static gboolean
+autoremove_event_timeout_cb (EventPriv *event)
+{
+  event_remove (event);
+  return FALSE;
+}
+
 static void
 event_manager_add (EmpathyEventManager *manager, EmpathyContact *contact,
   const gchar *icon_name, const gchar *header, const gchar *message,
@@ -262,6 +269,7 @@ event_manager_add (EmpathyEventManager *manager, EmpathyContact *contact,
   event->public.icon_name = g_strdup (icon_name);
   event->public.header = g_strdup (header);
   event->public.message = g_strdup (message);
+  event->public.must_ack = (func != NULL);
   event->inhibit = FALSE;
   event->func = func;
   event->user_data = user_data;
@@ -271,6 +279,11 @@ event_manager_add (EmpathyEventManager *manager, EmpathyContact *contact,
   DEBUG ("Adding event %p", event);
   priv->events = g_slist_prepend (priv->events, event);
   g_signal_emit (event->manager, signals[EVENT_ADDED], 0, event);
+
+  if (!event->public.must_ack)
+    {
+      g_timeout_add_seconds (2, (GSourceFunc)autoremove_event_timeout_cb, event);
+    }
 }
 
 static void

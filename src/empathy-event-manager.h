@@ -53,6 +53,7 @@ typedef struct {
 	gchar          *icon_name;
 	gchar          *header;
 	gchar          *message;
+	gboolean        must_ack;
 } EmpathyEvent;
 
 GType                empathy_event_manager_get_type      (void) G_GNUC_CONST;
