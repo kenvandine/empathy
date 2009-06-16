@@ -93,8 +93,10 @@
                     <child type="label">
                       <object class="GtkLabel" id="label611">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Appearance&lt;/b&gt;</property>
-                        <property name="use_markup">True</property>
+                        <property name="label" translatable="yes">Appearance</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                     </child>
                   </object>
@@ -153,8 +155,10 @@
                     <child type="label">
                       <object class="GtkLabel" id="label612">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Behavior&lt;/b&gt;</property>
-                        <property name="use_markup">True</property>
+                        <property name="label" translatable="yes">Behavior</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                     </child>
                   </object>
@@ -215,8 +219,10 @@
                     <child type="label">
                       <object class="GtkLabel" id="label644">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Contact List&lt;/b&gt;</property>
-                        <property name="use_markup">True</property>
+                        <property name="label" translatable="yes">Contact List</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                     </child>
                   </object>
@@ -369,8 +375,10 @@
                       <object class="GtkLabel" id="label645">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Play sound for events&lt;/b&gt;</property>
-                        <property name="use_markup">True</property>
+                        <property name="label" translatable="yes">Play sound for events</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -478,8 +486,10 @@
                                   <object class="GtkLabel" id="label6">
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">&lt;small&gt;Reduced location accuracy means that nothing more precise than your city, state and country will be published.  GPS coordinates will have a random value added (&#xB1;0.25&#xB0;).&lt;/small&gt;</property>
-                                    <property name="use_markup">True</property>
+                                    <property name="label" translatable="yes">Reduced location accuracy means that nothing more precise than your city, state and country will be published.  GPS coordinates will have a random value added (&#xB1;0.25&#xB0;).</property>
+                                    <attributes>
+                                      <attribute name="scale" value="0.8"/>
+                                    </attributes>
                                     <property name="wrap">True</property>
                                   </object>
                                   <packing>
@@ -515,8 +525,10 @@
                     <child type="label">
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Privacy&lt;/b&gt;</property>
-                        <property name="use_markup">True</property>
+                        <property name="label" translatable="yes">Privacy</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                     </child>
                   </object>
@@ -594,8 +606,10 @@
                     <child type="label">
                       <object class="GtkLabel" id="label5">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Geoclue Settings&lt;/b&gt;</property>
-                        <property name="use_markup">True</property>
+                        <property name="label" translatable="yes">Geoclue Settings</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                     </child>
                   </object>
@@ -693,8 +707,10 @@
                                   <object class="GtkLabel" id="label616">
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">&lt;small&gt;The list of languages reflects only the languages for which you have a dictionary installed.&lt;/small&gt;</property>
-                                    <property name="use_markup">True</property>
+                                    <property name="label" translatable="yes">The list of languages reflects only the languages for which you have a dictionary installed.</property>
+                                    <attributes>
+                                      <attribute name="scale" value="0.8"/>
+                                    </attributes>
                                     <property name="wrap">True</property>
                                   </object>
                                   <packing>
@@ -714,8 +730,10 @@
                     <child type="label">
                       <object class="GtkLabel" id="label615">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Enable spell checking for languages:&lt;/b&gt;</property>
-                        <property name="use_markup">True</property>
+                        <property name="label" translatable="yes">Enable spell checking for languages:</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                     </child>
                   </object>
@@ -825,8 +843,10 @@
                             <child>
                               <object class="GtkLabel" id="label_invalid_adium_theme">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">&lt;span foreground="red"&gt;Not a valid adium theme&lt;/span&gt;</property>
-                                <property name="use_markup">True</property>
+                                <property name="label" translatable="yes">Not a valid adium theme</property>
+                                <attributes>
+                                  <attribute name="foreground" value="red"/>
+                                </attributes>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -841,8 +861,10 @@
                     <child type="label">
                       <object class="GtkLabel" id="label626">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Appearance&lt;/b&gt;</property>
-                        <property name="use_markup">True</property>
+                        <property name="label" translatable="yes">Appearance</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                     </child>
                   </object>

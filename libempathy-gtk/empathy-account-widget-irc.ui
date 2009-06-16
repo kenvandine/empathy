@@ -87,8 +87,10 @@
             <child type="label">
               <object class="GtkLabel" id="label_network1">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">&lt;b&gt;Network&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
+                <property name="label" translatable="yes">Network</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
             </child>
           </object>
@@ -210,8 +212,10 @@
             <child type="label">
               <object class="GtkLabel" id="label_servers">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">&lt;b&gt;Servers&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
+                <property name="label" translatable="yes">Servers</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
             </child>
           </object>

@@ -158,8 +158,11 @@
                           <object class="GtkLabel" id="label_name">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="label">&lt;big&gt;&lt;b&gt;Gmail&lt;/b&gt;&lt;/big&gt;</property>
-                            <property name="use_markup">True</property>
+                            <property name="label" translatable="yes">Gmail</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                              <attribute name="scale" value="1.2"/>
+                            </attributes>
                             <property name="selectable">True</property>
                           </object>
                           <packing>
@@ -204,8 +207,10 @@
                         <child type="label">
                           <object class="GtkLabel" id="label599">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">&lt;b&gt;Settings&lt;/b&gt;</property>
-                            <property name="use_markup">True</property>
+                            <property name="label" translatable="yes">Settings</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
                           </object>
                         </child>
                       </object>
@@ -375,8 +380,10 @@
                     <child type="label">
                       <object class="GtkLabel" id="label643">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Add Account&lt;/b&gt;</property>
-                        <property name="use_markup">True</property>
+                        <property name="label" translatable="yes">Add Account</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                     </child>
                   </object>
@@ -406,8 +413,10 @@
                     <child type="label">
                       <object class="GtkLabel" id="label_no_protocol">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">&lt;b&gt;No protocol installed&lt;/b&gt;</property>
-                        <property name="use_markup">True</property>
+                        <property name="label" translatable="yes">No protocol installed</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                     </child>
                   </object>
