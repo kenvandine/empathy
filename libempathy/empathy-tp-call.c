@@ -687,7 +687,8 @@ empathy_tp_call_is_receiving_video (EmpathyTpCall *call)
 
   g_return_val_if_fail (EMPATHY_IS_TP_CALL (call), FALSE);
 
-  return priv->video->direction & TP_MEDIA_STREAM_DIRECTION_RECEIVE;
+  return priv->video->direction & TP_MEDIA_STREAM_DIRECTION_RECEIVE ?
+      TRUE : FALSE;
 }
 
 /**
@@ -705,5 +706,6 @@ empathy_tp_call_is_sending_video (EmpathyTpCall *call)
 
   g_return_val_if_fail (EMPATHY_IS_TP_CALL (call), FALSE);
 
-  return priv->video->direction & TP_MEDIA_STREAM_DIRECTION_SEND;
+  return priv->video->direction & TP_MEDIA_STREAM_DIRECTION_SEND ?
+      TRUE : FALSE;
 }
