@@ -96,6 +96,8 @@ PKG_CHECK_MODULES(LIBEMPATHY,
    telepathy-glib >= $TELEPATHY_GLIB_REQUIRED
    libmissioncontrol >= $MISSION_CONTROL_REQUIRED
    telepathy-farsight
+   farsight2-0.10
+   gstreamer-0.10
 ])
 
 PKG_CHECK_MODULES(LIBEMPATHYGTK,
@@ -109,7 +111,6 @@ PKG_CHECK_MODULES(LIBEMPATHYGTK,
    libcanberra-gtk >= $LIBCANBERRA_GTK_REQUIRED
    telepathy-glib >= $TELEPATHY_GLIB_REQUIRED
    libmissioncontrol >= $MISSION_CONTROL_REQUIRED
-   telepathy-farsight
    farsight2-0.10
    gstreamer-0.10
    gstreamer-interfaces-0.10
@@ -120,16 +121,14 @@ PKG_CHECK_MODULES(EMPATHY,
    glib-2.0 >= $GLIB_REQUIRED
    gobject-2.0
    gio-2.0 >= $GLIB_REQUIRED
-   gconf-2.0 >= $GCONF_REQUIRED
-   x11
+   gdk-x11-2.0
    gtk+-2.0 >= $GTK_REQUIRED
-   libcanberra-gtk >= $LIBCANBERRA_GTK_REQUIRED
    libebook-1.2
+   dbus-glib-1
    telepathy-glib >= $TELEPATHY_GLIB_REQUIRED
    libmissioncontrol >= $MISSION_CONTROL_REQUIRED
    telepathy-farsight
    gstreamer-0.10
-   gstreamer-interfaces-0.10
 ])
 
 PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= $LIBNOTIFY_REQUIRED)
