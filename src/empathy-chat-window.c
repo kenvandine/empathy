@@ -910,7 +910,8 @@ chat_window_show_or_update_notification (EmpathyChatWindow *window,
 					 EmpathyChat *chat)
 {
 	EmpathyContact *sender;
-	char *header, *escaped;
+	const gchar *header;
+	char *escaped;
 	const char *body;
 	GdkPixbuf *pixbuf;
 	NotificationData *cb_data;
@@ -932,8 +933,7 @@ chat_window_show_or_update_notification (EmpathyChatWindow *window,
 	cb_data->window = window;
 
 	sender = empathy_message_get_sender (message);
-	header = g_strdup_printf (_("New message from %s"),
-				  empathy_contact_get_name (sender));
+	header = empathy_contact_get_name (sender);
 	body = empathy_message_get_body (message);
 	escaped = g_markup_escape_text (body, -1);
 
@@ -955,7 +955,6 @@ chat_window_show_or_update_notification (EmpathyChatWindow *window,
 	notify_notification_show (priv->notification, NULL);
 
 	g_object_unref (pixbuf);
-	g_free (header);
 	g_free (escaped);
 }
 

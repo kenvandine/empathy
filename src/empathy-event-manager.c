@@ -409,7 +409,7 @@ event_manager_chat_message_received_cb (EmpathyTpChat *tp_chat,
   EmpathyMessage *message, EventManagerApproval *approval)
 {
   EmpathyContact  *sender;
-  gchar           *header;
+  const gchar     *header;
   const gchar     *msg;
   TpChannel       *channel;
   EventPriv       *event;
@@ -426,8 +426,7 @@ event_manager_chat_message_received_cb (EmpathyTpChat *tp_chat,
     }
 
   sender = empathy_message_get_sender (message);
-  header = g_strdup_printf (_("New message from %s"),
-                            empathy_contact_get_name (sender));
+  header = empathy_contact_get_name (sender);
   msg = empathy_message_get_body (message);
 
   channel = empathy_tp_chat_get_channel (tp_chat);
@@ -438,7 +437,6 @@ event_manager_chat_message_received_cb (EmpathyTpChat *tp_chat,
     event_manager_add (approval->manager, sender, EMPATHY_IMAGE_NEW_MESSAGE, header,
       msg, approval, event_text_channel_process_func, NULL);
 
-  g_free (header);
   empathy_sound_play (empathy_main_window_get (),
     EMPATHY_SOUND_CONVERSATION_NEW);
 }
