@@ -7,6 +7,7 @@ AM_CPPFLAGS =                                           \
 	-I$(top_builddir)                               \
 	-DDATADIR=\""$(datadir)"\"              	\
 	-DLOCALEDIR=\""$(datadir)/locale"\"		\
+	-DG_LOG_DOMAIN=\"empathy\"			\
 	$(LIBEMPATHY_CFLAGS)				\
 	$(GEOCLUE_CFLAGS)				\
 	$(WARN_CFLAGS)					\
