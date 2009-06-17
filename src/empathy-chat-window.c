@@ -1400,6 +1400,8 @@ chat_window_finalize (GObject *object)
 
 	g_object_unref (priv->ui_manager);
 	g_object_unref (priv->chatroom_manager);
+	g_object_unref (priv->indicator_manager);
+	g_object_unref (priv->indicators);
 	if (priv->save_geometry_id != 0) {
 		g_source_remove (priv->save_geometry_id);
 	}
