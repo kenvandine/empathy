@@ -1149,9 +1149,25 @@ ft_handler_gfile_ready_cb (GObject *source,
   if (error != NULL)
     goto out;
 
+  if (g_file_info_get_file_type (info) != G_FILE_TYPE_REGULAR)
+    {
+      error = g_error_new_literal (EMPATHY_FT_ERROR_QUARK,
+          EMPATHY_FT_ERROR_INVALID_SOURCE_FILE,
+          _("The selected file is not a regular file"));
+      goto out;
+    }
+
+  priv->total_bytes = g_file_info_get_size (info);
+  if (priv->total_bytes == 0)
+    {
+      error = g_error_new_literal (EMPATHY_FT_ERROR_QUARK,
+          EMPATHY_FT_ERROR_EMPTY_SOURCE_FILE,
+          _("The selected file is empty"));
+      goto out;
+    }
+
   priv->content_type = g_strdup (g_file_info_get_content_type (info));
   priv->filename = g_strdup (g_file_info_get_display_name (info));
-  priv->total_bytes = g_file_info_get_size (info);
   g_file_info_get_modification_time (info, &mtime);
   priv->mtime = mtime.tv_sec;
   priv->transferred_bytes = 0;
@@ -1303,6 +1319,7 @@ empathy_ft_handler_new_outgoing (EmpathyContact *contact,
       G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME ","
       G_FILE_ATTRIBUTE_STANDARD_SIZE ","
       G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE ","
+      G_FILE_ATTRIBUTE_STANDARD_TYPE ","
       G_FILE_ATTRIBUTE_TIME_MODIFIED,
       G_FILE_QUERY_INFO_NONE, G_PRIORITY_DEFAULT,
       NULL, (GAsyncReadyCallback) ft_handler_gfile_ready_cb, data);
