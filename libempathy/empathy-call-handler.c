@@ -304,7 +304,9 @@ EmpathyCallHandler *
 empathy_call_handler_new_for_channel (EmpathyTpCall *call)
 {
   return EMPATHY_CALL_HANDLER (g_object_new (EMPATHY_TYPE_CALL_HANDLER,
-    "tp-call", call, NULL));
+    "tp-call", call,
+    "initial-video", empathy_tp_call_is_receiving_video (call),
+    NULL));
 }
 
 void

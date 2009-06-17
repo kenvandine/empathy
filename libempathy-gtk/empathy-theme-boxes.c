@@ -210,7 +210,7 @@ theme_boxes_maybe_append_header (EmpathyThemeBoxes *theme,
 	/* Only insert a header if the previously inserted block is not the same
 	 * as this one.
 	 */
-	if (last_contact == contact) {
+	if (empathy_contact_equal (last_contact, contact)) {
 		return;
 	}
 

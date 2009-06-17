@@ -500,7 +500,8 @@ theme_adium_append_message (EmpathyChatView *view,
 	}
 
 	/* Get the right html/func to add the message */
-	if (priv->last_contact == sender) {
+	func = "appendMessage";
+	if (empathy_contact_equal (priv->last_contact, sender)) {
 		func = "appendNextMessage";
 		if (empathy_contact_is_user (sender)) {
 			html = priv->out_nextcontent_html;
@@ -512,7 +513,6 @@ theme_adium_append_message (EmpathyChatView *view,
 		}
 	}
 	if (!html) {
-		func = "appendMessage";
 		if (empathy_contact_is_user (sender)) {
 			html = priv->out_content_html;
 			len = priv->out_content_len;

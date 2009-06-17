@@ -1082,3 +1082,40 @@ empathy_contact_set_location (EmpathyContact *contact,
   priv->location = g_hash_table_ref (location);
   g_object_notify (G_OBJECT (contact), "location");
 }
+
+/**
+ * empathy_contact_equal:
+ * @contact1: an #EmpathyContact
+ * @contact2: an #EmpathyContact
+ *
+ * Returns FALSE if one of the contacts is NULL but the other is not.
+ * Otherwise returns TRUE if both pointer are equal or if they bith
+ * refer to the same id.
+ * It's only necessary to call this function if your contact objects
+ * come from logs where contacts are created dynamically and comparing
+ * pointers is not enough.
+ */
+gboolean
+empathy_contact_equal (gconstpointer contact1,
+                       gconstpointer contact2)
+{
+  EmpathyContact *c1;
+  EmpathyContact *c2;
+  const gchar *id1;
+  const gchar *id2;
+
+  if ((contact1 == NULL) != (contact2 == NULL)) {
+    return FALSE;
+  }
+  if (contact1 == contact2) {
+    return TRUE;
+  }
+  c1 = EMPATHY_CONTACT (contact1);
+  c2 = EMPATHY_CONTACT (contact2);
+  id1 = empathy_contact_get_id (c1);
+  id2 = empathy_contact_get_id (c2);
+  if (!tp_strdiff (id1, id2)) {
+    return TRUE;
+  }
+  return FALSE;
+}
