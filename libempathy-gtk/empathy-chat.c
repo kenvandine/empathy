@@ -1153,6 +1153,48 @@ chat_contacts_completion_func (const gchar *s1,
 	return ret;
 }
 
+static gchar *
+build_part_message (guint        reason,
+		    const gchar *name,
+		    const gchar *message)
+{
+	const gchar *template;
+
+	if (message == NULL) {
+		switch (reason) {
+		case TP_CHANNEL_GROUP_CHANGE_REASON_OFFLINE:
+			template = _("%s has disconnected");
+			break;
+		case TP_CHANNEL_GROUP_CHANGE_REASON_KICKED:
+			template = _("%s was kicked");
+			break;
+		case TP_CHANNEL_GROUP_CHANGE_REASON_BANNED:
+			template = _("%s was banned");
+			break;
+		default:
+			template = _("%s has left the room");
+		}
+
+		return g_strdup_printf (template, name);
+	} else {
+		switch (reason) {
+		case TP_CHANNEL_GROUP_CHANGE_REASON_OFFLINE:
+			template = _("%s has disconnected (%s)");
+			break;
+		case TP_CHANNEL_GROUP_CHANGE_REASON_KICKED:
+			template = _("%s was kicked (%s)");
+			break;
+		case TP_CHANNEL_GROUP_CHANGE_REASON_BANNED:
+			template = _("%s was banned (%s)");
+			break;
+		default:
+			template = _("%s has left the room (%s)");
+		}
+
+		return g_strdup_printf (template, name, message);
+	}
+}
+
 static void
 chat_members_changed_cb (EmpathyTpChat  *tp_chat,
 			 EmpathyContact *contact,
@@ -1173,41 +1215,8 @@ chat_members_changed_cb (EmpathyTpChat  *tp_chat,
 		str = g_strdup_printf (_("%s has joined the room"),
 				       name);
 	} else {
-		const gchar *action;
-
-		if (EMP_STR_EMPTY (message)) {
-			switch (reason) {
-			case TP_CHANNEL_GROUP_CHANGE_REASON_OFFLINE:
-				action = _("%s has disconnected");
-				break;
-			case TP_CHANNEL_GROUP_CHANGE_REASON_KICKED:
-				action = _("%s was kicked");
-				break;
-			case TP_CHANNEL_GROUP_CHANGE_REASON_BANNED:
-				action = _("%s was banned");
-				break;
-			default:
-				action = _("%s has left the room");
-			}
-
-			str = g_strdup_printf (action, name);
-		} else {
-			switch (reason) {
-			case TP_CHANNEL_GROUP_CHANGE_REASON_OFFLINE:
-				action = _("%s has disconnected (%s)");
-				break;
-			case TP_CHANNEL_GROUP_CHANGE_REASON_KICKED:
-				action = _("%s was kicked (%s)");
-				break;
-			case TP_CHANNEL_GROUP_CHANGE_REASON_BANNED:
-				action = _("%s was banned (%s)");
-				break;
-			default:
-				action = _("%s has left the room (%s)");
-			}
-
-			str = g_strdup_printf (action, name, message);
-		}
+		str = build_part_message (reason, name,
+			EMP_STR_EMPTY (message) ? NULL : message);
 	}
 
 	empathy_chat_view_append_event (chat->view, str);
