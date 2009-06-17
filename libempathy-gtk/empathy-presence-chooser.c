@@ -468,6 +468,10 @@ presence_chooser_entry_icon_release_cb (EmpathyPresenceChooser *self,
 		state = empathy_idle_get_state (priv->idle);
 		status = empathy_idle_get_status (priv->idle);
 
+		if (!empathy_status_presets_is_valid (state))
+			/* It doesn't make sense to add such presence as favorite */
+			return;
+
 		if (presence_chooser_is_preset (self)) {
 			/* remove the entry */
 			DEBUG ("REMOVING PRESET (%i, %s)\n", state, status);
