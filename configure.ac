@@ -36,6 +36,7 @@ ISO_CODES_REQUIRED=0.35
 LIBNOTIFY_REQUIRED=0.4.4
 LIBCANBERRA_GTK_REQUIRED=0.4
 LIBCHAMPLAIN_REQUIRED=0.3.3
+LIBINDICATE_REQUIRED=0.1.6
 LIBCHAMPLAIN_GTK_REQUIRED=0.3.3
 CLUTTER_GTK_REQUIRED=0.8.2
 GEOCLUE_REQUIRED=0.11
@@ -334,31 +335,33 @@ fi
 AM_CONDITIONAL(HAVE_NOTHERE, test "x$have_nothere" = "xyes")
 
 # -----------------------------------------------------------
-# libindicate
+# indicator checks: libindicate
 # -----------------------------------------------------------
 AC_ARG_ENABLE(libindicate,
               AS_HELP_STRING([--enable-libindicate=@<:@no/yes/auto@:>@],
-                             [build libindicate support]), ,
+                             [Enable message indicator]), ,
                              enable_libindicate=auto)
 
 if test "x$enable_libindicate" != "xno"; then
-   PKG_CHECK_MODULES(INDICATE, 
+   PKG_CHECK_MODULES(INDICATE,
    [
-     indicate
+      indicate >= $LIBINDICATE_REQUIRED
    ], have_libindicate="yes", have_libindicate="no")
+
+   if test "x$have_libindicate" = "xyes"; then
+      AC_DEFINE(HAVE_LIBINDICATE, 1, [Define if you have libindicate])
+   fi
 else
-   have_libindicate=no
+   have_libindicate="no"
 fi
 
 if test "x$enable_libindicate" = "xyes" -a "x$have_libindicate" != "xyes"; then
-   AC_MSG_ERROR([Couldn't find libindicate.])
-fi
-
-if test "x$enable_libindicate" = "xyes"; then
-   AC_DEFINE(HAVE_LIBINDICATE, 1, [Define if you have libindicate])
+   AC_MSG_ERROR([Couldn't find libindicate dependencies.])
 fi
 
 AM_CONDITIONAL(HAVE_LIBINDICATE, test "x$have_libindicate" = "xyes")
+AC_SUBST(INDICATE_CFLAGS)
+AC_SUBST(INDICATE_LIBS)
 
 # -----------------------------------------------------------
 # Tests
