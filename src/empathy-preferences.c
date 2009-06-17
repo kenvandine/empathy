@@ -235,7 +235,7 @@ preferences_setup_widgets (EmpathyPreferences *preferences)
 					  EMPATHY_PREFS_UI_USE_LIBINDICATE,
 					  preferences->checkbutton_use_libindicate);
 #else
-	gtk_widget_hide(GTK_WIDGET(preferences->checkbutton_use_libindicate));
+	gtk_widget_hide (GTK_WIDGET(preferences->checkbutton_use_libindicate));
 #endif
 
 	preferences_hookup_toggle_button (preferences,

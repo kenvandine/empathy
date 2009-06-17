@@ -94,22 +94,22 @@ activate_event (EmpathyEvent *event)
 static gboolean
 notification_server_supports_actions (void)
 {
-	GList * caps = notify_get_server_caps();
+	GList * caps = notify_get_server_caps ();
 	GList * l;
 	gboolean ret = FALSE;
 
 	for (l = caps; l; l = l->next) {
-		gchar *cap = (gchar *)l->data;
+		gchar *cap = (gchar *) l->data;
 		if (!cap) {
 			continue;
 		}
-		if (!strcmp(cap, "actions")) {
+		if (!strcmp (cap, "actions")) {
 			ret = TRUE;
 			break;
 		}
 	}
-	g_list_foreach(caps, (GFunc)g_free, NULL);
-	g_list_free(caps);
+	g_list_foreach (caps, (GFunc)g_free, NULL);
+	g_list_free (caps);
 
 	return ret;
 }
@@ -363,11 +363,11 @@ status_icon_set_use_libindicate (EmpathyStatusIcon *icon,
 	if (use_libindicate) {
 		empathy_indicator_manager_set_server_visible (priv->indicator_manager,
 				TRUE);
-		gtk_status_icon_set_visible(priv->icon, FALSE);
+		gtk_status_icon_set_visible (priv->icon, FALSE);
 	} else {
 		empathy_indicator_manager_set_server_visible (priv->indicator_manager,
 				FALSE);
-		gtk_status_icon_set_visible(priv->icon, TRUE);
+		gtk_status_icon_set_visible (priv->icon, TRUE);
 	}
 }
 #endif
@@ -426,7 +426,7 @@ static void
 indicate_server_activate_cb (EmpathyIndicatorManager *manager,
 				  EmpathyStatusIcon *icon)
 {
-	status_icon_toggle_visibility(icon);
+	status_icon_toggle_visibility (icon);
 }
 #endif
 

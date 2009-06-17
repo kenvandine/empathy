@@ -961,7 +961,7 @@ chat_window_add_indicator (EmpathyChatWindow *window,
 			sender, body);
 		g_signal_connect (indicator, "activate",
 				  G_CALLBACK (chat_window_indicator_activate_cb), cb_data);
-		g_hash_table_insert(priv->indicators, chat, g_object_ref(indicator));
+		g_hash_table_insert (priv->indicators, chat, g_object_ref (indicator));
 	}
 	empathy_indicator_show (indicator);
 }
