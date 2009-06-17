@@ -1163,54 +1163,55 @@ chat_members_changed_cb (EmpathyTpChat  *tp_chat,
 			 EmpathyChat    *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
+	const gchar *name = empathy_contact_get_name (contact);
+	gchar *str;
 
-	if (priv->block_events_timeout_id == 0) {
-		const gchar *name = empathy_contact_get_name (contact);
-		gchar *str;
+	if (priv->block_events_timeout_id != 0)
+		return;
 
-		if (is_member) {
-			str = g_strdup_printf (_("%s has joined the room"),
-					       name);
-		} else {
-			const gchar *action;
+	if (is_member) {
+		str = g_strdup_printf (_("%s has joined the room"),
+				       name);
+	} else {
+		const gchar *action;
 
-			if (EMP_STR_EMPTY (message)) {
-				switch (reason) {
-				case TP_CHANNEL_GROUP_CHANGE_REASON_OFFLINE:
-					action = _("%s has disconnected");
-					break;
-				case TP_CHANNEL_GROUP_CHANGE_REASON_KICKED:
-					action = _("%s was kicked");
-					break;
-				case TP_CHANNEL_GROUP_CHANGE_REASON_BANNED:
-					action = _("%s was banned");
-					break;
-				default:
-					action = _("%s has left the room");
-				}
-
-				str = g_strdup_printf (action, name);
-			} else {
-				switch (reason) {
-				case TP_CHANNEL_GROUP_CHANGE_REASON_OFFLINE:
-					action = _("%s has disconnected (%s)");
-					break;
-				case TP_CHANNEL_GROUP_CHANGE_REASON_KICKED:
-					action = _("%s was kicked (%s)");
-					break;
-				case TP_CHANNEL_GROUP_CHANGE_REASON_BANNED:
-					action = _("%s was banned (%s)");
-					break;
-				default:
-					action = _("%s has left the room (%s)");
-				}
-
-				str = g_strdup_printf (action, name, message);
+		if (EMP_STR_EMPTY (message)) {
+			switch (reason) {
+			case TP_CHANNEL_GROUP_CHANGE_REASON_OFFLINE:
+				action = _("%s has disconnected");
+				break;
+			case TP_CHANNEL_GROUP_CHANGE_REASON_KICKED:
+				action = _("%s was kicked");
+				break;
+			case TP_CHANNEL_GROUP_CHANGE_REASON_BANNED:
+				action = _("%s was banned");
+				break;
+			default:
+				action = _("%s has left the room");
 			}
+
+			str = g_strdup_printf (action, name);
+		} else {
+			switch (reason) {
+			case TP_CHANNEL_GROUP_CHANGE_REASON_OFFLINE:
+				action = _("%s has disconnected (%s)");
+				break;
+			case TP_CHANNEL_GROUP_CHANGE_REASON_KICKED:
+				action = _("%s was kicked (%s)");
+				break;
+			case TP_CHANNEL_GROUP_CHANGE_REASON_BANNED:
+				action = _("%s was banned (%s)");
+				break;
+			default:
+				action = _("%s has left the room (%s)");
+			}
+
+			str = g_strdup_printf (action, name, message);
 		}
-		empathy_chat_view_append_event (chat->view, str);
-		g_free (str);
 	}
+
+	empathy_chat_view_append_event (chat->view, str);
+	g_free (str);
 }
 
 static gboolean
