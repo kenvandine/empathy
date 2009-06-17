@@ -38,6 +38,7 @@
 #include <libebook/e-book.h>
 #include <libnotify/notify.h>
 
+#include <telepathy-glib/dbus.h>
 #include <telepathy-glib/util.h>
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mission-control.h>
@@ -470,6 +471,7 @@ main (int argc, char *argv[])
 	gboolean           hide_contact_list = FALSE;
 	gboolean           accounts_dialog = FALSE;
 	GError            *error = NULL;
+	TpDBusDaemon      *dbus_daemon;
 	GOptionEntry       options[] = {
 		{ "no-connect", 'n',
 		  0, G_OPTION_ARG_NONE, &no_connect,
@@ -545,6 +547,23 @@ main (int argc, char *argv[])
 		}
 	} else {
 		g_warning ("Cannot create the 'empathy' bacon connection.");
+	}
+
+	/* Take well-known name */
+	dbus_daemon = tp_dbus_daemon_dup (&error);
+	if (error == NULL) {
+		if (!tp_dbus_daemon_request_name (dbus_daemon,
+						  "org.gnome.Empathy",
+						  TRUE, &error)) {
+			DEBUG ("Failed to request well-known name: %s",
+			       error ? error->message : "no message");
+			g_clear_error (&error);
+		}
+		g_object_unref (dbus_daemon);
+	} else {
+		DEBUG ("Failed to dup dbus daemon: %s",
+		       error ? error->message : "no message");
+		g_clear_error (&error);
 	}
 
 	/* Setting up MC */
