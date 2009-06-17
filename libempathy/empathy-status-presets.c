@@ -405,3 +405,23 @@ empathy_status_presets_clear_default (void)
 
 	status_presets_file_save ();
 }
+
+gboolean
+empathy_status_presets_is_valid (TpConnectionPresenceType state)
+{
+	switch (state) {
+		case TP_CONNECTION_PRESENCE_TYPE_UNSET:
+		case TP_CONNECTION_PRESENCE_TYPE_OFFLINE:
+		case TP_CONNECTION_PRESENCE_TYPE_UNKNOWN:
+		case TP_CONNECTION_PRESENCE_TYPE_ERROR:
+			return FALSE;
+
+		case TP_CONNECTION_PRESENCE_TYPE_AVAILABLE:
+		case TP_CONNECTION_PRESENCE_TYPE_AWAY:
+		case TP_CONNECTION_PRESENCE_TYPE_EXTENDED_AWAY:
+		case TP_CONNECTION_PRESENCE_TYPE_HIDDEN:
+		case TP_CONNECTION_PRESENCE_TYPE_BUSY:
+			return TRUE;
+	}
+	return FALSE;
+}

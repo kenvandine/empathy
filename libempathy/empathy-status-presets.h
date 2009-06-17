@@ -40,6 +40,7 @@ const gchar * empathy_status_presets_get_default_status (void);
 void          empathy_status_presets_set_default        (TpConnectionPresenceType   state,
 							 const gchar *status);
 void          empathy_status_presets_clear_default      (void);
+gboolean      empathy_status_presets_is_valid           (TpConnectionPresenceType   state);
 
 G_END_DECLS
 
