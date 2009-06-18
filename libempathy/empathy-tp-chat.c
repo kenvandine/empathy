@@ -875,6 +875,33 @@ tp_chat_got_added_contacts_cb (EmpathyTpContactFactory *factory,
 	tp_chat_check_if_ready (EMPATHY_TP_CHAT (chat));
 }
 
+static EmpathyContact *
+chat_lookup_contact (EmpathyTpChat *chat,
+		     TpHandle       handle,
+		     gboolean       remove)
+{
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+	GList *l;
+
+	for (l = priv->members; l; l = l->next) {
+		EmpathyContact *c = l->data;
+
+		if (empathy_contact_get_handle (c) == handle) {
+			if (remove) {
+				/* Caller takes the reference. */
+				priv->members = g_list_delete_link (
+					priv->members, l);
+			} else {
+				g_object_ref (c);
+			}
+
+			return c;
+		}
+	}
+
+	return NULL;
+}
+
 static void
 tp_chat_group_members_changed_cb (TpChannel     *self,
 				  gchar         *message,
@@ -887,24 +914,30 @@ tp_chat_group_members_changed_cb (TpChannel     *self,
 				  EmpathyTpChat *chat)
 {
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
-	EmpathyContact *contact;
-	TpHandle handle;
+	EmpathyContact *contact, *actor_contact = NULL;
 	guint i;
-	GList *l;
+
+	if (actor != 0) {
+		actor_contact = chat_lookup_contact (chat, actor, FALSE);
+		if (actor_contact == NULL) {
+			/* TODO: handle this a tad more gracefully: perhaps the
+			 * actor was a server op. We could use the contact-ids
+			 * detail of MembersChangedDetailed.
+			 */
+			DEBUG ("actor %u not a channel member", actor);
+		}
+	}
 
 	/* Remove contacts that are not members anymore */
 	for (i = 0; i < removed->len; i++) {
-		for (l = priv->members; l; l = l->next) {
-			contact = l->data;
-			handle = empathy_contact_get_handle (contact);
-			if (handle == g_array_index (removed, TpHandle, i)) {
-				priv->members = g_list_delete_link (priv->members, l);
-				g_signal_emit_by_name (chat, "members-changed",
-						       contact, NULL, reason,
-						       message, FALSE);
-				g_object_unref (contact);
-				break;
-			}
+		contact = chat_lookup_contact (chat,
+			g_array_index (removed, TpHandle, i), TRUE);
+
+		if (contact != NULL) {
+			g_signal_emit_by_name (chat, "members-changed", contact,
+					       actor_contact, reason, message,
+					       FALSE);
+			g_object_unref (contact);
 		}
 	}
 
@@ -917,6 +950,10 @@ tp_chat_group_members_changed_cb (TpChannel     *self,
 	}
 
 	tp_chat_update_remote_contact (chat);
+
+	if (actor_contact != NULL) {
+		g_object_unref (actor_contact);
+	}
 }
 
 static void
