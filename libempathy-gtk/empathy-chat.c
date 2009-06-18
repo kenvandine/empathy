@@ -1156,42 +1156,62 @@ chat_contacts_completion_func (const gchar *s1,
 static gchar *
 build_part_message (guint        reason,
 		    const gchar *name,
+		    const gchar *actor,
 		    const gchar *message)
 {
-	const gchar *template;
-
+	/* Having an actor only really makes sense for a few actions... */
 	if (message == NULL) {
 		switch (reason) {
 		case TP_CHANNEL_GROUP_CHANGE_REASON_OFFLINE:
-			template = _("%s has disconnected");
-			break;
+			return g_strdup_printf (_("%s has disconnected"), name);
 		case TP_CHANNEL_GROUP_CHANGE_REASON_KICKED:
-			template = _("%s was kicked");
-			break;
+			if (actor != NULL) {
+				return g_strdup_printf (
+					_("%s was kicked by %s"), name, actor);
+			} else {
+				return g_strdup_printf (_("%s was kicked"),
+					name);
+			}
 		case TP_CHANNEL_GROUP_CHANGE_REASON_BANNED:
-			template = _("%s was banned");
-			break;
+			if (actor != NULL) {
+				return g_strdup_printf (
+					_("%s was banned by %s"), name, actor);
+			} else {
+				return g_strdup_printf (_("%s was banned"),
+					name);
+			}
 		default:
-			template = _("%s has left the room");
+			return g_strdup_printf (_("%s has left the room"),
+				name);
 		}
-
-		return g_strdup_printf (template, name);
 	} else {
 		switch (reason) {
 		case TP_CHANNEL_GROUP_CHANGE_REASON_OFFLINE:
-			template = _("%s has disconnected (%s)");
-			break;
+			return g_strdup_printf (_("%s has disconnected (%s)"),
+				name, message);
 		case TP_CHANNEL_GROUP_CHANGE_REASON_KICKED:
-			template = _("%s was kicked (%s)");
-			break;
+			if (actor != NULL) {
+				return g_strdup_printf (
+					_("%s was kicked by %s (%s)"), name,
+					actor, message);
+			} else {
+				return g_strdup_printf (
+					_("%s was kicked (%s)"),
+					name, message);
+			}
 		case TP_CHANNEL_GROUP_CHANGE_REASON_BANNED:
-			template = _("%s was banned (%s)");
-			break;
+			if (actor != NULL) {
+				return g_strdup_printf (
+					_("%s was banned by %s (%s)"), name,
+					actor, message);
+			} else {
+				return g_strdup_printf (_("%s was banned (%s)"),
+					name, message);
+			}
 		default:
-			template = _("%s has left the room (%s)");
+			return g_strdup_printf (_("%s has left the room (%s)"),
+				name, message);
 		}
-
-		return g_strdup_printf (template, name, message);
 	}
 }
 
@@ -1215,7 +1235,13 @@ chat_members_changed_cb (EmpathyTpChat  *tp_chat,
 		str = g_strdup_printf (_("%s has joined the room"),
 				       name);
 	} else {
-		str = build_part_message (reason, name,
+		const gchar *actor_name = NULL;
+
+		if (actor != NULL) {
+			actor_name = empathy_contact_get_name (actor);
+		}
+
+		str = build_part_message (reason, name, actor_name,
 			EMP_STR_EMPTY (message) ? NULL : message);
 	}
 
