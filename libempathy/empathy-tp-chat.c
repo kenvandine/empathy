@@ -921,9 +921,9 @@ tp_chat_group_members_changed_cb (TpChannel     *self,
 	if (actor != 0) {
 		actor_contact = chat_lookup_contact (chat, actor, FALSE);
 		if (actor_contact == NULL) {
-			/* TODO: handle this a tad more gracefully: perhaps the
-			 * actor was a server op. We could use the contact-ids
-			 * detail of MembersChangedDetailed.
+			/* FIXME: handle this a tad more gracefully: perhaps
+			 * the actor was a server op. We could use the
+			 * contact-ids detail of MembersChangedDetailed.
 			 */
 			DEBUG ("actor %u not a channel member", actor);
 		}
