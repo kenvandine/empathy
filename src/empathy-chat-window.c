@@ -636,9 +636,7 @@ chat_window_contacts_toggled_cb (GtkToggleAction   *toggle_action,
 
 	active = gtk_toggle_action_get_active (toggle_action);
 
-	g_object_set (priv->current_chat,
-		      "show-contacts", active,
-		      NULL);
+	empathy_chat_set_show_contacts (priv->current_chat, active);
 }
 
 static const gchar *

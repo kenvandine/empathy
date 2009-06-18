@@ -172,7 +172,7 @@
          </long>
       </locale>
     </schema>
-    
+
     <schema>
       <key>/schemas/apps/empathy/sounds/sounds_contact_logout</key>
       <applyto>/apps/empathy/sounds/sounds_contact_logout</applyto>
@@ -201,7 +201,7 @@
          </long>
       </locale>
     </schema>
-    
+
     <schema>
       <key>/schemas/apps/empathy/sounds/sounds_service_logout</key>
       <applyto>/apps/empathy/sounds/sounds_service_logout</applyto>
@@ -288,7 +288,7 @@
          </long>
       </locale>
     </schema>
-    
+
     <schema>
       <key>/schemas/apps/empathy/conversation/show_contacts_in_rooms</key>
       <applyto>/apps/empathy/conversation/show_contacts_in_rooms</applyto>
@@ -386,7 +386,7 @@
         Character to add after nickname when using nick completion (tab)
         in group chat.
         </long>
-        
+
       </locale>
     </schema>
 
@@ -448,7 +448,7 @@
         </long>
       </locale>
     </schema>
-    
+
     <schema>
       <key>/schemas/apps/empathy/autoconnect</key>
       <applyto>/apps/empathy/autoconnect</applyto>

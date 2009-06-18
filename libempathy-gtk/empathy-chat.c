@@ -1195,19 +1195,19 @@ chat_reset_size_request (gpointer widget)
 	return FALSE;
 }
 
-void
-empathy_chat_set_show_contacts (EmpathyChat *chat,
-				gboolean     show)
+static void
+chat_update_contacts_visibility (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
-	
-	priv->show_contacts = show;
+	gboolean show;
+
+	show = priv->remote_contact == NULL && priv->show_contacts;
 
 	if (!priv->scrolled_window_contacts) {
 		return;
-	}		
+	}
 
-	if (show) {
+	if (show && priv->contact_list_view == NULL) {
 		EmpathyContactListStore *store;
 		gint                     min_width;
 
@@ -1238,21 +1238,33 @@ empathy_chat_set_show_contacts (EmpathyChat *chat,
 		gtk_widget_show (priv->contact_list_view);
 		gtk_widget_show (priv->scrolled_window_contacts);
 		g_object_unref (store);
-	} else {
+	} else if (!show) {
 		priv->contacts_width = gtk_paned_get_position (GTK_PANED (priv->hpaned));
 		gtk_widget_hide (priv->scrolled_window_contacts);
-		if (priv->contact_list_view) {
+		if (priv->contact_list_view != NULL) {
 			gtk_widget_destroy (priv->contact_list_view);
 			priv->contact_list_view = NULL;
 		}
 	}
 }
 
+void
+empathy_chat_set_show_contacts (EmpathyChat *chat,
+				gboolean     show)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
+	priv->show_contacts = show;
+
+	chat_update_contacts_visibility (chat);
+
+	g_object_notify (G_OBJECT (chat), "show-contacts");
+}
+
 static void
 chat_remote_contact_changed_cb (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
-	gboolean         active;
 
 	if (priv->remote_contact != NULL) {
 		g_object_unref (priv->remote_contact);
@@ -1275,8 +1287,7 @@ chat_remote_contact_changed_cb (EmpathyChat *chat)
 		priv->id = g_strdup (empathy_tp_chat_get_id (priv->tp_chat));
 	}
 
-	active = (priv->remote_contact == NULL && priv->show_contacts == TRUE);
-	empathy_chat_set_show_contacts (chat, active);
+	chat_update_contacts_visibility (chat);
 
 	g_object_notify (G_OBJECT (chat), "remote-contact");
 	g_object_notify (G_OBJECT (chat), "id");
@@ -1329,7 +1340,6 @@ chat_create_ui (EmpathyChat *chat)
  	GList           *list = NULL;
 	gchar           *filename;
 	GtkTextBuffer   *buffer;
-	gboolean         active;
 
 	filename = empathy_file_lookup ("empathy-chat.ui",
 					"libempathy-gtk");
@@ -1387,8 +1397,7 @@ chat_create_ui (EmpathyChat *chat)
 	gtk_widget_show (chat->input_text_view);
 
 	/* Create contact list */
-	active = (priv->remote_contact == NULL && priv->show_contacts == TRUE);
-	empathy_chat_set_show_contacts (chat, active);
+	chat_update_contacts_visibility (chat);
 
 	/* Initialy hide the topic, will be shown if not empty */
 	gtk_widget_hide (priv->hbox_topic);
@@ -1546,49 +1555,56 @@ empathy_chat_class_init (EmpathyChatClass *klass)
 							      "The tp chat object",
 							      EMPATHY_TYPE_TP_CHAT,
 							      G_PARAM_CONSTRUCT |
-							      G_PARAM_READWRITE));
+							      G_PARAM_READWRITE |
+							      G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class,
 					 PROP_ACCOUNT,
 					 g_param_spec_object ("account",
 							      "Account of the chat",
 							      "The account of the chat",
 							      MC_TYPE_ACCOUNT,
-							      G_PARAM_READABLE));
+							      G_PARAM_READABLE |
+							      G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class,
 					 PROP_ID,
 					 g_param_spec_string ("id",
 							      "Chat's id",
 							      "The id of the chat",
 							      NULL,
-							      G_PARAM_READABLE));
+							      G_PARAM_READABLE |
+							      G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class,
 					 PROP_NAME,
 					 g_param_spec_string ("name",
 							      "Chat's name",
 							      "The name of the chat",
 							      NULL,
-							      G_PARAM_READABLE));
+							      G_PARAM_READABLE |
+							      G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class,
 					 PROP_SUBJECT,
 					 g_param_spec_string ("subject",
 							      "Chat's subject",
 							      "The subject or topic of the chat",
 							      NULL,
-							      G_PARAM_READABLE));
+							      G_PARAM_READABLE |
+							      G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class,
 					 PROP_REMOTE_CONTACT,
 					 g_param_spec_object ("remote-contact",
 							      "The remote contact",
 							      "The remote contact is any",
 							      EMPATHY_TYPE_CONTACT,
-							      G_PARAM_READABLE));
+							      G_PARAM_READABLE |
+							      G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class,
 					 PROP_SHOW_CONTACTS,
 					 g_param_spec_boolean ("show-contacts",
 							       "Contacts' visibility",
 							       "The visibility of the contacts' list",
 							       TRUE,
-							       G_PARAM_READWRITE));
+							       G_PARAM_READWRITE |
+							       G_PARAM_STATIC_STRINGS));
 
 	signals[COMPOSING] =
 		g_signal_new ("composing",
@@ -1626,7 +1642,6 @@ chat_block_events_timeout_cb (gpointer data)
 static void
 empathy_chat_init (EmpathyChat *chat)
 {
-	gboolean         active;
 	EmpathyChatPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (chat,
 		EMPATHY_TYPE_CHAT, EmpathyChatPriv);
 
@@ -1644,10 +1659,8 @@ empathy_chat_init (EmpathyChat *chat)
 
 	empathy_conf_get_bool (empathy_conf_get (),
 			       EMPATHY_PREFS_CHAT_SHOW_CONTACTS_IN_ROOMS,
-			       &active);
+			       &priv->show_contacts);
 
-	empathy_chat_set_show_contacts (chat, active);
-			  
 	/* Block events for some time to avoid having "has come online" or
 	 * "joined" messages. */
 	priv->block_events_timeout_id =

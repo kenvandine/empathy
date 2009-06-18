@@ -237,7 +237,7 @@ preferences_setup_widgets (EmpathyPreferences *preferences)
 	preferences_hookup_toggle_button (preferences,
 					  EMPATHY_PREFS_CHAT_SHOW_SMILEYS,
 					  preferences->checkbutton_show_smileys);
-					  
+
 	preferences_hookup_toggle_button (preferences,
 					  EMPATHY_PREFS_CHAT_SHOW_CONTACTS_IN_ROOMS,
 					  preferences->checkbutton_show_contacts_in_rooms);
