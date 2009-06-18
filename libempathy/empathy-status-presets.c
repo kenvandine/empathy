@@ -406,6 +406,14 @@ empathy_status_presets_clear_default (void)
 	status_presets_file_save ();
 }
 
+/**
+ * empathy_status_presets_is_valid:
+ * @state: a #TpConnectionPresenceType
+ *
+ * Check if a presence type can be used as a preset.
+ *
+ * Returns: %TRUE if the presence type can be used as a preset.
+ */
 gboolean
 empathy_status_presets_is_valid (TpConnectionPresenceType state)
 {
