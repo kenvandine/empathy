@@ -1154,12 +1154,17 @@ chat_contacts_completion_func (const gchar *s1,
 }
 
 static gchar *
-build_part_message (guint        reason,
-		    const gchar *name,
-		    const gchar *actor,
-		    const gchar *message)
+build_part_message (guint           reason,
+		    const gchar    *name,
+		    EmpathyContact *actor,
+		    const gchar    *message)
 {
 	GString *s = g_string_new ("");
+	const gchar *actor_name = NULL;
+
+	if (actor != NULL) {
+		actor_name = empathy_contact_get_name (actor);
+	}
 
 	/* Having an actor only really makes sense for a few actions... */
 	switch (reason) {
@@ -1167,17 +1172,17 @@ build_part_message (guint        reason,
 		g_string_append_printf (s, _("%s has disconnected"), name);
 		break;
 	case TP_CHANNEL_GROUP_CHANGE_REASON_KICKED:
-		if (actor != NULL) {
+		if (actor_name != NULL) {
 			g_string_append_printf (s, _("%s was kicked by %s"),
-				name, actor);
+				name, actor_name);
 		} else {
 			g_string_append_printf (s, _("%s was kicked"), name);
 		}
 		break;
 	case TP_CHANNEL_GROUP_CHANGE_REASON_BANNED:
-		if (actor != NULL) {
+		if (actor_name != NULL) {
 			g_string_append_printf (s, _("%s was banned by %s"),
-				name, actor);
+				name, actor_name);
 		} else {
 			g_string_append_printf (s, _("%s was banned"), name);
 		}
@@ -1186,7 +1191,7 @@ build_part_message (guint        reason,
 		g_string_append_printf (s, _("%s has left the room"), name);
 	}
 
-	if (message != NULL) {
+	if (!EMP_STR_EMPTY (message)) {
 		/* Note to translators: this string is appended to
 		 * notifications like "foo has left the room", with the message
 		 * given by the user living the room. If this poses a problem,
@@ -1218,14 +1223,7 @@ chat_members_changed_cb (EmpathyTpChat  *tp_chat,
 		str = g_strdup_printf (_("%s has joined the room"),
 				       name);
 	} else {
-		const gchar *actor_name = NULL;
-
-		if (actor != NULL) {
-			actor_name = empathy_contact_get_name (actor);
-		}
-
-		str = build_part_message (reason, name, actor_name,
-			EMP_STR_EMPTY (message) ? NULL : message);
+		str = build_part_message (reason, name, actor, message);
 	}
 
 	empathy_chat_view_append_event (chat->view, str);
