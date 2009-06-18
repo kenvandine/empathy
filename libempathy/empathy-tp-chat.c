@@ -914,7 +914,8 @@ tp_chat_group_members_changed_cb (TpChannel     *self,
 				  EmpathyTpChat *chat)
 {
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
-	EmpathyContact *contact, *actor_contact = NULL;
+	EmpathyContact *contact;
+	EmpathyContact *actor_contact = NULL;
 	guint i;
 
 	if (actor != 0) {
