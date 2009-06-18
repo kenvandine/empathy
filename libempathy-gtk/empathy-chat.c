@@ -1159,60 +1159,43 @@ build_part_message (guint        reason,
 		    const gchar *actor,
 		    const gchar *message)
 {
+	GString *s = g_string_new ("");
+
 	/* Having an actor only really makes sense for a few actions... */
-	if (message == NULL) {
-		switch (reason) {
-		case TP_CHANNEL_GROUP_CHANGE_REASON_OFFLINE:
-			return g_strdup_printf (_("%s has disconnected"), name);
-		case TP_CHANNEL_GROUP_CHANGE_REASON_KICKED:
-			if (actor != NULL) {
-				return g_strdup_printf (
-					_("%s was kicked by %s"), name, actor);
-			} else {
-				return g_strdup_printf (_("%s was kicked"),
-					name);
-			}
-		case TP_CHANNEL_GROUP_CHANGE_REASON_BANNED:
-			if (actor != NULL) {
-				return g_strdup_printf (
-					_("%s was banned by %s"), name, actor);
-			} else {
-				return g_strdup_printf (_("%s was banned"),
-					name);
-			}
-		default:
-			return g_strdup_printf (_("%s has left the room"),
-				name);
+	switch (reason) {
+	case TP_CHANNEL_GROUP_CHANGE_REASON_OFFLINE:
+		g_string_append_printf (s, _("%s has disconnected"), name);
+		break;
+	case TP_CHANNEL_GROUP_CHANGE_REASON_KICKED:
+		if (actor != NULL) {
+			g_string_append_printf (s, _("%s was kicked by %s"),
+				name, actor);
+		} else {
+			g_string_append_printf (s, _("%s was kicked"), name);
 		}
-	} else {
-		switch (reason) {
-		case TP_CHANNEL_GROUP_CHANGE_REASON_OFFLINE:
-			return g_strdup_printf (_("%s has disconnected (%s)"),
-				name, message);
-		case TP_CHANNEL_GROUP_CHANGE_REASON_KICKED:
-			if (actor != NULL) {
-				return g_strdup_printf (
-					_("%s was kicked by %s (%s)"), name,
-					actor, message);
-			} else {
-				return g_strdup_printf (
-					_("%s was kicked (%s)"),
-					name, message);
-			}
-		case TP_CHANNEL_GROUP_CHANGE_REASON_BANNED:
-			if (actor != NULL) {
-				return g_strdup_printf (
-					_("%s was banned by %s (%s)"), name,
-					actor, message);
-			} else {
-				return g_strdup_printf (_("%s was banned (%s)"),
-					name, message);
-			}
-		default:
-			return g_strdup_printf (_("%s has left the room (%s)"),
-				name, message);
+		break;
+	case TP_CHANNEL_GROUP_CHANGE_REASON_BANNED:
+		if (actor != NULL) {
+			g_string_append_printf (s, _("%s was banned by %s"),
+				name, actor);
+		} else {
+			g_string_append_printf (s, _("%s was banned"), name);
 		}
+		break;
+	default:
+		g_string_append_printf (s, _("%s has left the room"), name);
 	}
+
+	if (message != NULL) {
+		/* Note to translators: this string is appended to
+		 * notifications like "foo has left the room", with the message
+		 * given by the user living the room. If this poses a problem,
+		 * please let us know. :-)
+		 */
+		g_string_append_printf (s, _(" (%s)"), message);
+	}
+
+	return g_string_free (s, FALSE);
 }
 
 static void
