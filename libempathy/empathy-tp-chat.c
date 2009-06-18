@@ -886,17 +886,18 @@ chat_lookup_contact (EmpathyTpChat *chat,
 	for (l = priv->members; l; l = l->next) {
 		EmpathyContact *c = l->data;
 
-		if (empathy_contact_get_handle (c) == handle) {
-			if (remove) {
-				/* Caller takes the reference. */
-				priv->members = g_list_delete_link (
-					priv->members, l);
-			} else {
-				g_object_ref (c);
-			}
-
-			return c;
+		if (empathy_contact_get_handle (c) != handle) {
+			continue;
 		}
+
+		if (remove) {
+			/* Caller takes the reference. */
+			priv->members = g_list_delete_link (priv->members, l);
+		} else {
+			g_object_ref (c);
+		}
+
+		return c;
 	}
 
 	return NULL;
