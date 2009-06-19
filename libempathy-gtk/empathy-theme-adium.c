@@ -86,6 +86,8 @@ theme_adium_load (EmpathyThemeAdium *theme)
 	gchar                 *file;
 	gchar                 *template_html = NULL;
 	gsize                  template_len;
+	gchar                 *footer_html = NULL;
+	gsize                  footer_len;
 	GString               *string;
 	gchar                **strv = NULL;
 	gchar                 *css_path;
@@ -115,6 +117,10 @@ theme_adium_load (EmpathyThemeAdium *theme)
 
 	file = g_build_filename (priv->basedir, "Status.html", NULL);
 	g_file_get_contents (file, &priv->status_html, &priv->status_len, NULL);
+	g_free (file);
+
+	file = g_build_filename (priv->basedir, "Footer.html", NULL);
+	g_file_get_contents (file, &footer_html, &footer_len, NULL);
 	g_free (file);
 
 	file = g_build_filename (priv->basedir, "Incoming", "buddy_icon.png", NULL);
@@ -173,7 +179,8 @@ theme_adium_load (EmpathyThemeAdium *theme)
 	g_string_append (string, strv[i++]);
 	g_string_append (string, ""); /* We don't want header */
 	g_string_append (string, strv[i++]);
-	g_string_append (string, ""); /* FIXME: We don't support footer yet */
+	/* FIXME: We should replace adium %macros% in footer */
+	g_string_append (string, footer_html);
 	g_string_append (string, strv[i++]);
 	priv->template_html = g_string_free (string, FALSE);
 
@@ -182,6 +189,7 @@ theme_adium_load (EmpathyThemeAdium *theme)
 					  priv->template_html, basedir_uri);
 
 	g_free (basedir_uri);
+	g_free (footer_html);
 	g_free (template_html);
 	g_free (css_path);
 	g_strfreev (strv);
