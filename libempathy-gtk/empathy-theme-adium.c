@@ -28,6 +28,7 @@
 
 #include <libempathy/empathy-time.h>
 #include <libempathy/empathy-utils.h>
+#include <libmissioncontrol/mc-profile.h>
 
 #include "empathy-theme-adium.h"
 #include "empathy-smiley-manager.h"
@@ -402,6 +403,9 @@ theme_adium_append_html (EmpathyThemeAdium *theme,
 		         const gchar       *message,
 		         const gchar       *avatar_filename,
 		         const gchar       *name,
+		         const gchar       *contact_id,
+		         const gchar       *service_name,
+		         const gchar       *message_classes,
 		         time_t             timestamp)
 {
 	GString     *string;
@@ -417,10 +421,28 @@ theme_adium_append_html (EmpathyThemeAdium *theme,
 
 		if (theme_adium_match (&cur, "%message%")) {
 			replace = message;
+		} else if (theme_adium_match (&cur, "%messageClasses%")) {
+			replace = message_classes;
 		} else if (theme_adium_match (&cur, "%userIconPath%")) {
 			replace = avatar_filename;
 		} else if (theme_adium_match (&cur, "%sender%")) {
 			replace = name;
+		} else if (theme_adium_match (&cur, "%senderScreenName%")) {
+			replace = contact_id;
+		} else if (theme_adium_match (&cur, "%senderDisplayName%")) {
+			/* %senderDisplayName% -
+			 * "The serverside (remotely set) name of the sender,
+			 *  such as an MSN display name."
+			 *
+			 * We don't have access to that yet so we use local
+			 * alias instead.*/
+			replace = name;
+		} else if (theme_adium_match (&cur, "%service%")) {
+			replace = service_name;
+		} else if (theme_adium_match (&cur, "%shortTime%")) {
+			dup_replace = empathy_time_to_string_local (timestamp,
+				EMPATHY_TIME_FORMAT_DISPLAY_SHORT);
+			replace = dup_replace;
 		} else if (theme_adium_match (&cur, "%time")) {
 			gchar *format = NULL;
 			gchar *end;
@@ -468,15 +490,20 @@ theme_adium_append_message (EmpathyChatView *view,
 	EmpathyThemeAdium     *theme = EMPATHY_THEME_ADIUM (view);
 	EmpathyThemeAdiumPriv *priv = GET_PRIV (theme);
 	EmpathyContact        *sender;
+	McAccount             *account;
+	McProfile             *account_profile;
 	gchar                 *dup_body = NULL;
 	const gchar           *body;
 	const gchar           *name;
+	const gchar           *contact_id;
 	EmpathyAvatar         *avatar;
 	const gchar           *avatar_filename = NULL;
 	time_t                 timestamp;
 	gchar                 *html = NULL;
 	gsize                  len = 0;
 	const gchar           *func;
+	const gchar           *service_name;
+	const gchar           *message_classes = NULL;
 
 	if (!priv->page_loaded) {
 		priv->message_queue = g_list_prepend (priv->message_queue,
@@ -486,6 +513,9 @@ theme_adium_append_message (EmpathyChatView *view,
 
 	/* Get information */
 	sender = empathy_message_get_sender (msg);
+	account = empathy_contact_get_account (sender);
+	account_profile = mc_account_get_profile (account);
+	service_name = mc_profile_get_display_name (account_profile);
 	timestamp = empathy_message_get_timestamp (msg);
 	body = empathy_message_get_body (msg);
 	dup_body = theme_adium_parse_body (theme, body);
@@ -493,6 +523,7 @@ theme_adium_append_message (EmpathyChatView *view,
 		body = dup_body;
 	}
 	name = empathy_contact_get_name (sender);
+	contact_id = empathy_contact_get_id (sender);
 
 	/* If this is a /me, append an event */
 	if (empathy_message_get_tptype (msg) == TP_CHANNEL_TEXT_MESSAGE_TYPE_ACTION) {
@@ -536,27 +567,36 @@ theme_adium_append_message (EmpathyChatView *view,
 	    (timestamp - priv->last_timestamp < MESSAGE_JOIN_PERIOD)) {
 		func = "appendNextMessage";
 		if (empathy_contact_is_user (sender)) {
+			message_classes = "consecutive incoming message";
 			html = priv->out_nextcontent_html;
 			len = priv->out_nextcontent_len;
 		}
 		if (!html) {
+			message_classes = "consecutive message outgoing";
 			html = priv->in_nextcontent_html;
 			len = priv->in_nextcontent_len;
 		}
 	}
 	if (!html) {
 		if (empathy_contact_is_user (sender)) {
+			if (!message_classes) {
+				message_classes = "incoming message";
+			}
 			html = priv->out_content_html;
 			len = priv->out_content_len;
 		}
 		if (!html) {
+			if (!message_classes) {
+				message_classes = "message outgoing";
+			}
 			html = priv->in_content_html;
 			len = priv->in_content_len;
 		}
 	}
 
 	theme_adium_append_html (theme, func, html, len, body, avatar_filename,
-				 name, timestamp);
+				 name, contact_id, service_name, message_classes,
+				 timestamp);
 
 	/* Keep the sender of the last displayed message */
 	if (priv->last_contact) {
@@ -578,7 +618,7 @@ theme_adium_append_event (EmpathyChatView *view,
 	if (priv->status_html) {
 		theme_adium_append_html (theme, "appendMessage",
 					 priv->status_html, priv->status_len,
-					 str, NULL, NULL,
+					 str, NULL, NULL, NULL, NULL, "event",
 					 empathy_time_get_current ());
 	}
 
