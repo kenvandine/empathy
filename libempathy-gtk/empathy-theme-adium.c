@@ -50,6 +50,8 @@ typedef struct {
 	GList                *message_queue;
 	gchar                *path;
 	gchar                *default_avatar_filename;
+	gchar                *default_incoming_avatar_filename;
+	gchar                *default_outgoing_avatar_filename;
 	gchar                *template_html;
 	gchar                *basedir;
 	gchar                *in_content_html;
@@ -113,6 +115,20 @@ theme_adium_load (EmpathyThemeAdium *theme)
 	file = g_build_filename (priv->basedir, "Status.html", NULL);
 	g_file_get_contents (file, &priv->status_html, &priv->status_len, NULL);
 	g_free (file);
+
+	file = g_build_filename (priv->basedir, "Incoming", "buddy_icon.png", NULL);
+	if (g_file_test (file, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)) {
+		priv->default_incoming_avatar_filename = file;
+	} else {
+		g_free (file);
+	}
+
+	file = g_build_filename (priv->basedir, "Outgoing", "buddy_icon.png", NULL);
+	if (g_file_test (file, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)) {
+		priv->default_outgoing_avatar_filename = file;
+	} else {
+		g_free (file);
+	}
 
 	css_path = g_build_filename (priv->basedir, "main.css", NULL);
 
@@ -495,12 +511,19 @@ theme_adium_append_message (EmpathyChatView *view,
 		avatar_filename = avatar->filename;
 	}
 	if (!avatar_filename) {
-		if (!priv->default_avatar_filename) {
-			priv->default_avatar_filename =
-				empathy_filename_from_icon_name ("stock_person",
-								 GTK_ICON_SIZE_DIALOG);
+		if (empathy_contact_is_user (sender)) {
+			avatar_filename = priv->default_outgoing_avatar_filename;
+		} else {
+			avatar_filename = priv->default_incoming_avatar_filename;
 		}
-		avatar_filename = priv->default_avatar_filename;
+		if (!avatar_filename) {
+			if (!priv->default_avatar_filename) {
+				priv->default_avatar_filename =
+					empathy_filename_from_icon_name ("stock_person",
+									 GTK_ICON_SIZE_DIALOG);
+			}
+			avatar_filename = priv->default_avatar_filename;
+		}
 	}
 
 	/* Get the right html/func to add the message */
@@ -700,6 +723,8 @@ theme_adium_finalize (GObject *object)
 	g_free (priv->out_content_html);
 	g_free (priv->out_nextcontent_html);
 	g_free (priv->default_avatar_filename);
+	g_free (priv->default_incoming_avatar_filename);
+	g_free (priv->default_outgoing_avatar_filename);
 	g_free (priv->path);
 
 	G_OBJECT_CLASS (empathy_theme_adium_parent_class)->finalize (object);
