@@ -39,9 +39,13 @@
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyThemeAdium)
 
+/* "Join" consecutive messages with timestamps within five minutes */
+#define MESSAGE_JOIN_PERIOD 5*60
+
 typedef struct {
 	EmpathySmileyManager *smiley_manager;
 	EmpathyContact       *last_contact;
+	time_t                last_timestamp;
 	gboolean              page_loaded;
 	GList                *message_queue;
 	gchar                *path;
@@ -501,7 +505,12 @@ theme_adium_append_message (EmpathyChatView *view,
 
 	/* Get the right html/func to add the message */
 	func = "appendMessage";
-	if (empathy_contact_equal (priv->last_contact, sender)) {
+	/*
+	 * To mimick Adium's behavior, we only want to join messages
+	 * sent within a 5 minute time frame.
+	 */
+	if (empathy_contact_equal (priv->last_contact, sender) &&
+	    (timestamp - priv->last_timestamp < MESSAGE_JOIN_PERIOD)) {
 		func = "appendNextMessage";
 		if (empathy_contact_is_user (sender)) {
 			html = priv->out_nextcontent_html;
@@ -531,6 +540,7 @@ theme_adium_append_message (EmpathyChatView *view,
 		g_object_unref (priv->last_contact);
 	}
 	priv->last_contact = g_object_ref (sender);
+	priv->last_timestamp = timestamp;
 
 	g_free (dup_body);
 }
