@@ -766,6 +766,7 @@ theme_adium_finalize (GObject *object)
 	g_free (priv->default_incoming_avatar_filename);
 	g_free (priv->default_outgoing_avatar_filename);
 	g_free (priv->path);
+	g_free (priv->status_html);
 
 	G_OBJECT_CLASS (empathy_theme_adium_parent_class)->finalize (object);
 }
