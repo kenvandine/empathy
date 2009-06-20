@@ -226,11 +226,15 @@ endif
 
 if HAVE_WEBKIT
 libempathy_gtk_handwritten_source +=		\
+	empathy-plist.c				\
 	empathy-theme-adium.c
 libempathy_gtk_headers +=			\
+	empathy-plist.h				\
 	empathy-theme-adium.h
 else
 EXTRA_DIST +=					\
+	empathy-plist.c				\
+	empathy-plist.h				\
 	empathy-theme-adium.c			\
 	empathy-theme-adium.h
 endif

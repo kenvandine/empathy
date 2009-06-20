@@ -34,6 +34,7 @@
 #include "empathy-smiley-manager.h"
 #include "empathy-conf.h"
 #include "empathy-ui-utils.h"
+#include "empathy-plist.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_CHAT
 #include <libempathy/empathy-debug.h>
@@ -94,6 +95,11 @@ theme_adium_load (EmpathyThemeAdium *theme)
 	guint                  len = 0;
 	guint                  i = 0;
 	gchar                 *basedir_uri;
+	GValue                *theme_info = NULL;
+	gchar                 *variant = NULL;
+	gchar                 *font_family = NULL;
+	gint                   font_size;
+	WebKitWebSettings     *webkit_settings;
 
 	priv->basedir = g_strconcat (priv->path, G_DIR_SEPARATOR_S "Contents" G_DIR_SEPARATOR_S "Resources" G_DIR_SEPARATOR_S, NULL);
 	basedir_uri = g_strconcat ("file://", priv->basedir, NULL);
@@ -161,6 +167,18 @@ theme_adium_load (EmpathyThemeAdium *theme)
 		len = g_strv_length (strv);
 	}
 
+	file = g_build_filename (priv->path, "Contents", "Info.plist", NULL);
+	theme_info = empathy_plist_parse_from_file (file);
+	g_free (file);
+
+	if (theme_info) {
+		empathy_plist_get_string (theme_info, "DefaultVariant", &variant);
+		empathy_plist_get_string (theme_info, "DefaultFontFamily", &font_family);
+		empathy_plist_get_int (theme_info, "DefaultFontSize", &font_size);
+		g_value_unset (theme_info);
+		g_free (theme_info);
+	}
+
 	/* Replace %@ with the needed information in the template html. */
 	string = g_string_sized_new (template_len);
 	g_string_append (string, strv[i++]);
@@ -170,8 +188,11 @@ theme_adium_load (EmpathyThemeAdium *theme)
 		/* We include main.css by default */
 		g_string_append_printf (string, "@import url(\"%s\");", css_path);
 		g_string_append (string, strv[i++]);
-		/* FIXME: We should set the variant css here */
-		g_string_append (string, "");
+		if (variant) {
+			g_string_append (string, "Variants/");
+			g_string_append (string, variant);
+			g_string_append (string, ".css");
+		}
 	} else {
 		/* FIXME: We should set main.css OR the variant css */
 		g_string_append (string, css_path);
@@ -185,9 +206,21 @@ theme_adium_load (EmpathyThemeAdium *theme)
 	priv->template_html = g_string_free (string, FALSE);
 
 	/* Load the template */
+	webkit_settings = webkit_web_settings_new ();
+	if (font_family) {
+		g_object_set (G_OBJECT (webkit_settings), "default-font-family", font_family, NULL);
+	}
+	if (font_size) {
+		g_object_set (G_OBJECT (webkit_settings), "default-font-size", font_size, NULL);
+	}
+
+	webkit_web_view_set_settings (WEBKIT_WEB_VIEW (theme), webkit_settings);
 	webkit_web_view_load_html_string (WEBKIT_WEB_VIEW (theme),
 					  priv->template_html, basedir_uri);
 
+	g_object_unref (webkit_settings);
+	g_free (variant);
+	g_free (font_family);
 	g_free (basedir_uri);
 	g_free (footer_html);
 	g_free (template_html);
