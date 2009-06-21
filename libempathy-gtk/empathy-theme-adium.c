@@ -202,7 +202,9 @@ theme_adium_load (EmpathyThemeAdium *theme)
 	g_string_append (string, ""); /* We don't want header */
 	g_string_append (string, strv[i++]);
 	/* FIXME: We should replace adium %macros% in footer */
-	g_string_append (string, footer_html);
+	if (footer_html) {
+		g_string_append (string, footer_html);
+	}
 	g_string_append (string, strv[i++]);
 	priv->template_html = g_string_free (string, FALSE);
 
