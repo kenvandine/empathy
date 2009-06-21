@@ -23,19 +23,12 @@
 #include <string.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
-#include <glib.h>
-#include <glib-object.h>
+#include <telepathy-glib/util.h>
+#include <telepathy-glib/dbus.h>
 
 #include "empathy-plist.h"
 
 static GValue *empathy_plist_parse_node (xmlNode *a_node);
-
-static void
-empathy_plist_value_free (GValue *val)
-{
-	g_value_unset (val);
-	g_free (val);
-}
 
 static GValue *
 empathy_plist_parse_integer (xmlNode *a_node)
@@ -43,7 +36,6 @@ empathy_plist_parse_integer (xmlNode *a_node)
 	char *str_val;
 	char *end_ptr;
 	gint int_val;
-	GValue *value;
 
 	str_val = (char *) xmlNodeGetContent (a_node);
 	int_val = strtol (str_val, &end_ptr, 0);
@@ -53,11 +45,7 @@ empathy_plist_parse_integer (xmlNode *a_node)
 	}
 	xmlFree (str_val);
 
-	value = g_new0(GValue, 1);
-	g_value_init(value, G_TYPE_INT);
-	g_value_set_int (value, int_val);
-
-	return value;
+	return tp_g_value_slice_new_int (int_val);
 }
 
 static GValue *
@@ -68,9 +56,7 @@ empathy_plist_parse_string (xmlNode *a_node)
 
 	str_val = (char *) xmlNodeGetContent (a_node);
 
-	value = g_new0 (GValue, 1);
-	g_value_init (value, G_TYPE_STRING);
-	g_value_set_string (value, str_val);
+	value = tp_g_value_slice_new_string (str_val);
 
 	xmlFree (str_val);
 
@@ -83,7 +69,6 @@ empathy_plist_parse_real (xmlNode *a_node)
 	char *str_val;
 	char *end_ptr;
 	gfloat double_val;
-	GValue *value;
 
 	str_val = (char *) xmlNodeGetContent (a_node);
 	double_val = g_ascii_strtod (str_val, &end_ptr);
@@ -93,18 +78,12 @@ empathy_plist_parse_real (xmlNode *a_node)
 	}
 	xmlFree (str_val);
 
-	value = g_new0 (GValue, 1);
-	g_value_init (value, G_TYPE_DOUBLE);
-	g_value_set_double (value, double_val);
-
-	return value;
-}
+	return tp_g_value_slice_new_double (double_val);}
 
 static GValue *
 empathy_plist_parse_boolean (xmlNode *a_node)
 {
 	gboolean bool_val;
-	GValue *value;
 
 	if (strcmp ((char *) a_node->name, "true") == 0) {
 		bool_val = TRUE;
@@ -114,11 +93,7 @@ empathy_plist_parse_boolean (xmlNode *a_node)
 		return NULL;
 	}
 
-	value = g_new0 (GValue, 1);
-	g_value_init (value, G_TYPE_BOOLEAN);
-	g_value_set_boolean (value, bool_val);
-
-	return value;
+	return tp_g_value_slice_new_int (bool_val);
 }
 
 static GValue *
@@ -127,18 +102,15 @@ empathy_plist_parse_data (xmlNode *a_node)
 	char *str_val;
 	guchar *raw_data;
 	gsize len;
-	GString *data_val;
 	GValue *value;
 
 	str_val = (char *) xmlNodeGetContent (a_node);
 	raw_data = g_base64_decode (str_val, &len);
 	xmlFree (str_val);
-	data_val = g_string_new_len ((char *) raw_data, len);
-	g_free (raw_data);
 
-	value = g_new0 (GValue, 1);
-	g_value_init(value, G_TYPE_GSTRING);
-	g_value_take_boxed (value, data_val);
+	value = tp_g_value_slice_new_bytes (len, raw_data);
+
+	g_free (raw_data);
 
 	return value;
 }
@@ -180,11 +152,10 @@ static GValue *
 empathy_plist_parse_dict (xmlNode *a_node)
 {
 	xmlNode *cur_node = a_node->children;
-	GValue *value;
 	GHashTable *dict;
 
 	dict = g_hash_table_new_full (g_str_hash, g_str_equal,
-	                              g_free, (GDestroyNotify) empathy_plist_value_free);
+				      g_free, (GDestroyNotify) tp_g_value_slice_free);
 
 	while (cur_node) {
 		if (xmlIsBlankNode (cur_node)) {
@@ -193,36 +164,27 @@ empathy_plist_parse_dict (xmlNode *a_node)
 			cur_node = empathy_plist_parse_one_dict_entry (cur_node, dict);
 		}
 	}
-	value = g_new0 (GValue, 1);
-	value = g_value_init (value, G_TYPE_HASH_TABLE);
-	g_value_take_boxed (value, dict);
 
-	return value;
+	return tp_g_value_slice_new_take_boxed (G_TYPE_HASH_TABLE, dict);
 }
-
-typedef GValue *(*ParseCallback) (xmlNode *);
-
-static ParseCallback empathy_plist_get_parser_for_type (const xmlChar *type);
 
 static GValue *
 empathy_plist_parse_array (xmlNode *a_node)
 {
 	xmlNode *cur_node = a_node->children;
-	GValue *value;
 	GValueArray *array;
 
 	array = g_value_array_new (4);
 
 	while (cur_node) {
-		if (empathy_plist_get_parser_for_type (cur_node->name)) {
-			GValue *cur_value;
-			cur_value = empathy_plist_parse_node (cur_node);
-			if (cur_value) {
-				array = g_value_array_append (array, cur_value);
-				g_value_unset (cur_value);
-				g_free (cur_value);
-			}
+		GValue *cur_value;
+
+		cur_value = empathy_plist_parse_node (cur_node);
+		if (cur_value) {
+			g_value_array_append (array, cur_value);
+			tp_g_value_slice_free (cur_value);
 		}
+
 		/* When an array contains an element enclosed in "unknown" tags (ie
 		 * non-type ones), we silently skip them since early
 		 * SysInfoExtended files used to have <key> values enclosed within
@@ -231,12 +193,10 @@ empathy_plist_parse_array (xmlNode *a_node)
 		cur_node = cur_node->next;
 	}
 
-	value = g_new0 (GValue, 1);
-	value = g_value_init (value, G_TYPE_VALUE_ARRAY);
-	g_value_take_boxed (value, array);
-
-	return value;
+	return tp_g_value_slice_new_take_boxed (G_TYPE_VALUE_ARRAY, array);
 }
+
+typedef GValue *(*ParseCallback) (xmlNode *);
 
 struct Parser {
 	const char * const type_name;
@@ -287,6 +247,7 @@ static GValue *
 empathy_plist_parse (xmlNode * a_node)
 {
 	xmlNode *cur_node;
+
 	if (!a_node) {
 		return NULL;
 	}
@@ -300,9 +261,20 @@ empathy_plist_parse (xmlNode * a_node)
 	if (cur_node) {
 		return empathy_plist_parse_node (cur_node);
 	}
+
 	return NULL;
 }
 
+/**
+ * empathy_plist_parse_from_file:
+ * @filename: file containing XML plist data to parse
+ *
+ * Parses the XML plist file. If an error occurs during the parsing,
+ * empathy_plist_parse_from_file() will return NULL.
+ *
+ * Returns: NULL on error, a newly allocated
+ * #GValue otherwise. Free it using tp_g_value_slice_free()
+ */
 GValue *
 empathy_plist_parse_from_file (const char *filename)
 {
@@ -336,7 +308,7 @@ empathy_plist_parse_from_file (const char *filename)
  * empathy_plist_parse_from_memory() will return NULL.
  *
  * Returns: NULL on error, a newly allocated
- * #GValue containing a #GHashTable otherwise.
+ * #GValue otherwise. Free it using tp_g_value_slice_free()
  */
 GValue *
 empathy_plist_parse_from_memory (const char *data, gsize len)
@@ -361,44 +333,3 @@ empathy_plist_parse_from_memory (const char *data, gsize len)
 	return parsed_doc;
 }
 
-gboolean
-empathy_plist_get_int (GValue *data, const gchar *key, gint *value)
-{
-	GHashTable *hash;
-	GValue     *entry;
-
-	if (!data || !G_VALUE_HOLDS (data, G_TYPE_HASH_TABLE)) {
-		return FALSE;
-	}
-
-	hash = g_value_get_boxed (data);
-	entry = g_hash_table_lookup (hash, key);
-
-	if (!entry || !G_VALUE_HOLDS (entry, G_TYPE_INT)) {
-		return FALSE;
-	}
-
-	*value = g_value_get_int (entry);
-	return TRUE;
-}
-
-gboolean
-empathy_plist_get_string (GValue *data, const gchar *key, gchar **value)
-{
-	GHashTable *hash;
-	GValue     *entry;
-
-	if (!data || !G_VALUE_HOLDS (data, G_TYPE_HASH_TABLE)) {
-		return FALSE;
-	}
-
-	hash = g_value_get_boxed (data);
-	entry = g_hash_table_lookup (hash, key);
-
-	if (!entry || !G_VALUE_HOLDS (entry, G_TYPE_STRING)) {
-		return FALSE;
-	}
-
-	*value = g_value_dup_string (entry);
-	return TRUE;
-}

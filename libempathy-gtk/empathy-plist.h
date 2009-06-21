@@ -21,14 +21,13 @@
 #ifndef __EMPATHY_PLIST_H__
 #define __EMPATHY_PLIST_H__
 
+#include <glib.h>
 #include <glib-object.h>
 
 G_BEGIN_DECLS
 
 GValue * empathy_plist_parse_from_file (const char *filename);
 GValue * empathy_plist_parse_from_memory (const char *data, gsize len);
-gboolean empathy_plist_get_int (GValue *data, const gchar *key, gint *value);
-gboolean empathy_plist_get_string (GValue *data, const gchar *key, gchar **value);
 
 G_END_DECLS
 

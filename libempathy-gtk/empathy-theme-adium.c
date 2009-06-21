@@ -25,6 +25,7 @@
 #include <glib/gi18n.h>
 
 #include <webkit/webkitnetworkrequest.h>
+#include <telepathy-glib/dbus.h>
 
 #include <libempathy/empathy-time.h>
 #include <libempathy/empathy-utils.h>
@@ -95,10 +96,11 @@ theme_adium_load (EmpathyThemeAdium *theme)
 	guint                  len = 0;
 	guint                  i = 0;
 	gchar                 *basedir_uri;
-	GValue                *theme_info = NULL;
-	gchar                 *variant = NULL;
-	gchar                 *font_family = NULL;
-	gint                   font_size;
+	GValue                *value;
+	GHashTable            *theme_info;
+	const gchar           *variant = NULL;
+	const gchar           *font_family = NULL;
+	gint                   font_size = 0;
 	WebKitWebSettings     *webkit_settings;
 
 	priv->basedir = g_strconcat (priv->path, G_DIR_SEPARATOR_S "Contents" G_DIR_SEPARATOR_S "Resources" G_DIR_SEPARATOR_S, NULL);
@@ -168,15 +170,14 @@ theme_adium_load (EmpathyThemeAdium *theme)
 	}
 
 	file = g_build_filename (priv->path, "Contents", "Info.plist", NULL);
-	theme_info = empathy_plist_parse_from_file (file);
+	value = empathy_plist_parse_from_file (file);
 	g_free (file);
 
-	if (theme_info) {
-		empathy_plist_get_string (theme_info, "DefaultVariant", &variant);
-		empathy_plist_get_string (theme_info, "DefaultFontFamily", &font_family);
-		empathy_plist_get_int (theme_info, "DefaultFontSize", &font_size);
-		g_value_unset (theme_info);
-		g_free (theme_info);
+	if (value) {
+		theme_info = g_value_get_boxed (value);
+		variant = tp_asv_get_string (theme_info, "DefaultVariant");
+		font_family = tp_asv_get_string (theme_info, "DefaultFontFamily");
+		font_size = tp_asv_get_int32 (theme_info, "DefaultFontSize", NULL);
 	}
 
 	/* Replace %@ with the needed information in the template html. */
@@ -219,8 +220,6 @@ theme_adium_load (EmpathyThemeAdium *theme)
 					  priv->template_html, basedir_uri);
 
 	g_object_unref (webkit_settings);
-	g_free (variant);
-	g_free (font_family);
 	g_free (basedir_uri);
 	g_free (footer_html);
 	g_free (template_html);
