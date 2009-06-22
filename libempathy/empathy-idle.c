@@ -91,6 +91,10 @@ idle_presence_changed_cb (MissionControl *mc,
 
 	priv = GET_PRIV (idle);
 
+	if (state == TP_CONNECTION_PRESENCE_TYPE_UNSET)
+		/* Assume our presence is offline if MC reports UNSET */
+		state = TP_CONNECTION_PRESENCE_TYPE_OFFLINE;
+
 	DEBUG ("Presence changed to '%s' (%d)", status, state);
 
 	g_free (priv->status);
