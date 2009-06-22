@@ -68,7 +68,7 @@ empathy_plist_parse_real (xmlNode *a_node)
 {
 	char *str_val;
 	char *end_ptr;
-	gfloat double_val;
+	gdouble double_val;
 
 	str_val = (char *) xmlNodeGetContent (a_node);
 	double_val = g_ascii_strtod (str_val, &end_ptr);
@@ -78,7 +78,8 @@ empathy_plist_parse_real (xmlNode *a_node)
 	}
 	xmlFree (str_val);
 
-	return tp_g_value_slice_new_double (double_val);}
+	return tp_g_value_slice_new_double (double_val);
+}
 
 static GValue *
 empathy_plist_parse_boolean (xmlNode *a_node)
@@ -93,7 +94,7 @@ empathy_plist_parse_boolean (xmlNode *a_node)
 		return NULL;
 	}
 
-	return tp_g_value_slice_new_int (bool_val);
+	return tp_g_value_slice_new_boolean (bool_val);
 }
 
 static GValue *
