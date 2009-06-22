@@ -957,7 +957,7 @@ preferences_theme_adium_update_validity (EmpathyPreferences *preferences,
 					 const gchar        *path)
 {
 #ifdef HAVE_WEBKIT
-	if (empathy_theme_adium_is_valid (path)) {
+	if (empathy_adium_path_is_valid (path)) {
 		gtk_widget_hide (preferences->label_invalid_adium_theme);
 	} else {
 		gtk_widget_show (preferences->label_invalid_adium_theme);

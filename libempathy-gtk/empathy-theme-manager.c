@@ -329,8 +329,28 @@ empathy_theme_manager_create_view (EmpathyThemeManager *manager)
 
 #ifdef HAVE_WEBKIT
 	if (strcmp (priv->name, "adium") == 0)  {
-		if (empathy_theme_adium_is_valid (priv->adium_path)) {
-			return EMPATHY_CHAT_VIEW (empathy_theme_adium_new (priv->adium_path));
+		if (empathy_adium_path_is_valid (priv->adium_path)) {
+			static EmpathyAdiumData *data = NULL;
+			EmpathyThemeAdium *theme_adium;
+
+			if (data &&
+			    !tp_strdiff (empathy_adium_data_get_path (data),
+					 priv->adium_path)) {
+				/* Theme did not change, reuse data */
+				theme_adium = empathy_theme_adium_new (data);
+				return EMPATHY_CHAT_VIEW (theme_adium);
+			}
+
+			/* Theme changed, drop old data if any and
+			 * load a new one */
+			if (data) {
+				empathy_adium_data_unref (data);
+				data = NULL;
+			}
+
+			data = empathy_adium_data_new (priv->adium_path);
+			theme_adium = empathy_theme_adium_new (data);
+			return EMPATHY_CHAT_VIEW (theme_adium);
 		} else {
 			/* The adium path is not valid, fallback to classic theme */
 			return EMPATHY_CHAT_VIEW (theme_manager_create_irc_view (manager));
