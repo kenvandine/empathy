@@ -769,7 +769,8 @@ empathy_theme_adium_class_init (EmpathyThemeAdiumClass *klass)
 							     "Data for the adium theme",
 							      EMPATHY_TYPE_ADIUM_DATA,
 							      G_PARAM_CONSTRUCT_ONLY |
-							      G_PARAM_READWRITE));
+							      G_PARAM_READWRITE |
+							      G_PARAM_STATIC_STRINGS));
 
 
 	g_type_class_add_private (object_class, sizeof (EmpathyThemeAdiumPriv));
@@ -824,6 +825,27 @@ empathy_adium_path_is_valid (const gchar *path)
 	return ret;
 }
 
+GHashTable *
+empathy_adium_info_new (const gchar *path)
+{
+	gchar *file;
+	GValue *value;
+	GHashTable *info = NULL;
+
+	g_return_val_if_fail (empathy_adium_path_is_valid (path), NULL);
+
+	file = g_build_filename (path, "Contents", "Info.plist", NULL);
+	value = empathy_plist_parse_from_file (file);
+	g_free (file);
+
+	if (value) {
+		info = g_value_dup_boxed (value);
+		tp_g_value_slice_free (value);
+	}
+
+	return info;
+}
+
 GType
 empathy_adium_data_get_type (void)
 {
@@ -840,7 +862,7 @@ empathy_adium_data_get_type (void)
 }
 
 EmpathyAdiumData  *
-empathy_adium_data_new (const gchar *path)
+empathy_adium_data_new_with_info (const gchar *path, GHashTable *info)
 {
 	EmpathyAdiumData *data;
 	gchar            *file;
@@ -853,7 +875,6 @@ empathy_adium_data_new (const gchar *path)
 	gchar            *css_path;
 	guint             len = 0;
 	guint             i = 0;
-	GValue           *value;
 
 	g_return_val_if_fail (empathy_adium_path_is_valid (path), NULL);
 
@@ -862,6 +883,7 @@ empathy_adium_data_new (const gchar *path)
 	data->path = g_strdup (path);
 	data->basedir = g_strconcat (path, G_DIR_SEPARATOR_S "Contents"
 		G_DIR_SEPARATOR_S "Resources" G_DIR_SEPARATOR_S, NULL);
+	data->info = g_hash_table_ref (info);
 
 	/* Load html files */
 	file = g_build_filename (data->basedir, "Incoming", "Content.html", NULL);
@@ -926,15 +948,6 @@ empathy_adium_data_new (const gchar *path)
 		len = g_strv_length (strv);
 	}
 
-	/* Load Info.plist into a hash table */
-	file = g_build_filename (data->path, "Contents", "Info.plist", NULL);
-	value = empathy_plist_parse_from_file (file);
-	g_free (file);
-	if (value) {
-		data->info = g_value_dup_boxed (value);
-		tp_g_value_slice_free (value);
-	}
-
 	/* Replace %@ with the needed information in the template html. */
 	string = g_string_sized_new (template_len);
 	g_string_append (string, strv[i++]);
@@ -970,6 +983,19 @@ empathy_adium_data_new (const gchar *path)
 	g_free (template_html);
 	g_free (css_path);
 	g_strfreev (strv);
+
+	return data;
+}
+
+EmpathyAdiumData  *
+empathy_adium_data_new (const gchar *path)
+{
+	EmpathyAdiumData *data;
+	GHashTable *info;
+
+	info = empathy_adium_info_new (path);
+	data = empathy_adium_data_new_with_info (path, info);
+	g_hash_table_unref (info);
 
 	return data;
 }

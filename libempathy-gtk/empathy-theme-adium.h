@@ -52,14 +52,18 @@ GType              empathy_theme_adium_get_type (void) G_GNUC_CONST;
 EmpathyThemeAdium *empathy_theme_adium_new      (EmpathyAdiumData *data);
 
 gboolean           empathy_adium_path_is_valid (const gchar *path);
+GHashTable        *empathy_adium_info_new (const gchar *path);
 
 #define EMPATHY_TYPE_ADIUM_DATA (empathy_adium_data_get_type ())
 GType              empathy_adium_data_get_type (void) G_GNUC_CONST;
 EmpathyAdiumData  *empathy_adium_data_new (const gchar *path);
+EmpathyAdiumData  *empathy_adium_data_new_with_info (const gchar *path,
+						     GHashTable *info);
 EmpathyAdiumData  *empathy_adium_data_ref (EmpathyAdiumData *data);
 void               empathy_adium_data_unref (EmpathyAdiumData *data);
 GHashTable        *empathy_adium_data_get_info (EmpathyAdiumData *data);
 const gchar       *empathy_adium_data_get_path (EmpathyAdiumData *data);
+
 
 G_END_DECLS
 
