@@ -15,7 +15,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this code; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include "config.h"
@@ -124,7 +124,7 @@ empathy_plist_parse_one_dict_entry (xmlNode *a_node, GHashTable *dict)
 	GValue *value;
 
 	while (cur_node &&
-	       (xmlStrcmp(cur_node->name, (xmlChar *) "key") != 0)) {
+	       (xmlStrcmp (cur_node->name, (xmlChar *) "key") != 0)) {
 		cur_node = cur_node->next;
 	}
 	if (!cur_node) {
@@ -293,8 +293,8 @@ empathy_plist_parse_from_file (const char *filename)
 
 	parsed_doc = empathy_plist_parse (root_element);
 
-	xmlFreeDoc(doc);
-	xmlCleanupParser();
+	xmlFreeDoc (doc);
+	xmlCleanupParser ();
 
 	return parsed_doc;
 }
@@ -328,8 +328,8 @@ empathy_plist_parse_from_memory (const char *data, gsize len)
 
 	parsed_doc = empathy_plist_parse (root_element);
 
-	xmlFreeDoc(doc);
-	xmlCleanupParser();
+	xmlFreeDoc (doc);
+	xmlCleanupParser ();
 
 	return parsed_doc;
 }
