@@ -1006,7 +1006,7 @@ event_manager_presence_changed_cb (EmpathyContactMonitor *monitor,
           TP_CONNECTION_PRESENCE_TYPE_OFFLINE) <= 0)
         {
           /* someone is logging off */
-          header = g_strdup_printf (_("%s signed out."),
+          header = g_strdup_printf (_("%s is now offline."),
             empathy_contact_get_name (contact));
 
           event_manager_add (manager, contact, GTK_STOCK_DIALOG_INFO, header,
@@ -1022,7 +1022,7 @@ event_manager_presence_changed_cb (EmpathyContactMonitor *monitor,
           TP_CONNECTION_PRESENCE_TYPE_OFFLINE) > 0)
         {
           /* someone is logging in */
-          header = g_strdup_printf (_("%s signed in."),
+          header = g_strdup_printf (_("%s is now online."),
             empathy_contact_get_name (contact));
 
           event_manager_add (manager, contact, GTK_STOCK_DIALOG_INFO, header,
