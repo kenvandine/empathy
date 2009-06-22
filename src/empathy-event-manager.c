@@ -52,6 +52,8 @@
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyEventManager)
 
+#define NOTIFICATION_TIMEOUT 2 /* seconds */
+
 typedef struct {
   EmpathyEventManager *manager;
   EmpathyDispatchOperation *operation;
@@ -282,7 +284,8 @@ event_manager_add (EmpathyEventManager *manager, EmpathyContact *contact,
 
   if (!event->public.must_ack)
     {
-      g_timeout_add_seconds (2, (GSourceFunc)autoremove_event_timeout_cb, event);
+      g_timeout_add_seconds (NOTIFICATION_TIMEOUT,
+        (GSourceFunc) autoremove_event_timeout_cb, event);
     }
 }
 
@@ -973,10 +976,10 @@ event_manager_pendings_changed_cb (EmpathyContactList  *list,
 
 static void
 event_manager_presence_changed_cb (EmpathyContactMonitor *monitor,
-                                   EmpathyContact *contact,
-                                   TpConnectionPresenceType current,
-                                   TpConnectionPresenceType previous,
-                                   EmpathyEventManager *manager)
+    EmpathyContact *contact,
+    TpConnectionPresenceType current,
+    TpConnectionPresenceType previous,
+    EmpathyEventManager *manager)
 {
   McAccount *account;
   gboolean just_connected;
@@ -990,9 +993,8 @@ event_manager_presence_changed_cb (EmpathyContactMonitor *monitor,
                   account_manager, account);
 
   g_object_unref (account_manager);
-  if (just_connected) {
+  if (just_connected)
     return;
-  }
 
   if (tp_connection_presence_type_cmp_availability (previous,
      TP_CONNECTION_PRESENCE_TYPE_OFFLINE) > 0)
@@ -1109,8 +1111,8 @@ empathy_event_manager_init (EmpathyEventManager *manager)
 {
   EmpathyEventManagerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
     EMPATHY_TYPE_EVENT_MANAGER, EmpathyEventManagerPriv);
-  EmpathyContactMonitor   *monitor;
-  EmpathyContactList      *list_iface;
+  EmpathyContactMonitor *monitor;
+  EmpathyContactList *list_iface;
 
   list_iface = EMPATHY_CONTACT_LIST (empathy_contact_manager_dup_singleton ());
   monitor = empathy_contact_list_get_monitor (list_iface);
