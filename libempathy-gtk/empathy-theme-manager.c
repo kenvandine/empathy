@@ -252,7 +252,7 @@ theme_manager_update_boxes_tags (EmpathyThemeBoxes *theme,
 }
 
 static void
-theme_manager_update_simple_tags (EmpathyThemeBoxes *theme)
+on_style_set_cb (GtkWidget *widget, GtkStyle *previous_style, gpointer data)
 {
 	GtkStyle *style;
 	gchar     color1[10];
@@ -260,14 +260,14 @@ theme_manager_update_simple_tags (EmpathyThemeBoxes *theme)
 	gchar     color3[10];
 	gchar     color4[10];
 
-	style = gtk_widget_get_default_style ();
+	style = gtk_widget_get_style (GTK_WIDGET (widget));
 
 	theme_manager_gdk_color_to_hex (&style->base[GTK_STATE_SELECTED], color1);
 	theme_manager_gdk_color_to_hex (&style->bg[GTK_STATE_SELECTED], color2);
 	theme_manager_gdk_color_to_hex (&style->dark[GTK_STATE_SELECTED], color3);
 	theme_manager_gdk_color_to_hex (&style->fg[GTK_STATE_SELECTED], color4);
 
-	theme_manager_update_boxes_tags (theme,
+	theme_manager_update_boxes_tags (EMPATHY_THEME_BOXES (widget),
 					 color4,     /* header_foreground */
 					 color2,     /* header_background */
 					 color3,     /* header_line_background */
@@ -287,7 +287,8 @@ theme_manager_update_boxes_theme (EmpathyThemeManager *manager,
 	EmpathyThemeManagerPriv *priv = GET_PRIV (manager);
 
 	if (strcmp (priv->name, "simple") == 0) {
-		theme_manager_update_simple_tags (theme);
+		g_signal_connect (G_OBJECT (theme), "style-set",
+				  G_CALLBACK (on_style_set_cb), theme);
 	}
 	else if (strcmp (priv->name, "clean") == 0) {
 		theme_manager_update_boxes_tags (theme,
@@ -366,25 +367,6 @@ empathy_theme_manager_create_view (EmpathyThemeManager *manager)
 	theme_manager_update_boxes_theme (manager, theme);
 
 	return EMPATHY_CHAT_VIEW (theme);
-}
-
-static void
-theme_manager_color_hash_notify_cb (EmpathyThemeManager *manager)
-{
-	EmpathyThemeManagerPriv *priv = GET_PRIV (manager);
-
-	/* FIXME: Make that work, it should update color when theme changes but
-	 * it doesnt seems to work with all themes. */
-
-	if (strcmp (priv->name, "simple") == 0) {
-		GList *l;
-
-		/* We are using the simple theme which use the GTK theme color,
-		 * Update views to use the new color. */
-		for (l = priv->boxes_views; l; l = l->next) {
-			theme_manager_update_simple_tags (EMPATHY_THEME_BOXES (l->data));
-		}
-	}
 }
 
 static gboolean
@@ -532,12 +514,6 @@ empathy_theme_manager_init (EmpathyThemeManager *manager)
 	theme_manager_notify_adium_path_cb (empathy_conf_get (),
 					    EMPATHY_PREFS_CHAT_ADIUM_PATH,
 					    manager);
-
-	/* Track GTK color changes */
-	priv->settings = gtk_settings_get_default ();
-	g_signal_connect_swapped (priv->settings, "notify::color-hash",
-				  G_CALLBACK (theme_manager_color_hash_notify_cb),
-				  manager);
 }
 
 EmpathyThemeManager *
