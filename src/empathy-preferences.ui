@@ -312,7 +312,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="checkbutton_notifications_contact_signin">
-                            <property name="label" translatable="yes">Enable notifications when a contact signs in</property>
+                            <property name="label" translatable="yes">Enable notifications when a contact comes online</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -325,7 +325,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="checkbutton_notifications_contact_signout">
-                            <property name="label" translatable="yes">Enable notifications when a contact signs out</property>
+                            <property name="label" translatable="yes">Enable notifications when a contact goes offline</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
