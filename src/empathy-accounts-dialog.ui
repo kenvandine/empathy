@@ -23,15 +23,14 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkScrolledWindow" id="scrolledwindow17">
+                    <property name="height_request">200</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="hscrollbar_policy">automatic</property>
+                    <property name="hscrollbar_policy">never</property>
                     <property name="vscrollbar_policy">automatic</property>
                     <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkTreeView" id="treeview">
-                        <property name="width_request">250</property>
-                        <property name="height_request">200</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="enable_search">False</property>
@@ -143,7 +142,6 @@
             </child>
             <child>
               <object class="GtkVBox" id="vbox214">
-                <property name="width_request">415</property>
                 <property name="visible">True</property>
                 <property name="spacing">18</property>
                 <child>

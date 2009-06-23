@@ -417,6 +417,7 @@ accounts_dialog_model_add_columns (EmpathyAccountsDialog *dialog)
 	cell = gtk_cell_renderer_text_new ();
 	g_object_set (cell,
 		      "ellipsize", PANGO_ELLIPSIZE_END,
+		      "width-chars", 25,
 		      "editable", TRUE,
 		      NULL);
 	gtk_tree_view_column_pack_start (column, cell, TRUE);
