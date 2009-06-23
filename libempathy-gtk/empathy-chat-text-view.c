@@ -336,10 +336,16 @@ chat_text_view_is_scrolled_down (EmpathyChatTextView *view)
 	sw = gtk_widget_get_parent (GTK_WIDGET (view));
 	if (GTK_IS_SCROLLED_WINDOW (sw)) {
 		GtkAdjustment *vadj;
-		
+		gdouble value;
+		gdouble upper;
+		gdouble page_size;
+
 		vadj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (sw));
-		
-		if (vadj->value + vadj->page_size / 2 < vadj->upper - vadj->page_size) {
+		value = gtk_adjustment_get_value (vadj);
+		upper = gtk_adjustment_get_upper (vadj);
+		page_size = gtk_adjustment_get_page_size (vadj);
+
+		if (value < upper - page_size) {
 			return FALSE;
 		}
 	}
