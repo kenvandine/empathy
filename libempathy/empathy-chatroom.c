@@ -407,11 +407,11 @@ empathy_chatroom_get_name (EmpathyChatroom *chatroom)
 	g_return_val_if_fail (EMPATHY_IS_CHATROOM (chatroom), NULL);
 
 	priv = GET_PRIV (chatroom);
-	
+
 	if (EMP_STR_EMPTY (priv->name)) {
 		return priv->room;
 	}
-	
+
 	return priv->name;
 }
 
