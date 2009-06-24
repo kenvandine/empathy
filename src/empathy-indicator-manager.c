@@ -212,7 +212,7 @@ indicator_manager_finalize (GObject *object)
           NULL);
   g_object_unref (priv->event_manager);
   g_object_unref (priv->indicate_server);
-  g_object_unref (priv->login_timeouts);
+  g_hash_table_unref (priv->login_timeouts);
 }
 
 static GObject *
