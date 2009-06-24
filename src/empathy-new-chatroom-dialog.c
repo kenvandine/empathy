@@ -362,7 +362,7 @@ new_chatroom_dialog_update_widgets (EmpathyNewChatroomDialog *dialog)
 	McProfile             *profile;
 	const gchar           *protocol;
 	const gchar           *room;
-	
+
 	account_chooser = EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser);
 	account = empathy_account_chooser_dup_account (account_chooser);
 	profile = mc_account_get_profile (account);
@@ -545,7 +545,7 @@ new_chatroom_dialog_listing_cb (EmpathyTpRoomlist        *room_list,
 
 	/* Update the throbber */
 	if (listing) {
-		ephy_spinner_start (EPHY_SPINNER (dialog->throbber));		
+		ephy_spinner_start (EPHY_SPINNER (dialog->throbber));
 	} else {
 		ephy_spinner_stop (EPHY_SPINNER (dialog->throbber));
 	}
@@ -572,7 +572,7 @@ new_chatroom_dialog_model_row_activated_cb (GtkTreeView             *tree_view,
 static void
 new_chatroom_dialog_model_selection_changed (GtkTreeSelection         *selection,
 					     EmpathyNewChatroomDialog *dialog)
-{	
+{
 	GtkTreeModel *model;
 	GtkTreeIter   iter;
 	gchar        *room = NULL;
