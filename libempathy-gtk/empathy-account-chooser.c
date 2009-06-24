@@ -361,7 +361,7 @@ empathy_account_chooser_get_has_all_option (EmpathyAccountChooser *chooser)
 	g_return_val_if_fail (EMPATHY_IS_ACCOUNT_CHOOSER (chooser), FALSE);
 
 	priv = GET_PRIV (chooser);
-	
+
 	return priv->has_all_option;
 }
 
@@ -653,11 +653,11 @@ account_chooser_separator_func (GtkTreeModel         *model,
 	gboolean                  is_separator;
 
 	priv = GET_PRIV (chooser);
-	
+
 	if (!priv->has_all_option) {
 		return FALSE;
 	}
-	
+
 	gtk_tree_model_get (model, iter, COL_ACCOUNT_TEXT, &text, -1);
 	is_separator = text == NULL;
 	g_free (text);
