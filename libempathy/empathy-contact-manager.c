@@ -123,7 +123,7 @@ contact_manager_invalidated_cb (TpProxy *connection,
 	list = g_hash_table_lookup (priv->lists, connection);
 	if (list) {
 		empathy_tp_contact_list_remove_all (list);
-		g_hash_table_remove (priv->lists, connection);		
+		g_hash_table_remove (priv->lists, connection);
 	}
 }
 
@@ -499,7 +499,7 @@ contact_manager_remove_group (EmpathyContactList *manager,
 			      const gchar *group)
 {
 	EmpathyContactManagerPriv *priv = GET_PRIV (manager);
-	
+
 	g_return_if_fail (EMPATHY_IS_CONTACT_MANAGER (manager));
 
 	g_hash_table_foreach (priv->lists,
@@ -529,7 +529,7 @@ empathy_contact_manager_can_add (EmpathyContactManager *manager,
 {
 	EmpathyContactManagerPriv *priv = GET_PRIV (manager);
 	EmpathyTpContactList      *list;
-	
+
 	g_return_val_if_fail (EMPATHY_IS_CONTACT_MANAGER (manager), FALSE);
 
 	list = g_hash_table_lookup (priv->lists, connection);
