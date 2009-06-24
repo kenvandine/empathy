@@ -285,13 +285,13 @@ create_salut_account (void)
 
 	account = mc_account_create (profile);
 	mc_account_set_display_name (account, _("People nearby"));
-	
+
 	nickname = e_contact_get (contact, E_CONTACT_NICKNAME);
 	first_name = e_contact_get (contact, E_CONTACT_GIVEN_NAME);
 	last_name = e_contact_get (contact, E_CONTACT_FAMILY_NAME);
 	email = e_contact_get (contact, E_CONTACT_EMAIL_1);
 	jid = e_contact_get (contact, E_CONTACT_IM_JABBER_HOME_1);
-	
+
 	if (!tp_strdiff (nickname, "nickname")) {
 		g_free (nickname);
 		nickname = NULL;
@@ -603,7 +603,7 @@ main (int argc, char *argv[])
 			(idle), TP_CONNECTION_PRESENCE_TYPE_OFFLINE) <= 0) {
 		empathy_idle_set_state (idle, MC_PRESENCE_AVAILABLE);
 	}
-	
+
 	create_salut_account ();
 
 	/* Setting up UI */
