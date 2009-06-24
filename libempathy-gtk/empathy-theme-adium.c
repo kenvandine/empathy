@@ -113,12 +113,12 @@ theme_adium_populate_popup_cb (WebKitWebView *view,
 	/* Remove default menu items */
 	gtk_container_foreach (GTK_CONTAINER (menu),
 		(GtkCallback) gtk_widget_destroy, NULL);
-	
+
 	/* Select all item */
 	item = gtk_image_menu_item_new_from_stock (GTK_STOCK_SELECT_ALL, NULL);
 	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
-		
+
 	g_signal_connect_swapped (item, "activate",
 				  G_CALLBACK (webkit_web_view_select_all),
 				  view);
@@ -128,7 +128,7 @@ theme_adium_populate_popup_cb (WebKitWebView *view,
 		item = gtk_image_menu_item_new_from_stock (GTK_STOCK_COPY, NULL);
 		gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 		gtk_widget_show (item);
-		
+
 		g_signal_connect_swapped (item, "activate",
 					  G_CALLBACK (webkit_web_view_copy_clipboard),
 					  view);
@@ -138,11 +138,11 @@ theme_adium_populate_popup_cb (WebKitWebView *view,
 	item = gtk_separator_menu_item_new ();
 	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
-		
+
 	item = gtk_image_menu_item_new_from_stock (GTK_STOCK_CLEAR, NULL);
 	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
-		
+
 	g_signal_connect_swapped (item, "activate",
 				  G_CALLBACK (empathy_chat_view_clear),
 				  view);
@@ -266,7 +266,7 @@ escape_and_append_len (GString *string, const gchar *str, gint len)
 		switch (*str) {
 		case '\\':
 			/* \ becomes \\ */
-			g_string_append (string, "\\\\");	
+			g_string_append (string, "\\\\");
 			break;
 		case '\"':
 			/* " becomes \" */
@@ -755,7 +755,7 @@ static void
 empathy_theme_adium_class_init (EmpathyThemeAdiumClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	
+
 	object_class->finalize = theme_adium_finalize;
 	object_class->dispose = theme_adium_dispose;
 	object_class->constructed = theme_adium_constructed;
@@ -782,7 +782,7 @@ empathy_theme_adium_init (EmpathyThemeAdium *theme)
 	EmpathyThemeAdiumPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (theme,
 		EMPATHY_TYPE_THEME_ADIUM, EmpathyThemeAdiumPriv);
 
-	theme->priv = priv;	
+	theme->priv = priv;
 
 	priv->smiley_manager = empathy_smiley_manager_dup_singleton ();
 
