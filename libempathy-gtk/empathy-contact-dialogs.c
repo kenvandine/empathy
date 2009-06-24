@@ -398,7 +398,7 @@ empathy_new_contact_dialog_show (GtkWindow *parent)
 				      button,
 				      GTK_RESPONSE_CANCEL);
 	gtk_widget_show (button);
-	
+
 	/* Add button */
 	button = gtk_button_new_with_label (GTK_STOCK_ADD);
 	gtk_button_set_use_stock (GTK_BUTTON (button), TRUE);
