@@ -261,7 +261,7 @@ status_icon_event_removed_cb (EmpathyEventManager *manager,
 
 	/* update notification anyway, as it's safe and we might have been
 	 * changed presence in the meanwhile
-	 */	
+	 */
 	status_icon_update_notification (icon);
 
 	if (!priv->event && priv->blink_timeout) {
@@ -379,7 +379,7 @@ status_icon_key_press_event_cb  (GtkWidget *window,
 	}
 	return FALSE;
 }
-				
+
 static void
 status_icon_activate_cb (GtkStatusIcon     *status_icon,
 			 EmpathyStatusIcon *icon)
