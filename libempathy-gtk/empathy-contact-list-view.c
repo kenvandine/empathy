@@ -121,7 +121,7 @@ contact_list_view_tooltip_destroy_cb (GtkWidget              *widget,
 				      EmpathyContactListView *view)
 {
 	EmpathyContactListViewPriv *priv = GET_PRIV (view);
-	
+
 	if (priv->tooltip_widget) {
 		DEBUG ("Tooltip destroyed");
 		g_object_unref (priv->tooltip_widget);
@@ -230,7 +230,7 @@ contact_list_view_drag_got_contact (EmpathyTpContactFactory *factory,
 	if (data->new_group) {
 		empathy_contact_list_add_to_group (list, contact, data->new_group);
 	}
-	if (data->old_group && data->action == GDK_ACTION_MOVE) {	
+	if (data->old_group && data->action == GDK_ACTION_MOVE) {
 		empathy_contact_list_remove_from_group (list, contact, data->old_group);
 	}
 }
@@ -1272,7 +1272,7 @@ empathy_contact_list_view_new (EmpathyContactListStore        *store,
 			       EmpathyContactFeatureFlags      contact_features)
 {
 	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST_STORE (store), NULL);
-	
+
 	return g_object_new (EMPATHY_TYPE_CONTACT_LIST_VIEW,
 			     "store", store,
 			     "contact-features", contact_features,
@@ -1344,7 +1344,7 @@ contact_list_view_remove_dialog_show (GtkWindow   *parent,
 {
 	GtkWidget *dialog;
 	gboolean res;
-	
+
 	dialog = gtk_message_dialog_new (parent, GTK_DIALOG_MODAL,
 					 GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
 					 "%s", message);
@@ -1446,7 +1446,7 @@ contact_list_view_remove_activate_cb (GtkMenuItem            *menuitem,
 {
 	EmpathyContactListViewPriv *priv = GET_PRIV (view);
 	EmpathyContact             *contact;
-		
+
 	contact = empathy_contact_list_view_dup_selected (view);
 
 	if (contact) {
@@ -1455,7 +1455,7 @@ contact_list_view_remove_activate_cb (GtkMenuItem            *menuitem,
 
 		parent = empathy_get_toplevel_window (GTK_WIDGET (view));
 		text = g_strdup_printf (_("Do you really want to remove the contact '%s'?"),
-					empathy_contact_get_name (contact));						
+					empathy_contact_get_name (contact));
 		if (contact_list_view_remove_dialog_show (parent, _("Removing contact"), text)) {
 			EmpathyContactList *list;
 
