@@ -42,7 +42,7 @@ empathy_time_get_local_time (struct tm *tm)
 {
 	const gchar *timezone;
 	time_t       t;
-	
+
 	timezone = g_getenv ("TZ");
 	g_setenv ("TZ", "", TRUE);
 
