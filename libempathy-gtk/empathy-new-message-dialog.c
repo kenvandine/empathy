@@ -239,7 +239,7 @@ new_message_change_state_button_cb  (GtkEditable             *editable,
 
 	id = gtk_entry_get_text (GTK_ENTRY (editable));
 	sensitive = !EMP_STR_EMPTY (id);
-	
+
 	gtk_widget_set_sensitive (dialog->button_chat, sensitive);
 	gtk_widget_set_sensitive (dialog->button_call, sensitive);
 }
