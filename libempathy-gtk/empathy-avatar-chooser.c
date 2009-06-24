@@ -810,14 +810,14 @@ avatar_chooser_drag_data_received_cb (GtkWidget          *widget,
 
 		if (input_stream != NULL) {
 			GFileInfo *info;
-			
+
 			info = g_file_query_info (file,
 						  G_FILE_ATTRIBUTE_STANDARD_SIZE,
 						  0, NULL, NULL);
 			if (info != NULL) {
 				goffset size;
 				gssize bytes_read;
-				
+
 				size = g_file_info_get_size (info);
 				data = g_malloc (size);
 
@@ -838,7 +838,7 @@ avatar_chooser_drag_data_received_cb (GtkWidget          *widget,
 
 			g_object_unref (input_stream);
 		}
-		
+
 		g_object_unref (file);
 	}
 
