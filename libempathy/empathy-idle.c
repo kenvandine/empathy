@@ -733,7 +733,7 @@ empathy_idle_set_use_nm (EmpathyIdle *idle,
 			g_clear_error (&error);
 			nm_status = NM_STATE_ASLEEP;
 		}
-		
+
 		idle_nm_state_change_cb (priv->nm_proxy, nm_status, idle);
 	} else {
 		priv->nm_connected = TRUE;
