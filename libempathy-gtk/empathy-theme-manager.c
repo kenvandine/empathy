@@ -193,7 +193,7 @@ theme_manager_update_boxes_tags (EmpathyThemeBoxes *theme,
 
 	/* FIXME: GtkTextTag don't support to set color properties to NULL.
 	 * See bug #542523 */
-	
+
 	#define TAG_SET(prop, prop_set, value) \
 		if (value != NULL) { \
 			g_object_set (tag, prop, value, NULL); \
