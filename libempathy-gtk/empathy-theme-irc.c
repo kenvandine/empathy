@@ -83,7 +83,7 @@ theme_irc_append_message (EmpathyChatTextView *view,
 			nick_tag = EMPATHY_THEME_IRC_TAG_NICK_OTHER;
 		}
 	}
-		
+
 	gtk_text_buffer_get_end_iter (buffer, &iter);
 
 	/* The nickname. */
