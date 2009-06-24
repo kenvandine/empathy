@@ -167,7 +167,7 @@ table_size_allocate_cb (GtkWidget     *view,
         gtk_widget_get_size_request (box, NULL, &height);
 
 	width = allocation->width;
-	
+
 	width -= \
 		gtk_text_view_get_right_margin (GTK_TEXT_VIEW (view)) - \
 		gtk_text_view_get_left_margin (GTK_TEXT_VIEW (view));
@@ -269,7 +269,7 @@ theme_boxes_maybe_append_header (EmpathyThemeBoxes *theme,
 			       NULL);
 	g_free (tmp);
 	g_free (str);
-	
+
 	/* Set foreground color of labels to the same color than the header tag. */
 	table = gtk_text_buffer_get_tag_table (buffer);
 	tag = gtk_text_tag_table_lookup (table, EMPATHY_THEME_BOXES_TAG_HEADER);
@@ -349,7 +349,7 @@ theme_boxes_notify_show_avatars_cb (EmpathyConf *conf,
 				    gpointer     user_data)
 {
 	EmpathyThemeBoxesPriv *priv = GET_PRIV (user_data);
-	
+
 	empathy_conf_get_bool (conf, key, &priv->show_avatars);
 }
 
