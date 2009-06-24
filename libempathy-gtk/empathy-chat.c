@@ -207,7 +207,7 @@ chat_new_connection_cb (EmpathyAccountManager *manager,
 	if (!priv->tp_chat && empathy_account_equal (account, priv->account) &&
 	    priv->handle_type != TP_HANDLE_TYPE_NONE &&
 	    !EMP_STR_EMPTY (priv->id)) {
-		
+
 		DEBUG ("Account reconnected, request a new Text channel");
 
 		switch (priv->handle_type) {
@@ -302,7 +302,7 @@ chat_sent_message_add (EmpathyChat  *chat,
 
 	/* Save the sent message in our repeat buffer */
 	list = priv->sent_messages;
-	
+
 	/* Remove any other occurances of this msg */
 	while ((item = g_slist_find_custom (list, str, (GCompareFunc) strcmp)) != NULL) {
 		list = g_slist_remove_link (list, item);
@@ -333,7 +333,7 @@ chat_sent_message_get_next (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv;
 	gint            max;
-	
+
 	priv = GET_PRIV (chat);
 
 	if (!priv->sent_messages) {
@@ -346,7 +346,7 @@ chat_sent_message_get_next (EmpathyChat *chat)
 	if (priv->sent_messages_index < max) {
 		priv->sent_messages_index++;
 	}
-	
+
 	DEBUG ("Returning next message index:%d", priv->sent_messages_index);
 
 	return g_slist_nth_data (priv->sent_messages, priv->sent_messages_index);
@@ -360,7 +360,7 @@ chat_sent_message_get_last (EmpathyChat *chat)
 	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
 
 	priv = GET_PRIV (chat);
-	
+
 	if (!priv->sent_messages) {
 		DEBUG ("No sent messages, last message is NULL");
 		return NULL;
