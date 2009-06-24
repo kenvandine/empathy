@@ -193,7 +193,7 @@ empathy_xml_node_get_child_content (xmlNodePtr   node,
 	if (l) {
 		return xmlNodeGetContent (l);
 	}
-		
+
 	return NULL;
 }
 
@@ -220,10 +220,10 @@ empathy_xml_node_find_child_prop_value (xmlNodePtr   node,
 		if (prop && strcmp (prop, prop_value) == 0) {
 			found = l;
 		}
-		
+
 		xmlFree (prop);
 	}
-		
+
 	return found;
 }
 
