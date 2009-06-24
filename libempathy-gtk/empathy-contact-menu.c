@@ -141,7 +141,7 @@ empathy_contact_chat_menu_item_new (EmpathyContact *contact)
 	g_signal_connect (item, "activate",
 				  G_CALLBACK (empathy_contact_chat_menu_item_activated),
 				  contact);
-	
+
 	return item;
 }
 
@@ -244,7 +244,7 @@ empathy_contact_log_menu_item_new (EmpathyContact *contact)
 	g_signal_connect_swapped (item, "activate",
 				  G_CALLBACK (contact_log_menu_item_activate_cb),
 				  contact);
-	
+
 	return item;
 }
 
@@ -293,7 +293,7 @@ empathy_contact_info_menu_item_new (EmpathyContact *contact)
 	g_signal_connect_swapped (item, "activate",
 				  G_CALLBACK (contact_info_menu_item_activate_cb),
 				  contact);
-	
+
 	return item;
 }
 
@@ -320,7 +320,7 @@ empathy_contact_edit_menu_item_new (EmpathyContact *contact)
 	g_signal_connect_swapped (item, "activate",
 				  G_CALLBACK (contact_edit_menu_item_activate_cb),
 				  contact);
-	
+
 	return item;
 }
 
