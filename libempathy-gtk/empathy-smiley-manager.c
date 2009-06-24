@@ -314,7 +314,7 @@ empathy_smiley_manager_parse (EmpathySmileyManager *manager,
 	for (t = text; *t; t = g_utf8_next_char (t)) {
 		SmileyManagerTree *child;
 		gunichar           c;
-		
+
 		c = g_utf8_get_char (t);
 		child = smiley_manager_tree_find_child (cur_tree, c);
 
