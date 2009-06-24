@@ -476,7 +476,7 @@ preferences_languages_add (EmpathyPreferences *preferences)
 			       codes != NULL);
 	if (!codes) {
 		gtk_widget_set_sensitive (preferences->treeview_spell_checker, FALSE);
-	}		
+	}
 
 	for (l = codes; l; l = l->next) {
 		GtkTreeIter  iter;
@@ -674,12 +674,12 @@ preferences_widget_sync_string (const gchar *key, GtkWidget *widget)
 				GEnumValue  *enum_value;
 				GSList      *list;
 				GtkWidget   *toggle_widget;
-				
+
 				/* Get index from new string */
 				type = empathy_contact_list_store_sort_get_type ();
 				enum_class = G_ENUM_CLASS (g_type_class_peek (type));
 				enum_value = g_enum_get_value_by_nick (enum_class, value);
-				
+
 				if (enum_value) {
 					list = gtk_radio_button_get_group (GTK_RADIO_BUTTON (widget));
 					toggle_widget = g_slist_nth_data (list, enum_value->value);
@@ -741,7 +741,7 @@ preferences_notify_int_cb (EmpathyConf  *conf,
 			   const gchar *key,
 			   gpointer     user_data)
 {
-	preferences_widget_sync_int (key, user_data);	
+	preferences_widget_sync_int (key, user_data);
 }
 
 static void
@@ -931,14 +931,14 @@ preferences_radio_button_toggled_cb (GtkWidget *button,
 		GType        type;
 		GEnumClass  *enum_class;
 		GEnumValue  *enum_value;
-		
+
 		group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-		
+
 		/* Get string from index */
 		type = empathy_contact_list_store_sort_get_type ();
 		enum_class = G_ENUM_CLASS (g_type_class_peek (type));
 		enum_value = g_enum_get_value (enum_class, g_slist_index (group, button));
-		
+
 		if (!enum_value) {
 			g_warning ("No GEnumValue for EmpathyContactListSort with GtkRadioButton index:%d",
 				   g_slist_index (group, button));
