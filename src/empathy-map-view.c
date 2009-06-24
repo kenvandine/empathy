@@ -161,7 +161,7 @@ map_view_contacts_foreach (GtkTreeModel *model,
     GtkTreeIter *iter,
     gpointer user_data)
 {
-  EmpathyMapView *window = (EmpathyMapView*) user_data;
+  EmpathyMapView *window = (EmpathyMapView *) user_data;
   EmpathyContact *contact;
   ClutterActor *marker;
   ClutterActor *texture;
