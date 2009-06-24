@@ -621,7 +621,7 @@ chat_window_favorite_toggled_cb (GtkToggleAction   *toggle_action,
 		g_object_unref (chatroom);
 		return;
 	}
-	
+
 	if (!active && chatroom) {
 		empathy_chatroom_manager_remove (priv->chatroom_manager, chatroom);
 	}
@@ -1210,7 +1210,7 @@ chat_window_focus_in_event_cb (GtkWidget        *widget,
 	priv->chats_new_msg = g_list_remove (priv->chats_new_msg, priv->current_chat);
 
 	chat_window_set_urgency_hint (window, FALSE);
-	
+
 	/* Update the title, since we now mark all unread messages as read. */
 	chat_window_update_chat_tab (priv->current_chat);
 
@@ -1239,7 +1239,7 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		id = (const gchar*) selection->data;
 
 		DEBUG ("DND contact from roster with id:'%s'", id);
-		
+
 		strv = g_strsplit (id, "/", 2);
 		account_id = strv[0];
 		contact_id = strv[1];
@@ -1267,18 +1267,18 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		g_object_unref (account);
 		g_strfreev (strv);
 
-		old_window = chat_window_find_chat (chat);		
+		old_window = chat_window_find_chat (chat);
 		if (old_window) {
 			if (old_window == window) {
 				gtk_drag_finish (context, TRUE, FALSE, time);
 				return;
 			}
-			
+
 			empathy_chat_window_move_chat (old_window, window, chat);
 		} else {
 			empathy_chat_window_add_chat (window, chat);
 		}
-		
+
 		/* Added to take care of any outstanding chat events */
 		empathy_chat_window_present_chat (chat);
 
@@ -1309,7 +1309,7 @@ chat_window_drag_data_received (GtkWidget        *widget,
 				gtk_drag_finish (context, TRUE, FALSE, time);
 				return;
 			}
-			
+
 			priv->dnd_same_window = FALSE;
 		}
 
@@ -1598,14 +1598,14 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 	/* If this window has just been created, position it */
 	if (priv->chats == NULL) {
 		empathy_geometry_load (chat_get_window_id_for_geometry (chat), &x, &y, &w, &h);
-		
+
 		if (x >= 0 && y >= 0) {
 			/* Let the window manager position it if we don't have
 			 * good x, y coordinates.
 			 */
 			gtk_window_move (GTK_WINDOW (priv->dialog), x, y);
 		}
-		
+
 		if (w > 0 && h > 0) {
 			/* Use the defaults from the ui file if we don't have
 			 * good w, h geometry.
