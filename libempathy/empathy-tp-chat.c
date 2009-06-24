@@ -993,7 +993,7 @@ tp_chat_constructor (GType                  type,
 
 		/* Get initial member contacts */
 		members = tp_channel_group_get_members (priv->channel);
-		handles = tp_intset_to_array (members);		
+		handles = tp_intset_to_array (members);
 		empathy_tp_contact_factory_get_from_handles (priv->factory,
 			handles->len, (TpHandle *) handles->data,
 			tp_chat_got_added_contacts_cb, NULL, NULL, chat);
