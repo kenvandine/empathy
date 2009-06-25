@@ -96,7 +96,7 @@ EXTRA_DIST += 					\
 endif
 
 if HAVE_LIBCHAMPLAIN
-empathy_SOURCES += 				\
+empathy_handwritten_source += 				\
 	empathy-map-view.c			\
 	empathy-map-view.h
 

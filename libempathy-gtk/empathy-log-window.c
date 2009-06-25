@@ -320,7 +320,7 @@ log_window_find_changed_cb (GtkTreeSelection *selection,
 		gtk_widget_set_sensitive (window->button_next, FALSE);
 
 		empathy_chat_view_clear (window->chatview_find);
-	
+
 		return;
 	}
 
@@ -646,7 +646,7 @@ log_window_chats_populate (EmpathyLogWindow *window)
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter,
 				    COL_CHAT_ICON, "empathy-available", /* FIXME */
-				    COL_CHAT_NAME, hit->chat_id,				
+				    COL_CHAT_NAME, hit->chat_id,
 				    COL_CHAT_ACCOUNT, account,
 				    COL_CHAT_ID, hit->chat_id,
 				    COL_CHAT_IS_CHATROOM, hit->is_chatroom,

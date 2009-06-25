@@ -601,7 +601,7 @@ empathy_contact_list_store_set_sort_criterium (EmpathyContactListStore     *stor
 						      EMPATHY_CONTACT_LIST_STORE_COL_STATUS,
 						      GTK_SORT_ASCENDING);
 		break;
-		
+
 	case EMPATHY_CONTACT_LIST_STORE_SORT_NAME:
 		gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
 						      EMPATHY_CONTACT_LIST_STORE_COL_NAME,
@@ -738,7 +738,7 @@ contact_list_store_setup (EmpathyContactListStore *store)
 					       G_TYPE_BOOLEAN,       /* Is separator */
 					       G_TYPE_BOOLEAN,       /* Can make audio calls */
 					       G_TYPE_BOOLEAN};      /* Can make video calls */
-	
+
 	priv = GET_PRIV (store);
 
 	gtk_tree_store_set_column_types (GTK_TREE_STORE (store),
@@ -853,7 +853,7 @@ contact_list_store_add_contact (EmpathyContactListStore *store,
 	GList                      *groups = NULL, *l;
 
 	priv = GET_PRIV (store);
-	
+
 	if (EMP_STR_EMPTY (empathy_contact_get_name (contact)) ||
 	    (!priv->show_offline && !empathy_contact_is_online (contact))) {
 		return;
@@ -922,7 +922,7 @@ contact_list_store_remove_contact (EmpathyContactListStore *store,
 	if (!iters) {
 		return;
 	}
-	
+
 	/* Clean up model */
 	model = GTK_TREE_MODEL (store);
 
@@ -1156,7 +1156,7 @@ contact_list_store_contact_active_new (EmpathyContactListStore *store,
 	DEBUG ("Contact:'%s' now active, and %s be removed",
 		empathy_contact_get_name (contact),
 		remove ? "WILL" : "WILL NOT");
-	
+
 	data = g_slice_new0 (ShowActiveData);
 
 	data->store = g_object_ref (store);

@@ -172,7 +172,7 @@
          </long>
       </locale>
     </schema>
-    
+
     <schema>
       <key>/schemas/apps/empathy/sounds/sounds_contact_logout</key>
       <applyto>/apps/empathy/sounds/sounds_contact_logout</applyto>
@@ -201,7 +201,7 @@
          </long>
       </locale>
     </schema>
-    
+
     <schema>
       <key>/schemas/apps/empathy/sounds/sounds_service_logout</key>
       <applyto>/apps/empathy/sounds/sounds_service_logout</applyto>
@@ -276,6 +276,36 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/empathy/notifications/notifications_contact_signin</key>
+      <applyto>/apps/empathy/notifications/notifications_contact_signin</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+         <short>Popup notifications when a contact sign in</short>
+         <long>
+         Whether or not to show a popup notification when a contact goes
+         online.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/notifications/notifications_contact_signout</key>
+      <applyto>/apps/empathy/notifications/notifications_contact_signout</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+         <short>Popup notifications when a contact sign out</short>
+         <long>
+         Whether or not to show a popup notification when a contact goes
+         offline.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
        <key>/schemas/apps/empathy/ui/separate_chat_windows</key>
        <applyto>/apps/empathy/ui/separate_chat_windows</applyto>
        <owner>empathy</owner>
@@ -300,6 +330,20 @@
          <long>
          Whether or not to convert smileys into graphical images in
          conversations.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/conversation/show_contacts_in_rooms</key>
+      <applyto>/apps/empathy/conversation/show_contacts_in_rooms</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+         <short>Show contact list in rooms</short>
+         <long>
+         Whether or not to show the contact list in chat rooms.
          </long>
       </locale>
     </schema>
@@ -387,7 +431,7 @@
         Character to add after nickname when using nick completion (tab)
         in group chat.
         </long>
-        
+
       </locale>
     </schema>
 
@@ -449,7 +493,7 @@
         </long>
       </locale>
     </schema>
-    
+
     <schema>
       <key>/schemas/apps/empathy/autoconnect</key>
       <applyto>/apps/empathy/autoconnect</applyto>

@@ -397,7 +397,7 @@ accounts_dialog_model_add_columns (EmpathyAccountsDialog *dialog)
 	g_signal_connect (cell, "toggled",
 			  G_CALLBACK (accounts_dialog_enable_toggled_cb),
 			  dialog);
-	
+
 	/* Account column */
 	column = gtk_tree_view_column_new ();
 	gtk_tree_view_column_set_title (column, _("Accounts"));
@@ -440,7 +440,7 @@ accounts_dialog_model_select_first (EmpathyAccountsDialog *dialog)
 	/* select first */
 	view = GTK_TREE_VIEW (dialog->treeview);
 	model = gtk_tree_view_get_model (view);
-	
+
 	if (gtk_tree_model_get_iter_first (model, &iter)) {
 		selection = gtk_tree_view_get_selection (view);
 		gtk_tree_selection_select_iter (selection, &iter);
@@ -510,7 +510,7 @@ accounts_dialog_get_account_iter (EmpathyAccountsDialog *dialog,
 	GtkTreeSelection *selection;
 	GtkTreeModel     *model;
 	gboolean          ok;
-	
+
 	/* Update the status in the model */
 	view = GTK_TREE_VIEW (dialog->treeview);
 	selection = gtk_tree_view_get_selection (view);
@@ -730,7 +730,7 @@ accounts_dialog_connection_changed_cb     (EmpathyAccountManager    *manager,
 	GtkTreeModel *model;
 	GtkTreeIter   iter;
 	gboolean      found;
-	
+
 	/* Update the status in the model */
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
 
@@ -1041,7 +1041,7 @@ accounts_dialog_destroy_cb (GtkWidget            *widget,
 
 	g_object_unref (dialog->account_manager);
 	g_object_unref (dialog->mc);
-	
+
 	g_free (dialog);
 }
 

@@ -86,6 +86,7 @@ typedef struct {
 	GtkUIManager *ui_manager;
 	GtkAction   *menu_conv_insert_smiley;
 	GtkAction   *menu_conv_favorite;
+	GtkAction   *menu_conv_toggle_contacts;
 
 	GtkAction   *menu_edit_cut;
 	GtkAction   *menu_edit_copy;
@@ -556,6 +557,8 @@ chat_window_conv_activate_cb (GtkAction         *action,
 {
 	EmpathyChatWindowPriv *priv = GET_PRIV (window);
 	gboolean               is_room;
+	gboolean               active;
+	EmpathyContact        *remote_contact = NULL;
 
 	/* Favorite room menu */
 	is_room = empathy_chat_is_room (priv->current_chat);
@@ -574,6 +577,22 @@ chat_window_conv_activate_cb (GtkAction         *action,
 			GTK_TOGGLE_ACTION (priv->menu_conv_favorite), found);
 	}
 	gtk_action_set_visible (priv->menu_conv_favorite, is_room);
+
+	/* Show contacts menu */
+	g_object_get (priv->current_chat,
+		      "remote-contact", &remote_contact,
+		      "show-contacts", &active,
+		      NULL);
+	if (remote_contact == NULL) {
+		gtk_toggle_action_set_active (
+			GTK_TOGGLE_ACTION (priv->menu_conv_toggle_contacts),
+					   active);
+	}
+	gtk_action_set_visible (priv->menu_conv_toggle_contacts,
+				(remote_contact == NULL));
+	if (remote_contact != NULL) {
+		g_object_unref (remote_contact);
+	}
 }
 
 static void
@@ -611,10 +630,22 @@ chat_window_favorite_toggled_cb (GtkToggleAction   *toggle_action,
 		g_object_unref (chatroom);
 		return;
 	}
-	
+
 	if (!active && chatroom) {
 		empathy_chatroom_manager_remove (priv->chatroom_manager, chatroom);
 	}
+}
+
+static void
+chat_window_contacts_toggled_cb (GtkToggleAction   *toggle_action,
+				 EmpathyChatWindow *window)
+{
+	EmpathyChatWindowPriv *priv = GET_PRIV (window);
+	gboolean               active;
+
+	active = gtk_toggle_action_get_active (toggle_action);
+
+	empathy_chat_set_show_contacts (priv->current_chat, active);
 }
 
 static const gchar *
@@ -998,7 +1029,8 @@ chat_window_show_or_update_notification (EmpathyChatWindow *window,
 					 EmpathyChat *chat)
 {
 	EmpathyContact *sender;
-	char *header, *escaped;
+	const gchar *header;
+	char *escaped;
 	const char *body;
 	GdkPixbuf *pixbuf;
 	NotificationData *cb_data;
@@ -1020,8 +1052,7 @@ chat_window_show_or_update_notification (EmpathyChatWindow *window,
 	cb_data->window = window;
 
 	sender = empathy_message_get_sender (message);
-	header = g_strdup_printf (_("New message from %s"),
-				  empathy_contact_get_name (sender));
+	header = empathy_contact_get_name (sender);
 	body = empathy_message_get_body (message);
 	escaped = g_markup_escape_text (body, -1);
 
@@ -1043,7 +1074,6 @@ chat_window_show_or_update_notification (EmpathyChatWindow *window,
 	notify_notification_show (priv->notification, NULL);
 
 	g_object_unref (pixbuf);
-	g_free (header);
 	g_free (escaped);
 }
 
@@ -1275,7 +1305,7 @@ chat_window_focus_in_event_cb (GtkWidget        *widget,
 	priv->chats_new_msg = g_list_remove (priv->chats_new_msg, priv->current_chat);
 
 	chat_window_set_urgency_hint (window, FALSE);
-	
+
 	/* Update the title, since we now mark all unread messages as read. */
 	chat_window_update_chat_tab (priv->current_chat);
 
@@ -1309,7 +1339,7 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		id = (const gchar*) selection->data;
 
 		DEBUG ("DND contact from roster with id:'%s'", id);
-		
+
 		strv = g_strsplit (id, "/", 2);
 		account_id = strv[0];
 		contact_id = strv[1];
@@ -1337,18 +1367,18 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		g_object_unref (account);
 		g_strfreev (strv);
 
-		old_window = chat_window_find_chat (chat);		
+		old_window = chat_window_find_chat (chat);
 		if (old_window) {
 			if (old_window == window) {
 				gtk_drag_finish (context, TRUE, FALSE, time);
 				return;
 			}
-			
+
 			empathy_chat_window_move_chat (old_window, window, chat);
 		} else {
 			empathy_chat_window_add_chat (window, chat);
 		}
-		
+
 		/* Added to take care of any outstanding chat events */
 		empathy_chat_window_present_chat (chat);
 
@@ -1379,7 +1409,7 @@ chat_window_drag_data_received (GtkWidget        *widget,
 				gtk_drag_finish (context, TRUE, FALSE, time);
 				return;
 			}
-			
+
 			priv->dnd_same_window = FALSE;
 		}
 
@@ -1473,6 +1503,7 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 				       "ui_manager", &priv->ui_manager,
 				       "menu_conv_insert_smiley", &priv->menu_conv_insert_smiley,
 				       "menu_conv_favorite", &priv->menu_conv_favorite,
+				       "menu_conv_toggle_contacts", &priv->menu_conv_toggle_contacts,
 				       "menu_edit_cut", &priv->menu_edit_cut,
 				       "menu_edit_copy", &priv->menu_edit_copy,
 				       "menu_edit_paste", &priv->menu_edit_paste,
@@ -1489,6 +1520,7 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 			      "menu_conv", "activate", chat_window_conv_activate_cb,
 			      "menu_conv_clear", "activate", chat_window_clear_activate_cb,
 			      "menu_conv_favorite", "toggled", chat_window_favorite_toggled_cb,
+			      "menu_conv_toggle_contacts", "toggled", chat_window_contacts_toggled_cb,
 			      "menu_conv_close", "activate", chat_window_close_activate_cb,
 			      "menu_edit", "activate", chat_window_edit_activate_cb,
 			      "menu_edit_cut", "activate", chat_window_cut_activate_cb,
@@ -1674,14 +1706,14 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 	/* If this window has just been created, position it */
 	if (priv->chats == NULL) {
 		empathy_geometry_load (chat_get_window_id_for_geometry (chat), &x, &y, &w, &h);
-		
+
 		if (x >= 0 && y >= 0) {
 			/* Let the window manager position it if we don't have
 			 * good x, y coordinates.
 			 */
 			gtk_window_move (GTK_WINDOW (priv->dialog), x, y);
 		}
-		
+
 		if (w > 0 && h > 0) {
 			/* Use the defaults from the ui file if we don't have
 			 * good w, h geometry.

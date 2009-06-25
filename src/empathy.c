@@ -38,6 +38,7 @@
 #include <libebook/e-book.h>
 #include <libnotify/notify.h>
 
+#include <telepathy-glib/dbus.h>
 #include <telepathy-glib/util.h>
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mission-control.h>
@@ -284,13 +285,13 @@ create_salut_account (void)
 
 	account = mc_account_create (profile);
 	mc_account_set_display_name (account, _("People nearby"));
-	
+
 	nickname = e_contact_get (contact, E_CONTACT_NICKNAME);
 	first_name = e_contact_get (contact, E_CONTACT_GIVEN_NAME);
 	last_name = e_contact_get (contact, E_CONTACT_FAMILY_NAME);
 	email = e_contact_get (contact, E_CONTACT_EMAIL_1);
 	jid = e_contact_get (contact, E_CONTACT_IM_JABBER_HOME_1);
-	
+
 	if (!tp_strdiff (nickname, "nickname")) {
 		g_free (nickname);
 		nickname = NULL;
@@ -470,6 +471,7 @@ main (int argc, char *argv[])
 	gboolean           hide_contact_list = FALSE;
 	gboolean           accounts_dialog = FALSE;
 	GError            *error = NULL;
+	TpDBusDaemon      *dbus_daemon;
 	GOptionEntry       options[] = {
 		{ "no-connect", 'n',
 		  0, G_OPTION_ARG_NONE, &no_connect,
@@ -547,6 +549,23 @@ main (int argc, char *argv[])
 		g_warning ("Cannot create the 'empathy' bacon connection.");
 	}
 
+	/* Take well-known name */
+	dbus_daemon = tp_dbus_daemon_dup (&error);
+	if (error == NULL) {
+		if (!tp_dbus_daemon_request_name (dbus_daemon,
+						  "org.gnome.Empathy",
+						  TRUE, &error)) {
+			DEBUG ("Failed to request well-known name: %s",
+			       error ? error->message : "no message");
+			g_clear_error (&error);
+		}
+		g_object_unref (dbus_daemon);
+	} else {
+		DEBUG ("Failed to dup dbus daemon: %s",
+		       error ? error->message : "no message");
+		g_clear_error (&error);
+	}
+
 	/* Setting up MC */
 	mc = empathy_mission_control_dup_singleton ();
 	g_signal_connect (mc, "ServiceEnded",
@@ -584,7 +603,7 @@ main (int argc, char *argv[])
 			(idle), TP_CONNECTION_PRESENCE_TYPE_OFFLINE) <= 0) {
 		empathy_idle_set_state (idle, MC_PRESENCE_AVAILABLE);
 	}
-	
+
 	create_salut_account ();
 
 	/* Setting up UI */

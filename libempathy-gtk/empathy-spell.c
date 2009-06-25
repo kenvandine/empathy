@@ -175,7 +175,7 @@ spell_notify_languages_cb (EmpathyConf  *conf,
 
 		enchant_broker_free_dict (lang->config, lang->speller);
 		enchant_broker_free (lang->config);
-		
+
 		g_slice_free (SpellLanguage, lang);
 	}
 
@@ -363,7 +363,7 @@ empathy_spell_get_suggestions (const gchar *word)
 
 		suggestions = enchant_dict_suggest (lang->speller, word, len,
 						    &number_of_suggestions);
-		
+
 		for (i = 0; i < number_of_suggestions; i++) {
 			suggestion_list = g_list_append (suggestion_list,
 							 g_strdup (suggestions[i]));

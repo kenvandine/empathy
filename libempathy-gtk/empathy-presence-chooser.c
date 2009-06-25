@@ -293,7 +293,7 @@ presence_chooser_is_preset (EmpathyPresenceChooser *self)
 	for (l = presets; l; l = l->next) {
 		char *preset = (char *) l->data;
 
-		if (!strcmp (status, preset)) {
+		if (!tp_strdiff (status, preset)) {
 			match = TRUE;
 			break;
 		}
@@ -467,6 +467,10 @@ presence_chooser_entry_icon_release_cb (EmpathyPresenceChooser *self,
 		type = presence_chooser_get_entry_type (self);
 		state = empathy_idle_get_state (priv->idle);
 		status = empathy_idle_get_status (priv->idle);
+
+		if (!empathy_status_presets_is_valid (state))
+			/* It doesn't make sense to add such presence as favorite */
+			return;
 
 		if (presence_chooser_is_preset (self)) {
 			/* remove the entry */

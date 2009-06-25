@@ -131,16 +131,17 @@ status_presets_file_parse (const gchar *filename)
 
 			if (state_str) {
 				state = empathy_presence_from_str (state_str);
+				if (empathy_status_presets_is_valid (state)) {
+					if (is_default) {
+						DEBUG ("Default status preset state is:"
+							" '%s', status:'%s'", state_str,
+							status);
 
-				if (is_default) {
-					DEBUG ("Default status preset state is:"
-						" '%s', status:'%s'", state_str,
-						status);
-
-					status_presets_set_default (state, status);
-				} else {
-					preset = status_preset_new (state, status);
-					presets = g_list_append (presets, preset);
+						status_presets_set_default (state, status);
+					} else {
+						preset = status_preset_new (state, status);
+						presets = g_list_append (presets, preset);
+					}
 				}
 			}
 
@@ -404,4 +405,32 @@ empathy_status_presets_clear_default (void)
 	}
 
 	status_presets_file_save ();
+}
+
+/**
+ * empathy_status_presets_is_valid:
+ * @state: a #TpConnectionPresenceType
+ *
+ * Check if a presence type can be used as a preset.
+ *
+ * Returns: %TRUE if the presence type can be used as a preset.
+ */
+gboolean
+empathy_status_presets_is_valid (TpConnectionPresenceType state)
+{
+	switch (state) {
+		case TP_CONNECTION_PRESENCE_TYPE_UNSET:
+		case TP_CONNECTION_PRESENCE_TYPE_OFFLINE:
+		case TP_CONNECTION_PRESENCE_TYPE_UNKNOWN:
+		case TP_CONNECTION_PRESENCE_TYPE_ERROR:
+			return FALSE;
+
+		case TP_CONNECTION_PRESENCE_TYPE_AVAILABLE:
+		case TP_CONNECTION_PRESENCE_TYPE_AWAY:
+		case TP_CONNECTION_PRESENCE_TYPE_EXTENDED_AWAY:
+		case TP_CONNECTION_PRESENCE_TYPE_HIDDEN:
+		case TP_CONNECTION_PRESENCE_TYPE_BUSY:
+			return TRUE;
+	}
+	return FALSE;
 }

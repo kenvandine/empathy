@@ -69,6 +69,7 @@ typedef struct {
 	gchar             *name;
 	gchar             *subject;
 	EmpathyContact    *remote_contact;
+	gboolean           show_contacts;
 
 	EmpathyLogManager *log_manager;
 	EmpathyAccountManager *account_manager;
@@ -107,6 +108,7 @@ enum {
 	PROP_NAME,
 	PROP_SUBJECT,
 	PROP_REMOTE_CONTACT,
+	PROP_SHOW_CONTACTS,
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -141,6 +143,9 @@ chat_get_property (GObject    *object,
 	case PROP_REMOTE_CONTACT:
 		g_value_set_object (value, priv->remote_contact);
 		break;
+	case PROP_SHOW_CONTACTS:
+		g_value_set_boolean (value, priv->show_contacts);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
 		break;
@@ -158,6 +163,9 @@ chat_set_property (GObject      *object,
 	switch (param_id) {
 	case PROP_TP_CHAT:
 		empathy_chat_set_tp_chat (chat, EMPATHY_TP_CHAT (g_value_get_object (value)));
+		break;
+	case PROP_SHOW_CONTACTS:
+		empathy_chat_set_show_contacts (chat, g_value_get_boolean (value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -199,7 +207,7 @@ chat_new_connection_cb (EmpathyAccountManager *manager,
 	if (!priv->tp_chat && empathy_account_equal (account, priv->account) &&
 	    priv->handle_type != TP_HANDLE_TYPE_NONE &&
 	    !EMP_STR_EMPTY (priv->id)) {
-		
+
 		DEBUG ("Account reconnected, request a new Text channel");
 
 		switch (priv->handle_type) {
@@ -294,7 +302,7 @@ chat_sent_message_add (EmpathyChat  *chat,
 
 	/* Save the sent message in our repeat buffer */
 	list = priv->sent_messages;
-	
+
 	/* Remove any other occurances of this msg */
 	while ((item = g_slist_find_custom (list, str, (GCompareFunc) strcmp)) != NULL) {
 		list = g_slist_remove_link (list, item);
@@ -325,7 +333,7 @@ chat_sent_message_get_next (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv;
 	gint            max;
-	
+
 	priv = GET_PRIV (chat);
 
 	if (!priv->sent_messages) {
@@ -338,7 +346,7 @@ chat_sent_message_get_next (EmpathyChat *chat)
 	if (priv->sent_messages_index < max) {
 		priv->sent_messages_index++;
 	}
-	
+
 	DEBUG ("Returning next message index:%d", priv->sent_messages_index);
 
 	return g_slist_nth_data (priv->sent_messages, priv->sent_messages_index);
@@ -352,7 +360,7 @@ chat_sent_message_get_last (EmpathyChat *chat)
 	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
 
 	priv = GET_PRIV (chat);
-	
+
 	if (!priv->sent_messages) {
 		DEBUG ("No sent messages, last message is NULL");
 		return NULL;
@@ -1188,15 +1196,18 @@ chat_reset_size_request (gpointer widget)
 }
 
 static void
-chat_set_show_contacts (EmpathyChat *chat, gboolean show)
+chat_update_contacts_visibility (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
+	gboolean show;
+
+	show = priv->remote_contact == NULL && priv->show_contacts;
 
 	if (!priv->scrolled_window_contacts) {
 		return;
 	}
 
-	if (show) {
+	if (show && priv->contact_list_view == NULL) {
 		EmpathyContactListStore *store;
 		gint                     min_width;
 
@@ -1227,14 +1238,27 @@ chat_set_show_contacts (EmpathyChat *chat, gboolean show)
 		gtk_widget_show (priv->contact_list_view);
 		gtk_widget_show (priv->scrolled_window_contacts);
 		g_object_unref (store);
-	} else {
+	} else if (!show) {
 		priv->contacts_width = gtk_paned_get_position (GTK_PANED (priv->hpaned));
 		gtk_widget_hide (priv->scrolled_window_contacts);
-		if (priv->contact_list_view) {
+		if (priv->contact_list_view != NULL) {
 			gtk_widget_destroy (priv->contact_list_view);
 			priv->contact_list_view = NULL;
 		}
 	}
+}
+
+void
+empathy_chat_set_show_contacts (EmpathyChat *chat,
+				gboolean     show)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
+	priv->show_contacts = show;
+
+	chat_update_contacts_visibility (chat);
+
+	g_object_notify (G_OBJECT (chat), "show-contacts");
 }
 
 static void
@@ -1242,19 +1266,19 @@ chat_remote_contact_changed_cb (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
 
-	if (priv->remote_contact) {
+	if (priv->remote_contact != NULL) {
 		g_object_unref (priv->remote_contact);
 		priv->remote_contact = NULL;
 	}
 
 	priv->remote_contact = empathy_tp_chat_get_remote_contact (priv->tp_chat);
-	if (priv->remote_contact) {
+	if (priv->remote_contact != NULL) {
 		g_object_ref (priv->remote_contact);
 		priv->handle_type = TP_HANDLE_TYPE_CONTACT;
 		g_free (priv->id);
 		priv->id = g_strdup (empathy_contact_get_id (priv->remote_contact));
 	}
-	else if (priv->tp_chat) {
+	else if (priv->tp_chat != NULL) {
 		TpChannel *channel;
 
 		channel = empathy_tp_chat_get_channel (priv->tp_chat);
@@ -1263,7 +1287,7 @@ chat_remote_contact_changed_cb (EmpathyChat *chat)
 		priv->id = g_strdup (empathy_tp_chat_get_id (priv->tp_chat));
 	}
 
-	chat_set_show_contacts (chat, priv->remote_contact == NULL);
+	chat_update_contacts_visibility (chat);
 
 	g_object_notify (G_OBJECT (chat), "remote-contact");
 	g_object_notify (G_OBJECT (chat), "id");
@@ -1288,7 +1312,7 @@ chat_destroy_cb (EmpathyTpChat *tp_chat,
 
 	empathy_chat_view_append_event (chat->view, _("Disconnected"));
 	gtk_widget_set_sensitive (chat->input_text_view, FALSE);
-	chat_set_show_contacts (chat, FALSE);
+	empathy_chat_set_show_contacts (chat, FALSE);
 }
 
 static void
@@ -1373,7 +1397,7 @@ chat_create_ui (EmpathyChat *chat)
 	gtk_widget_show (chat->input_text_view);
 
 	/* Create contact list */
-	chat_set_show_contacts (chat, priv->remote_contact == NULL);
+	chat_update_contacts_visibility (chat);
 
 	/* Initialy hide the topic, will be shown if not empty */
 	gtk_widget_hide (priv->hbox_topic);
@@ -1531,42 +1555,56 @@ empathy_chat_class_init (EmpathyChatClass *klass)
 							      "The tp chat object",
 							      EMPATHY_TYPE_TP_CHAT,
 							      G_PARAM_CONSTRUCT |
-							      G_PARAM_READWRITE));
+							      G_PARAM_READWRITE |
+							      G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class,
 					 PROP_ACCOUNT,
 					 g_param_spec_object ("account",
 							      "Account of the chat",
 							      "The account of the chat",
 							      MC_TYPE_ACCOUNT,
-							      G_PARAM_READABLE));
+							      G_PARAM_READABLE |
+							      G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class,
 					 PROP_ID,
 					 g_param_spec_string ("id",
 							      "Chat's id",
 							      "The id of the chat",
 							      NULL,
-							      G_PARAM_READABLE));
+							      G_PARAM_READABLE |
+							      G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class,
 					 PROP_NAME,
 					 g_param_spec_string ("name",
 							      "Chat's name",
 							      "The name of the chat",
 							      NULL,
-							      G_PARAM_READABLE));
+							      G_PARAM_READABLE |
+							      G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class,
 					 PROP_SUBJECT,
 					 g_param_spec_string ("subject",
 							      "Chat's subject",
 							      "The subject or topic of the chat",
 							      NULL,
-							      G_PARAM_READABLE));
+							      G_PARAM_READABLE |
+							      G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class,
 					 PROP_REMOTE_CONTACT,
 					 g_param_spec_object ("remote-contact",
 							      "The remote contact",
 							      "The remote contact is any",
 							      EMPATHY_TYPE_CONTACT,
-							      G_PARAM_READABLE));
+							      G_PARAM_READABLE |
+							      G_PARAM_STATIC_STRINGS));
+	g_object_class_install_property (object_class,
+					 PROP_SHOW_CONTACTS,
+					 g_param_spec_boolean ("show-contacts",
+							       "Contacts' visibility",
+							       "The visibility of the contacts' list",
+							       TRUE,
+							       G_PARAM_READWRITE |
+							       G_PARAM_STATIC_STRINGS));
 
 	signals[COMPOSING] =
 		g_signal_new ("composing",
@@ -1618,6 +1656,10 @@ empathy_chat_init (EmpathyChat *chat)
 			  "new-connection",
 			  G_CALLBACK (chat_new_connection_cb),
 			  chat);
+
+	empathy_conf_get_bool (empathy_conf_get (),
+			       EMPATHY_PREFS_CHAT_SHOW_CONTACTS_IN_ROOMS,
+			       &priv->show_contacts);
 
 	/* Block events for some time to avoid having "has come online" or
 	 * "joined" messages. */

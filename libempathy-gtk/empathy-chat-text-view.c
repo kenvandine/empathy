@@ -103,10 +103,10 @@ chat_text_view_url_event_cb (GtkTextTag          *tag,
 	if (gtk_text_iter_get_offset (&start) != gtk_text_iter_get_offset (&end)) {
 		return FALSE;
 	}
-	
+
 	if (event->type == GDK_BUTTON_RELEASE && event->button.button == 1) {
 		start = end = *iter;
-		
+
 		if (gtk_text_iter_backward_to_tag_toggle (&start, tag) &&
 		    gtk_text_iter_forward_to_tag_toggle (&end, tag)) {
 			    str = gtk_text_buffer_get_text (priv->buffer,
@@ -118,7 +118,7 @@ chat_text_view_url_event_cb (GtkTextTag          *tag,
 			    g_free (str);
 		    }
 	}
-	
+
 	return FALSE;
 }
 
@@ -133,31 +133,31 @@ chat_text_view_event_cb (EmpathyChatTextView *view,
 	GtkTextIter        iter;
 	GdkWindow         *win;
 	gint               x, y, buf_x, buf_y;
-	
+
 	type = gtk_text_view_get_window_type (GTK_TEXT_VIEW (view),
 					      event->window);
-	
+
 	if (type != GTK_TEXT_WINDOW_TEXT) {
 		return FALSE;
 	}
-	
+
 	/* Get where the pointer really is. */
 	win = gtk_text_view_get_window (GTK_TEXT_VIEW (view), type);
 	if (!win) {
 		return FALSE;
 	}
-	
+
 	gdk_window_get_pointer (win, &x, &y, NULL);
-	
+
 	/* Get the iter where the cursor is at */
 	gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (view), type,
 					       x, y,
 					       &buf_x, &buf_y);
-	
+
 	gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (view),
 					    &iter,
 					    buf_x, buf_y);
-	
+
 	if (gtk_text_iter_has_tag (&iter, tag)) {
 		if (!hand) {
 			hand = gdk_cursor_new (GDK_HAND2);
@@ -170,7 +170,7 @@ chat_text_view_event_cb (EmpathyChatTextView *view,
 		}
 		gdk_window_set_cursor (win, beam);
 	}
-	
+
 	return FALSE;
 }
 
@@ -192,7 +192,7 @@ chat_text_view_create_tags (EmpathyChatTextView *view)
 	g_signal_connect (tag, "event",
 			  G_CALLBACK (chat_text_view_url_event_cb),
 			  view);
-	
+
 	g_signal_connect (view, "motion-notify-event",
 			  G_CALLBACK (chat_text_view_event_cb),
 			  tag);
@@ -203,7 +203,7 @@ chat_text_view_system_font_update (EmpathyChatTextView *view)
 {
 	PangoFontDescription *font_description = NULL;
 	gchar                *font_name;
-	
+
 	if (empathy_conf_get_string (empathy_conf_get (),
 				     "/desktop/gnome/interface/document_font_name",
 				     &font_name) && font_name) {
@@ -212,9 +212,9 @@ chat_text_view_system_font_update (EmpathyChatTextView *view)
 				     } else {
 					     font_description = NULL;
 				     }
-	
+
 	gtk_widget_modify_font (GTK_WIDGET (view), font_description);
-	
+
 	if (font_description) {
 		pango_font_description_free (font_description);
 	}
@@ -226,7 +226,7 @@ chat_text_view_notify_system_font_cb (EmpathyConf *conf,
 				      gpointer     user_data)
 {
 	EmpathyChatTextView *view = user_data;
-	
+
 	chat_text_view_system_font_update (view);
 }
 
@@ -240,10 +240,10 @@ static void
 chat_text_view_copy_address_cb (GtkMenuItem *menuitem, const gchar *url)
 {
 	GtkClipboard *clipboard;
-	
+
 	clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
 	gtk_clipboard_set_text (clipboard, url, -1);
-	
+
 	clipboard = gtk_clipboard_get (GDK_SELECTION_PRIMARY);
 	gtk_clipboard_set_text (clipboard, url, -1);
 }
@@ -260,66 +260,66 @@ chat_text_view_populate_popup (EmpathyChatTextView *view,
 	GtkTextIter         iter, start, end;
 	GtkWidget          *item;
 	gchar              *str = NULL;
-	
+
 	priv = GET_PRIV (view);
-	
+
 	/* Clear menu item */
 	if (gtk_text_buffer_get_char_count (priv->buffer) > 0) {
 		item = gtk_separator_menu_item_new ();
 		gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 		gtk_widget_show (item);
-		
+
 		item = gtk_image_menu_item_new_from_stock (GTK_STOCK_CLEAR, NULL);
 		gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 		gtk_widget_show (item);
-		
+
 		g_signal_connect_swapped (item, "activate",
 					  G_CALLBACK (empathy_chat_view_clear),
 					  view);
 	}
-	
+
 	/* Link context menu items */
 	table = gtk_text_buffer_get_tag_table (priv->buffer);
 	tag = gtk_text_tag_table_lookup (table, EMPATHY_CHAT_TEXT_VIEW_TAG_LINK);
-	
+
 	gtk_widget_get_pointer (GTK_WIDGET (view), &x, &y);
-	
+
 	gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (view),
 					       GTK_TEXT_WINDOW_WIDGET,
 					       x, y,
 					       &x, &y);
-	
+
 	gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (view), &iter, x, y);
-	
+
 	start = end = iter;
-	
+
 	if (gtk_text_iter_backward_to_tag_toggle (&start, tag) &&
 	    gtk_text_iter_forward_to_tag_toggle (&end, tag)) {
 		    str = gtk_text_buffer_get_text (priv->buffer,
 						    &start, &end, FALSE);
 	    }
-	
+
 	if (EMP_STR_EMPTY (str)) {
 		g_free (str);
 		return;
 	}
-	
+
 	/* NOTE: Set data just to get the string freed when not needed. */
 	g_object_set_data_full (G_OBJECT (menu),
 				"url", str,
 				(GDestroyNotify) g_free);
-	
+
 	item = gtk_separator_menu_item_new ();
 	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
-	
+
 	item = gtk_menu_item_new_with_mnemonic (_("_Copy Link Address"));
 	g_signal_connect (item, "activate",
 			  G_CALLBACK (chat_text_view_copy_address_cb),
 			  str);
 	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
-	
+
 	item = gtk_menu_item_new_with_mnemonic (_("_Open Link"));
 	g_signal_connect (item, "activate",
 			  G_CALLBACK (chat_text_view_open_address_cb),
@@ -332,18 +332,24 @@ static gboolean
 chat_text_view_is_scrolled_down (EmpathyChatTextView *view)
 {
 	GtkWidget *sw;
-	
+
 	sw = gtk_widget_get_parent (GTK_WIDGET (view));
 	if (GTK_IS_SCROLLED_WINDOW (sw)) {
 		GtkAdjustment *vadj;
-		
+		gdouble value;
+		gdouble upper;
+		gdouble page_size;
+
 		vadj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (sw));
-		
-		if (vadj->value + vadj->page_size / 2 < vadj->upper - vadj->page_size) {
+		value = gtk_adjustment_get_value (vadj);
+		upper = gtk_adjustment_get_upper (vadj);
+		page_size = gtk_adjustment_get_page_size (vadj);
+
+		if (value < upper - page_size) {
 			return FALSE;
 		}
 	}
-	
+
 	return TRUE;
 }
 
@@ -356,23 +362,23 @@ chat_text_view_maybe_trim_buffer (EmpathyChatTextView *view)
 	gint                remove;
 	GtkTextTagTable    *table;
 	GtkTextTag         *tag;
-	
+
 	priv = GET_PRIV (view);
-	
+
 	gtk_text_buffer_get_end_iter (priv->buffer, &bottom);
 	line = gtk_text_iter_get_line (&bottom);
 	if (line < MAX_LINES) {
 		return;
 	}
-	
+
 	remove = line - MAX_LINES;
 	gtk_text_buffer_get_start_iter (priv->buffer, &top);
-	
+
 	bottom = top;
 	if (!gtk_text_iter_forward_lines (&bottom, remove)) {
 		return;
 	}
-	
+
 	/* Track backwords to a place where we can safely cut, we don't do it in
 	  * the middle of a tag.
 	  */
@@ -381,11 +387,11 @@ chat_text_view_maybe_trim_buffer (EmpathyChatTextView *view)
 	if (!tag) {
 		return;
 	}
-	
+
 	if (!gtk_text_iter_forward_to_tag_toggle (&bottom, tag)) {
 		return;
 	}
-	
+
 	if (!gtk_text_iter_equal (&top, &bottom)) {
 		gtk_text_buffer_delete (priv->buffer, &top, &bottom);
 	}
@@ -436,7 +442,7 @@ chat_text_view_append_timestamp (EmpathyChatTextView *view,
 
 	priv->last_timestamp = timestamp;
 
-	g_string_free (str, TRUE);	
+	g_string_free (str, TRUE);
 }
 
 static void
@@ -461,7 +467,7 @@ chat_text_maybe_append_date_and_time (EmpathyChatTextView *view,
 		append_date = TRUE;
 		append_time = TRUE;
 	}
-	
+
 	g_date_free (last_date);
 	g_date_free (date);
 
@@ -480,14 +486,14 @@ chat_text_view_size_allocate (GtkWidget     *widget,
 			      GtkAllocation *alloc)
 {
 	gboolean down;
-	
+
 	down = chat_text_view_is_scrolled_down (EMPATHY_CHAT_TEXT_VIEW (widget));
-	
+
 	GTK_WIDGET_CLASS (empathy_chat_text_view_parent_class)->size_allocate (widget, alloc);
-	
+
 	if (down) {
 		GtkAdjustment *adj;
-		
+
 		adj = GTK_TEXT_VIEW (widget)->vadjustment;
 		gtk_adjustment_set_value (adj, adj->upper - adj->page_size);
 	}
@@ -502,7 +508,7 @@ chat_text_view_drag_motion (GtkWidget      *widget,
 {
 	/* Don't handle drag motion, since we don't want the view to scroll as
 	 * the result of dragging something across it. */
-	
+
 	return FALSE;
 }
 
@@ -550,14 +556,14 @@ chat_text_view_finalize (GObject *object)
 {
 	EmpathyChatTextView     *view;
 	EmpathyChatTextViewPriv *priv;
-	
+
 	view = EMPATHY_CHAT_TEXT_VIEW (object);
 	priv = GET_PRIV (view);
-	
+
 	DEBUG ("%p", object);
-	
+
 	empathy_conf_notify_remove (empathy_conf_get (), priv->notify_system_fonts_id);
-	
+
 	if (priv->last_contact) {
 		g_object_unref (priv->last_contact);
 	}
@@ -568,7 +574,7 @@ chat_text_view_finalize (GObject *object)
 		g_source_remove (priv->scroll_timeout);
 	}
 	g_object_unref (priv->smiley_manager);
-	
+
 	G_OBJECT_CLASS (empathy_chat_text_view_parent_class)->finalize (object);
 }
 
@@ -577,7 +583,7 @@ empathy_chat_text_view_class_init (EmpathyChatTextViewClass *klass)
 {
 	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-	
+
 	object_class->finalize = chat_text_view_finalize;
 	object_class->get_property = chat_text_view_get_property;
 	object_class->set_property = chat_text_view_set_property;
@@ -610,18 +616,18 @@ empathy_chat_text_view_init (EmpathyChatTextView *view)
 	EmpathyChatTextViewPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (view,
 		EMPATHY_TYPE_CHAT_TEXT_VIEW, EmpathyChatTextViewPriv);
 
-	view->priv = priv;	
+	view->priv = priv;
 	priv->buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 	priv->last_timestamp = 0;
 	priv->allow_scrolling = TRUE;
 	priv->smiley_manager = empathy_smiley_manager_dup_singleton ();
-	
+
 	g_object_set (view,
 		      "wrap-mode", GTK_WRAP_WORD_CHAR,
 		      "editable", FALSE,
 		      "cursor-visible", FALSE,
 		      NULL);
-	
+
 	priv->notify_system_fonts_id =
 		empathy_conf_notify_add (empathy_conf_get (),
 					 "/desktop/gnome/interface/document_font_name",
@@ -643,13 +649,13 @@ chat_text_view_scroll_cb (EmpathyChatTextView *view)
 	EmpathyChatTextViewPriv *priv;
 	GtkAdjustment      *adj;
 	gdouble             max_val;
-	
+
 	priv = GET_PRIV (view);
 	adj = GTK_TEXT_VIEW (view)->vadjustment;
 	max_val = adj->upper - adj->page_size;
-	
+
 	g_return_val_if_fail (priv->scroll_time != NULL, FALSE);
-	
+
 	if (g_timer_elapsed (priv->scroll_time, NULL) > MAX_SCROLL_TIME) {
 		/* time's up. jump to the end and kill the timer */
 		gtk_adjustment_set_value (adj, max_val);
@@ -658,7 +664,7 @@ chat_text_view_scroll_cb (EmpathyChatTextView *view)
 		priv->scroll_timeout = 0;
 		return FALSE;
 	}
-	
+
 	/* scroll by 1/3rd the remaining distance */
 	gtk_adjustment_set_value (adj, gtk_adjustment_get_value (adj) + ((max_val - gtk_adjustment_get_value (adj)) / 3));
 	return TRUE;
@@ -668,9 +674,9 @@ static void
 chat_text_view_scroll_down (EmpathyChatView *view)
 {
 	EmpathyChatTextViewPriv *priv = GET_PRIV (view);
-	
+
 	g_return_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view));
-	
+
 	if (!priv->allow_scrolling) {
 		return;
 	}
@@ -697,29 +703,29 @@ chat_text_view_append_message (EmpathyChatView *view,
 	EmpathyChatTextViewPriv *priv = GET_PRIV (text_view);
 	gboolean                 bottom;
 	time_t                   timestamp;
-	
+
 	g_return_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view));
 	g_return_if_fail (EMPATHY_IS_MESSAGE (msg));
-	
+
 	if (!empathy_message_get_body (msg)) {
 		return;
 	}
-	
+
 	bottom = chat_text_view_is_scrolled_down (text_view);
-	
+
 	chat_text_view_maybe_trim_buffer (EMPATHY_CHAT_TEXT_VIEW (view));
-	
+
 	timestamp = empathy_message_get_timestamp (msg);
 	chat_text_maybe_append_date_and_time (text_view, timestamp);
 	if (EMPATHY_CHAT_TEXT_VIEW_GET_CLASS (view)->append_message) {
 		EMPATHY_CHAT_TEXT_VIEW_GET_CLASS (view)->append_message (text_view,
 									 msg);
 	}
-	
+
 	if (bottom) {
 		chat_text_view_scroll_down (view);
 	}
-	
+
 	if (priv->last_contact) {
 		g_object_unref (priv->last_contact);
 	}
@@ -757,7 +763,7 @@ chat_text_view_append_event (EmpathyChatView *view,
 	if (bottom) {
 		chat_text_view_scroll_down (view);
 	}
-	
+
 	if (priv->last_contact) {
 		g_object_unref (priv->last_contact);
 		priv->last_contact = NULL;
@@ -770,9 +776,9 @@ chat_text_view_scroll (EmpathyChatView *view,
 		       gboolean         allow_scrolling)
 {
 	EmpathyChatTextViewPriv *priv = GET_PRIV (view);
-	
+
 	g_return_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view));
-	
+
 	DEBUG ("Scrolling %s", allow_scrolling ? "enabled" : "disabled");
 
 	priv->allow_scrolling = allow_scrolling;
@@ -785,11 +791,11 @@ static gboolean
 chat_text_view_get_has_selection (EmpathyChatView *view)
 {
 	GtkTextBuffer *buffer;
-	
+
 	g_return_val_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view), FALSE);
-	
+
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-	
+
 	return gtk_text_buffer_get_has_selection (buffer);
 }
 
@@ -798,18 +804,18 @@ chat_text_view_clear (EmpathyChatView *view)
 {
 	GtkTextBuffer      *buffer;
 	EmpathyChatTextViewPriv *priv;
-	
+
 	g_return_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view));
-	
+
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 	gtk_text_buffer_set_text (buffer, "", -1);
-	
+
 	/* We set these back to the initial values so we get
 	  * timestamps when clearing the window to know when
 	  * conversations start.
 	  */
 	priv = GET_PRIV (view);
-	
+
 	priv->last_timestamp = 0;
 }
 
@@ -825,18 +831,18 @@ chat_text_view_find_previous (EmpathyChatView *view,
 	GtkTextIter         iter_match_end;
 	gboolean            found;
 	gboolean            from_start = FALSE;
-	
+
 	g_return_val_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view), FALSE);
 	g_return_val_if_fail (search_criteria != NULL, FALSE);
-	
+
 	priv = GET_PRIV (view);
-	
+
 	buffer = priv->buffer;
-	
+
 	if (EMP_STR_EMPTY (search_criteria)) {
 		if (priv->find_mark_previous) {
 			gtk_text_buffer_get_start_iter (buffer, &iter_at_mark);
-			
+
 			gtk_text_buffer_move_mark (buffer,
 						   priv->find_mark_previous,
 						   &iter_at_mark);
@@ -850,14 +856,14 @@ chat_text_view_find_previous (EmpathyChatView *view,
 						      &iter_at_mark,
 						      &iter_at_mark);
 		}
-		
+
 		return FALSE;
 	}
-	
+
 	if (new_search) {
 		from_start = TRUE;
 	}
-	
+
 	if (priv->find_mark_previous) {
 		gtk_text_buffer_get_iter_at_mark (buffer,
 						  &iter_at_mark,
@@ -866,22 +872,22 @@ chat_text_view_find_previous (EmpathyChatView *view,
 		gtk_text_buffer_get_end_iter (buffer, &iter_at_mark);
 		from_start = TRUE;
 	}
-	
+
 	priv->find_last_direction = FALSE;
-	
+
 	found = empathy_text_iter_backward_search (&iter_at_mark,
 						   search_criteria,
 						   &iter_match_start,
 						   &iter_match_end,
 						   NULL);
-	
+
 	if (!found) {
 		gboolean result = FALSE;
-		
+
 		if (from_start) {
 			return result;
 		}
-		
+
 		/* Here we wrap around. */
 		if (!new_search && !priv->find_wrapped) {
 			priv->find_wrapped = TRUE;
@@ -890,10 +896,10 @@ chat_text_view_find_previous (EmpathyChatView *view,
 								 FALSE);
 			priv->find_wrapped = FALSE;
 		}
-		
+
 		return result;
 	}
-	
+
 	/* Set new mark and show on screen */
 	if (!priv->find_mark_previous) {
 		priv->find_mark_previous = gtk_text_buffer_create_mark (buffer, NULL,
@@ -904,7 +910,7 @@ chat_text_view_find_previous (EmpathyChatView *view,
 					   priv->find_mark_previous,
 					   &iter_match_start);
 	}
-	
+
 	if (!priv->find_mark_next) {
 		priv->find_mark_next = gtk_text_buffer_create_mark (buffer, NULL,
 								    &iter_match_end,
@@ -914,17 +920,17 @@ chat_text_view_find_previous (EmpathyChatView *view,
 					   priv->find_mark_next,
 					   &iter_match_end);
 	}
-	
+
 	gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (view),
 				      priv->find_mark_previous,
 				      0.0,
 				      TRUE,
 				      0.5,
 				      0.5);
-	
+
 	gtk_text_buffer_move_mark_by_name (buffer, "selection_bound", &iter_match_start);
 	gtk_text_buffer_move_mark_by_name (buffer, "insert", &iter_match_end);
-	
+
 	return TRUE;
 }
 
@@ -940,18 +946,18 @@ chat_text_view_find_next (EmpathyChatView *view,
 	GtkTextIter         iter_match_end;
 	gboolean            found;
 	gboolean            from_start = FALSE;
-	
+
 	g_return_val_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view), FALSE);
 	g_return_val_if_fail (search_criteria != NULL, FALSE);
-	
+
 	priv = GET_PRIV (view);
-	
+
 	buffer = priv->buffer;
-	
+
 	if (EMP_STR_EMPTY (search_criteria)) {
 		if (priv->find_mark_next) {
 			gtk_text_buffer_get_start_iter (buffer, &iter_at_mark);
-			
+
 			gtk_text_buffer_move_mark (buffer,
 						   priv->find_mark_next,
 						   &iter_at_mark);
@@ -965,14 +971,14 @@ chat_text_view_find_next (EmpathyChatView *view,
 						      &iter_at_mark,
 						      &iter_at_mark);
 		}
-		
+
 		return FALSE;
 	}
-	
+
 	if (new_search) {
 		from_start = TRUE;
 	}
-	
+
 	if (priv->find_mark_next) {
 		gtk_text_buffer_get_iter_at_mark (buffer,
 						  &iter_at_mark,
@@ -981,22 +987,22 @@ chat_text_view_find_next (EmpathyChatView *view,
 		gtk_text_buffer_get_start_iter (buffer, &iter_at_mark);
 		from_start = TRUE;
 	}
-	
+
 	priv->find_last_direction = TRUE;
-	
+
 	found = empathy_text_iter_forward_search (&iter_at_mark,
 						  search_criteria,
 						  &iter_match_start,
 						  &iter_match_end,
 						  NULL);
-	
+
 	if (!found) {
 		gboolean result = FALSE;
-		
+
 		if (from_start) {
 			return result;
 		}
-		
+
 		/* Here we wrap around. */
 		if (!new_search && !priv->find_wrapped) {
 			priv->find_wrapped = TRUE;
@@ -1005,10 +1011,10 @@ chat_text_view_find_next (EmpathyChatView *view,
 							     FALSE);
 			priv->find_wrapped = FALSE;
 		}
-		
+
 		return result;
 	}
-	
+
 	/* Set new mark and show on screen */
 	if (!priv->find_mark_next) {
 		priv->find_mark_next = gtk_text_buffer_create_mark (buffer, NULL,
@@ -1019,7 +1025,7 @@ chat_text_view_find_next (EmpathyChatView *view,
 					   priv->find_mark_next,
 					   &iter_match_end);
 	}
-	
+
 	if (!priv->find_mark_previous) {
 		priv->find_mark_previous = gtk_text_buffer_create_mark (buffer, NULL,
 									&iter_match_start,
@@ -1029,17 +1035,17 @@ chat_text_view_find_next (EmpathyChatView *view,
 					   priv->find_mark_previous,
 					   &iter_match_start);
 	}
-	
+
 	gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (view),
 				      priv->find_mark_next,
 				      0.0,
 				      TRUE,
 				      0.5,
 				      0.5);
-	
+
 	gtk_text_buffer_move_mark_by_name (buffer, "selection_bound", &iter_match_start);
 	gtk_text_buffer_move_mark_by_name (buffer, "insert", &iter_match_end);
-	
+
 	return TRUE;
 }
 
@@ -1054,15 +1060,15 @@ chat_text_view_find_abilities (EmpathyChatView *view,
 	GtkTextIter              iter_at_mark;
 	GtkTextIter              iter_match_start;
 	GtkTextIter              iter_match_end;
-	
+
 	g_return_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view));
 	g_return_if_fail (search_criteria != NULL);
 	g_return_if_fail (can_do_previous != NULL && can_do_next != NULL);
-	
+
 	priv = GET_PRIV (view);
-	
+
 	buffer = priv->buffer;
-	
+
 	if (can_do_previous) {
 		if (priv->find_mark_previous) {
 			gtk_text_buffer_get_iter_at_mark (buffer,
@@ -1071,14 +1077,14 @@ chat_text_view_find_abilities (EmpathyChatView *view,
 		} else {
 			gtk_text_buffer_get_start_iter (buffer, &iter_at_mark);
 		}
-		
+
 		*can_do_previous = empathy_text_iter_backward_search (&iter_at_mark,
 								      search_criteria,
 								      &iter_match_start,
 								      &iter_match_end,
 								      NULL);
 	}
-	
+
 	if (can_do_next) {
 		if (priv->find_mark_next) {
 			gtk_text_buffer_get_iter_at_mark (buffer,
@@ -1087,7 +1093,7 @@ chat_text_view_find_abilities (EmpathyChatView *view,
 		} else {
 			gtk_text_buffer_get_start_iter (buffer, &iter_at_mark);
 		}
-		
+
 		*can_do_next = empathy_text_iter_forward_search (&iter_at_mark,
 								 search_criteria,
 								 &iter_match_start,
@@ -1107,37 +1113,37 @@ chat_text_view_highlight (EmpathyChatView *view,
 	GtkTextIter    iter_match_start;
 	GtkTextIter    iter_match_end;
 	gboolean       found;
-	
+
 	g_return_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view));
-	
+
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-	
+
 	gtk_text_buffer_get_start_iter (buffer, &iter);
-	
+
 	gtk_text_buffer_get_bounds (buffer, &iter_start, &iter_end);
 	gtk_text_buffer_remove_tag_by_name (buffer, EMPATHY_CHAT_TEXT_VIEW_TAG_HIGHLIGHT,
 					    &iter_start,
 					    &iter_end);
-	
+
 	if (EMP_STR_EMPTY (text)) {
 		return;
 	}
-	
+
 	while (1) {
 		found = empathy_text_iter_forward_search (&iter,
 							  text,
 							  &iter_match_start,
 							  &iter_match_end,
 							  NULL);
-		
+
 		if (!found) {
 			break;
 		}
-		
+
 		gtk_text_buffer_apply_tag_by_name (buffer, EMPATHY_CHAT_TEXT_VIEW_TAG_HIGHLIGHT,
 						   &iter_match_start,
 						   &iter_match_end);
-		
+
 		iter = iter_match_end;
 		gtk_text_iter_forward_char (&iter);
 	}
@@ -1148,12 +1154,12 @@ chat_text_view_copy_clipboard (EmpathyChatView *view)
 {
 	GtkTextBuffer *buffer;
 	GtkClipboard  *clipboard;
-	
+
 	g_return_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view));
-	
+
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 	clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
-	
+
 	gtk_text_buffer_copy_clipboard (buffer, clipboard);
 }
 
@@ -1177,9 +1183,9 @@ EmpathyContact *
 empathy_chat_text_view_get_last_contact (EmpathyChatTextView *view)
 {
 	EmpathyChatTextViewPriv *priv = GET_PRIV (view);
-	
+
 	g_return_val_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view), NULL);
-	
+
 	return priv->last_contact;
 }
 
@@ -1188,7 +1194,7 @@ empathy_chat_text_view_set_only_if_date (EmpathyChatTextView *view,
 					 gboolean             only_if_date)
 {
 	EmpathyChatTextViewPriv *priv = GET_PRIV (view);
-	
+
 	g_return_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view));
 
 	if (only_if_date != priv->only_if_date) {

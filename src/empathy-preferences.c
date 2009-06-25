@@ -53,6 +53,7 @@ typedef struct {
 	GtkWidget *checkbutton_compact_contact_list;
 	GtkWidget *checkbutton_show_smileys;
 	GtkWidget *checkbutton_use_libindicate;
+	GtkWidget *checkbutton_show_contacts_in_rooms;
 	GtkWidget *combobox_chat_theme;
 	GtkWidget *hbox_adium_theme;
 	GtkWidget *filechooserbutton_adium_theme;
@@ -69,6 +70,8 @@ typedef struct {
 	GtkWidget *checkbutton_notifications_enabled;
 	GtkWidget *checkbutton_notifications_disabled_away;
 	GtkWidget *checkbutton_notifications_focus;
+	GtkWidget *checkbutton_notifications_contact_signin;
+	GtkWidget *checkbutton_notifications_contact_signout;
 
 	GtkWidget *treeview_spell_checker;
 
@@ -200,6 +203,12 @@ preferences_setup_widgets (EmpathyPreferences *preferences)
 	preferences_hookup_toggle_button (preferences,
 					  EMPATHY_PREFS_NOTIFICATIONS_FOCUS,
 					  preferences->checkbutton_notifications_focus);
+	preferences_hookup_toggle_button (preferences,
+					  EMPATHY_PREFS_NOTIFICATIONS_CONTACT_SIGNIN,
+					  preferences->checkbutton_notifications_contact_signin);
+	preferences_hookup_toggle_button (preferences,
+					  EMPATHY_PREFS_NOTIFICATIONS_CONTACT_SIGNOUT,
+					  preferences->checkbutton_notifications_contact_signout);
 
 	preferences_hookup_sensitivity (preferences,
 					EMPATHY_PREFS_NOTIFICATIONS_ENABLED,
@@ -207,6 +216,12 @@ preferences_setup_widgets (EmpathyPreferences *preferences)
 	preferences_hookup_sensitivity (preferences,
 					EMPATHY_PREFS_NOTIFICATIONS_ENABLED,
 					preferences->checkbutton_notifications_focus);
+	preferences_hookup_sensitivity (preferences,
+					EMPATHY_PREFS_NOTIFICATIONS_ENABLED,
+					preferences->checkbutton_notifications_contact_signin);
+	preferences_hookup_sensitivity (preferences,
+					EMPATHY_PREFS_NOTIFICATIONS_ENABLED,
+					preferences->checkbutton_notifications_contact_signout);
 
 	preferences_hookup_toggle_button (preferences,
 					  EMPATHY_PREFS_SOUNDS_ENABLED,
@@ -245,6 +260,10 @@ preferences_setup_widgets (EmpathyPreferences *preferences)
 	preferences_hookup_toggle_button (preferences,
 					  EMPATHY_PREFS_CHAT_SHOW_SMILEYS,
 					  preferences->checkbutton_show_smileys);
+
+	preferences_hookup_toggle_button (preferences,
+					  EMPATHY_PREFS_CHAT_SHOW_CONTACTS_IN_ROOMS,
+					  preferences->checkbutton_show_contacts_in_rooms);
 
 	preferences_hookup_radio_button (preferences,
 					 EMPATHY_PREFS_CONTACTS_SORT_CRITERIUM,
@@ -466,7 +485,7 @@ preferences_languages_add (EmpathyPreferences *preferences)
 			       codes != NULL);
 	if (!codes) {
 		gtk_widget_set_sensitive (preferences->treeview_spell_checker, FALSE);
-	}		
+	}
 
 	for (l = codes; l; l = l->next) {
 		GtkTreeIter  iter;
@@ -664,12 +683,12 @@ preferences_widget_sync_string (const gchar *key, GtkWidget *widget)
 				GEnumValue  *enum_value;
 				GSList      *list;
 				GtkWidget   *toggle_widget;
-				
+
 				/* Get index from new string */
 				type = empathy_contact_list_store_sort_get_type ();
 				enum_class = G_ENUM_CLASS (g_type_class_peek (type));
 				enum_value = g_enum_get_value_by_nick (enum_class, value);
-				
+
 				if (enum_value) {
 					list = gtk_radio_button_get_group (GTK_RADIO_BUTTON (widget));
 					toggle_widget = g_slist_nth_data (list, enum_value->value);
@@ -731,7 +750,7 @@ preferences_notify_int_cb (EmpathyConf  *conf,
 			   const gchar *key,
 			   gpointer     user_data)
 {
-	preferences_widget_sync_int (key, user_data);	
+	preferences_widget_sync_int (key, user_data);
 }
 
 static void
@@ -921,14 +940,14 @@ preferences_radio_button_toggled_cb (GtkWidget *button,
 		GType        type;
 		GEnumClass  *enum_class;
 		GEnumValue  *enum_value;
-		
+
 		group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-		
+
 		/* Get string from index */
 		type = empathy_contact_list_store_sort_get_type ();
 		enum_class = G_ENUM_CLASS (g_type_class_peek (type));
 		enum_value = g_enum_get_value (enum_class, g_slist_index (group, button));
-		
+
 		if (!enum_value) {
 			g_warning ("No GEnumValue for EmpathyContactListSort with GtkRadioButton index:%d",
 				   g_slist_index (group, button));
@@ -961,7 +980,7 @@ preferences_theme_adium_update_validity (EmpathyPreferences *preferences,
 					 const gchar        *path)
 {
 #ifdef HAVE_WEBKIT
-	if (empathy_theme_adium_is_valid (path)) {
+	if (empathy_adium_path_is_valid (path)) {
 		gtk_widget_hide (preferences->label_invalid_adium_theme);
 	} else {
 		gtk_widget_show (preferences->label_invalid_adium_theme);
@@ -1200,6 +1219,7 @@ empathy_preferences_show (GtkWindow *parent)
 		"checkbutton_compact_contact_list", &preferences->checkbutton_compact_contact_list,
 		"checkbutton_show_smileys", &preferences->checkbutton_show_smileys,
 		"checkbutton_use_libindicate", &preferences->checkbutton_use_libindicate,
+		"checkbutton_show_contacts_in_rooms", &preferences->checkbutton_show_contacts_in_rooms,
 		"combobox_chat_theme", &preferences->combobox_chat_theme,
 		"hbox_adium_theme", &preferences->hbox_adium_theme,
 		"filechooserbutton_adium_theme", &preferences->filechooserbutton_adium_theme,
@@ -1211,6 +1231,8 @@ empathy_preferences_show (GtkWindow *parent)
 		"checkbutton_notifications_enabled", &preferences->checkbutton_notifications_enabled,
 		"checkbutton_notifications_disabled_away", &preferences->checkbutton_notifications_disabled_away,
 		"checkbutton_notifications_focus", &preferences->checkbutton_notifications_focus,
+		"checkbutton_notifications_contact_signin", &preferences->checkbutton_notifications_contact_signin,
+		"checkbutton_notifications_contact_signout", &preferences->checkbutton_notifications_contact_signout,
 		"checkbutton_sounds_enabled", &preferences->checkbutton_sounds_enabled,
 		"checkbutton_sounds_disabled_away", &preferences->checkbutton_sounds_disabled_away,
 		"treeview_sounds", &preferences->treeview_sounds,

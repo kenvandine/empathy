@@ -488,7 +488,7 @@ empathy_call_window_mic_volume_changed_cb (GtkAdjustment *adj,
     priv->volume = volume;
 
   /* Ensure that the toggle button is active if the volume is > 0 and inactive
-   * if it's smaller then 0 */
+   * if it's smaller than 0 */
   if ((volume > 0) != gtk_toggle_tool_button_get_active (
         GTK_TOGGLE_TOOL_BUTTON (priv->mic_button)))
     gtk_toggle_tool_button_set_active (
@@ -1201,13 +1201,17 @@ empathy_call_window_disconnected (EmpathyCallWindow *self)
       gtk_action_set_sensitive (priv->redial, TRUE);
       gtk_widget_set_sensitive (priv->redial_button, TRUE);
 
-      /* Reseting the send_video and camera_buton to their initial state */
+      /* Reseting the send_video, camera_buton and mic_button to their
+         initial state */
       gtk_widget_set_sensitive (priv->camera_button, FALSE);
+      gtk_widget_set_sensitive (priv->mic_button, FALSE);
       gtk_action_set_sensitive (priv->send_video, FALSE);
       gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->send_video),
           initial_video);
       gtk_toggle_tool_button_set_active (
           GTK_TOGGLE_TOOL_BUTTON (priv->camera_button), initial_video);
+      gtk_toggle_tool_button_set_active (
+          GTK_TOGGLE_TOOL_BUTTON (priv->mic_button), TRUE);
 
       gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->show_preview),
           FALSE);
@@ -1347,6 +1351,8 @@ empathy_call_window_connected (gpointer user_data)
 
   gtk_action_set_sensitive (priv->redial, FALSE);
   gtk_widget_set_sensitive (priv->redial_button, FALSE);
+
+  gtk_widget_set_sensitive (priv->mic_button, TRUE);
 
   empathy_call_window_update_avatars_visibility (call, self);
 
@@ -1849,6 +1855,9 @@ empathy_call_window_mic_toggled_cb (GtkToggleToolButton *toggle,
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (window);
   gboolean active;
+
+  if (priv->audio_input == NULL)
+    return;
 
   active = (gtk_toggle_tool_button_get_active (toggle));
 

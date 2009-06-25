@@ -1,4 +1,5 @@
 empathy_account_chooser_get_type
+empathy_adium_data_get_type
 empathy_audio_sink_get_type
 empathy_audio_src_get_type
 empathy_avatar_chooser_get_type

@@ -205,7 +205,7 @@ tp_contact_list_group_members_changed_cb (TpChannel     *channel,
 		g_signal_emit_by_name (list, "groups-changed", contact,
 				       group_name,
 				       TRUE);
-	}	
+	}
 
 	for (i = 0; i < removed->len; i++) {
 		EmpathyContact *contact;
@@ -224,7 +224,7 @@ tp_contact_list_group_members_changed_cb (TpChannel     *channel,
 		g_signal_emit_by_name (list, "groups-changed", contact,
 				       group_name,
 				       FALSE);
-	}	
+	}
 }
 
 static void

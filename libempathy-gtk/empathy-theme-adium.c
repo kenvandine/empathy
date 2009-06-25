@@ -25,146 +25,69 @@
 #include <glib/gi18n.h>
 
 #include <webkit/webkitnetworkrequest.h>
+#include <telepathy-glib/dbus.h>
+#include <telepathy-glib/util.h>
+
 
 #include <libempathy/empathy-time.h>
 #include <libempathy/empathy-utils.h>
+#include <libmissioncontrol/mc-profile.h>
 
 #include "empathy-theme-adium.h"
 #include "empathy-smiley-manager.h"
 #include "empathy-conf.h"
 #include "empathy-ui-utils.h"
+#include "empathy-plist.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_CHAT
 #include <libempathy/empathy-debug.h>
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyThemeAdium)
 
+/* "Join" consecutive messages with timestamps within five minutes */
+#define MESSAGE_JOIN_PERIOD 5*60
+
 typedef struct {
+	EmpathyAdiumData     *data;
 	EmpathySmileyManager *smiley_manager;
 	EmpathyContact       *last_contact;
+	time_t                last_timestamp;
 	gboolean              page_loaded;
 	GList                *message_queue;
-	gchar                *path;
-	gchar                *default_avatar_filename;
-	gchar                *template_html;
-	gchar                *basedir;
-	gchar                *in_content_html;
-	gsize                 in_content_len;
-	gchar                *in_nextcontent_html;
-	gsize                 in_nextcontent_len;
-	gchar                *out_content_html;
-	gsize                 out_content_len;
-	gchar                *out_nextcontent_html;
-	gsize                 out_nextcontent_len;
-	gchar                *status_html;
-	gsize                 status_len;
 } EmpathyThemeAdiumPriv;
+
+struct _EmpathyAdiumData {
+	guint  ref_count;
+	gchar *path;
+	gchar *basedir;
+	gchar *default_avatar_filename;
+	gchar *default_incoming_avatar_filename;
+	gchar *default_outgoing_avatar_filename;
+	gchar *template_html;
+	gchar *in_content_html;
+	gsize  in_content_len;
+	gchar *in_nextcontent_html;
+	gsize  in_nextcontent_len;
+	gchar *out_content_html;
+	gsize  out_content_len;
+	gchar *out_nextcontent_html;
+	gsize  out_nextcontent_len;
+	gchar *status_html;
+	gsize  status_len;
+	GHashTable *info;
+};
 
 static void theme_adium_iface_init (EmpathyChatViewIface *iface);
 
 enum {
 	PROP_0,
-	PROP_PATH,
+	PROP_ADIUM_DATA,
 };
 
 G_DEFINE_TYPE_WITH_CODE (EmpathyThemeAdium, empathy_theme_adium,
 			 WEBKIT_TYPE_WEB_VIEW,
 			 G_IMPLEMENT_INTERFACE (EMPATHY_TYPE_CHAT_VIEW,
 						theme_adium_iface_init));
-
-static void
-theme_adium_load (EmpathyThemeAdium *theme)
-{
-	EmpathyThemeAdiumPriv *priv = GET_PRIV (theme);
-	gchar                 *file;
-	gchar                 *template_html = NULL;
-	gsize                  template_len;
-	GString               *string;
-	gchar                **strv = NULL;
-	gchar                 *css_path;
-	guint                  len = 0;
-	guint                  i = 0;
-	gchar                 *basedir_uri;
-
-	priv->basedir = g_strconcat (priv->path, G_DIR_SEPARATOR_S "Contents" G_DIR_SEPARATOR_S "Resources" G_DIR_SEPARATOR_S, NULL);
-	basedir_uri = g_strconcat ("file://", priv->basedir, NULL);
-
-	/* Load html files */
-	file = g_build_filename (priv->basedir, "Incoming", "Content.html", NULL);
-	g_file_get_contents (file, &priv->in_content_html, &priv->in_content_len, NULL);
-	g_free (file);
-
-	file = g_build_filename (priv->basedir, "Incoming", "NextContent.html", NULL);
-	g_file_get_contents (file, &priv->in_nextcontent_html, &priv->in_nextcontent_len, NULL);
-	g_free (file);
-
-	file = g_build_filename (priv->basedir, "Outgoing", "Content.html", NULL);
-	g_file_get_contents (file, &priv->out_content_html, &priv->out_content_len, NULL);
-	g_free (file);
-
-	file = g_build_filename (priv->basedir, "Outgoing", "NextContent.html", NULL);
-	g_file_get_contents (file, &priv->out_nextcontent_html, &priv->out_nextcontent_len, NULL);
-	g_free (file);
-
-	file = g_build_filename (priv->basedir, "Status.html", NULL);
-	g_file_get_contents (file, &priv->status_html, &priv->status_len, NULL);
-	g_free (file);
-
-	css_path = g_build_filename (priv->basedir, "main.css", NULL);
-
-	/* There is 2 formats for Template.html: The old one has 4 parameters,
-	 * the new one has 5 parameters. */
-	file = g_build_filename (priv->basedir, "Template.html", NULL);
-	if (g_file_get_contents (file, &template_html, &template_len, NULL)) {
-		strv = g_strsplit (template_html, "%@", -1);
-		len = g_strv_length (strv);
-	}
-	g_free (file);
-
-	if (len != 5 && len != 6) {
-		/* Either the theme has no template or it don't have the good
-		 * number of parameters. Fallback to use our own template. */
-		g_free (template_html);
-		g_strfreev (strv);
-
-		file = empathy_file_lookup ("Template.html", "data");
-		g_file_get_contents (file, &template_html, &template_len, NULL);
-		g_free (file);
-		strv = g_strsplit (template_html, "%@", -1);
-		len = g_strv_length (strv);
-	}
-
-	/* Replace %@ with the needed information in the template html. */
-	string = g_string_sized_new (template_len);
-	g_string_append (string, strv[i++]);
-	g_string_append (string, priv->basedir);
-	g_string_append (string, strv[i++]);
-	if (len == 6) {
-		/* We include main.css by default */
-		g_string_append_printf (string, "@import url(\"%s\");", css_path);
-		g_string_append (string, strv[i++]);
-		/* FIXME: We should set the variant css here */
-		g_string_append (string, "");
-	} else {
-		/* FIXME: We should set main.css OR the variant css */
-		g_string_append (string, css_path);
-	}
-	g_string_append (string, strv[i++]);
-	g_string_append (string, ""); /* We don't want header */
-	g_string_append (string, strv[i++]);
-	g_string_append (string, ""); /* FIXME: We don't support footer yet */
-	g_string_append (string, strv[i++]);
-	priv->template_html = g_string_free (string, FALSE);
-
-	/* Load the template */
-	webkit_web_view_load_html_string (WEBKIT_WEB_VIEW (theme),
-					  priv->template_html, basedir_uri);
-
-	g_free (basedir_uri);
-	g_free (template_html);
-	g_free (css_path);
-	g_strfreev (strv);
-}
 
 static WebKitNavigationResponse
 theme_adium_navigation_requested_cb (WebKitWebView        *view,
@@ -190,12 +113,12 @@ theme_adium_populate_popup_cb (WebKitWebView *view,
 	/* Remove default menu items */
 	gtk_container_foreach (GTK_CONTAINER (menu),
 		(GtkCallback) gtk_widget_destroy, NULL);
-	
+
 	/* Select all item */
 	item = gtk_image_menu_item_new_from_stock (GTK_STOCK_SELECT_ALL, NULL);
 	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
-		
+
 	g_signal_connect_swapped (item, "activate",
 				  G_CALLBACK (webkit_web_view_select_all),
 				  view);
@@ -205,7 +128,7 @@ theme_adium_populate_popup_cb (WebKitWebView *view,
 		item = gtk_image_menu_item_new_from_stock (GTK_STOCK_COPY, NULL);
 		gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 		gtk_widget_show (item);
-		
+
 		g_signal_connect_swapped (item, "activate",
 					  G_CALLBACK (webkit_web_view_copy_clipboard),
 					  view);
@@ -215,11 +138,11 @@ theme_adium_populate_popup_cb (WebKitWebView *view,
 	item = gtk_separator_menu_item_new ();
 	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
-		
+
 	item = gtk_image_menu_item_new_from_stock (GTK_STOCK_CLEAR, NULL);
 	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
-		
+
 	g_signal_connect_swapped (item, "activate",
 				  G_CALLBACK (empathy_chat_view_clear),
 				  view);
@@ -343,7 +266,7 @@ escape_and_append_len (GString *string, const gchar *str, gint len)
 		switch (*str) {
 		case '\\':
 			/* \ becomes \\ */
-			g_string_append (string, "\\\\");	
+			g_string_append (string, "\\\\");
 			break;
 		case '\"':
 			/* " becomes \" */
@@ -382,6 +305,9 @@ theme_adium_append_html (EmpathyThemeAdium *theme,
 		         const gchar       *message,
 		         const gchar       *avatar_filename,
 		         const gchar       *name,
+		         const gchar       *contact_id,
+		         const gchar       *service_name,
+		         const gchar       *message_classes,
 		         time_t             timestamp)
 {
 	GString     *string;
@@ -397,10 +323,28 @@ theme_adium_append_html (EmpathyThemeAdium *theme,
 
 		if (theme_adium_match (&cur, "%message%")) {
 			replace = message;
+		} else if (theme_adium_match (&cur, "%messageClasses%")) {
+			replace = message_classes;
 		} else if (theme_adium_match (&cur, "%userIconPath%")) {
 			replace = avatar_filename;
 		} else if (theme_adium_match (&cur, "%sender%")) {
 			replace = name;
+		} else if (theme_adium_match (&cur, "%senderScreenName%")) {
+			replace = contact_id;
+		} else if (theme_adium_match (&cur, "%senderDisplayName%")) {
+			/* %senderDisplayName% -
+			 * "The serverside (remotely set) name of the sender,
+			 *  such as an MSN display name."
+			 *
+			 * We don't have access to that yet so we use local
+			 * alias instead.*/
+			replace = name;
+		} else if (theme_adium_match (&cur, "%service%")) {
+			replace = service_name;
+		} else if (theme_adium_match (&cur, "%shortTime%")) {
+			dup_replace = empathy_time_to_string_local (timestamp,
+				EMPATHY_TIME_FORMAT_DISPLAY_SHORT);
+			replace = dup_replace;
 		} else if (theme_adium_match (&cur, "%time")) {
 			gchar *format = NULL;
 			gchar *end;
@@ -448,15 +392,20 @@ theme_adium_append_message (EmpathyChatView *view,
 	EmpathyThemeAdium     *theme = EMPATHY_THEME_ADIUM (view);
 	EmpathyThemeAdiumPriv *priv = GET_PRIV (theme);
 	EmpathyContact        *sender;
+	McAccount             *account;
+	McProfile             *account_profile;
 	gchar                 *dup_body = NULL;
 	const gchar           *body;
 	const gchar           *name;
+	const gchar           *contact_id;
 	EmpathyAvatar         *avatar;
 	const gchar           *avatar_filename = NULL;
 	time_t                 timestamp;
 	gchar                 *html = NULL;
 	gsize                  len = 0;
 	const gchar           *func;
+	const gchar           *service_name;
+	const gchar           *message_classes = NULL;
 
 	if (!priv->page_loaded) {
 		priv->message_queue = g_list_prepend (priv->message_queue,
@@ -466,6 +415,9 @@ theme_adium_append_message (EmpathyChatView *view,
 
 	/* Get information */
 	sender = empathy_message_get_sender (msg);
+	account = empathy_contact_get_account (sender);
+	account_profile = mc_account_get_profile (account);
+	service_name = mc_profile_get_display_name (account_profile);
 	timestamp = empathy_message_get_timestamp (msg);
 	body = empathy_message_get_body (msg);
 	dup_body = theme_adium_parse_body (theme, body);
@@ -473,6 +425,7 @@ theme_adium_append_message (EmpathyChatView *view,
 		body = dup_body;
 	}
 	name = empathy_contact_get_name (sender);
+	contact_id = empathy_contact_get_id (sender);
 
 	/* If this is a /me, append an event */
 	if (empathy_message_get_tptype (msg) == TP_CHANNEL_TEXT_MESSAGE_TYPE_ACTION) {
@@ -491,46 +444,68 @@ theme_adium_append_message (EmpathyChatView *view,
 		avatar_filename = avatar->filename;
 	}
 	if (!avatar_filename) {
-		if (!priv->default_avatar_filename) {
-			priv->default_avatar_filename =
-				empathy_filename_from_icon_name ("stock_person",
-								 GTK_ICON_SIZE_DIALOG);
+		if (empathy_contact_is_user (sender)) {
+			avatar_filename = priv->data->default_outgoing_avatar_filename;
+		} else {
+			avatar_filename = priv->data->default_incoming_avatar_filename;
 		}
-		avatar_filename = priv->default_avatar_filename;
+		if (!avatar_filename) {
+			if (!priv->data->default_avatar_filename) {
+				priv->data->default_avatar_filename =
+					empathy_filename_from_icon_name ("stock_person",
+									 GTK_ICON_SIZE_DIALOG);
+			}
+			avatar_filename = priv->data->default_avatar_filename;
+		}
 	}
 
 	/* Get the right html/func to add the message */
 	func = "appendMessage";
-	if (empathy_contact_equal (priv->last_contact, sender)) {
+	/*
+	 * To mimick Adium's behavior, we only want to join messages
+	 * sent within a 5 minute time frame.
+	 */
+	if (empathy_contact_equal (priv->last_contact, sender) &&
+	    (timestamp - priv->last_timestamp < MESSAGE_JOIN_PERIOD)) {
 		func = "appendNextMessage";
 		if (empathy_contact_is_user (sender)) {
-			html = priv->out_nextcontent_html;
-			len = priv->out_nextcontent_len;
+			message_classes = "consecutive incoming message";
+			html = priv->data->out_nextcontent_html;
+			len = priv->data->out_nextcontent_len;
 		}
 		if (!html) {
-			html = priv->in_nextcontent_html;
-			len = priv->in_nextcontent_len;
+			message_classes = "consecutive message outgoing";
+			html = priv->data->in_nextcontent_html;
+			len = priv->data->in_nextcontent_len;
 		}
 	}
 	if (!html) {
 		if (empathy_contact_is_user (sender)) {
-			html = priv->out_content_html;
-			len = priv->out_content_len;
+			if (!message_classes) {
+				message_classes = "incoming message";
+			}
+			html = priv->data->out_content_html;
+			len = priv->data->out_content_len;
 		}
 		if (!html) {
-			html = priv->in_content_html;
-			len = priv->in_content_len;
+			if (!message_classes) {
+				message_classes = "message outgoing";
+			}
+			html = priv->data->in_content_html;
+			len = priv->data->in_content_len;
 		}
 	}
 
 	theme_adium_append_html (theme, func, html, len, body, avatar_filename,
-				 name, timestamp);
+				 name, contact_id, service_name, message_classes,
+				 timestamp);
 
 	/* Keep the sender of the last displayed message */
 	if (priv->last_contact) {
 		g_object_unref (priv->last_contact);
 	}
 	priv->last_contact = g_object_ref (sender);
+	priv->last_timestamp = timestamp;
 
 	g_free (dup_body);
 }
@@ -542,10 +517,11 @@ theme_adium_append_event (EmpathyChatView *view,
 	EmpathyThemeAdium     *theme = EMPATHY_THEME_ADIUM (view);
 	EmpathyThemeAdiumPriv *priv = GET_PRIV (theme);
 
-	if (priv->status_html) {
+	if (priv->data->status_html) {
 		theme_adium_append_html (theme, "appendMessage",
-					 priv->status_html, priv->status_len,
-					 str, NULL, NULL,
+					 priv->data->status_html,
+					 priv->data->status_len,
+					 str, NULL, NULL, NULL, NULL, "event",
 					 empathy_time_get_current ());
 	}
 
@@ -583,9 +559,10 @@ theme_adium_clear (EmpathyChatView *view)
 	gchar *basedir_uri;
 
 	priv->page_loaded = FALSE;
-	basedir_uri = g_strconcat ("file://", priv->basedir, NULL);
+	basedir_uri = g_strconcat ("file://", priv->data->basedir, NULL);
 	webkit_web_view_load_html_string (WEBKIT_WEB_VIEW (view),
-					  priv->template_html, basedir_uri);
+					  priv->data->template_html,
+					  basedir_uri);
 	g_free (basedir_uri);
 }
 
@@ -683,14 +660,7 @@ theme_adium_finalize (GObject *object)
 {
 	EmpathyThemeAdiumPriv *priv = GET_PRIV (object);
 
-	g_free (priv->basedir);
-	g_free (priv->template_html);
-	g_free (priv->in_content_html);
-	g_free (priv->in_nextcontent_html);
-	g_free (priv->out_content_html);
-	g_free (priv->out_nextcontent_html);
-	g_free (priv->default_avatar_filename);
-	g_free (priv->path);
+	empathy_adium_data_unref (priv->data);
 
 	G_OBJECT_CLASS (empathy_theme_adium_parent_class)->finalize (object);
 }
@@ -716,7 +686,32 @@ theme_adium_dispose (GObject *object)
 static void
 theme_adium_constructed (GObject *object)
 {
-	theme_adium_load (EMPATHY_THEME_ADIUM (object));
+	EmpathyThemeAdiumPriv *priv = GET_PRIV (object);
+	gchar                 *basedir_uri;
+	const gchar           *font_family = NULL;
+	gint                   font_size = 0;
+	WebKitWebSettings     *webkit_settings;
+
+	/* Set default settings */
+	font_family = tp_asv_get_string (priv->data->info, "DefaultFontFamily");
+	font_size = tp_asv_get_int32 (priv->data->info, "DefaultFontSize", NULL);
+	webkit_settings = webkit_web_settings_new ();
+	if (font_family) {
+		g_object_set (G_OBJECT (webkit_settings), "default-font-family", font_family, NULL);
+	}
+	if (font_size) {
+		g_object_set (G_OBJECT (webkit_settings), "default-font-size", font_size, NULL);
+	}
+	webkit_web_view_set_settings (WEBKIT_WEB_VIEW (object), webkit_settings);
+
+	/* Load template */
+	basedir_uri = g_strconcat ("file://", priv->data->basedir, NULL);
+	webkit_web_view_load_html_string (WEBKIT_WEB_VIEW (object),
+					  priv->data->template_html,
+					  basedir_uri);
+
+	g_object_unref (webkit_settings);
+	g_free (basedir_uri);
 }
 
 static void
@@ -728,8 +723,8 @@ theme_adium_get_property (GObject    *object,
 	EmpathyThemeAdiumPriv *priv = GET_PRIV (object);
 
 	switch (param_id) {
-	case PROP_PATH:
-		g_value_set_string (value, priv->path);
+	case PROP_ADIUM_DATA:
+		g_value_set_boxed (value, priv->data);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -746,9 +741,9 @@ theme_adium_set_property (GObject      *object,
 	EmpathyThemeAdiumPriv *priv = GET_PRIV (object);
 
 	switch (param_id) {
-	case PROP_PATH:
-		g_free (priv->path);
-		priv->path = g_value_dup_string (value);
+	case PROP_ADIUM_DATA:
+		g_assert (priv->data == NULL);
+		priv->data = g_value_dup_boxed (value);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -760,7 +755,7 @@ static void
 empathy_theme_adium_class_init (EmpathyThemeAdiumClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	
+
 	object_class->finalize = theme_adium_finalize;
 	object_class->dispose = theme_adium_dispose;
 	object_class->constructed = theme_adium_constructed;
@@ -768,13 +763,14 @@ empathy_theme_adium_class_init (EmpathyThemeAdiumClass *klass)
 	object_class->set_property = theme_adium_set_property;
 
 	g_object_class_install_property (object_class,
-					 PROP_PATH,
-					 g_param_spec_string ("path",
-							      "The theme path",
-							      "Path to the adium theme",
-							      g_get_home_dir (),
+					 PROP_ADIUM_DATA,
+					 g_param_spec_boxed ("adium-data",
+							     "The theme data",
+							     "Data for the adium theme",
+							      EMPATHY_TYPE_ADIUM_DATA,
 							      G_PARAM_CONSTRUCT_ONLY |
-							      G_PARAM_READWRITE));
+							      G_PARAM_READWRITE |
+							      G_PARAM_STATIC_STRINGS));
 
 
 	g_type_class_add_private (object_class, sizeof (EmpathyThemeAdiumPriv));
@@ -786,7 +782,7 @@ empathy_theme_adium_init (EmpathyThemeAdium *theme)
 	EmpathyThemeAdiumPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (theme,
 		EMPATHY_TYPE_THEME_ADIUM, EmpathyThemeAdiumPriv);
 
-	theme->priv = priv;	
+	theme->priv = priv;
 
 	priv->smiley_manager = empathy_smiley_manager_dup_singleton ();
 
@@ -802,17 +798,17 @@ empathy_theme_adium_init (EmpathyThemeAdium *theme)
 }
 
 EmpathyThemeAdium *
-empathy_theme_adium_new (const gchar *path)
+empathy_theme_adium_new (EmpathyAdiumData *data)
 {
-	g_return_val_if_fail (empathy_theme_adium_is_valid (path), NULL);
+	g_return_val_if_fail (data != NULL, NULL);
 
 	return g_object_new (EMPATHY_TYPE_THEME_ADIUM,
-			     "path", path,
+			     "adium-data", data,
 			     NULL);
 }
 
 gboolean
-empathy_theme_adium_is_valid (const gchar *path)
+empathy_adium_path_is_valid (const gchar *path)
 {
 	gboolean ret;
 	gchar   *file;
@@ -827,5 +823,229 @@ empathy_theme_adium_is_valid (const gchar *path)
 	g_free (file);
 
 	return ret;
+}
+
+GHashTable *
+empathy_adium_info_new (const gchar *path)
+{
+	gchar *file;
+	GValue *value;
+	GHashTable *info = NULL;
+
+	g_return_val_if_fail (empathy_adium_path_is_valid (path), NULL);
+
+	file = g_build_filename (path, "Contents", "Info.plist", NULL);
+	value = empathy_plist_parse_from_file (file);
+	g_free (file);
+
+	if (value) {
+		info = g_value_dup_boxed (value);
+		tp_g_value_slice_free (value);
+	}
+
+	return info;
+}
+
+GType
+empathy_adium_data_get_type (void)
+{
+  static GType type_id = 0;
+
+  if (!type_id)
+    {
+      type_id = g_boxed_type_register_static ("EmpathyAdiumData",
+          (GBoxedCopyFunc) empathy_adium_data_ref,
+          (GBoxedFreeFunc) empathy_adium_data_unref);
+    }
+
+  return type_id;
+}
+
+EmpathyAdiumData  *
+empathy_adium_data_new_with_info (const gchar *path, GHashTable *info)
+{
+	EmpathyAdiumData *data;
+	gchar            *file;
+	gchar            *template_html = NULL;
+	gsize             template_len;
+	gchar            *footer_html = NULL;
+	gsize             footer_len;
+	GString          *string;
+	gchar           **strv = NULL;
+	gchar            *css_path;
+	guint             len = 0;
+	guint             i = 0;
+
+	g_return_val_if_fail (empathy_adium_path_is_valid (path), NULL);
+
+	data = g_slice_new0 (EmpathyAdiumData);
+	data->ref_count = 1;
+	data->path = g_strdup (path);
+	data->basedir = g_strconcat (path, G_DIR_SEPARATOR_S "Contents"
+		G_DIR_SEPARATOR_S "Resources" G_DIR_SEPARATOR_S, NULL);
+	data->info = g_hash_table_ref (info);
+
+	/* Load html files */
+	file = g_build_filename (data->basedir, "Incoming", "Content.html", NULL);
+	g_file_get_contents (file, &data->in_content_html, &data->in_content_len, NULL);
+	g_free (file);
+
+	file = g_build_filename (data->basedir, "Incoming", "NextContent.html", NULL);
+	g_file_get_contents (file, &data->in_nextcontent_html, &data->in_nextcontent_len, NULL);
+	g_free (file);
+
+	file = g_build_filename (data->basedir, "Outgoing", "Content.html", NULL);
+	g_file_get_contents (file, &data->out_content_html, &data->out_content_len, NULL);
+	g_free (file);
+
+	file = g_build_filename (data->basedir, "Outgoing", "NextContent.html", NULL);
+	g_file_get_contents (file, &data->out_nextcontent_html, &data->out_nextcontent_len, NULL);
+	g_free (file);
+
+	file = g_build_filename (data->basedir, "Status.html", NULL);
+	g_file_get_contents (file, &data->status_html, &data->status_len, NULL);
+	g_free (file);
+
+	file = g_build_filename (data->basedir, "Footer.html", NULL);
+	g_file_get_contents (file, &footer_html, &footer_len, NULL);
+	g_free (file);
+
+	file = g_build_filename (data->basedir, "Incoming", "buddy_icon.png", NULL);
+	if (g_file_test (file, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)) {
+		data->default_incoming_avatar_filename = file;
+	} else {
+		g_free (file);
+	}
+
+	file = g_build_filename (data->basedir, "Outgoing", "buddy_icon.png", NULL);
+	if (g_file_test (file, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)) {
+		data->default_outgoing_avatar_filename = file;
+	} else {
+		g_free (file);
+	}
+
+	css_path = g_build_filename (data->basedir, "main.css", NULL);
+
+	/* There is 2 formats for Template.html: The old one has 4 parameters,
+	 * the new one has 5 parameters. */
+	file = g_build_filename (data->basedir, "Template.html", NULL);
+	if (g_file_get_contents (file, &template_html, &template_len, NULL)) {
+		strv = g_strsplit (template_html, "%@", -1);
+		len = g_strv_length (strv);
+	}
+	g_free (file);
+
+	if (len != 5 && len != 6) {
+		/* Either the theme has no template or it don't have the good
+		 * number of parameters. Fallback to use our own template. */
+		g_free (template_html);
+		g_strfreev (strv);
+
+		file = empathy_file_lookup ("Template.html", "data");
+		g_file_get_contents (file, &template_html, &template_len, NULL);
+		g_free (file);
+		strv = g_strsplit (template_html, "%@", -1);
+		len = g_strv_length (strv);
+	}
+
+	/* Replace %@ with the needed information in the template html. */
+	string = g_string_sized_new (template_len);
+	g_string_append (string, strv[i++]);
+	g_string_append (string, data->basedir);
+	g_string_append (string, strv[i++]);
+	if (len == 6) {
+		const gchar *variant;
+
+		/* We include main.css by default */
+		g_string_append_printf (string, "@import url(\"%s\");", css_path);
+		g_string_append (string, strv[i++]);
+		variant = tp_asv_get_string (data->info, "DefaultVariant");
+		if (variant) {
+			g_string_append (string, "Variants/");
+			g_string_append (string, variant);
+			g_string_append (string, ".css");
+		}
+	} else {
+		/* FIXME: We should set main.css OR the variant css */
+		g_string_append (string, css_path);
+	}
+	g_string_append (string, strv[i++]);
+	g_string_append (string, ""); /* We don't want header */
+	g_string_append (string, strv[i++]);
+	/* FIXME: We should replace adium %macros% in footer */
+	if (footer_html) {
+		g_string_append (string, footer_html);
+	}
+	g_string_append (string, strv[i++]);
+	data->template_html = g_string_free (string, FALSE);
+
+	g_free (footer_html);
+	g_free (template_html);
+	g_free (css_path);
+	g_strfreev (strv);
+
+	return data;
+}
+
+EmpathyAdiumData  *
+empathy_adium_data_new (const gchar *path)
+{
+	EmpathyAdiumData *data;
+	GHashTable *info;
+
+	info = empathy_adium_info_new (path);
+	data = empathy_adium_data_new_with_info (path, info);
+	g_hash_table_unref (info);
+
+	return data;
+}
+
+EmpathyAdiumData  *
+empathy_adium_data_ref (EmpathyAdiumData *data)
+{
+	g_return_val_if_fail (data != NULL, NULL);
+
+	data->ref_count++;
+
+	return data;
+}
+
+void
+empathy_adium_data_unref (EmpathyAdiumData *data)
+{
+	g_return_if_fail (data != NULL);
+
+	data->ref_count--;
+	if (data->ref_count == 0) {
+		g_free (data->path);
+		g_free (data->basedir);
+		g_free (data->template_html);
+		g_free (data->in_content_html);
+		g_free (data->in_nextcontent_html);
+		g_free (data->out_content_html);
+		g_free (data->out_nextcontent_html);
+		g_free (data->default_avatar_filename);
+		g_free (data->default_incoming_avatar_filename);
+		g_free (data->default_outgoing_avatar_filename);
+		g_free (data->status_html);
+		g_hash_table_unref (data->info);
+		g_slice_free (EmpathyAdiumData, data);
+	}
+}
+
+GHashTable *
+empathy_adium_data_get_info (EmpathyAdiumData *data)
+{
+	g_return_val_if_fail (data != NULL, NULL);
+
+	return data->info;
+}
+
+const gchar *
+empathy_adium_data_get_path (EmpathyAdiumData *data)
+{
+	g_return_val_if_fail (data != NULL, NULL);
+
+	return data->path;
 }
 

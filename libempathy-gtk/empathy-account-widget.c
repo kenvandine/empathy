@@ -238,11 +238,11 @@ account_widget_generic_format_param_name (const gchar *param_name)
 	gchar *p;
 
 	str = g_strdup (param_name);
-	
+
 	if (str && g_ascii_isalpha (str[0])) {
 		str[0] = g_ascii_toupper (str[0]);
 	}
-	
+
 	while ((p = strchr (str, '-')) != NULL) {
 		if (p[1] != '\0' && g_ascii_isalpha (p[1])) {
 			p[0] = ' ';
@@ -251,7 +251,7 @@ account_widget_generic_format_param_name (const gchar *param_name)
 
 		p++;
 	}
-	
+
 	return str;
 }
 
@@ -448,7 +448,7 @@ empathy_account_widget_add_forget_button (McAccount   *account,
 	GtkWidget *button_forget;
 	GtkWidget *entry_password;
 	gchar   *password = NULL;
-	
+
 	button_forget = GTK_WIDGET (gtk_builder_get_object (gui, button));
 	entry_password = GTK_WIDGET (gtk_builder_get_object (gui, entry));
 

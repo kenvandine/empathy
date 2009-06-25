@@ -91,6 +91,10 @@ idle_presence_changed_cb (MissionControl *mc,
 
 	priv = GET_PRIV (idle);
 
+	if (state == TP_CONNECTION_PRESENCE_TYPE_UNSET)
+		/* Assume our presence is offline if MC reports UNSET */
+		state = TP_CONNECTION_PRESENCE_TYPE_OFFLINE;
+
 	DEBUG ("Presence changed to '%s' (%d)", status, state);
 
 	g_free (priv->status);
@@ -729,7 +733,7 @@ empathy_idle_set_use_nm (EmpathyIdle *idle,
 			g_clear_error (&error);
 			nm_status = NM_STATE_ASLEEP;
 		}
-		
+
 		idle_nm_state_change_cb (priv->nm_proxy, nm_status, idle);
 	} else {
 		priv->nm_connected = TRUE;

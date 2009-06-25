@@ -19,7 +19,7 @@
         </child>
         <child>
           <object class="GtkAction" id="menuhangup">
-            <property name="stock_id">gtk-cancel</property>
+            <property name="icon_name">call-stop</property>
             <property name="name">menuhangup</property>
             <property name="label" translatable="yes">Hang up</property>
           </object>
@@ -89,7 +89,7 @@
                 <property name="visible">True</property>
                 <property name="is_important">True</property>
                 <property name="label" translatable="yes">Hang up</property>
-                <property name="stock_id">gtk-cancel</property>
+                <property name="icon_name">call-stop</property>
               </object>
               <packing>
                 <property name="homogeneous">True</property>

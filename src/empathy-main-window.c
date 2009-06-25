@@ -209,7 +209,7 @@ main_window_flash_cb (EmpathyMainWindow *window)
 	events = empathy_event_manager_get_events (window->event_manager);
 	for (l = events; l; l = l->next) {
 		data.event = l->data;
-		if (!data.event->contact) {
+		if (!data.event->contact || !data.event->must_ack) {
 			continue;
 		}
 

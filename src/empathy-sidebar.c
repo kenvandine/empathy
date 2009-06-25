@@ -165,7 +165,7 @@ empathy_sidebar_set_property (GObject *object,
   switch (prop_id)
     {
       case PROP_CURRENT_PAGE:
-        empathy_sidebar_set_page (sidebar, g_value_get_object (value));	
+        empathy_sidebar_set_page (sidebar, g_value_get_object (value));
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
