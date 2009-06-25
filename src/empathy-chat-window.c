@@ -916,12 +916,18 @@ chat_window_notification_closed_cb (NotifyNotification *notify,
 #ifdef HAVE_LIBINDICATE
 static void
 chat_window_indicator_activate_cb (EmpathyIndicator *indicator,
-				    NotificationData *cb_data)
+					GHashTable *hash)
 {
+	NotificationData * cb_data = (NotificationData *)g_object_get_data(G_OBJECT(indicator), "activate-callback-data");
 	empathy_chat_window_present_chat (cb_data->chat);
 
 	empathy_indicator_hide (indicator);
-	g_object_unref (indicator);
+	g_hash_table_remove(hash, cb_data->chat);
+}
+
+static void
+chat_window_indicator_destroy_cb_data (EmpathyIndicator * indicator, NotificationData * cb_data)
+{
 	g_object_unref (cb_data->chat);
 	g_slice_free (NotificationData, cb_data);
 }
@@ -959,6 +965,8 @@ chat_window_add_indicator (EmpathyChatWindow *window,
 	} else {
 		indicator = empathy_indicator_manager_add_indicator (priv->indicator_manager,
 			sender, body);
+		g_object_set_data (G_OBJECT(indicator), "activate-callback-data", cb_data);
+		g_signal_connect (G_OBJECT(indicator), "destroy", G_CALLBACK(chat_window_indicator_destroy_cb_data), cb_data);
 		g_signal_connect (indicator, "activate",
 				  G_CALLBACK (chat_window_indicator_activate_cb), cb_data);
 		g_hash_table_insert (priv->indicators, chat, g_object_ref (indicator));
