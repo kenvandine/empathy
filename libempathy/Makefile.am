@@ -7,6 +7,7 @@ AM_CPPFLAGS =                                           \
 	-I$(top_builddir)                               \
 	-DDATADIR=\""$(datadir)"\"              	\
 	-DLOCALEDIR=\""$(datadir)/locale"\"		\
+	-DG_LOG_DOMAIN=\"empathy\"			\
 	$(LIBEMPATHY_CFLAGS)				\
 	$(GEOCLUE_CFLAGS)				\
 	$(WARN_CFLAGS)					\
@@ -33,6 +34,7 @@ libempathy_la_SOURCES =					\
 	empathy-contact-manager.c			\
 	empathy-contact-monitor.c			\
 	empathy-debug.c					\
+	empathy-debugger.c				\
 	empathy-dispatcher.c				\
 	empathy-dispatch-operation.c			\
 	empathy-ft-factory.c				\
@@ -81,6 +83,7 @@ libempathy_headers =				\
 	empathy-contact-manager.h		\
 	empathy-contact-monitor.h		\
 	empathy-debug.h				\
+	empathy-debugger.h			\
 	empathy-dispatcher.h			\
 	empathy-dispatch-operation.h		\
 	empathy-ft-factory.h			\

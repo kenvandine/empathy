@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /*
  * Copyright (C) 2007 Collabora Ltd.
  * Copyright (C) 2007 Nokia Corporation
@@ -32,6 +32,8 @@
 #include <telepathy-glib/debug.h>
 
 #include "empathy-debug.h"
+
+#include "empathy-debugger.h"
 
 #ifdef ENABLE_DEBUG
 
@@ -75,18 +77,74 @@ empathy_debug_flag_is_set (EmpathyDebugFlags flag)
   return (flag & flags) != 0;
 }
 
+GHashTable *flag_to_keys = NULL;
+
+static const gchar *
+debug_flag_to_key (EmpathyDebugFlags flag)
+{
+  if (flag_to_keys == NULL)
+    {
+      guint i;
+
+      flag_to_keys = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+          NULL, g_free);
+
+      for (i = 0; keys[i].value; i++)
+        {
+          GDebugKey key = (GDebugKey) keys[i];
+          g_hash_table_insert (flag_to_keys, GUINT_TO_POINTER (key.value),
+              g_strdup (key.key));
+        }
+    }
+
+  return g_hash_table_lookup (flag_to_keys, GUINT_TO_POINTER (flag));
+}
+
+void
+empathy_debug_free (void)
+{
+  if (flag_to_keys == NULL)
+    return;
+
+  g_hash_table_destroy (flag_to_keys);
+  flag_to_keys = NULL;
+}
+
+static void
+log_to_debugger (EmpathyDebugFlags flag,
+    const gchar *message)
+{
+  EmpathyDebugger *dbg = empathy_debugger_get_singleton ();
+  gchar *domain;
+  GTimeVal now;
+
+  g_get_current_time (&now);
+
+  domain = g_strdup_printf ("%s/%s", G_LOG_DOMAIN, debug_flag_to_key (flag));
+
+  empathy_debugger_add_message (dbg, &now, domain, G_LOG_LEVEL_DEBUG, message);
+
+  g_free (domain);
+}
+
 void
 empathy_debug (EmpathyDebugFlags flag,
-               const gchar *format,
-               ...)
+    const gchar *format,
+    ...)
 {
+  gchar *message;
+  va_list args;
+
+  va_start (args, format);
+  message = g_strdup_vprintf (format, args);
+  va_end (args);
+
+  log_to_debugger (flag, message);
+
   if (flag & flags)
-    {
-      va_list args;
-      va_start (args, format);
-      g_logv (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, format, args);
-      va_end (args);
-    }
+    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, "%s", message);
+
+  g_free (message);
 }
 
 #else
