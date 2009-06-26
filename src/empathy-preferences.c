@@ -1068,6 +1068,8 @@ preferences_themes_setup (EmpathyPreferences *preferences)
 				    G_TYPE_STRING,  /* Display name */
 				    G_TYPE_STRING,  /* Theme name */
 				    G_TYPE_STRING); /* Theme path */
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
+		COL_COMBO_VISIBLE_NAME, GTK_SORT_ASCENDING);
 
 	/* Fill the model */
 	themes = empathy_theme_manager_get_themes ();
