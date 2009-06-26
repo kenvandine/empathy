@@ -37,16 +37,17 @@
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-status-presets.h>
 
+#include <libempathy-gtk/empathy-conf.h>
 #include <libempathy-gtk/empathy-contact-dialogs.h>
 #include <libempathy-gtk/empathy-contact-list-store.h>
 #include <libempathy-gtk/empathy-contact-list-view.h>
-#include <libempathy-gtk/empathy-presence-chooser.h>
-#include <libempathy-gtk/empathy-ui-utils.h>
 #include <libempathy-gtk/empathy-geometry.h>
-#include <libempathy-gtk/empathy-conf.h>
-#include <libempathy-gtk/empathy-log-window.h>
-#include <libempathy-gtk/empathy-new-message-dialog.h>
 #include <libempathy-gtk/empathy-gtk-enum-types.h>
+#include <libempathy-gtk/empathy-new-message-dialog.h>
+#include <libempathy-gtk/empathy-log-window.h>
+#include <libempathy-gtk/empathy-presence-chooser.h>
+#include <libempathy-gtk/empathy-sound.h>
+#include <libempathy-gtk/empathy-ui-utils.h>
 
 #include <libmissioncontrol/mission-control.h>
 

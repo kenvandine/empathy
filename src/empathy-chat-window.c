@@ -50,6 +50,7 @@
 #include <libempathy-gtk/empathy-log-window.h>
 #include <libempathy-gtk/empathy-geometry.h>
 #include <libempathy-gtk/empathy-smiley-manager.h>
+#include <libempathy-gtk/empathy-sound.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
 
 #include "empathy-chat-window.h"
