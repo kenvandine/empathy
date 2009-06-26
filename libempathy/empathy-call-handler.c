@@ -615,3 +615,4 @@ empathy_call_handler_has_initial_video (EmpathyCallHandler *handler)
 
   return priv->initial_video;
 }
+

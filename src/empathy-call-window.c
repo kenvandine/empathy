@@ -40,9 +40,9 @@
 #include <libempathy-gtk/empathy-audio-sink.h>
 #include <libempathy-gtk/empathy-video-src.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
+#include <libempathy-gtk/empathy-sound.h>
 
 #include "empathy-call-window.h"
-
 #include "empathy-call-window-fullscreen.h"
 #include "empathy-sidebar.h"
 
@@ -60,10 +60,11 @@
 #define REMOTE_CONTACT_AVATAR_DEFAULT_WIDTH EMPATHY_VIDEO_WIDGET_DEFAULT_HEIGHT
 #define REMOTE_CONTACT_AVATAR_DEFAULT_HEIGHT EMPATHY_VIDEO_WIDGET_DEFAULT_HEIGHT
 
-#define CONNECTING_STATUS_TEXT _("Connecting...")
-
 /* If an video input error occurs, the error message will start with "v4l" */
 #define VIDEO_INPUT_ERROR_PREFIX "v4l"
+
+/* The time interval in milliseconds between 2 outgoing rings */
+#define MS_BETWEEN_RING 500
 
 G_DEFINE_TYPE(EmpathyCallWindow, empathy_call_window, GTK_TYPE_WINDOW)
 
@@ -81,6 +82,13 @@ enum {
   PROP_CALL_HANDLER = 1,
 };
 
+typedef enum {
+  CONNECTING,
+  CONNECTED,
+  DISCONNECTED,
+  REDIALING
+} CallState;
+
 /* private structure */
 typedef struct _EmpathyCallWindowPriv EmpathyCallWindowPriv;
 
@@ -90,7 +98,8 @@ struct _EmpathyCallWindowPriv
   EmpathyCallHandler *handler;
   EmpathyContact *contact;
 
-  gboolean connected;
+  guint call_state;
+  gboolean outgoing;
 
   GtkUIManager *ui_manager;
   GtkWidget *video_output;
@@ -165,10 +174,6 @@ struct _EmpathyCallWindowPriv
   gboolean sidebar_was_visible_before_fs;
   gint original_width_before_fs;
   gint original_height_before_fs;
-
-  /* Used to indicate if we are currently redialing. If we are, as soon as the
-     channel is closed, the call is automatically re-initiated.*/
-  gboolean redialing;
 };
 
 #define GET_PRIV(o) \
@@ -650,6 +655,19 @@ empathy_call_window_setup_video_preview (EmpathyCallWindow *window)
 }
 
 static void
+empathy_call_window_set_state_connecting (EmpathyCallWindow *window)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+
+  empathy_call_window_status_message (window, _("Connecting..."));
+  priv->call_state = CONNECTING;
+
+  if (priv->outgoing)
+    empathy_sound_start_playing (GTK_WIDGET (window),
+        EMPATHY_SOUND_PHONE_OUTGOING, MS_BETWEEN_RING);
+}
+
+static void
 empathy_call_window_init (EmpathyCallWindow *self)
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
@@ -777,8 +795,6 @@ empathy_call_window_init (EmpathyCallWindow *self)
 
   g_signal_connect (G_OBJECT (self), "key-press-event",
       G_CALLBACK (empathy_call_window_key_press_cb), self);
-
-  empathy_call_window_status_message (self, CONNECTING_STATUS_TEXT);
 
   priv->timer = g_timer_new ();
 
@@ -921,10 +937,18 @@ empathy_call_window_constructed (GObject *object)
 {
   EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (object);
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
+  EmpathyTpCall *call;
 
   g_assert (priv->handler != NULL);
+
+  g_object_get (priv->handler, "tp-call", &call, NULL);
+  priv->outgoing = (call == NULL);
+  if (call != NULL)
+    g_object_unref (call);
+
   empathy_call_window_setup_avatars (self, priv->handler);
   empathy_call_window_setup_video_preview_visibility (self, priv->handler);
+  empathy_call_window_set_state_connecting (self);
 }
 
 static void empathy_call_window_dispose (GObject *object);
@@ -985,7 +1009,6 @@ empathy_call_window_class_init (
     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (object_class,
     PROP_CALL_HANDLER, param_spec);
-
 }
 
 static void
@@ -1180,7 +1203,11 @@ empathy_call_window_disconnected (EmpathyCallWindow *self)
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
   gboolean could_reset_pipeline = empathy_call_window_reset_pipeline (self);
 
-  priv->connected = FALSE;
+  if (priv->call_state == CONNECTING)
+      empathy_sound_stop (EMPATHY_SOUND_PHONE_OUTGOING);
+
+  if (priv->call_state != REDIALING)
+    priv->call_state = DISCONNECTED;
 
   if (could_reset_pipeline)
     {
@@ -1236,11 +1263,8 @@ empathy_call_window_channel_closed_cb (TfChannel *channel, gpointer user_data)
   EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (user_data);
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
 
-  if (empathy_call_window_disconnected (self) && priv->redialing)
-    {
+  if (empathy_call_window_disconnected (self) && priv->call_state == REDIALING)
       empathy_call_window_restart_call (self);
-      priv->redialing = FALSE;
-    }
 }
 
 /* Called with global lock held */
@@ -1383,11 +1407,12 @@ empathy_call_window_src_added_cb (EmpathyCallHandler *handler,
 
   g_mutex_lock (priv->lock);
 
-  if (priv->connected == FALSE)
+  if (priv->call_state != CONNECTED)
     {
       g_timer_start (priv->timer);
       priv->timer_id = g_idle_add  (empathy_call_window_connected, self);
-      priv->connected = TRUE;
+      priv->call_state = CONNECTED;
+      empathy_sound_stop (EMPATHY_SOUND_PHONE_OUTGOING);
     }
 
   switch (media_type)
@@ -1629,6 +1654,9 @@ empathy_call_window_delete_cb (GtkWidget *widget, GdkEvent*event,
   if (priv->pipeline != NULL)
     gst_element_set_state (priv->pipeline, GST_STATE_NULL);
 
+  if (priv->call_state == CONNECTING)
+    empathy_sound_stop (EMPATHY_SOUND_PHONE_OUTGOING);
+
   return FALSE;
 }
 
@@ -1796,7 +1824,7 @@ empathy_call_window_camera_toggled_cb (GtkToggleToolButton *toggle,
   EmpathyCallWindowPriv *priv = GET_PRIV (window);
   gboolean active;
 
-  if (!priv->connected)
+  if (priv->call_state != CONNECTED)
     return;
 
   active = (gtk_toggle_tool_button_get_active (toggle));
@@ -1815,7 +1843,7 @@ empathy_call_window_send_video_toggled_cb (GtkToggleAction *toggle,
   EmpathyCallWindowPriv *priv = GET_PRIV (window);
   gboolean active;
 
-  if (!priv->connected)
+  if (priv->call_state != CONNECTED)
     return;
 
   active = (gtk_toggle_action_get_active (toggle));
@@ -1931,7 +1959,9 @@ empathy_call_window_restart_call (EmpathyCallWindow *window)
   if (!empathy_call_handler_has_initial_video (priv->handler))
     gtk_widget_hide (priv->self_user_output_frame);
 
-  empathy_call_window_status_message (window, CONNECTING_STATUS_TEXT);
+  priv->outgoing = TRUE;
+  empathy_call_window_set_state_connecting (window);
+
   priv->call_started = TRUE;
   empathy_call_handler_start_call (priv->handler);
   empathy_call_window_setup_avatars (window, priv->handler);
@@ -1947,12 +1977,12 @@ empathy_call_window_redial_cb (gpointer object,
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (window);
 
-  if (priv->connected)
-    priv->redialing = TRUE;
+  if (priv->call_state == CONNECTED)
+    priv->call_state = REDIALING;
 
   empathy_call_handler_stop_call (priv->handler);
 
-  if (!priv->connected)
+  if (priv->call_state != CONNECTED)
     empathy_call_window_restart_call (window);
 }
 
