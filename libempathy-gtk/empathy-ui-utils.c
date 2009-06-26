@@ -183,11 +183,11 @@ empathy_builder_unref_and_keep_widget (GtkBuilder *gui,
 }
 
 const gchar *
-empathy_icon_name_from_account (McAccount *account)
+empathy_icon_name_from_account (EmpathyAccount *account)
 {
 	McProfile *profile;
 
-	profile = mc_account_get_profile (account);
+	profile = empathy_account_get_profile (account);
 
 	return mc_profile_get_icon_name (profile);
 }

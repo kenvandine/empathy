@@ -32,7 +32,6 @@
 #include <gtk/gtk.h>
 
 #include <telepathy-glib/util.h>
-#include <libmissioncontrol/mc-account.h>
 
 #include <libempathy/empathy-account-manager.h>
 #include <libempathy/empathy-call-factory.h>
@@ -247,7 +246,7 @@ contact_list_view_drag_data_received (GtkWidget         *view,
 	EmpathyContactListViewPriv *priv;
 	EmpathyAccountManager      *account_manager;
 	EmpathyTpContactFactory    *factory = NULL;
-	McAccount                  *account;
+	EmpathyAccount             *account;
 	GtkTreeModel               *model;
 	GtkTreeViewDropPosition     position;
 	GtkTreePath                *path;
@@ -302,19 +301,17 @@ contact_list_view_drag_data_received (GtkWidget         *view,
 	strv = g_strsplit (id, "/", 2);
 	account_id = strv[0];
 	contact_id = strv[1];
-	account = mc_account_lookup (account_id);
+  account_manager = empathy_account_manager_dup_singleton ();
+	account = empathy_account_manager_lookup (account_manager, account_id);
 	if (account) {
 		TpConnection *connection;
 
-		/* FIXME: We assume we have already an account manager */
-		account_manager = empathy_account_manager_dup_singleton ();
-		connection = empathy_account_manager_get_connection (account_manager,
-								     account);
+		connection = empathy_account_get_connection (account);
 		if (connection) {
 			factory = empathy_tp_contact_factory_dup_singleton (connection);
 		}
-		g_object_unref (account_manager);
 	}
+	g_object_unref (account_manager);
 
 	if (!factory) {
 		DEBUG ("Failed to get factory for account '%s'", account_id);
@@ -451,7 +448,7 @@ contact_list_view_drag_data_get (GtkWidget        *widget,
 	GtkTreeIter                 iter;
 	GtkTreeModel               *model;
 	EmpathyContact             *contact;
-	McAccount                  *account;
+	EmpathyAccount             *account;
 	const gchar                *contact_id;
 	const gchar                *account_id;
 	gchar                      *str;
@@ -481,7 +478,7 @@ contact_list_view_drag_data_get (GtkWidget        *widget,
 	}
 
 	account = empathy_contact_get_account (contact);
-	account_id = mc_account_get_unique_name (account);
+	account_id = empathy_account_get_unique_name (account);
 	contact_id = empathy_contact_get_id (contact);
 	g_object_unref (contact);
 	str = g_strconcat (account_id, "/", contact_id, NULL);

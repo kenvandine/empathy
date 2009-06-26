@@ -34,9 +34,9 @@
 #include <gtk/gtk.h>
 
 #include <telepathy-glib/util.h>
-#include <libmissioncontrol/mc-account.h>
 
 #include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-account.h>
 
 #include "empathy-chat-text-view.h"
 #include "empathy-chat.h"

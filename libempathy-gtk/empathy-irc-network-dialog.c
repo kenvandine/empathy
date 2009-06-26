@@ -27,10 +27,10 @@
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 
-#include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-protocol.h>
 
 #include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-account.h>
 
 #include <libempathy/empathy-irc-network-manager.h>
 #include "empathy-ui-utils.h"
