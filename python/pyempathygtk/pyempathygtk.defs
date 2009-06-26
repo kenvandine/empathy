@@ -290,7 +290,7 @@
 (define-method dup_account
   (of-object "EmpathyAccountChooser")
   (c-name "empathy_account_chooser_dup_account")
-  (return-type "McAccount*")
+  (return-type "EmpathyAccount*")
 )
 
 (define-method get_connection
@@ -304,7 +304,7 @@
   (c-name "empathy_account_chooser_set_account")
   (return-type "gboolean")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
   )
 )
 
@@ -333,11 +333,11 @@
   )
 )
 
-(define-function account_chooser_filter_is_connected
+(define-method chooser_filter_is_connected
+  (of-object "EmpathyAccount")
   (c-name "empathy_account_chooser_filter_is_connected")
   (return-type "gboolean")
   (parameters
-    '("McAccount*" "account")
     '("gpointer" "user_data")
   )
 )
@@ -346,22 +346,22 @@
 
 ;; From empathy-account-widget.h
 
-(define-function account_widget_handle_params
+(define-method widget_handle_params
+  (of-object "EmpathyAccount")
   (c-name "empathy_account_widget_handle_params")
   (return-type "none")
   (parameters
-    '("McAccount*" "account")
     '("GtkBuilder*" "gui")
     '("const-gchar*" "first_widget")
   )
   (varargs #t)
 )
 
-(define-function account_widget_add_forget_button
+(define-method widget_add_forget_button
+  (of-object "EmpathyAccount")
   (c-name "empathy_account_widget_add_forget_button")
   (return-type "none")
   (parameters
-    '("McAccount*" "account")
     '("GtkBuilder*" "gui")
     '("const-gchar*" "button")
     '("const-gchar*" "entry")
@@ -377,102 +377,72 @@
   )
 )
 
-(define-function account_widget_generic_new
+(define-method widget_generic_new
+  (of-object "EmpathyAccount")
   (c-name "empathy_account_widget_generic_new")
-  (is-constructor-of "EmpathyAccountWidgetGeneric")
   (return-type "GtkWidget*")
-  (parameters
-    '("McAccount*" "account")
-  )
 )
 
-(define-function account_widget_salut_new
+(define-method widget_salut_new
+  (of-object "EmpathyAccount")
   (c-name "empathy_account_widget_salut_new")
-  (is-constructor-of "EmpathyAccountWidgetSalut")
   (return-type "GtkWidget*")
-  (parameters
-    '("McAccount*" "account")
-  )
 )
 
-(define-function account_widget_msn_new
+(define-method widget_msn_new
+  (of-object "EmpathyAccount")
   (c-name "empathy_account_widget_msn_new")
-  (is-constructor-of "EmpathyAccountWidgetMsn")
   (return-type "GtkWidget*")
-  (parameters
-    '("McAccount*" "account")
-  )
 )
 
-(define-function account_widget_jabber_new
+(define-method widget_jabber_new
+  (of-object "EmpathyAccount")
   (c-name "empathy_account_widget_jabber_new")
-  (is-constructor-of "EmpathyAccountWidgetJabber")
   (return-type "GtkWidget*")
-  (parameters
-    '("McAccount*" "account")
-  )
 )
 
-(define-function account_widget_icq_new
+(define-method widget_icq_new
+  (of-object "EmpathyAccount")
   (c-name "empathy_account_widget_icq_new")
-  (is-constructor-of "EmpathyAccountWidgetIcq")
   (return-type "GtkWidget*")
-  (parameters
-    '("McAccount*" "account")
-  )
 )
 
-(define-function account_widget_aim_new
+(define-method widget_aim_new
+  (of-object "EmpathyAccount")
   (c-name "empathy_account_widget_aim_new")
-  (is-constructor-of "EmpathyAccountWidgetAim")
   (return-type "GtkWidget*")
-  (parameters
-    '("McAccount*" "account")
-  )
 )
 
-(define-function account_widget_yahoo_new
+(define-method widget_yahoo_new
+  (of-object "EmpathyAccount")
   (c-name "empathy_account_widget_yahoo_new")
-  (is-constructor-of "EmpathyAccountWidgetYahoo")
   (return-type "GtkWidget*")
-  (parameters
-    '("McAccount*" "account")
-  )
 )
 
-(define-function account_widget_groupwise_new
+(define-method widget_groupwise_new
+  (of-object "EmpathyAccount")
   (c-name "empathy_account_widget_groupwise_new")
-  (is-constructor-of "EmpathyAccountWidgetGroupwise")
   (return-type "GtkWidget*")
-  (parameters
-    '("McAccount*" "account")
-  )
 )
 
 
 
 ;; From empathy-account-widget-irc.h
 
-(define-function account_widget_irc_new
+(define-method widget_irc_new
+  (of-object "EmpathyAccount")
   (c-name "empathy_account_widget_irc_new")
-  (is-constructor-of "EmpathyAccountWidgetIrc")
   (return-type "GtkWidget*")
-  (parameters
-    '("McAccount*" "account")
-  )
 )
 
 
 
 ;; From empathy-account-widget-sip.h
 
-(define-function account_widget_sip_new
+(define-method widget_sip_new
+  (of-object "EmpathyAccount")
   (c-name "empathy_account_widget_sip_new")
-  (is-constructor-of "EmpathyAccountWidgetSip")
   (return-type "GtkWidget*")
-  (parameters
-    '("McAccount*" "account")
-  )
 )
 
 
@@ -615,7 +585,7 @@
 (define-method get_account
   (of-object "EmpathyChat")
   (c-name "empathy_chat_get_account")
-  (return-type "McAccount*")
+  (return-type "EmpathyAccount*")
 )
 
 (define-method get_id
@@ -693,6 +663,15 @@
   (of-object "EmpathyChat")
   (c-name "empathy_chat_is_room")
   (return-type "gboolean")
+)
+
+(define-method set_show_contacts
+  (of-object "EmpathyChat")
+  (c-name "empathy_chat_set_show_contacts")
+  (return-type "none")
+  (parameters
+    '("gboolean" "show")
+  )
 )
 
 
@@ -1521,7 +1500,7 @@
   (c-name "empathy_log_window_show")
   (return-type "GtkWidget*")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
     '("const-gchar*" "chat_id")
     '("gboolean" "chatroom")
     '("GtkWindow*" "parent")
@@ -1807,7 +1786,7 @@
   (c-name "empathy_icon_name_from_account")
   (return-type "const-gchar*")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
   )
 )
 

@@ -259,6 +259,8 @@
     '("tp-error" "EMPATHY_FT_ERROR_TP_ERROR")
     '("socket" "EMPATHY_FT_ERROR_SOCKET")
     '("not-supported" "EMPATHY_FT_ERROR_NOT_SUPPORTED")
+    '("invalid-source-file" "EMPATHY_FT_ERROR_INVALID_SOURCE_FILE")
+    '("empty-source-file" "EMPATHY_FT_ERROR_EMPTY_SOURCE_FILE")
   )
 )
 
@@ -275,6 +277,15 @@
   (return-type "EmpathyAccountManager*")
 )
 
+(define-method create
+  (of-object "EmpathyAccountManager")
+  (c-name "empathy_account_manager_create")
+  (return-type "EmpathyAccount*")
+  (parameters
+    '("McProfile*" "profile")
+  )
+)
+
 (define-method get_connected_accounts
   (of-object "EmpathyAccountManager")
   (c-name "empathy_account_manager_get_connected_accounts")
@@ -287,15 +298,6 @@
   (return-type "int")
 )
 
-(define-method is_account_just_connected
-  (of-object "EmpathyAccountManager")
-  (c-name "empathy_account_manager_is_account_just_connected")
-  (return-type "gboolean")
-  (parameters
-    '("McAccount*" "account")
-  )
-)
-
 (define-method get_count
   (of-object "EmpathyAccountManager")
   (c-name "empathy_account_manager_get_count")
@@ -305,9 +307,18 @@
 (define-method get_account
   (of-object "EmpathyAccountManager")
   (c-name "empathy_account_manager_get_account")
-  (return-type "McAccount*")
+  (return-type "EmpathyAccount*")
   (parameters
     '("TpConnection*" "connection")
+  )
+)
+
+(define-method lookup
+  (of-object "EmpathyAccountManager")
+  (c-name "empathy_account_manager_lookup")
+  (return-type "EmpathyAccount*")
+  (parameters
+    '("const-gchar*" "unique_name")
   )
 )
 
@@ -317,19 +328,19 @@
   (return-type "GList*")
 )
 
-(define-method get_connection
-  (of-object "EmpathyAccountManager")
-  (c-name "empathy_account_manager_get_connection")
-  (return-type "TpConnection*")
-  (parameters
-    '("McAccount*" "account")
-  )
-)
-
 (define-method dup_connections
   (of-object "EmpathyAccountManager")
   (c-name "empathy_account_manager_dup_connections")
   (return-type "GList*")
+)
+
+(define-method remove
+  (of-object "EmpathyAccountManager")
+  (c-name "empathy_account_manager_remove")
+  (return-type "none")
+  (parameters
+    '("EmpathyAccount*" "account")
+  )
 )
 
 
@@ -346,7 +357,7 @@
   (is-constructor-of "EmpathyChatroom")
   (return-type "EmpathyChatroom*")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
   )
 )
 
@@ -354,7 +365,7 @@
   (c-name "empathy_chatroom_new_full")
   (return-type "EmpathyChatroom*")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
     '("const-gchar*" "room")
     '("const-gchar*" "name")
     '("gboolean" "auto_connect")
@@ -364,7 +375,7 @@
 (define-method get_account
   (of-object "EmpathyChatroom")
   (c-name "empathy_chatroom_get_account")
-  (return-type "McAccount*")
+  (return-type "EmpathyAccount*")
 )
 
 (define-method set_account
@@ -372,7 +383,7 @@
   (c-name "empathy_chatroom_set_account")
   (return-type "none")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
   )
 )
 
@@ -560,7 +571,7 @@
   (c-name "empathy_chatroom_manager_find")
   (return-type "EmpathyChatroom*")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
     '("const-gchar*" "room")
   )
 )
@@ -570,7 +581,7 @@
   (c-name "empathy_chatroom_manager_get_chatrooms")
   (return-type "GList*")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
   )
 )
 
@@ -579,7 +590,7 @@
   (c-name "empathy_chatroom_manager_get_count")
   (return-type "guint")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
   )
 )
 
@@ -681,6 +692,18 @@
   (return-type "none")
 )
 
+(define-method stop_call
+  (of-object "EmpathyCallHandler")
+  (c-name "empathy_call_handler_stop_call")
+  (return-type "none")
+)
+
+(define-method has_initial_video
+  (of-object "EmpathyCallHandler")
+  (c-name "empathy_call_handler_has_initial_video")
+  (return-type "gboolean")
+)
+
 (define-method bus_message
   (of-object "EmpathyCallHandler")
   (c-name "empathy_call_handler_bus_message")
@@ -713,7 +736,7 @@
   (c-name "empathy_contact_new_for_log")
   (return-type "EmpathyContact*")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
     '("const-gchar*" "id")
     '("const-gchar*" "name")
     '("gboolean" "is_user")
@@ -774,7 +797,7 @@
 (define-method get_account
   (of-object "EmpathyContact")
   (c-name "empathy_contact_get_account")
-  (return-type "McAccount*")
+  (return-type "EmpathyAccount*")
 )
 
 (define-method get_connection
@@ -969,6 +992,15 @@
   (return-type "none")
   (parameters
     '("GHashTable*" "location")
+  )
+)
+
+(define-function contact_equal
+  (c-name "empathy_contact_equal")
+  (return-type "gboolean")
+  (parameters
+    '("gconstpointer" "contact1")
+    '("gconstpointer" "contact2")
   )
 )
 
@@ -1177,6 +1209,11 @@
     '("const-gchar*" "format")
   )
   (varargs #t)
+)
+
+(define-function debug_free
+  (c-name "empathy_debug_free")
+  (return-type "none")
 )
 
 (define-function debug_set_flags
@@ -1794,7 +1831,7 @@
   (c-name "empathy_log_manager_exists")
   (return-type "gboolean")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
     '("const-gchar*" "chat_id")
     '("gboolean" "chatroom")
   )
@@ -1805,7 +1842,7 @@
   (c-name "empathy_log_manager_get_dates")
   (return-type "GList*")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
     '("const-gchar*" "chat_id")
     '("gboolean" "chatroom")
   )
@@ -1816,7 +1853,7 @@
   (c-name "empathy_log_manager_get_messages_for_date")
   (return-type "GList*")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
     '("const-gchar*" "chat_id")
     '("gboolean" "chatroom")
     '("const-gchar*" "date")
@@ -1828,7 +1865,7 @@
   (c-name "empathy_log_manager_get_filtered_messages")
   (return-type "GList*")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
     '("const-gchar*" "chat_id")
     '("gboolean" "chatroom")
     '("guint" "num_messages")
@@ -1842,7 +1879,7 @@
   (c-name "empathy_log_manager_get_chats")
   (return-type "GList*")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
   )
 )
 
@@ -1908,7 +1945,7 @@
   (c-name "empathy_log_store_exists")
   (return-type "gboolean")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
     '("const-gchar*" "chat_id")
     '("gboolean" "chatroom")
   )
@@ -1931,7 +1968,7 @@
   (c-name "empathy_log_store_get_dates")
   (return-type "GList*")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
     '("const-gchar*" "chat_id")
     '("gboolean" "chatroom")
   )
@@ -1942,7 +1979,7 @@
   (c-name "empathy_log_store_get_messages_for_date")
   (return-type "GList*")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
     '("const-gchar*" "chat_id")
     '("gboolean" "chatroom")
     '("const-gchar*" "date")
@@ -1954,7 +1991,7 @@
   (c-name "empathy_log_store_get_last_messages")
   (return-type "GList*")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
     '("const-gchar*" "chat_id")
     '("gboolean" "chatroom")
   )
@@ -1965,7 +2002,7 @@
   (c-name "empathy_log_store_get_chats")
   (return-type "GList*")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
   )
 )
 
@@ -1994,7 +2031,7 @@
   (c-name "empathy_log_store_get_filtered_messages")
   (return-type "GList*")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
     '("const-gchar*" "chat_id")
     '("gboolean" "chatroom")
     '("guint" "num_messages")
@@ -2216,6 +2253,14 @@
   (return-type "none")
 )
 
+(define-function status_presets_is_valid
+  (c-name "empathy_status_presets_is_valid")
+  (return-type "gboolean")
+  (parameters
+    '("TpConnectionPresenceType" "state")
+  )
+)
+
 
 
 ;; From empathy-time.h
@@ -2335,6 +2380,18 @@
 (define-method has_dtmf
   (of-object "EmpathyTpCall")
   (c-name "empathy_tp_call_has_dtmf")
+  (return-type "gboolean")
+)
+
+(define-method is_receiving_video
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_is_receiving_video")
+  (return-type "gboolean")
+)
+
+(define-method is_sending_video
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_is_sending_video")
   (return-type "gboolean")
 )
 
@@ -2661,7 +2718,7 @@
   (is-constructor-of "EmpathyTpRoomlist")
   (return-type "EmpathyTpRoomlist*")
   (parameters
-    '("McAccount*" "account")
+    '("EmpathyAccount*" "account")
   )
 )
 
