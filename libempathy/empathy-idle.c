@@ -68,6 +68,14 @@ typedef enum {
 	NM_STATE_DISCONNECTED
 } NMState;
 
+typedef enum {
+	SESSION_STATUS_AVAILABLE,
+	SESSION_STATUS_INVISIBLE,
+	SESSION_STATUS_BUSY,
+	SESSION_STATUS_IDLE,
+	SESSION_STATUS_UNKNOWN
+} SessionStatus;
+
 enum {
 	PROP_0,
 	PROP_STATE,
@@ -151,13 +159,16 @@ idle_ext_away_start (EmpathyIdle *idle)
 }
 
 static void
-idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
-			      gboolean     is_idle,
-			      EmpathyIdle *idle)
+idle_session_status_changed_cb (DBusGProxy    *gs_proxy,
+				SessionStatus  status,
+				EmpathyIdle   *idle)
 {
 	EmpathyIdlePriv *priv;
+	gboolean is_idle;
 
 	priv = GET_PRIV (idle);
+
+	is_idle = (status == SESSION_STATUS_IDLE);
 
 	DEBUG ("Session idle state changed, %s -> %s",
 		priv->is_idle ? "yes" : "no",
@@ -492,15 +503,14 @@ empathy_idle_init (EmpathyIdle *idle)
 				     idle, NULL);
 
 	priv->gs_proxy = dbus_g_proxy_new_for_name (tp_get_bus (),
-						    "org.gnome.ScreenSaver",
-						    "/org/gnome/ScreenSaver",
-						    "org.gnome.ScreenSaver");
+						    "org.gnome.SessionManager",
+						    "/org/gnome/SessionManager/Presence",
+						    "org.gnome.SessionManager.Presence");
 	if (priv->gs_proxy) {
-		dbus_g_proxy_add_signal (priv->gs_proxy, "SessionIdleChanged",
-					 G_TYPE_BOOLEAN,
-					 G_TYPE_INVALID);
-		dbus_g_proxy_connect_signal (priv->gs_proxy, "SessionIdleChanged",
-					     G_CALLBACK (idle_session_idle_changed_cb),
+		dbus_g_proxy_add_signal (priv->gs_proxy, "StatusChanged",
+					 G_TYPE_UINT, G_TYPE_INVALID);
+		dbus_g_proxy_connect_signal (priv->gs_proxy, "StatusChanged",
+					     G_CALLBACK (idle_session_status_changed_cb),
 					     idle, NULL);
 	} else {
 		DEBUG ("Failed to get gs proxy");
