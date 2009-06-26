@@ -308,7 +308,7 @@ chatrooms_window_model_refresh_data (EmpathyChatroomsWindow *window,
 	GtkTreeIter            iter;
 	GtkTreeViewColumn     *column;
 	EmpathyAccountChooser  *account_chooser;
-	McAccount             *account;
+	EmpathyAccount        *account;
 	GList                 *chatrooms, *l;
 
 	view = GTK_TREE_VIEW (window->treeview);
@@ -506,7 +506,7 @@ chatrooms_window_chatroom_added_cb (EmpathyChatroomManager *manager,
 				    EmpathyChatroomsWindow *window)
 {
 	EmpathyAccountChooser *account_chooser;
-	McAccount            *account;
+	EmpathyAccount       *account;
 
 	account_chooser = EMPATHY_ACCOUNT_CHOOSER (window->account_chooser);
 	account = empathy_account_chooser_dup_account (account_chooser);

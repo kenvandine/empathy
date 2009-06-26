@@ -28,7 +28,6 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-#include <libmissioncontrol/mc-account.h>
 #include <telepathy-glib/util.h>
 #include <telepathy-glib/dbus.h>
 

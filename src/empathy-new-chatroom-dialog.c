@@ -33,7 +33,6 @@
 #include <glib/gprintf.h>
 
 #include <libmissioncontrol/mission-control.h>
-#include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-profile.h>
 
 #include <libempathy/empathy-tp-roomlist.h>
@@ -358,14 +357,14 @@ static void
 new_chatroom_dialog_update_widgets (EmpathyNewChatroomDialog *dialog)
 {
 	EmpathyAccountChooser *account_chooser;
-	McAccount             *account;
+	EmpathyAccount        *account;
 	McProfile             *profile;
 	const gchar           *protocol;
 	const gchar           *room;
 
 	account_chooser = EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser);
 	account = empathy_account_chooser_dup_account (account_chooser);
-	profile = mc_account_get_profile (account);
+	profile = empathy_account_get_profile (account);
 	protocol = mc_profile_get_protocol_name (profile);
 
 	gtk_entry_set_text (GTK_ENTRY (dialog->entry_server), "");
@@ -399,12 +398,13 @@ new_chatroom_dialog_account_changed_cb (GtkComboBox             *combobox,
 					EmpathyNewChatroomDialog *dialog)
 {
 	EmpathyAccountChooser *account_chooser;
-	McAccount             *account;
+	EmpathyAccount        *account;
 	gboolean               listing = FALSE;
 	gboolean               expanded = FALSE;
 
 	if (dialog->room_list) {
 		g_object_unref (dialog->room_list);
+		dialog->room_list = NULL;
 	}
 
 	ephy_spinner_stop (EPHY_SPINNER (dialog->throbber));
@@ -412,6 +412,9 @@ new_chatroom_dialog_account_changed_cb (GtkComboBox             *combobox,
 
 	account_chooser = EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser);
 	account = empathy_account_chooser_dup_account (account_chooser);
+	if (account == NULL)
+		goto out;
+
 	dialog->room_list = empathy_tp_roomlist_new (account);
 
 	if (dialog->room_list) {
@@ -444,9 +447,10 @@ new_chatroom_dialog_account_changed_cb (GtkComboBox             *combobox,
 		}
 	}
 
-	new_chatroom_dialog_update_widgets (dialog);
-
 	g_object_unref (account);
+
+out:
+	new_chatroom_dialog_update_widgets (dialog);
 }
 
 static void

@@ -408,7 +408,7 @@ chat_window_update_chat_tab (EmpathyChat *chat)
 	EmpathyContact        *remote_contact;
 	const gchar           *name;
 	const gchar           *id;
-	McAccount             *account;
+	EmpathyAccount        *account;
 	const gchar           *subject;
 	const gchar           *status = NULL;
 	GtkWidget             *widget;
@@ -429,7 +429,7 @@ chat_window_update_chat_tab (EmpathyChat *chat)
 	remote_contact = empathy_chat_get_remote_contact (chat);
 
 	DEBUG ("Updating chat tab, name=%s, account=%s, subject=%s, remote_contact=%p",
-		name, mc_account_get_unique_name (account), subject, remote_contact);
+		name, empathy_account_get_unique_name (account), subject, remote_contact);
 
 	/* Update tab image */
 	if (g_list_find (priv->chats_new_msg, chat)) {
@@ -461,7 +461,7 @@ chat_window_update_chat_tab (EmpathyChat *chat)
 	append_markup_printf (tooltip,
 			      "<b>%s</b><small> (%s)</small>",
 			      id,
-			      mc_account_get_display_name (account));
+			      empathy_account_get_display_name (account));
 
 	if (!EMP_STR_EMPTY (status)) {
 		append_markup_printf (tooltip, "\n<i>%s</i>", status);
@@ -556,7 +556,7 @@ chat_window_conv_activate_cb (GtkAction         *action,
 	is_room = empathy_chat_is_room (priv->current_chat);
 	if (is_room) {
 		const gchar *room;
-		McAccount   *account;
+		EmpathyAccount   *account;
 		gboolean     found;
 
 		room = empathy_chat_get_id (priv->current_chat);
@@ -602,7 +602,7 @@ chat_window_favorite_toggled_cb (GtkToggleAction   *toggle_action,
 {
 	EmpathyChatWindowPriv *priv = GET_PRIV (window);
 	gboolean               active;
-	McAccount             *account;
+	EmpathyAccount        *account;
 	const gchar           *room;
 	EmpathyChatroom       *chatroom;
 
@@ -1235,41 +1235,40 @@ chat_window_drag_data_received (GtkWidget        *widget,
 	if (info == DND_DRAG_TYPE_CONTACT_ID) {
 		EmpathyChat           *chat;
 		EmpathyChatWindow     *old_window;
-		McAccount             *account;
+		EmpathyAccount        *account;
+		EmpathyAccountManager *account_manager;
 		const gchar           *id;
 		gchar                **strv;
 		const gchar           *account_id;
 		const gchar           *contact_id;
 
 		id = (const gchar*) selection->data;
+		account_manager = empathy_account_manager_dup_singleton ();
 
 		DEBUG ("DND contact from roster with id:'%s'", id);
 
 		strv = g_strsplit (id, "/", 2);
 		account_id = strv[0];
 		contact_id = strv[1];
-		account = mc_account_lookup (account_id);
+		account = empathy_account_manager_lookup (account_manager, account_id);
 		chat = empathy_chat_window_find_chat (account, contact_id);
 
 		if (!chat) {
-			EmpathyAccountManager *account_manager;
 			TpConnection *connection;
 
-			account_manager = empathy_account_manager_dup_singleton ();
-			connection = empathy_account_manager_get_connection (
-				account_manager, account);
+			connection = empathy_account_get_connection (account);
 
 			if (connection) {
 				empathy_dispatcher_chat_with_contact_id (
 					connection, contact_id, NULL, NULL);
 			}
 
-			g_object_unref (account_manager);
 			g_object_unref (account);
 			g_strfreev (strv);
 			return;
 		}
 		g_object_unref (account);
+		g_object_unref (account_manager);
 		g_strfreev (strv);
 
 		old_window = chat_window_find_chat (chat);
@@ -1740,12 +1739,11 @@ empathy_chat_window_has_focus (EmpathyChatWindow *window)
 }
 
 EmpathyChat *
-empathy_chat_window_find_chat (McAccount   *account,
+empathy_chat_window_find_chat (EmpathyAccount   *account,
 			       const gchar *id)
 {
 	GList *l;
 
-	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 	g_return_val_if_fail (!EMP_STR_EMPTY (id), NULL);
 
 	for (l = chat_windows; l; l = l->next) {

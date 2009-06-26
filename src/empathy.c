@@ -40,7 +40,6 @@
 
 #include <telepathy-glib/dbus.h>
 #include <telepathy-glib/util.h>
-#include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mission-control.h>
 
 #include <libempathy/empathy-idle.h>
@@ -107,7 +106,7 @@ dispatch_cb (EmpathyDispatcher *dispatcher,
 		if (id) {
 			EmpathyAccountManager *manager;
 			TpConnection *connection;
-			McAccount *account;
+			EmpathyAccount *account;
 
 			manager = empathy_account_manager_dup_singleton ();
 			connection = empathy_tp_chat_get_connection (tp_chat);
@@ -227,7 +226,8 @@ create_salut_account (void)
 	McProfile  *profile;
 	McProtocol *protocol;
 	gboolean    salut_created = FALSE;
-	McAccount  *account;
+	EmpathyAccount  *account;
+	EmpathyAccountManager *account_manager;
 	GList      *accounts;
 	EBook      *book;
 	EContact   *contact;
@@ -284,8 +284,10 @@ create_salut_account (void)
 		return;
 	}
 
-	account = mc_account_create (profile);
-	mc_account_set_display_name (account, _("People nearby"));
+	account_manager = empathy_account_manager_dup_singleton ();
+	account = empathy_account_manager_create (account_manager, profile);
+	empathy_account_set_display_name (account, _("People nearby"));
+	g_object_unref (account_manager);
 
 	nickname = e_contact_get (contact, E_CONTACT_NICKNAME);
 	first_name = e_contact_get (contact, E_CONTACT_GIVEN_NAME);
@@ -302,11 +304,11 @@ create_salut_account (void)
 		"last-name=%s\nemail=%s\njid=%s\n",
 		nickname, first_name, last_name, email, jid);
 
-	mc_account_set_param_string (account, "nickname", nickname ? nickname : "");
-	mc_account_set_param_string (account, "first-name", first_name ? first_name : "");
-	mc_account_set_param_string (account, "last-name", last_name ? last_name : "");
-	mc_account_set_param_string (account, "email", email ? email : "");
-	mc_account_set_param_string (account, "jid", jid ? jid : "");
+	empathy_account_set_param_string (account, "nickname", nickname ? nickname : "");
+	empathy_account_set_param_string (account, "first-name", first_name ? first_name : "");
+	empathy_account_set_param_string (account, "last-name", last_name ? last_name : "");
+	empathy_account_set_param_string (account, "email", email ? email : "");
+	empathy_account_set_param_string (account, "jid", jid ? jid : "");
 
 	g_free (nickname);
 	g_free (first_name);
