@@ -87,26 +87,6 @@ contact_manager_groups_changed_cb (EmpathyTpContactList  *list,
 }
 
 static void
-contact_manager_disconnect_foreach (gpointer key,
-				    gpointer value,
-				    gpointer user_data)
-{
-	EmpathyTpContactList  *list = value;
-	EmpathyContactManager *manager = user_data;
-
-	/* Disconnect signals from the list */
-	g_signal_handlers_disconnect_by_func (list,
-					      contact_manager_members_changed_cb,
-					      manager);
-	g_signal_handlers_disconnect_by_func (list,
-					      contact_manager_pendings_changed_cb,
-					      manager);
-	g_signal_handlers_disconnect_by_func (list,
-					      contact_manager_groups_changed_cb,
-					      manager);
-}
-
-static void
 contact_manager_invalidated_cb (TpProxy *connection,
 				guint    domain,
 				gint     code,
@@ -125,6 +105,30 @@ contact_manager_invalidated_cb (TpProxy *connection,
 		empathy_tp_contact_list_remove_all (list);
 		g_hash_table_remove (priv->lists, connection);		
 	}
+}
+
+static void
+contact_manager_disconnect_foreach (gpointer key,
+				    gpointer value,
+				    gpointer user_data)
+{
+	TpConnection *connection = key;
+	EmpathyTpContactList  *list = value;
+	EmpathyContactManager *manager = user_data;
+
+	/* Disconnect signals from the list */
+	g_signal_handlers_disconnect_by_func (list,
+					      contact_manager_members_changed_cb,
+					      manager);
+	g_signal_handlers_disconnect_by_func (list,
+					      contact_manager_pendings_changed_cb,
+					      manager);
+	g_signal_handlers_disconnect_by_func (list,
+					      contact_manager_groups_changed_cb,
+					      manager);
+	g_signal_handlers_disconnect_by_func (connection,
+					      contact_manager_invalidated_cb,
+					      manager);
 }
 
 static void
