@@ -974,11 +974,15 @@ chat_window_show_or_update_notification (EmpathyChatWindow *window,
 	if (priv->notification != NULL) {
 		notify_notification_update (priv->notification,
 					    header, escaped, NULL);
-		notify_notification_set_icon_from_pixbuf (priv->notification, pixbuf);
+		/* if icon doesn't exist libnotify will crash */
+		if (pixbuf != NULL)
+			notify_notification_set_icon_from_pixbuf (priv->notification, pixbuf);
 	} else {
 		priv->notification = notify_notification_new (header, escaped, NULL, NULL);
 		notify_notification_set_timeout (priv->notification, NOTIFY_EXPIRES_DEFAULT);
-		notify_notification_set_icon_from_pixbuf (priv->notification, pixbuf);
+		/* if icon doesn't exist libnotify will crash */
+		if (pixbuf != NULL)
+			notify_notification_set_icon_from_pixbuf (priv->notification, pixbuf);
 
 		g_signal_connect (priv->notification, "closed",
 				  G_CALLBACK (chat_window_notification_closed_cb), cb_data);

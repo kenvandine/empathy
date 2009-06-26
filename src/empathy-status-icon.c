@@ -153,7 +153,9 @@ status_icon_update_notification (EmpathyStatusIcon *icon)
 					  G_CALLBACK (status_icon_notification_closed_cb), icon);
 
  		}
-		notify_notification_set_icon_from_pixbuf (priv->notification,
+		/* if icon doesn't exist libnotify will crash */
+		if (pixbuf != NULL)
+			notify_notification_set_icon_from_pixbuf (priv->notification,
 							  pixbuf);
 		notify_notification_show (priv->notification, NULL);
 
