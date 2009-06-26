@@ -21,7 +21,6 @@
 
 #include <glib.h>
 #include <check.h>
-#include <libmissioncontrol/mc-account.h>
 
 void
 check_helpers_init (void);

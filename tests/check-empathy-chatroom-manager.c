@@ -13,6 +13,7 @@
 #include "check-empathy-helpers.h"
 
 #include <libempathy/empathy-chatroom-manager.h>
+#include <libempathy/empathy-account-manager.h>
 
 #define CHATROOM_SAMPLE "chatrooms-sample.xml"
 #define CHATROOM_FILE "chatrooms.xml"
@@ -43,7 +44,7 @@ struct chatroom_t
 
 static void
 check_chatrooms_list (EmpathyChatroomManager *mgr,
-                      McAccount *account,
+                      EmpathyAccount *account,
                       struct chatroom_t *_chatrooms,
                       guint nb_chatrooms)
 {
@@ -83,13 +84,13 @@ check_chatrooms_list (EmpathyChatroomManager *mgr,
 }
 
 static gboolean
-change_account_name_in_file (McAccount *account,
+change_account_name_in_file (EmpathyAccount *account,
                              const gchar *file)
 {
   gchar *cmd;
 
   cmd = g_strdup_printf ("sed -i 's/CHANGE_ME/%s/' %s",
-      mc_account_get_unique_name (account), file);
+      empathy_account_get_unique_name (account), file);
 
   if (system (cmd) == -1)
     {
@@ -106,11 +107,13 @@ START_TEST (test_empathy_chatroom_manager_dup_singleton)
 {
   EmpathyChatroomManager *mgr;
   gchar *file;
-  McAccount *account;
+  EmpathyAccount *account;
+  EmpathyAccountManager *account_manager;
   struct chatroom_t chatrooms[] = {
         { "name1", "room1", TRUE, TRUE },
         { "name2", "room2", FALSE, TRUE }};
 
+  account_manager = empathy_account_manager_dup_singleton ();
   account = get_test_account ();
 
   copy_xml_file (CHATROOM_SAMPLE, CHATROOM_FILE);
@@ -126,6 +129,7 @@ START_TEST (test_empathy_chatroom_manager_dup_singleton)
 
   g_free (file);
   g_object_unref (mgr);
+  g_object_unref (account_manager);
   g_object_unref (account);
 }
 END_TEST
@@ -134,13 +138,16 @@ START_TEST (test_empathy_chatroom_manager_add)
 {
   EmpathyChatroomManager *mgr;
   gchar *file;
-  McAccount *account;
+  EmpathyAccount *account;
+  EmpathyAccountManager *account_manager;
   struct chatroom_t chatrooms[] = {
         { "name1", "room1", TRUE, TRUE },
         { "name2", "room2", FALSE, TRUE },
         { "name3", "room3", FALSE, TRUE },
         { "name4", "room4", FALSE, FALSE }};
   EmpathyChatroom *chatroom;
+
+  account_manager = empathy_account_manager_dup_singleton ();
 
   account = get_test_account ();
 
@@ -149,8 +156,7 @@ START_TEST (test_empathy_chatroom_manager_add)
   file = get_user_xml_file (CHATROOM_FILE);
 
   /* change the chatrooms XML file to use the account we just created */
-  if (!change_account_name_in_file (account, file))
-    return;
+  fail_unless (change_account_name_in_file (account, file));
 
   mgr = empathy_chatroom_manager_dup_singleton (file);
 
@@ -186,6 +192,7 @@ START_TEST (test_empathy_chatroom_manager_add)
 
   g_object_unref (mgr);
   g_free (file);
+  g_object_unref (account_manager);
   g_object_unref (account);
 }
 END_TEST
@@ -194,11 +201,13 @@ START_TEST (test_empathy_chatroom_manager_remove)
 {
   EmpathyChatroomManager *mgr;
   gchar *file;
-  McAccount *account;
+  EmpathyAccount *account;
   struct chatroom_t chatrooms[] = {
         { "name2", "room2", FALSE, TRUE }};
   EmpathyChatroom *chatroom;
+  EmpathyAccountManager *account_mgr;
 
+  account_mgr = empathy_account_manager_dup_singleton ();
   account = get_test_account ();
 
   copy_xml_file (CHATROOM_SAMPLE, CHATROOM_FILE);
@@ -206,8 +215,7 @@ START_TEST (test_empathy_chatroom_manager_remove)
   file = get_user_xml_file (CHATROOM_FILE);
 
   /* change the chatrooms XML file to use the account we just created */
-  if (!change_account_name_in_file (account, file))
-    return;
+  fail_unless (change_account_name_in_file (account, file));
 
   mgr = empathy_chatroom_manager_dup_singleton (file);
 
@@ -241,6 +249,7 @@ START_TEST (test_empathy_chatroom_manager_remove)
   g_object_unref (mgr);
   g_free (file);
   g_object_unref (account);
+  g_object_unref (account_mgr);
 }
 END_TEST
 
@@ -248,12 +257,14 @@ START_TEST (test_empathy_chatroom_manager_change_favorite)
 {
   EmpathyChatroomManager *mgr;
   gchar *file;
-  McAccount *account;
+  EmpathyAccount *account;
+  EmpathyAccountManager *account_manager;
   struct chatroom_t chatrooms[] = {
         { "name1", "room1", TRUE, TRUE },
         { "name2", "room2", FALSE, FALSE }};
   EmpathyChatroom *chatroom;
 
+  account_manager = empathy_account_manager_dup_singleton ();
   account = get_test_account ();
 
   copy_xml_file (CHATROOM_SAMPLE, CHATROOM_FILE);
@@ -261,8 +272,7 @@ START_TEST (test_empathy_chatroom_manager_change_favorite)
   file = get_user_xml_file (CHATROOM_FILE);
 
   /* change the chatrooms XML file to use the account we just created */
-  if (!change_account_name_in_file (account, file))
-    return;
+  fail_unless (change_account_name_in_file (account, file));
 
   mgr = empathy_chatroom_manager_dup_singleton (file);
 
@@ -302,6 +312,7 @@ START_TEST (test_empathy_chatroom_manager_change_favorite)
   g_object_unref (mgr);
   g_object_unref (chatroom);
   g_free (file);
+  g_object_unref (account_manager);
   g_object_unref (account);
 }
 END_TEST
@@ -310,12 +321,14 @@ START_TEST (test_empathy_chatroom_manager_change_chatroom)
 {
   EmpathyChatroomManager *mgr;
   gchar *file;
-  McAccount *account;
+  EmpathyAccount *account;
+  EmpathyAccountManager *account_manager;
   struct chatroom_t chatrooms[] = {
         { "name1", "room1", TRUE, TRUE },
         { "name2", "room2", FALSE, TRUE }};
   EmpathyChatroom *chatroom;
 
+  account_manager = empathy_account_manager_dup_singleton ();
   account = get_test_account ();
 
   copy_xml_file (CHATROOM_SAMPLE, "foo.xml");
@@ -323,8 +336,7 @@ START_TEST (test_empathy_chatroom_manager_change_chatroom)
   file = get_user_xml_file ("foo.xml");
 
   /* change the chatrooms XML file to use the account we just created */
-  if (!change_account_name_in_file (account, file))
-    return;
+  fail_unless (change_account_name_in_file (account, file));
 
   mgr = empathy_chatroom_manager_dup_singleton (file);
 
@@ -369,6 +381,7 @@ START_TEST (test_empathy_chatroom_manager_change_chatroom)
   g_object_unref (mgr);
   g_free (file);
   g_object_unref (account);
+  g_object_unref (account_manager);
 }
 END_TEST
 
