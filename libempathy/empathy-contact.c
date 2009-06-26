@@ -39,7 +39,7 @@
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyContact)
 typedef struct {
   TpContact *tp_contact;
-  McAccount *account;
+  EmpathyAccount *account;
   gchar *id;
   gchar *name;
   EmpathyAvatar *avatar;
@@ -159,7 +159,7 @@ empathy_contact_class_init (EmpathyContactClass *class)
       g_param_spec_object ("account",
         "The account",
         "The account associated with the contact",
-        MC_TYPE_ACCOUNT,
+        EMPATHY_TYPE_ACCOUNT,
         G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_property (object_class,
@@ -409,12 +409,11 @@ empathy_contact_new (TpContact *tp_contact)
 }
 
 EmpathyContact *
-empathy_contact_new_for_log (McAccount *account,
+empathy_contact_new_for_log (EmpathyAccount *account,
                              const gchar *id,
                              const gchar *name,
                              gboolean is_user)
 {
-  g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
   g_return_val_if_fail (id != NULL, NULL);
 
   return g_object_new (EMPATHY_TYPE_CONTACT,
@@ -554,7 +553,7 @@ empathy_contact_set_avatar (EmpathyContact *contact,
   g_object_notify (G_OBJECT (contact), "avatar");
 }
 
-McAccount *
+EmpathyAccount *
 empathy_contact_get_account (EmpathyContact *contact)
 {
   EmpathyContactPriv *priv;
@@ -830,7 +829,7 @@ static gchar *
 contact_get_avatar_filename (EmpathyContact *contact,
                              const gchar *token)
 {
-  McAccount *account;
+  EmpathyAccount *account;
   gchar *avatar_path;
   gchar *avatar_file;
   gchar *token_escaped;
@@ -847,7 +846,7 @@ contact_get_avatar_filename (EmpathyContact *contact,
   avatar_path = g_build_filename (g_get_user_cache_dir (),
       PACKAGE_NAME,
       "avatars",
-      mc_account_get_unique_name (account),
+      empathy_account_get_unique_name (account),
       contact_escaped,
       NULL);
   g_mkdir_with_parents (avatar_path, 0700);

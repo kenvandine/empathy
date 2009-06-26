@@ -25,7 +25,7 @@
 #include <glib-object.h>
 
 #include <telepathy-glib/contact.h>
-#include <libmissioncontrol/mc-account.h>
+#include <libempathy/empathy-account.h>
 
 G_BEGIN_DECLS
 
@@ -70,7 +70,7 @@ typedef enum {
 
 GType empathy_contact_get_type (void) G_GNUC_CONST;
 EmpathyContact * empathy_contact_new (TpContact *tp_contact);
-EmpathyContact * empathy_contact_new_for_log (McAccount *account,
+EmpathyContact * empathy_contact_new_for_log (EmpathyAccount *account,
     const gchar *id, const gchar *name, gboolean is_user);
 TpContact * empathy_contact_get_tp_contact (EmpathyContact *contact);
 const gchar * empathy_contact_get_id (EmpathyContact *contact);
@@ -80,7 +80,7 @@ void empathy_contact_set_name (EmpathyContact *contact, const gchar *name);
 EmpathyAvatar * empathy_contact_get_avatar (EmpathyContact *contact);
 void empathy_contact_set_avatar (EmpathyContact *contact,
     EmpathyAvatar *avatar);
-McAccount * empathy_contact_get_account (EmpathyContact *contact);
+EmpathyAccount * empathy_contact_get_account (EmpathyContact *contact);
 TpConnection * empathy_contact_get_connection (EmpathyContact *contact);
 TpConnectionPresenceType empathy_contact_get_presence (EmpathyContact *contact);
 void empathy_contact_set_presence (EmpathyContact *contact,

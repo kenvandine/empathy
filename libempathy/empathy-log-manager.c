@@ -157,7 +157,7 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
 
 gboolean
 empathy_log_manager_exists (EmpathyLogManager *manager,
-                            McAccount *account,
+                            EmpathyAccount *account,
                             const gchar *chat_id,
                             gboolean chatroom)
 {
@@ -165,7 +165,6 @@ empathy_log_manager_exists (EmpathyLogManager *manager,
   EmpathyLogManagerPriv *priv;
 
   g_return_val_if_fail (EMPATHY_IS_LOG_MANAGER (manager), FALSE);
-  g_return_val_if_fail (MC_IS_ACCOUNT (account), FALSE);
   g_return_val_if_fail (chat_id != NULL, FALSE);
 
   priv = GET_PRIV (manager);
@@ -182,7 +181,7 @@ empathy_log_manager_exists (EmpathyLogManager *manager,
 
 GList *
 empathy_log_manager_get_dates (EmpathyLogManager *manager,
-                               McAccount *account,
+                               EmpathyAccount *account,
                                const gchar *chat_id,
                                gboolean chatroom)
 {
@@ -190,7 +189,6 @@ empathy_log_manager_get_dates (EmpathyLogManager *manager,
   EmpathyLogManagerPriv *priv;
 
   g_return_val_if_fail (EMPATHY_IS_LOG_MANAGER (manager), NULL);
-  g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
   g_return_val_if_fail (chat_id != NULL, NULL);
 
   priv = GET_PRIV (manager);
@@ -219,7 +217,7 @@ empathy_log_manager_get_dates (EmpathyLogManager *manager,
 
 GList *
 empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
-                                           McAccount *account,
+                                           EmpathyAccount *account,
                                            const gchar *chat_id,
                                            gboolean chatroom,
                                            const gchar *date)
@@ -228,7 +226,6 @@ empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
   EmpathyLogManagerPriv *priv;
 
   g_return_val_if_fail (EMPATHY_IS_LOG_MANAGER (manager), NULL);
-  g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
   g_return_val_if_fail (chat_id != NULL, NULL);
 
   priv = GET_PRIV (manager);
@@ -261,7 +258,7 @@ log_manager_message_date_cmp (gconstpointer a,
 
 GList *
 empathy_log_manager_get_filtered_messages (EmpathyLogManager *manager,
-					   McAccount *account,
+					   EmpathyAccount *account,
 					   const gchar *chat_id,
 					   gboolean chatroom,
 					   guint num_messages,
@@ -274,7 +271,6 @@ empathy_log_manager_get_filtered_messages (EmpathyLogManager *manager,
   guint i = 0;
 
   g_return_val_if_fail (EMPATHY_IS_LOG_MANAGER (manager), NULL);
-  g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
   g_return_val_if_fail (chat_id != NULL, NULL);
 
   priv = GET_PRIV (manager);
@@ -322,13 +318,12 @@ empathy_log_manager_get_filtered_messages (EmpathyLogManager *manager,
 
 GList *
 empathy_log_manager_get_chats (EmpathyLogManager *manager,
-                               McAccount *account)
+                               EmpathyAccount *account)
 {
   GList *l, *out = NULL;
   EmpathyLogManagerPriv *priv;
 
   g_return_val_if_fail (EMPATHY_IS_LOG_MANAGER (manager), NULL);
-  g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 
   priv = GET_PRIV (manager);
 

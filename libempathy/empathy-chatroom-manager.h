@@ -27,8 +27,7 @@
 
 #include <glib-object.h>
 
-#include <libmissioncontrol/mc-account.h>
-
+#include "empathy-account.h"
 #include "empathy-chatroom.h"
 #include "empathy-dispatcher.h"
 
@@ -60,12 +59,12 @@ gboolean               empathy_chatroom_manager_add           (EmpathyChatroomMa
 void                   empathy_chatroom_manager_remove        (EmpathyChatroomManager *manager,
 							      EmpathyChatroom        *chatroom);
 EmpathyChatroom *       empathy_chatroom_manager_find          (EmpathyChatroomManager *manager,
-							      McAccount             *account,
-							      const gchar           *room);
+							      EmpathyAccount           *account,
+							      const gchar              *room);
 GList *                empathy_chatroom_manager_get_chatrooms (EmpathyChatroomManager *manager,
-							      McAccount             *account);
+							      EmpathyAccount          *account);
 guint                  empathy_chatroom_manager_get_count     (EmpathyChatroomManager *manager,
-							      McAccount             *account);
+							      EmpathyAccount          *account);
 void                   empathy_chatroom_manager_observe       (EmpathyChatroomManager *manager,
 							      EmpathyDispatcher *dispatcher);
 
