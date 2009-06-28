@@ -505,12 +505,26 @@ empathy_account_manager_init (EmpathyAccountManager *manager)
 }
 
 static void
+account_manager_disconnect_foreach (gpointer key,
+                                    gpointer value,
+                                    gpointer user_data)
+{
+  TpConnection *connection = key;
+  EmpathyAccountManager *manager = user_data;
+
+  g_signal_handlers_disconnect_by_func (connection, connection_invalidated_cb,
+    manager);
+}
+
+static void
 do_finalize (GObject *obj)
 {
   EmpathyAccountManager *manager = EMPATHY_ACCOUNT_MANAGER (obj);
   EmpathyAccountManagerPriv *priv = GET_PRIV (manager);
 
   g_hash_table_unref (priv->accounts);
+  g_hash_table_foreach (priv->connections, account_manager_disconnect_foreach,
+    obj);
   g_hash_table_unref (priv->connections);
 
   G_OBJECT_CLASS (empathy_account_manager_parent_class)->finalize (obj);
