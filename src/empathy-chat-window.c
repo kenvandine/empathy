@@ -557,12 +557,15 @@ chat_window_conv_activate_cb (GtkAction         *action,
 	if (is_room) {
 		const gchar *room;
 		EmpathyAccount   *account;
-		gboolean     found;
+		gboolean     found = FALSE;
+		EmpathyChatroom *chatroom;
 
 		room = empathy_chat_get_id (priv->current_chat);
 		account = empathy_chat_get_account (priv->current_chat);
-		found = empathy_chatroom_manager_find (priv->chatroom_manager,
-						       account, room) != NULL;
+		chatroom = empathy_chatroom_manager_find (priv->chatroom_manager,
+						       account, room);
+		if (chatroom != NULL)
+			found = empathy_chatroom_is_favorite (chatroom);
 
 		DEBUG ("This room %s favorite", found ? "is" : "is not");
 		gtk_toggle_action_set_active (
@@ -613,19 +616,16 @@ chat_window_favorite_toggled_cb (GtkToggleAction   *toggle_action,
 	chatroom = empathy_chatroom_manager_find (priv->chatroom_manager,
 						  account, room);
 
-	if (active && !chatroom) {
+	if (chatroom == NULL) {
 		const gchar *name;
 
 		name = empathy_chat_get_name (priv->current_chat);
 		chatroom = empathy_chatroom_new_full (account, room, name, FALSE);
 		empathy_chatroom_manager_add (priv->chatroom_manager, chatroom);
 		g_object_unref (chatroom);
-		return;
-	}
+  }
 
-	if (!active && chatroom) {
-		empathy_chatroom_manager_remove (priv->chatroom_manager, chatroom);
-	}
+	empathy_chatroom_set_favorite (chatroom, active);
 }
 
 static void
