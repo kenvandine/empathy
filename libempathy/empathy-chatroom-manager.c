@@ -521,10 +521,11 @@ chatroom_manager_remove_link (EmpathyChatroomManager *manager,
   if (empathy_chatroom_is_favorite (chatroom))
     reset_save_timeout (manager);
 
+  priv->chatrooms = g_list_delete_link (priv->chatrooms, l);
+
   g_signal_emit (manager, signals[CHATROOM_REMOVED], 0, chatroom);
   g_signal_handlers_disconnect_by_func (chatroom, chatroom_changed_cb, manager);
 
-  priv->chatrooms = g_list_delete_link (priv->chatrooms, l);
   g_object_unref (chatroom);
 }
 
