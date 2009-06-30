@@ -468,7 +468,7 @@ empathy_idle_get_actual_presence (EmpathyIdle *idle, GError **error)
 	case MC_PRESENCE_DO_NOT_DISTURB:
 		return TP_CONNECTION_PRESENCE_TYPE_BUSY;
 	default:
-		return TP_CONNECTION_PRESENCE_TYPE_UNSET;
+		return TP_CONNECTION_PRESENCE_TYPE_OFFLINE;
 	}
 }
 
