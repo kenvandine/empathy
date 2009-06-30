@@ -244,8 +244,7 @@ idle_nm_state_change_cb (NMClient         *client,
 
 	priv = GET_PRIV (idle);
 
-	if (!priv->use_nm
-	    || priv->nm_saved_state == TP_CONNECTION_PRESENCE_TYPE_UNSET) {
+	if (!priv->use_nm) {
 		return;
 	}
 
@@ -266,7 +265,8 @@ idle_nm_state_change_cb (NMClient         *client,
 		priv->nm_saved_status = g_strdup (priv->status);
 		empathy_idle_set_state (idle, TP_CONNECTION_PRESENCE_TYPE_OFFLINE);
 	}
-	else if (!old_nm_connected && new_nm_connected) {
+	else if (!old_nm_connected && new_nm_connected
+			&& priv->nm_saved_state != TP_CONNECTION_PRESENCE_TYPE_UNSET) {
 		/* We are now connected */
 		DEBUG ("Reconnected: Restore state %d (%s)",
 				priv->nm_saved_state, priv->nm_saved_status);
