@@ -440,8 +440,8 @@ empathy_idle_class_init (EmpathyIdleClass *klass)
 					  g_param_spec_boolean ("use-nm",
 								"Use Network Manager",
 								"Set presence according to Network Manager",
-								FALSE,
-								G_PARAM_READWRITE));
+								TRUE,
+								G_PARAM_CONSTRUCT | G_PARAM_READWRITE));
 
 	g_type_class_add_private (object_class, sizeof (EmpathyIdlePriv));
 }
@@ -531,8 +531,6 @@ empathy_idle_init (EmpathyIdle *idle)
 	} else {
 		DEBUG ("Failed to get nm proxy");
 	}
-
-	priv->nm_connected = TRUE;
 #endif
 }
 
