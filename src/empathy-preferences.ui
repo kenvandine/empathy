@@ -851,50 +851,6 @@
                                 <property name="position">0</property>
                               </packing>
                             </child>
-                            <child>
-                              <object class="GtkHBox" id="hbox_adium_theme">
-                                <property name="visible">True</property>
-                                <property name="spacing">6</property>
-                                <child>
-                                  <object class="GtkLabel" id="label587">
-                                    <property name="visible">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Adium theme to use:</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkFileChooserButton" id="filechooserbutton_adium_theme">
-                                    <property name="visible">True</property>
-                                    <property name="preview_widget_active">False</property>
-                                    <property name="action">GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER</property>
-                                  </object>
-                                  <packing>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label_invalid_adium_theme">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">Not a valid adium theme</property>
-                                <attributes>
-                                  <attribute name="foreground" value="red"/>
-                                </attributes>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
                           </object>
                         </child>
                       </object>

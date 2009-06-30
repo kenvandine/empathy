@@ -28,6 +28,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <telepathy-glib/dbus.h>
 
 #include <libempathy/empathy-utils.h>
 
@@ -54,9 +55,6 @@ typedef struct {
 	GtkWidget *checkbutton_show_smileys;
 	GtkWidget *checkbutton_show_contacts_in_rooms;
 	GtkWidget *combobox_chat_theme;
-	GtkWidget *hbox_adium_theme;
-	GtkWidget *filechooserbutton_adium_theme;
-	GtkWidget *label_invalid_adium_theme;
 	GtkWidget *checkbutton_separate_chat_windows;
 	GtkWidget *checkbutton_autoconnect;
 	GtkWidget *radiobutton_contact_list_sort_by_name;
@@ -139,8 +137,10 @@ enum {
 };
 
 enum {
+	COL_COMBO_IS_ADIUM,
 	COL_COMBO_VISIBLE_NAME,
 	COL_COMBO_NAME,
+	COL_COMBO_PATH,
 	COL_COMBO_COUNT
 };
 
@@ -953,73 +953,6 @@ preferences_radio_button_toggled_cb (GtkWidget *button,
 	empathy_conf_set_string (empathy_conf_get (), key, value);
 }
 
-
-static void
-preferences_theme_adium_update_visibility (EmpathyPreferences *preferences,
-					   const gchar        *name)
-{
-	if (name && strcmp (name, "adium") == 0) {
-		gtk_widget_show (preferences->hbox_adium_theme);
-	} else {
-		gtk_widget_hide (preferences->hbox_adium_theme);
-		gtk_widget_hide (preferences->label_invalid_adium_theme);
-	}
-}
-
-static void
-preferences_theme_adium_update_validity (EmpathyPreferences *preferences,
-					 const gchar        *path)
-{
-#ifdef HAVE_WEBKIT
-	if (empathy_adium_path_is_valid (path)) {
-		gtk_widget_hide (preferences->label_invalid_adium_theme);
-	} else {
-		gtk_widget_show (preferences->label_invalid_adium_theme);
-	}
-#endif
-}
-
-static void
-preferences_theme_adium_path_notify_cb (EmpathyConf *conf,
-					const gchar *key,
-					gpointer     user_data)
-{
-	EmpathyPreferences *preferences = user_data;
-	GtkFileChooser     *chooser;
-	gchar              *value;
-	const gchar        *path;
-
-	if (!empathy_conf_get_string (conf, key, &value)) {
-		return;
-	}
-
-	if (EMP_STR_EMPTY (value)) {
-		path = g_get_home_dir ();
-	} else {
-		path = value;
-	}
-
-	chooser = GTK_FILE_CHOOSER (preferences->filechooserbutton_adium_theme);
-	gtk_file_chooser_set_current_folder (chooser, path);
-	preferences_theme_adium_update_validity (preferences, path);
-	g_free (value);
-}
-
-static void
-preferences_theme_adium_file_set_cb (GtkFileChooser     *chooser,
-				     EmpathyPreferences *preferences)
-{
-	gchar *path;
-
-	path = gtk_file_chooser_get_current_folder (chooser);
-	empathy_conf_set_string (empathy_conf_get (),
-				 EMPATHY_PREFS_CHAT_ADIUM_PATH,
-				 path);
-	preferences_theme_adium_update_validity (preferences, path);
-
-	g_free (path);
-}
-
 static void
 preferences_theme_notify_cb (EmpathyConf *conf,
 			     const gchar *key,
@@ -1027,34 +960,48 @@ preferences_theme_notify_cb (EmpathyConf *conf,
 {
 	EmpathyPreferences *preferences = user_data;
 	GtkComboBox        *combo;
-	gchar              *value;
+	gchar              *conf_name;
+	gchar              *conf_path;
 	GtkTreeModel       *model;
 	GtkTreeIter         iter;
 	gboolean            found = FALSE;
 
-	if (!empathy_conf_get_string (conf, key, &value)) {
+	if (!empathy_conf_get_string (conf, EMPATHY_PREFS_CHAT_THEME, &conf_name)) {
 		return;
 	}
 
-	preferences_theme_adium_update_visibility (preferences, value);
+	if (!empathy_conf_get_string (conf, EMPATHY_PREFS_CHAT_ADIUM_PATH, &conf_path)) {
+		g_free (conf_name);
+		return;
+	}
 
 	combo = GTK_COMBO_BOX (preferences->combobox_chat_theme);
 	model = gtk_combo_box_get_model (combo);
-	if (value && gtk_tree_model_get_iter_first (model, &iter)) {
+	if (gtk_tree_model_get_iter_first (model, &iter)) {
+		gboolean is_adium;
 		gchar *name;
+		gchar *path;
 
 		do {
 			gtk_tree_model_get (model, &iter,
+					    COL_COMBO_IS_ADIUM, &is_adium,
 					    COL_COMBO_NAME, &name,
+					    COL_COMBO_PATH, &path,
 					    -1);
 
-			if (strcmp (name, value) == 0) {
-				found = TRUE;
-				gtk_combo_box_set_active_iter (combo, &iter);
-				break;
+			if (strcmp (name, conf_name) == 0) {
+				if (strcmp (name, "adium") != 0 ||
+				    strcmp (path, conf_path) == 0) {
+					found = TRUE;
+					gtk_combo_box_set_active_iter (combo, &iter);
+					g_free (name);
+					g_free (path);
+					break;
+				}
 			}
 
 			g_free (name);
+			g_free (path);
 		} while (gtk_tree_model_iter_next (model, &iter));
 	}
 
@@ -1065,7 +1012,8 @@ preferences_theme_notify_cb (EmpathyConf *conf,
 		}
 	}
 
-	g_free (value);
+	g_free (conf_name);
+	g_free (conf_path);
 }
 
 static void
@@ -1074,21 +1022,28 @@ preferences_theme_changed_cb (GtkComboBox        *combo,
 {
 	GtkTreeModel *model;
 	GtkTreeIter   iter;
+	gboolean      is_adium;
 	gchar        *name;
+	gchar        *path;
 
 	if (gtk_combo_box_get_active_iter (combo, &iter)) {
 		model = gtk_combo_box_get_model (combo);
 
 		gtk_tree_model_get (model, &iter,
+				    COL_COMBO_IS_ADIUM, &is_adium,
 				    COL_COMBO_NAME, &name,
+				    COL_COMBO_PATH, &path,
 				    -1);
-
-		preferences_theme_adium_update_visibility (preferences, name);
 
 		empathy_conf_set_string (empathy_conf_get (),
 					 EMPATHY_PREFS_CHAT_THEME,
 					 name);
+		if (is_adium == TRUE)
+			empathy_conf_set_string (empathy_conf_get (),
+						 EMPATHY_PREFS_CHAT_ADIUM_PATH,
+						 path);
 		g_free (name);
+		g_free (path);
 	}
 }
 
@@ -1100,6 +1055,7 @@ preferences_themes_setup (EmpathyPreferences *preferences)
 	GtkCellRenderer *renderer;
 	GtkListStore  *store;
 	const gchar  **themes;
+	GList         *adium_themes;
 	gint           i;
 	guint          id;
 
@@ -1108,16 +1064,42 @@ preferences_themes_setup (EmpathyPreferences *preferences)
 
 	/* Create the model */
 	store = gtk_list_store_new (COL_COMBO_COUNT,
+				    G_TYPE_BOOLEAN, /* Is an Adium theme */
 				    G_TYPE_STRING,  /* Display name */
-				    G_TYPE_STRING); /* Theme name */
+				    G_TYPE_STRING,  /* Theme name */
+				    G_TYPE_STRING); /* Theme path */
 
 	/* Fill the model */
 	themes = empathy_theme_manager_get_themes ();
 	for (i = 0; themes[i]; i += 2) {
 		gtk_list_store_insert_with_values (store, NULL, -1,
+			COL_COMBO_IS_ADIUM, FALSE,
 			COL_COMBO_VISIBLE_NAME, _(themes[i + 1]),
 			COL_COMBO_NAME, themes[i],
+			COL_COMBO_PATH, NULL,
 			-1);
+	}
+
+	adium_themes = empathy_theme_manager_get_adium_themes ();
+	while (adium_themes != NULL) {
+		GHashTable *info;
+		const gchar *name;
+		const gchar *path;
+
+		info = adium_themes->data;
+		name = tp_asv_get_string (info, "CFBundleName");
+		path = tp_asv_get_string (info, "path");
+
+		if (name != NULL && path != NULL) {
+			gtk_list_store_insert_with_values (store, NULL, -1,
+				COL_COMBO_IS_ADIUM, TRUE,
+				COL_COMBO_VISIBLE_NAME, name,
+				COL_COMBO_NAME, "adium",
+				COL_COMBO_PATH, path,
+				-1);
+		}
+		g_hash_table_unref (info);
+		adium_themes = g_list_delete_link (adium_themes, adium_themes);
 	}
 
 	/* Add cell renderer */
@@ -1145,17 +1127,9 @@ preferences_themes_setup (EmpathyPreferences *preferences)
 		preferences_add_id (preferences, id);
 	}
 
-	g_signal_connect (preferences->filechooserbutton_adium_theme,
-			  "file-set",
-			  G_CALLBACK (preferences_theme_adium_file_set_cb),
-			  preferences);
-	/* Select the adium path from the gconf key and track changes */
-	preferences_theme_adium_path_notify_cb (empathy_conf_get (),
-						EMPATHY_PREFS_CHAT_ADIUM_PATH,
-						preferences);
 	id = empathy_conf_notify_add (empathy_conf_get (),
 				      EMPATHY_PREFS_CHAT_ADIUM_PATH,
-				      preferences_theme_adium_path_notify_cb,
+				      preferences_theme_notify_cb,
 				      preferences);
 	if (id) {
 		preferences_add_id (preferences, id);
@@ -1211,9 +1185,6 @@ empathy_preferences_show (GtkWindow *parent)
 		"checkbutton_show_smileys", &preferences->checkbutton_show_smileys,
 		"checkbutton_show_contacts_in_rooms", &preferences->checkbutton_show_contacts_in_rooms,
 		"combobox_chat_theme", &preferences->combobox_chat_theme,
-		"hbox_adium_theme", &preferences->hbox_adium_theme,
-		"filechooserbutton_adium_theme", &preferences->filechooserbutton_adium_theme,
-		"label_invalid_adium_theme", &preferences->label_invalid_adium_theme,
 		"checkbutton_separate_chat_windows", &preferences->checkbutton_separate_chat_windows,
 		"checkbutton_autoconnect", &preferences->checkbutton_autoconnect,
 		"radiobutton_contact_list_sort_by_name", &preferences->radiobutton_contact_list_sort_by_name,

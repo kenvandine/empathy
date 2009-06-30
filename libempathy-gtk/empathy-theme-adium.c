@@ -820,6 +820,15 @@ empathy_adium_path_is_valid (const gchar *path)
 	gboolean ret;
 	gchar   *file;
 
+	/* The theme is not valid if there is no Info.plist */
+	file = g_build_filename (path, "Contents", "Info.plist",
+				 NULL);
+	ret = g_file_test (file, G_FILE_TEST_EXISTS);
+	g_free (file);
+
+	if (ret == FALSE)
+		return ret;
+
 	/* We ship a default Template.html as fallback if there is any problem
 	 * with the one inside the theme. The only other required file is
 	 * Content.html for incoming messages (outgoing fallback to use
@@ -845,10 +854,15 @@ empathy_adium_info_new (const gchar *path)
 	value = empathy_plist_parse_from_file (file);
 	g_free (file);
 
-	if (value) {
-		info = g_value_dup_boxed (value);
-		tp_g_value_slice_free (value);
-	}
+	if (value == NULL)
+		return NULL;
+
+	info = g_value_dup_boxed (value);
+	tp_g_value_slice_free (value);
+
+	/* Insert the theme's path into the hash table,
+	 * keys have to be dupped */
+	tp_asv_set_string (info, g_strdup ("path"), path);
 
 	return info;
 }
