@@ -428,7 +428,8 @@ _empathy_account_new (McAccount *mc_account)
   return account;
 }
 
-void _empathy_account_set_status (EmpathyAccount *account,
+void
+_empathy_account_set_status (EmpathyAccount *account,
     TpConnectionStatus status,
     TpConnectionStatusReason reason,
     TpConnectionPresenceType presence)
