@@ -564,6 +564,13 @@ theme_adium_clear (EmpathyChatView *view)
 					  priv->data->template_html,
 					  basedir_uri);
 	g_free (basedir_uri);
+
+	/* Clear last contact to avoid trying to add a 'joined'
+	 * message when we don't have an insertion point. */
+	if (priv->last_contact) {
+		g_object_unref (priv->last_contact);
+		priv->last_contact = NULL;
+	}
 }
 
 static gboolean

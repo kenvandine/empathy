@@ -817,6 +817,10 @@ chat_text_view_clear (EmpathyChatView *view)
 	priv = GET_PRIV (view);
 
 	priv->last_timestamp = 0;
+	if (priv->last_contact) {
+		g_object_unref (priv->last_contact);
+		priv->last_contact = NULL;
+	}
 }
 
 static gboolean
