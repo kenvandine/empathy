@@ -69,6 +69,7 @@ struct _EmpathyAccountPriv
   TpConnectionPresenceType presence;
 
   gboolean enabled;
+  /* Timestamp when the connection got connected in seconds since the epoch */
   glong connect_time;
 
   McAccount *mc_account;
