@@ -548,6 +548,7 @@ _empathy_account_set_connection (EmpathyAccount *account,
           G_CALLBACK (_empathy_account_connection_invalidated_cb),
           account);
 
+      /* notify a change in the connection property when it's ready */
       tp_connection_call_when_ready (priv->connection,
         empathy_account_connection_ready_cb, account);
     }
