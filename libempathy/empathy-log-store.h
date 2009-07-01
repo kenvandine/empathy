@@ -25,7 +25,7 @@
 
 #include <glib-object.h>
 
-#include <libmissioncontrol/mc-account.h>
+#include <libempathy/empathy-account.h>
 
 #include "empathy-message.h"
 #include "empathy-log-manager.h"
@@ -50,23 +50,23 @@ struct _EmpathyLogStoreInterface
   GTypeInterface parent;
 
   const gchar * (*get_name) (EmpathyLogStore *self);
-  gboolean (*exists) (EmpathyLogStore *self, McAccount *account,
+  gboolean (*exists) (EmpathyLogStore *self, EmpathyAccount *account,
       const gchar *chat_id, gboolean chatroom);
   gboolean (*add_message) (EmpathyLogStore *self, const gchar *chat_id,
       gboolean chatroom, EmpathyMessage *message, GError **error);
-  GList * (*get_dates) (EmpathyLogStore *self, McAccount *account,
+  GList * (*get_dates) (EmpathyLogStore *self, EmpathyAccount *account,
       const gchar *chat_id, gboolean chatroom);
   GList * (*get_messages_for_date) (EmpathyLogStore *self,
-      McAccount *account, const gchar *chat_id, gboolean chatroom,
+      EmpathyAccount *account, const gchar *chat_id, gboolean chatroom,
       const gchar *date);
-  GList * (*get_last_messages) (EmpathyLogStore *self, McAccount *account,
+  GList * (*get_last_messages) (EmpathyLogStore *self, EmpathyAccount *account,
       const gchar *chat_id, gboolean chatroom);
   GList * (*get_chats) (EmpathyLogStore *self,
-            McAccount         *account);
+            EmpathyAccount    *account);
   GList * (*search_new) (EmpathyLogStore *self, const gchar *text);
   void (*ack_message) (EmpathyLogStore *self, const gchar *chat_id,
       gboolean chatroom, EmpathyMessage *message);
-  GList * (*get_filtered_messages) (EmpathyLogStore *self, McAccount *account,
+  GList * (*get_filtered_messages) (EmpathyLogStore *self, EmpathyAccount *account,
       const gchar *chat_id, gboolean chatroom, guint num_messages,
       EmpathyLogMessageFilter filter, gpointer user_data);
 };
@@ -75,25 +75,25 @@ GType empathy_log_store_get_type (void) G_GNUC_CONST;
 
 const gchar *empathy_log_store_get_name (EmpathyLogStore *self);
 gboolean empathy_log_store_exists (EmpathyLogStore *self,
-    McAccount *account, const gchar *chat_id, gboolean chatroom);
+    EmpathyAccount *account, const gchar *chat_id, gboolean chatroom);
 gboolean empathy_log_store_add_message (EmpathyLogStore *self,
     const gchar *chat_id, gboolean chatroom, EmpathyMessage *message,
     GError **error);
 GList *empathy_log_store_get_dates (EmpathyLogStore *self,
-    McAccount *account, const gchar *chat_id, gboolean chatroom);
+    EmpathyAccount *account, const gchar *chat_id, gboolean chatroom);
 GList *empathy_log_store_get_messages_for_date (EmpathyLogStore *self,
-    McAccount *account, const gchar *chat_id, gboolean chatroom,
+    EmpathyAccount *account, const gchar *chat_id, gboolean chatroom,
     const gchar *date);
 GList *empathy_log_store_get_last_messages (EmpathyLogStore *self,
-    McAccount *account, const gchar *chat_id, gboolean chatroom);
+    EmpathyAccount *account, const gchar *chat_id, gboolean chatroom);
 GList *empathy_log_store_get_chats (EmpathyLogStore *self,
-    McAccount *account);
+    EmpathyAccount *account);
 GList *empathy_log_store_search_new (EmpathyLogStore *self,
     const gchar *text);
 void empathy_log_store_ack_message (EmpathyLogStore *self,
     const gchar *chat_id, gboolean chatroom, EmpathyMessage *message);
 GList *empathy_log_store_get_filtered_messages (EmpathyLogStore *self,
-    McAccount *account, const gchar *chat_id, gboolean chatroom,
+    EmpathyAccount *account, const gchar *chat_id, gboolean chatroom,
     guint num_messages, EmpathyLogMessageFilter filter, gpointer user_data);
 
 G_END_DECLS

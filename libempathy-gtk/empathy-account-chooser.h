@@ -27,7 +27,7 @@
 
 #include <gtk/gtk.h>
 
-#include <libmissioncontrol/mc-account.h>
+#include <libempathy/empathy-account.h>
 
 G_BEGIN_DECLS
 
@@ -38,7 +38,7 @@ G_BEGIN_DECLS
 #define EMPATHY_IS_ACCOUNT_CHOOSER_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), EMPATHY_TYPE_ACCOUNT_CHOOSER))
 #define EMPATHY_ACCOUNT_CHOOSER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EMPATHY_TYPE_ACCOUNT_CHOOSER, EmpathyAccountChooserClass))
 
-typedef gboolean (* EmpathyAccountChooserFilterFunc) (McAccount *account,
+typedef gboolean (* EmpathyAccountChooserFilterFunc) (EmpathyAccount *account,
 						      gpointer   user_data);
 
 
@@ -58,17 +58,17 @@ struct _EmpathyAccountChooserClass {
 
 GType          empathy_account_chooser_get_type           (void) G_GNUC_CONST;
 GtkWidget *    empathy_account_chooser_new                (void);
-McAccount *    empathy_account_chooser_dup_account        (EmpathyAccountChooser *chooser);
+EmpathyAccount *    empathy_account_chooser_dup_account        (EmpathyAccountChooser *chooser);
 TpConnection * empathy_account_chooser_get_connection     (EmpathyAccountChooser *chooser);
 gboolean       empathy_account_chooser_set_account        (EmpathyAccountChooser *chooser,
-							   McAccount            *account);
+							   EmpathyAccount        *account);
 gboolean       empathy_account_chooser_get_has_all_option (EmpathyAccountChooser *chooser);
 void           empathy_account_chooser_set_has_all_option (EmpathyAccountChooser *chooser,
 							   gboolean               has_all_option);
 void           empathy_account_chooser_set_filter         (EmpathyAccountChooser *chooser,
 							   EmpathyAccountChooserFilterFunc filter,
 							   gpointer               user_data);
-gboolean       empathy_account_chooser_filter_is_connected (McAccount             *account,
+gboolean       empathy_account_chooser_filter_is_connected (EmpathyAccount       *account,
 							   gpointer               user_data);
 
 G_END_DECLS

@@ -24,6 +24,8 @@ BUILT_SOURCES = 					\
 lib_LTLIBRARIES = libempathy.la
 
 libempathy_la_SOURCES =					\
+	empathy-account.c			\
+	empathy-account-priv.h			\
 	empathy-account-manager.c			\
 	empathy-chatroom.c				\
 	empathy-chatroom-manager.c			\
@@ -74,6 +76,7 @@ libempathy_la_LDFLAGS =		\
        -export-symbols-regex ^empathy_
 
 libempathy_headers =				\
+	empathy-account.h		\
 	empathy-account-manager.h		\
 	empathy-chatroom.h			\
 	empathy-chatroom-manager.h		\

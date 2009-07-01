@@ -65,7 +65,7 @@ typedef struct {
 
 typedef struct {
 	EmpathyAccountChooser *chooser;
-	McAccount             *account;
+	EmpathyAccount        *account;
 	gboolean               set;
 } SetAccountData;
 
@@ -88,19 +88,19 @@ static void     account_chooser_set_property           (GObject                 
 							GParamSpec               *pspec);
 static void     account_chooser_setup                  (EmpathyAccountChooser    *chooser);
 static void     account_chooser_account_created_cb     (EmpathyAccountManager    *manager,
-							McAccount                *account,
+							EmpathyAccount           *account,
 							EmpathyAccountChooser    *chooser);
-static void     account_chooser_account_add_foreach    (McAccount                *account,
+static void     account_chooser_account_add_foreach    (EmpathyAccount                *account,
 							EmpathyAccountChooser    *chooser);
 static void     account_chooser_account_deleted_cb     (EmpathyAccountManager    *manager,
-							McAccount                *account,
+							EmpathyAccount           *account,
 							EmpathyAccountChooser    *chooser);
-static void     account_chooser_account_remove_foreach (McAccount                *account,
+static void     account_chooser_account_remove_foreach (EmpathyAccount                *account,
 							EmpathyAccountChooser    *chooser);
 static void     account_chooser_update_iter            (EmpathyAccountChooser    *chooser,
 							GtkTreeIter              *iter);
 static void     account_chooser_connection_changed_cb  (EmpathyAccountManager    *manager,
-							McAccount                *account,
+							EmpathyAccount                *account,
 							TpConnectionStatusReason  reason,
 							TpConnectionStatus        new_status,
 							TpConnectionStatus        old_status,
@@ -253,16 +253,16 @@ empathy_account_chooser_new (void)
  * @chooser: an #EmpathyAccountChooser
  *
  * Returns the account which is currently selected in the chooser or %NULL
- * if there is no account selected. The #McAccount returned should be
+ * if there is no account selected. The #EmpathyAccount returned should be
  * unrefed with g_object_unref() when finished with.
  *
- * Return value: a new ref to the #McAccount currently selected, or %NULL.
+ * Return value: a new ref to the #EmpathyAccount currently selected, or %NULL.
  */
-McAccount *
+EmpathyAccount *
 empathy_account_chooser_dup_account (EmpathyAccountChooser *chooser)
 {
 	EmpathyAccountChooserPriv *priv;
-	McAccount                *account;
+	EmpathyAccount           *account;
 	GtkTreeModel             *model;
 	GtkTreeIter               iter;
 
@@ -295,7 +295,7 @@ TpConnection *
 empathy_account_chooser_get_connection (EmpathyAccountChooser *chooser)
 {
 	EmpathyAccountChooserPriv *priv;
-	McAccount                 *account;
+	EmpathyAccount            *account;
 	TpConnection              *connection;
 
 	g_return_val_if_fail (EMPATHY_IS_ACCOUNT_CHOOSER (chooser), NULL);
@@ -303,7 +303,7 @@ empathy_account_chooser_get_connection (EmpathyAccountChooser *chooser)
 	priv = GET_PRIV (chooser);
 
 	account = empathy_account_chooser_dup_account (chooser);
-	connection = empathy_account_manager_get_connection (priv->manager, account);
+	connection = empathy_account_get_connection (account);
 	g_object_unref (account);
 
 	return connection;
@@ -312,7 +312,7 @@ empathy_account_chooser_get_connection (EmpathyAccountChooser *chooser)
 /**
  * empathy_account_chooser_set_account:
  * @chooser: an #EmpathyAccountChooser
- * @account: an #McAccount
+ * @account: an #EmpathyAccount
  *
  * Sets the currently selected account to @account, if it exists in the list.
  *
@@ -320,7 +320,7 @@ empathy_account_chooser_get_connection (EmpathyAccountChooser *chooser)
  */
 gboolean
 empathy_account_chooser_set_account (EmpathyAccountChooser *chooser,
-				     McAccount             *account)
+				     EmpathyAccount *account)
 {
 	GtkComboBox    *combobox;
 	GtkTreeModel   *model;
@@ -457,7 +457,7 @@ account_chooser_setup (EmpathyAccountChooser *chooser)
 				    G_TYPE_STRING,    /* Image */
 				    G_TYPE_STRING,    /* Name */
 				    G_TYPE_BOOLEAN,   /* Enabled */
-				    MC_TYPE_ACCOUNT);
+				    EMPATHY_TYPE_ACCOUNT);
 
 	gtk_combo_box_set_model (combobox, GTK_TREE_MODEL (store));
 
@@ -477,25 +477,25 @@ account_chooser_setup (EmpathyAccountChooser *chooser)
 					NULL);
 
 	/* Populate accounts */
-	accounts = mc_accounts_list ();
+	accounts = empathy_account_manager_dup_accounts (priv->manager);
 	g_list_foreach (accounts,
 			(GFunc) account_chooser_account_add_foreach,
 			chooser);
 
-	mc_accounts_list_free (accounts);
+	g_list_free (accounts);
 	g_object_unref (store);
 }
 
 static void
 account_chooser_account_created_cb (EmpathyAccountManager *manager,
-				    McAccount             *account,
+				    EmpathyAccount        *account,
 				    EmpathyAccountChooser *chooser)
 {
 	account_chooser_account_add_foreach (account, chooser);
 }
 
 static void
-account_chooser_account_add_foreach (McAccount             *account,
+account_chooser_account_add_foreach (EmpathyAccount        *account,
 				     EmpathyAccountChooser *chooser)
 {
 	GtkListStore *store;
@@ -511,18 +511,20 @@ account_chooser_account_add_foreach (McAccount             *account,
 					   COL_ACCOUNT_POINTER, account,
 					   -1);
 	account_chooser_update_iter (chooser, &iter);
+	/* We got a reffed account and it was reffed by the liststore as well */
+	g_object_unref (account);
 }
 
 static void
 account_chooser_account_deleted_cb (EmpathyAccountManager *manager,
-				    McAccount             *account,
+				    EmpathyAccount        *account,
 				    EmpathyAccountChooser *chooser)
 {
 	account_chooser_account_remove_foreach (account, chooser);
 }
 
 typedef struct {
-	McAccount   *account;
+	EmpathyAccount   *account;
 	GtkTreeIter *iter;
 	gboolean     found;
 } FindAccountData;
@@ -534,7 +536,7 @@ account_chooser_find_account_foreach (GtkTreeModel *model,
 				      gpointer      user_data)
 {
 	FindAccountData *data = user_data;
-	McAccount       *account;
+	EmpathyAccount  *account;
 
 	gtk_tree_model_get (model, iter, COL_ACCOUNT_POINTER, &account, -1);
 
@@ -553,7 +555,7 @@ account_chooser_find_account_foreach (GtkTreeModel *model,
 
 static gboolean
 account_chooser_find_account (EmpathyAccountChooser *chooser,
-			      McAccount             *account,
+			      EmpathyAccount        *account,
 			      GtkTreeIter           *iter)
 {
 	GtkListStore    *store;
@@ -573,7 +575,7 @@ account_chooser_find_account (EmpathyAccountChooser *chooser,
 }
 
 static void
-account_chooser_account_remove_foreach (McAccount            *account,
+account_chooser_account_remove_foreach (EmpathyAccount        *account,
 					EmpathyAccountChooser *chooser)
 {
 	GtkListStore *store;
@@ -595,7 +597,7 @@ account_chooser_update_iter (EmpathyAccountChooser *chooser,
 	EmpathyAccountChooserPriv *priv;
 	GtkListStore              *store;
 	GtkComboBox               *combobox;
-	McAccount                 *account;
+	EmpathyAccount            *account;
 	const gchar               *icon_name;
 	gboolean                   is_enabled = TRUE;
 
@@ -615,7 +617,7 @@ account_chooser_update_iter (EmpathyAccountChooser *chooser,
 
 	gtk_list_store_set (store, iter,
 			    COL_ACCOUNT_IMAGE, icon_name,
-			    COL_ACCOUNT_TEXT, mc_account_get_display_name (account),
+			    COL_ACCOUNT_TEXT, empathy_account_get_display_name (account),
 			    COL_ACCOUNT_ENABLED, is_enabled,
 			    -1);
 
@@ -630,7 +632,7 @@ account_chooser_update_iter (EmpathyAccountChooser *chooser,
 
 static void
 account_chooser_connection_changed_cb (EmpathyAccountManager   *manager,
-				       McAccount               *account,
+				       EmpathyAccount          *account,
 				       TpConnectionStatusReason reason,
 				       TpConnectionStatus       new_status,
 				       TpConnectionStatus       old_status,
@@ -671,7 +673,7 @@ account_chooser_set_account_foreach (GtkTreeModel   *model,
 				     GtkTreeIter    *iter,
 				     SetAccountData *data)
 {
-	McAccount *account;
+	EmpathyAccount *account;
 	gboolean   equal;
 
 	gtk_tree_model_get (model, iter, COL_ACCOUNT_POINTER, &account, -1);
@@ -744,7 +746,7 @@ empathy_account_chooser_set_filter (EmpathyAccountChooser           *chooser,
 
 /**
  * EmpathyAccountChooserFilterFunc:
- * @account: an #McAccount
+ * @account: an #EmpathyAccount
  * @user_data: user data, or %NULL
  *
  * A function which decides whether the account indicated by @account
@@ -755,7 +757,7 @@ empathy_account_chooser_set_filter (EmpathyAccountChooser           *chooser,
 
 /**
  * empathy_account_chooser_filter_is_connected:
- * @account: an #McAccount
+ * @account: an #EmpathyAccount
  * @user_data: user data or %NULL
  *
  * A useful #EmpathyAccountChooserFilterFunc that one could pass into
@@ -764,17 +766,12 @@ empathy_account_chooser_set_filter (EmpathyAccountChooser           *chooser,
  * Return value: Whether @account is connected
  */
 gboolean
-empathy_account_chooser_filter_is_connected (McAccount *account,
+empathy_account_chooser_filter_is_connected (EmpathyAccount *account,
 					     gpointer   user_data)
 {
-	MissionControl     *mc;
 	TpConnectionStatus  status;
 
-	g_return_val_if_fail (MC_IS_ACCOUNT (account), FALSE);
-
-	mc = empathy_mission_control_dup_singleton ();
-	status = mission_control_get_connection_status (mc, account, NULL);
-	g_object_unref (mc);
+	g_object_get (account, "status", &status, NULL);
 
 	return status == TP_CONNECTION_STATUS_CONNECTED;
 }

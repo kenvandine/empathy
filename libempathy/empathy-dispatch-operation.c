@@ -22,6 +22,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <telepathy-glib/interfaces.h>
+
 #include "empathy-dispatch-operation.h"
 #include <libempathy/empathy-enum-types.h>
 #include <libempathy/empathy-tp-contact-factory.h>
@@ -215,7 +217,7 @@ empathy_dispatch_operation_constructed (GObject *object)
 
   handle = tp_channel_get_handle (priv->channel, &handle_type);
 
-  if (handle_type == TP_CONN_HANDLE_TYPE_CONTACT && priv->contact == NULL)
+  if (handle_type == TP_HANDLE_TYPE_CONTACT && priv->contact == NULL)
     {
       EmpathyTpContactFactory *factory;
 

@@ -24,7 +24,7 @@
 
 #include <glib-object.h>
 
-#include <libmissioncontrol/mc-account.h>
+#include "empathy-account.h"
 
 G_BEGIN_DECLS
 
@@ -52,25 +52,28 @@ GType empathy_account_manager_get_type (void);
 /* public methods */
 
 EmpathyAccountManager * empathy_account_manager_dup_singleton (void);
+EmpathyAccount *        empathy_account_manager_create
+                                (EmpathyAccountManager *manager,
+                                 McProfile *profile);
 int                     empathy_account_manager_get_connected_accounts
                                 (EmpathyAccountManager *manager);
 int                     empathy_account_manager_get_connecting_accounts
                                 (EmpathyAccountManager *manager);
-gboolean                empathy_account_manager_is_account_just_connected
-                                (EmpathyAccountManager *manager,
-                                 McAccount             *account);
 int                     empathy_account_manager_get_count
                                 (EmpathyAccountManager *manager);
-McAccount *             empathy_account_manager_get_account
+EmpathyAccount *        empathy_account_manager_get_account
                                 (EmpathyAccountManager *manager,
                                  TpConnection          *connection);
+EmpathyAccount *        empathy_account_manager_lookup
+                                (EmpathyAccountManager *manager,
+                                 const gchar *unique_name);
 GList *                 empathy_account_manager_dup_accounts
                                 (EmpathyAccountManager *manager);
-TpConnection *          empathy_account_manager_get_connection
-                                (EmpathyAccountManager *manager,
-                                 McAccount             *account);
 GList *                 empathy_account_manager_dup_connections
                                 (EmpathyAccountManager *manager);
+void                    empathy_account_manager_remove (
+                                 EmpathyAccountManager *manager,
+                                 EmpathyAccount *account);
 
 G_END_DECLS
 

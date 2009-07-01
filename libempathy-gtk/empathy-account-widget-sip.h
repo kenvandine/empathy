@@ -22,11 +22,11 @@
 #define __EMPATHY_ACCOUNT_WIDGET_SIP_H__
 
 #include <gtk/gtk.h>
-#include <libmissioncontrol/mc-account.h>
+#include <libempathy/empathy-account.h>
 
 G_BEGIN_DECLS
 
-GtkWidget * empathy_account_widget_sip_new (McAccount *account);
+GtkWidget * empathy_account_widget_sip_new (EmpathyAccount *account);
 
 G_END_DECLS
 

@@ -32,6 +32,7 @@
 #include "empathy-log-store.h"
 #include "empathy-log-store-empathy.h"
 #include "empathy-log-manager.h"
+#include "empathy-account-manager.h"
 #include "empathy-contact.h"
 #include "empathy-time.h"
 #include "empathy-utils.h"
@@ -59,6 +60,7 @@ typedef struct
 {
   gchar *basedir;
   gchar *name;
+  EmpathyAccountManager *account_manager;
 } EmpathyLogStoreEmpathyPriv;
 
 static void log_store_iface_init (gpointer g_iface,gpointer iface_data);
@@ -73,6 +75,7 @@ log_store_empathy_finalize (GObject *object)
   EmpathyLogStoreEmpathy *self = EMPATHY_LOG_STORE_EMPATHY (object);
   EmpathyLogStoreEmpathyPriv *priv = GET_PRIV (self);
 
+  g_object_unref (priv->account_manager);
   g_free (priv->basedir);
   g_free (priv->name);
 }
@@ -99,11 +102,12 @@ empathy_log_store_empathy_init (EmpathyLogStoreEmpathy *self)
       ".gnome2", PACKAGE_NAME, "logs", NULL);
 
   priv->name = g_strdup ("Empathy");
+  priv->account_manager = empathy_account_manager_dup_singleton ();
 }
 
 static gchar *
 log_store_empathy_get_dir (EmpathyLogStore *self,
-                           McAccount *account,
+                           EmpathyAccount *account,
                            const gchar *chat_id,
                            gboolean chatroom)
 {
@@ -113,7 +117,7 @@ log_store_empathy_get_dir (EmpathyLogStore *self,
 
   priv = GET_PRIV (self);
 
-  account_id = mc_account_get_unique_name (account);
+  account_id = empathy_account_get_unique_name (account);
 
   if (chatroom)
     basedir = g_build_path (G_DIR_SEPARATOR_S, priv->basedir, account_id,
@@ -154,7 +158,7 @@ log_store_empathy_get_timestamp_from_message (EmpathyMessage *message)
 
 static gchar *
 log_store_empathy_get_filename (EmpathyLogStore *self,
-                                McAccount *account,
+                                EmpathyAccount *account,
                                 const gchar *chat_id,
                                 gboolean chatroom)
 {
@@ -180,7 +184,7 @@ log_store_empathy_add_message (EmpathyLogStore *self,
                                GError **error)
 {
   FILE *file;
-  McAccount *account;
+  EmpathyAccount *account;
   EmpathyContact *sender;
   const gchar *body_str;
   const gchar *str;
@@ -267,7 +271,7 @@ log_store_empathy_add_message (EmpathyLogStore *self,
 
 static gboolean
 log_store_empathy_exists (EmpathyLogStore *self,
-                          McAccount *account,
+                          EmpathyAccount *account,
                           const gchar *chat_id,
                           gboolean chatroom)
 {
@@ -283,7 +287,7 @@ log_store_empathy_exists (EmpathyLogStore *self,
 
 static GList *
 log_store_empathy_get_dates (EmpathyLogStore *self,
-                             McAccount *account,
+                             EmpathyAccount *account,
                              const gchar *chat_id,
                              gboolean chatroom)
 {
@@ -295,7 +299,6 @@ log_store_empathy_get_dates (EmpathyLogStore *self,
   const gchar *p;
 
   g_return_val_if_fail (EMPATHY_IS_LOG_STORE (self), NULL);
-  g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
   g_return_val_if_fail (chat_id != NULL, NULL);
 
   directory = log_store_empathy_get_dir (self, account, chat_id, chatroom);
@@ -336,7 +339,7 @@ log_store_empathy_get_dates (EmpathyLogStore *self,
 
 static gchar *
 log_store_empathy_get_filename_for_date (EmpathyLogStore *self,
-                                         McAccount *account,
+                                         EmpathyAccount *account,
                                          const gchar *chat_id,
                                          gboolean chatroom,
                                          const gchar *date)
@@ -359,6 +362,7 @@ static EmpathyLogSearchHit *
 log_store_empathy_search_hit_new (EmpathyLogStore *self,
                                   const gchar *filename)
 {
+  EmpathyLogStoreEmpathyPriv *priv = GET_PRIV (self);
   EmpathyLogSearchHit *hit;
   const gchar *account_name;
   const gchar *end;
@@ -383,7 +387,8 @@ log_store_empathy_search_hit_new (EmpathyLogStore *self,
   else
     account_name = strv[len-3];
 
-  hit->account = mc_account_lookup (account_name);
+  hit->account = empathy_account_manager_lookup (priv->account_manager,
+    account_name);
   hit->filename = g_strdup (filename);
 
   g_strfreev (strv);
@@ -401,7 +406,7 @@ log_store_empathy_get_messages_for_file (EmpathyLogStore *self,
   xmlNodePtr log_node;
   xmlNodePtr node;
   EmpathyLogSearchHit *hit;
-  McAccount *account;
+  EmpathyAccount *account;
 
   g_return_val_if_fail (EMPATHY_IS_LOG_STORE (self), NULL);
   g_return_val_if_fail (filename != NULL, NULL);
@@ -666,7 +671,7 @@ log_store_empathy_get_chats_for_dir (EmpathyLogStore *self,
 
 static GList *
 log_store_empathy_get_messages_for_date (EmpathyLogStore *self,
-                                         McAccount *account,
+                                         EmpathyAccount *account,
                                          const gchar *chat_id,
                                          gboolean chatroom,
                                          const gchar *date)
@@ -675,7 +680,6 @@ log_store_empathy_get_messages_for_date (EmpathyLogStore *self,
   GList *messages;
 
   g_return_val_if_fail (EMPATHY_IS_LOG_STORE (self), NULL);
-  g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
   g_return_val_if_fail (chat_id != NULL, NULL);
 
   filename = log_store_empathy_get_filename_for_date (self, account,
@@ -688,7 +692,7 @@ log_store_empathy_get_messages_for_date (EmpathyLogStore *self,
 
 static GList *
 log_store_empathy_get_chats (EmpathyLogStore *self,
-                              McAccount *account)
+                              EmpathyAccount *account)
 {
   gchar *dir;
   GList *hits;
@@ -697,7 +701,7 @@ log_store_empathy_get_chats (EmpathyLogStore *self,
   priv = GET_PRIV (self);
 
   dir = g_build_filename (priv->basedir,
-      mc_account_get_unique_name (account), NULL);
+      empathy_account_get_unique_name (account), NULL);
 
   hits = log_store_empathy_get_chats_for_dir (self, dir, FALSE);
 
@@ -716,7 +720,7 @@ log_store_empathy_get_name (EmpathyLogStore *self)
 
 static GList *
 log_store_empathy_get_filtered_messages (EmpathyLogStore *self,
-                                         McAccount *account,
+                                         EmpathyAccount *account,
                                          const gchar *chat_id,
                                          gboolean chatroom,
                                          guint num_messages,

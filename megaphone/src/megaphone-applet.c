@@ -32,10 +32,10 @@
 #include <gconf/gconf-client.h>
 
 #include <libmissioncontrol/mission-control.h>
-#include <libmissioncontrol/mc-account.h>
 
 #include <libempathy/empathy-tp-contact-factory.h>
 #include <libempathy/empathy-account-manager.h>
+#include <libempathy/empathy-dispatcher.h>
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-contact-manager.h>
@@ -55,7 +55,7 @@
 typedef struct {
 	EmpathyTpContactFactory *factory;
 	EmpathyAccountManager   *account_manager;
-	McAccount               *account;
+	EmpathyAccount          *account;
 	gchar                   *id;
 	GtkWidget               *image;
 	gint                     image_size;
@@ -194,7 +194,7 @@ megaphone_applet_got_contact_cb (EmpathyTpContactFactory *factory,
 static void
 megaphone_applet_new_connection_cb (EmpathyAccountManager *manager,
 				    TpConnection          *connection,
-				    McAccount             *account,
+				    EmpathyAccount        *account,
 				    MegaphoneApplet       *applet)
 {
 	MegaphoneAppletPriv *priv = GET_PRIV (applet);
@@ -223,13 +223,13 @@ megaphone_applet_preferences_response_cb (GtkWidget       *dialog,
 		contact_list = g_object_get_data (G_OBJECT (dialog), "contact-list");
 		contact = empathy_contact_list_view_dup_selected (contact_list);
 		if (contact) {
-			McAccount   *account;
+			EmpathyAccount   *account;
 			const gchar *account_id;
 			const gchar *contact_id;
 			gchar       *str;
 
 			account = empathy_contact_get_account (contact);
-			account_id = mc_account_get_unique_name (account);
+			account_id = empathy_account_get_unique_name (account);
 			contact_id = empathy_contact_get_id (contact);
 
 			str = g_strconcat (account_id, "/", contact_id, NULL);
@@ -300,7 +300,6 @@ megaphone_applet_button_press_event_cb (GtkWidget       *widget,
 					MegaphoneApplet *applet)
 {
 	MegaphoneAppletPriv *priv = GET_PRIV (applet);
-	MissionControl      *mc;
 
 	/* Only react on left-clicks */
 	if (event->button != 1 || event->type != GDK_BUTTON_PRESS) {
@@ -317,15 +316,8 @@ megaphone_applet_button_press_event_cb (GtkWidget       *widget,
 		empathy_contact_get_id (priv->contact),
 		empathy_contact_get_handle (priv->contact));
 
-	mc = empathy_mission_control_dup_singleton ();
-	mission_control_request_channel (mc,
-					 empathy_contact_get_account (priv->contact),
-					 TP_IFACE_CHANNEL_TYPE_TEXT,
-					 empathy_contact_get_handle (priv->contact),
-					 TP_HANDLE_TYPE_CONTACT,
-					 NULL, NULL);
-	g_object_unref (mc);
-	
+	empathy_dispatcher_chat_with_contact (priv->contact, NULL, NULL);
+
 	return TRUE;
 }
 
@@ -453,15 +445,15 @@ megaphone_applet_set_contact (MegaphoneApplet *applet,
 	/* Lookup the new contact */
 	if (str) {
 		strv = g_strsplit (str, "/", 2);
-		priv->account = mc_account_lookup (strv[0]);
+		priv->account = empathy_account_manager_lookup (priv->account_manager, 
+			strv[0]);
 		priv->id = strv[1];
 		g_free (strv[0]);
 		g_free (strv);
 	}
 
 	if (priv->account) {
-		connection = empathy_account_manager_get_connection (
-			priv->account_manager, priv->account);
+		connection = empathy_account_get_connection (priv->account);
 		if (connection) {
 			megaphone_applet_new_connection_cb (priv->account_manager,
 				connection, priv->account, applet);

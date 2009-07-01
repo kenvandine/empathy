@@ -64,7 +64,7 @@
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyChat)
 typedef struct {
 	EmpathyTpChat     *tp_chat;
-	McAccount         *account;
+	EmpathyAccount    *account;
 	gchar             *id;
 	gchar             *name;
 	gchar             *subject;
@@ -201,7 +201,7 @@ chat_new_connection_cb (EmpathyAccountManager *manager,
 			EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
-	McAccount *account;
+	EmpathyAccount *account;
 
 	account = empathy_account_manager_get_account (manager, connection);
 	if (!priv->tp_chat && empathy_account_equal (account, priv->account) &&
@@ -1562,7 +1562,7 @@ empathy_chat_class_init (EmpathyChatClass *klass)
 					 g_param_spec_object ("account",
 							      "Account of the chat",
 							      "The account of the chat",
-							      MC_TYPE_ACCOUNT,
+							      EMPATHY_TYPE_ACCOUNT,
 							      G_PARAM_READABLE |
 							      G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class,
@@ -1753,7 +1753,7 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 	show_pending_messages (chat);
 }
 
-McAccount *
+EmpathyAccount *
 empathy_chat_get_account (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);

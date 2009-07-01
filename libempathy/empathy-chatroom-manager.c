@@ -100,7 +100,8 @@ chatroom_manager_file_save (EmpathyChatroomManager *manager)
 			continue;
 		}
 
-		account_id = mc_account_get_unique_name (empathy_chatroom_get_account (chatroom));
+		account_id = empathy_account_get_unique_name (
+		  empathy_chatroom_get_account (chatroom));
 
 		node = xmlNewChild (root, NULL, "chatroom", NULL);
 		xmlNewTextChild (node, NULL, "name", empathy_chatroom_get_name (chatroom));
@@ -174,7 +175,7 @@ chatroom_manager_parse_chatroom (EmpathyChatroomManager *manager,
 {
 	EmpathyChatroomManagerPriv *priv;
 	EmpathyChatroom            *chatroom;
-	McAccount                 *account;
+	EmpathyAccount             *account;
 	xmlNodePtr                 child;
 	gchar                     *str;
 	gchar                     *name;
@@ -220,7 +221,7 @@ chatroom_manager_parse_chatroom (EmpathyChatroomManager *manager,
 		xmlFree (str);
 	}
 
-	account = mc_account_lookup (account_id);
+	account = empathy_account_manager_lookup (priv->account_manager, account_id);
 	if (!account) {
 		g_free (name);
 		g_free (room);
@@ -556,21 +557,20 @@ empathy_chatroom_manager_remove (EmpathyChatroomManager *manager,
 
 EmpathyChatroom *
 empathy_chatroom_manager_find (EmpathyChatroomManager *manager,
-                               McAccount *account,
+                               EmpathyAccount *account,
                                const gchar *room)
 {
 	EmpathyChatroomManagerPriv *priv;
 	GList                     *l;
 
 	g_return_val_if_fail (EMPATHY_IS_CHATROOM_MANAGER (manager), NULL);
-	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 	g_return_val_if_fail (room != NULL, NULL);
 
 	priv = GET_PRIV (manager);
 
 	for (l = priv->chatrooms; l; l = l->next) {
 		EmpathyChatroom *chatroom;
-		McAccount      *this_account;
+		EmpathyAccount *this_account;
 		const gchar    *this_room;
 
 		chatroom = l->data;
@@ -589,7 +589,7 @@ empathy_chatroom_manager_find (EmpathyChatroomManager *manager,
 
 GList *
 empathy_chatroom_manager_get_chatrooms (EmpathyChatroomManager *manager,
-				       McAccount             *account)
+				       EmpathyAccount *account)
 {
 	EmpathyChatroomManagerPriv *priv;
 	GList                     *chatrooms, *l;
@@ -619,7 +619,7 @@ empathy_chatroom_manager_get_chatrooms (EmpathyChatroomManager *manager,
 
 guint
 empathy_chatroom_manager_get_count (EmpathyChatroomManager *manager,
-				   McAccount             *account)
+				   EmpathyAccount *account)
 {
 	EmpathyChatroomManagerPriv *priv;
 	GList                     *l;
@@ -686,7 +686,7 @@ chatroom_manager_observe_channel_cb (EmpathyDispatcher *dispatcher,
   const gchar *roomname;
   GQuark channel_type;
   TpHandleType handle_type;
-  McAccount *account;
+  EmpathyAccount *account;
   TpConnection *connection;
 
   channel_type = empathy_dispatch_operation_get_channel_type_id (operation);

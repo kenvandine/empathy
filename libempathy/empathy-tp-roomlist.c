@@ -27,7 +27,7 @@
 #include <telepathy-glib/dbus.h>
 #include <telepathy-glib/util.h>
 
-#include <libmissioncontrol/mission-control.h>
+#include "empathy-account.h"
 
 #include "empathy-tp-roomlist.h"
 #include "empathy-chatroom.h"
@@ -40,7 +40,7 @@
 typedef struct {
 	TpConnection *connection;
 	TpChannel    *channel;
-	McAccount    *account;
+	EmpathyAccount    *account;
 	gboolean      is_listing;
 	gboolean      start_requested;
 } EmpathyTpRoomlistPriv;
@@ -54,7 +54,7 @@ enum {
 
 enum {
 	PROP_0,
-	PROP_CONNECTION,
+	PROP_ACCOUNT,
 	PROP_IS_LISTING,
 };
 
@@ -352,13 +352,9 @@ static void
 tp_roomlist_constructed (GObject *list)
 {
 	EmpathyTpRoomlistPriv *priv = GET_PRIV (list);
-	MissionControl        *mc;
 
-	mc = empathy_mission_control_dup_singleton ();
-	priv->account = mission_control_get_account_for_tpconnection (mc,
-								      priv->connection,
-								      NULL);
-	g_object_unref (mc);
+	priv->connection = empathy_account_get_connection (priv->account);
+	g_object_ref (priv->connection);
 
 	tp_cli_connection_call_request_channel (priv->connection, -1,
 						TP_IFACE_CHANNEL_TYPE_ROOM_LIST,
@@ -379,8 +375,8 @@ tp_roomlist_get_property (GObject    *object,
 	EmpathyTpRoomlistPriv *priv = GET_PRIV (object);
 
 	switch (param_id) {
-	case PROP_CONNECTION:
-		g_value_set_object (value, priv->connection);
+	case PROP_ACCOUNT:
+		g_value_set_object (value, priv->account);
 		break;
 	case PROP_IS_LISTING:
 		g_value_set_boolean (value, priv->is_listing);
@@ -400,8 +396,8 @@ tp_roomlist_set_property (GObject      *object,
 	EmpathyTpRoomlistPriv *priv = GET_PRIV (object);
 
 	switch (param_id) {
-	case PROP_CONNECTION:
-		priv->connection = g_object_ref (g_value_get_object (value));
+	case PROP_ACCOUNT:
+		priv->account = g_value_dup_object (value);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -420,11 +416,11 @@ empathy_tp_roomlist_class_init (EmpathyTpRoomlistClass *klass)
 	object_class->set_property = tp_roomlist_set_property;
 
 	g_object_class_install_property (object_class,
-					 PROP_CONNECTION,
-					 g_param_spec_object ("connection",
-							      "The Connection",
-							      "The connection on which it lists rooms",
-							      TP_TYPE_CONNECTION,
+					 PROP_ACCOUNT,
+					 g_param_spec_object ("account",
+							      "The Account",
+							      "The account on which it lists rooms",
+							      EMPATHY_TYPE_ACCOUNT,
 							      G_PARAM_READWRITE |
 							      G_PARAM_CONSTRUCT_ONLY));
 	g_object_class_install_property (object_class,
@@ -480,23 +476,13 @@ empathy_tp_roomlist_init (EmpathyTpRoomlist *list)
 }
 
 EmpathyTpRoomlist *
-empathy_tp_roomlist_new (McAccount *account)
+empathy_tp_roomlist_new (EmpathyAccount *account)
 {
 	EmpathyTpRoomlist *list;
-	MissionControl    *mc;
-	TpConnection      *connection;
-
-	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
-
-	mc = empathy_mission_control_dup_singleton ();
-	connection = mission_control_get_tpconnection (mc, account, NULL);
 
 	list = g_object_new (EMPATHY_TYPE_TP_ROOMLIST,
-			     "connection", connection,
+			     "account", account,
 			     NULL);
-
-	g_object_unref (mc);
-	g_object_unref (connection);
 
 	return list;
 }

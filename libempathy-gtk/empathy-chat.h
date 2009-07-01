@@ -66,7 +66,7 @@ EmpathyChat *      empathy_chat_new                  (EmpathyTpChat *tp_chat);
 EmpathyTpChat *    empathy_chat_get_tp_chat          (EmpathyChat   *chat);
 void               empathy_chat_set_tp_chat          (EmpathyChat   *chat,
 						      EmpathyTpChat *tp_chat);
-McAccount *        empathy_chat_get_account          (EmpathyChat   *chat);
+EmpathyAccount *        empathy_chat_get_account          (EmpathyChat   *chat);
 const gchar *      empathy_chat_get_id               (EmpathyChat   *chat);
 const gchar *      empathy_chat_get_name             (EmpathyChat   *chat);
 const gchar *      empathy_chat_get_subject          (EmpathyChat   *chat);

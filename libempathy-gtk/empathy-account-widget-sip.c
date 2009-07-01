@@ -28,7 +28,6 @@
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 
-#include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-protocol.h>
 
 #include <libempathy/empathy-utils.h>
@@ -38,7 +37,7 @@
 #include "empathy-ui-utils.h"
 
 typedef struct {
-  McAccount *account;
+  EmpathyAccount *account;
 
   GtkWidget *vbox_settings;
 
@@ -69,14 +68,14 @@ account_widget_sip_discover_stun_toggled_cb (
 
 /**
  * empathy_account_widget_sip_new:
- * @account: the #McAccount to configure
+ * @account: the #EmpathyAccount to configure
  *
- * Creates a new SIP account widget to configure a given #McAccount
+ * Creates a new SIP account widget to configure a given #EmpathyAccount
  *
  * Returns: The toplevel container of the configuration widget
  */
 GtkWidget *
-empathy_account_widget_sip_new (McAccount *account)
+empathy_account_widget_sip_new (EmpathyAccount *account)
 {
   EmpathyAccountWidgetSip *settings;
   GtkBuilder *gui;

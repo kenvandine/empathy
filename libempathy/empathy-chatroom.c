@@ -31,7 +31,7 @@
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyChatroom)
 typedef struct {
-	McAccount *account;
+	EmpathyAccount *account;
 	gchar     *room;
 	gchar     *name;
 	gboolean   auto_connect;
@@ -84,7 +84,7 @@ empathy_chatroom_class_init (EmpathyChatroomClass *klass)
 					 g_param_spec_object ("account",
 							      "Chatroom Account",
 							      "The account associated with an chatroom",
-							      MC_TYPE_ACCOUNT,
+							      EMPATHY_TYPE_ACCOUNT,
 							      G_PARAM_READWRITE));
 
 	g_object_class_install_property (object_class,
@@ -312,22 +312,19 @@ chatroom_set_property (GObject      *object,
 }
 
 EmpathyChatroom *
-empathy_chatroom_new (McAccount *account)
+empathy_chatroom_new (EmpathyAccount *account)
 {
-	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
-
 	return g_object_new (EMPATHY_TYPE_CHATROOM,
 			     "account", account,
 			     NULL);
 }
 
 EmpathyChatroom *
-empathy_chatroom_new_full (McAccount   *account,
+empathy_chatroom_new_full (EmpathyAccount *account,
 			  const gchar *room,
 			  const gchar *name,
 			  gboolean     auto_connect)
 {
-	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 	g_return_val_if_fail (room != NULL, NULL);
 
 	return g_object_new (EMPATHY_TYPE_CHATROOM,
@@ -338,7 +335,7 @@ empathy_chatroom_new_full (McAccount   *account,
 			     NULL);
 }
 
-McAccount *
+EmpathyAccount *
 empathy_chatroom_get_account (EmpathyChatroom *chatroom)
 {
 	EmpathyChatroomPriv *priv;
@@ -351,12 +348,11 @@ empathy_chatroom_get_account (EmpathyChatroom *chatroom)
 
 void
 empathy_chatroom_set_account (EmpathyChatroom *chatroom,
-			     McAccount      *account)
+			     EmpathyAccount *account)
 {
 	EmpathyChatroomPriv *priv;
 
 	g_return_if_fail (EMPATHY_IS_CHATROOM (chatroom));
-	g_return_if_fail (MC_IS_ACCOUNT (account));
 
 	priv = GET_PRIV (chatroom);
 
@@ -470,8 +466,8 @@ gboolean
 empathy_chatroom_equal (gconstpointer v1,
 		       gconstpointer v2)
 {
-	McAccount   *account_a;
-	McAccount   *account_b;
+	EmpathyAccount *account_a;
+	EmpathyAccount *account_b;
 	const gchar *room_a;
 	const gchar *room_b;
 

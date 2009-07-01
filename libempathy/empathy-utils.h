@@ -32,7 +32,6 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-#include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mission-control.h>
 
 #include "empathy-contact.h"

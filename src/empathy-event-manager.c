@@ -914,19 +914,12 @@ event_manager_presence_changed_cb (EmpathyContactMonitor *monitor,
     TpConnectionPresenceType previous,
     EmpathyEventManager *manager)
 {
-  McAccount *account;
-  gboolean just_connected;
-  EmpathyAccountManager *account_manager;
+  EmpathyAccount *account;
   gchar *header = NULL;
   gboolean preference = FALSE;
 
   account = empathy_contact_get_account (contact);
-  account_manager = empathy_account_manager_dup_singleton ();
-  just_connected = empathy_account_manager_is_account_just_connected (
-                  account_manager, account);
-
-  g_object_unref (account_manager);
-  if (just_connected)
+  if (empathy_account_is_just_connected (account))
     return;
 
   if (tp_connection_presence_type_cmp_availability (previous,

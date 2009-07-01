@@ -392,7 +392,7 @@ theme_adium_append_message (EmpathyChatView *view,
 	EmpathyThemeAdium     *theme = EMPATHY_THEME_ADIUM (view);
 	EmpathyThemeAdiumPriv *priv = GET_PRIV (theme);
 	EmpathyContact        *sender;
-	McAccount             *account;
+	EmpathyAccount        *account;
 	McProfile             *account_profile;
 	gchar                 *dup_body = NULL;
 	const gchar           *body;
@@ -416,7 +416,7 @@ theme_adium_append_message (EmpathyChatView *view,
 	/* Get information */
 	sender = empathy_message_get_sender (msg);
 	account = empathy_contact_get_account (sender);
-	account_profile = mc_account_get_profile (account);
+	account_profile = empathy_account_get_profile (account);
 	service_name = mc_profile_get_display_name (account_profile);
 	timestamp = empathy_message_get_timestamp (msg);
 	body = empathy_message_get_body (msg);
