@@ -37,7 +37,8 @@ typedef struct {
   McAccountMonitor *monitor;
   MissionControl   *mc;
 
-  GHashTable       *accounts; /* unique name -> EmpathyAccount */
+  /* (owned) unique name -> (reffed) EmpathyAccount */
+  GHashTable       *accounts;
   int               connected;
   int               connecting;
   gboolean          dispose_run;
