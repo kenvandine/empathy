@@ -93,7 +93,6 @@ emp_account_connection_cb (EmpathyAccount *account,
   DEBUG ("Signalling connection %p of account %s",
       connection, empathy_account_get_unique_name (account));
 
-
   if (connection != NULL)
     g_signal_emit (manager, signals[NEW_CONNECTION], 0, connection);
 }
