@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-23 21:46+0530\n"
-"PO-Revision-Date: 2009-06-20 14:19+0530\n"
+"POT-Creation-Date: 2009-07-03 22:10+0530\n"
+"PO-Revision-Date: 2009-07-04 14:42+0530\n"
 "Last-Translator: Dr.T.Vasudevan <agnihot3@gmail.com>\n"
 "Language-Team: Tamil <Ubuntu-l10n-tam@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
@@ -41,10 +41,8 @@ msgid "Chat window theme"
 msgstr "அரட்டை சாளர கருத்து"
 
 #: ../data/empathy.schemas.in.h:4
-msgid ""
-"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
-msgstr ""
-"சொல் திருத்தி மொழிகளை பயன்படுத்த காற் புள்ளியால் பிரித்த பட்டியல் (எ-டு. en, fr, nl)"
+msgid "Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgstr "சொல் திருத்தி மொழிகளை பயன்படுத்த காற் புள்ளியால் பிரித்த பட்டியல் (எ-டு. en, fr, nl)"
 
 #: ../data/empathy.schemas.in.h:5
 msgid "Compact contact list"
@@ -100,8 +98,7 @@ msgstr "துவங்கும் போது எம்பதி இடதத
 
 #: ../data/empathy.schemas.in.h:18
 msgid "Empathy should use the avatar of the contact as the chat window icon"
-msgstr ""
-"துவங்கும் போது எம்பதி அரட்டை சாரளத்தில்  சின்னமாக தொடர்பின் அவதாரத்தை காட்ட  வேண்டும்."
+msgstr "துவங்கும் போது எம்பதி அரட்டை சாரளத்தில்  சின்னமாக தொடர்பின் அவதாரத்தை காட்ட  வேண்டும்."
 
 #: ../data/empathy.schemas.in.h:19
 msgid "Enable popup notifications for new messages"
@@ -172,14 +169,12 @@ msgid "Popup notifications if the chat isn't focused"
 msgstr "அரட்டை குவிப்பில் இல்லையானால் வெளித்துள்ளல் மூலம் அறிவி"
 
 #: ../data/empathy.schemas.in.h:36
-#, fuzzy
 msgid "Popup notifications when a contact sign in"
-msgstr "அரட்டை குவிப்பில் இல்லையானால் வெளித்துள்ளல் மூலம் அறிவி"
+msgstr "தொடர்பு உள் நுழைகையில் வெளித்துள்ளல் மூலம் அறிவி"
 
 #: ../data/empathy.schemas.in.h:37
-#, fuzzy
 msgid "Popup notifications when a contact sign out"
-msgstr "அரட்டை குவிப்பில் இல்லையானால் வெளித்துள்ளல் மூலம் அறிவி"
+msgstr "தொடர்பு உள் நுழைகையில்  வெளித்துள்ளல் மூலம் அறிவி"
 
 #: ../data/empathy.schemas.in.h:38
 msgid "Salut account is created"
@@ -238,8 +233,7 @@ msgid "Whether or not Empathy can use the GPS to guess the location."
 msgstr "எம்பதி பயனரின் இடத்தை ஊகிக்க ஜிபிஎஸ் ஐ பயன்படுத்தலாமா இல்லையா."
 
 #: ../data/empathy.schemas.in.h:52
-msgid ""
-"Whether or not Empathy can use the cellular network to guess the location."
+msgid "Whether or not Empathy can use the cellular network to guess the location."
 msgstr "எம்பதி பயனரின் இடத்தை ஊகிக்க அலைபேசி வலையை பயன்படுத்தலாமா இல்லையா."
 
 #: ../data/empathy.schemas.in.h:53
@@ -250,8 +244,7 @@ msgstr "எம்பதி பயனரின் இடத்தை ஊகிக
 msgid ""
 "Whether or not Empathy has asked about importing accounts from other "
 "programs."
-msgstr ""
-"எம்பதி மற்ற நிரல்களில் இருந்து கணக்குகளை இறக்குமதி செய்வது குறித்து வினவியதா இல்லையா."
+msgstr "எம்பதி மற்ற நிரல்களில் இருந்து கணக்குகளை இறக்குமதி செய்வது குறித்து வினவியதா இல்லையா."
 
 #: ../data/empathy.schemas.in.h:55
 msgid ""
@@ -273,8 +266,7 @@ msgid ""
 msgstr "எம்பதி தொடர்பின் அவதாரத்தை அரட்டை அறை சின்னமாக பயன்படுத்த வேண்டுமா இல்லையா."
 
 #: ../data/empathy.schemas.in.h:58
-msgid ""
-"Whether or not the Salut account has been created on the first Empathy run."
+msgid "Whether or not the Salut account has been created on the first Empathy run."
 msgstr "முதல் ஓட்டத்தில் எம்பதி சலூட் கணக்கை உருவாக்கியதா இல்லையா."
 
 #: ../data/empathy.schemas.in.h:59
@@ -292,13 +284,11 @@ msgid ""
 msgstr "நீங்கள் விரும்பிய மொழிகளில் உள்ளிட்ட சொற்களை சோதிக்க வேண்டுமா இல்லையா?"
 
 #: ../data/empathy.schemas.in.h:61
-msgid ""
-"Whether or not to convert smileys into graphical images in conversations."
+msgid "Whether or not to convert smileys into graphical images in conversations."
 msgstr "உரையாடல்களில் சிரிப்பான்களை வரைகலை படங்களாக மாற்ற வேண்டுமா இல்லையா?"
 
 #: ../data/empathy.schemas.in.h:62
-msgid ""
-"Whether or not to play a sound to notify for contacts logging in the network."
+msgid "Whether or not to play a sound to notify for contacts logging in the network."
 msgstr "வலைப்பின்னலில் தொடர்புகள் உள்நுழையும் போது ஒலியை எழுப்ப வேண்டுமா இல்லையா?"
 
 #: ../data/empathy.schemas.in.h:63
@@ -336,15 +326,12 @@ msgid "Whether or not to play sound notifications when away or busy."
 msgstr "வெளியே அல்லது வேலையாக உள்ள போது ஒலி அறிக்கைகளை இயக்க வேண்டுமா இல்லையா?"
 
 #: ../data/empathy.schemas.in.h:71
-#, fuzzy
-msgid ""
-"Whether or not to show a popup notification when a contact goes offline."
-msgstr "வெளியே அல்லது வேலையாக உள்ள போது துள்ளு அறிக்கைகளை காட்ட வேண்டுமா இல்லையா?"
+msgid "Whether or not to show a popup notification when a contact goes offline."
+msgstr "தொடர்பு இணைப்பு விலகி செல்கையில்  துள்ளு அறிக்கைகளை காட்ட வேண்டுமா இல்லையா?"
 
 #: ../data/empathy.schemas.in.h:72
-#, fuzzy
 msgid "Whether or not to show a popup notification when a contact goes online."
-msgstr "வெளியே அல்லது வேலையாக உள்ள போது துள்ளு அறிக்கைகளை காட்ட வேண்டுமா இல்லையா?"
+msgstr "தொடர்பு இணைப்பில் வருகையில்  துள்ளு அறிக்கைகளை காட்ட வேண்டுமா இல்லையா?"
 
 #: ../data/empathy.schemas.in.h:73
 msgid ""
@@ -355,8 +342,7 @@ msgstr ""
 "அறிக்கையை காட்ட வேண்டுமா இல்லையா?"
 
 #: ../data/empathy.schemas.in.h:74
-msgid ""
-"Whether or not to show a popup notification when receiving a new message."
+msgid "Whether or not to show a popup notification when receiving a new message."
 msgstr "புதிய செய்தி ஒன்று வரும்போது  துள்ளு அறிக்கையை காட்ட வேண்டுமா இல்லையா?"
 
 #: ../data/empathy.schemas.in.h:75
@@ -419,7 +405,7 @@ msgstr "தேர்ந்தெடுத்த கோப்பு வழக்�
 msgid "The selected file is empty"
 msgstr "தேர்ந்தெடுத்த கோப்பு காலியாக உள்ளது"
 
-#: ../libempathy/empathy-tp-contact-list.c:757 ../src/empathy.c:287
+#: ../libempathy/empathy-tp-contact-list.c:757 ../src/empathy.c:289
 msgid "People nearby"
 msgstr "அருகில் உள்ள மக்கள்"
 
@@ -455,23 +441,23 @@ msgstr "மற்ற பங்குதாரர் கோப்பு பரி
 msgid "Unknown reason"
 msgstr "தெரியாத காரணம்"
 
-#: ../libempathy/empathy-utils.c:274
+#: ../libempathy/empathy-utils.c:265
 msgid "Available"
 msgstr "இருப்பவை"
 
-#: ../libempathy/empathy-utils.c:276
+#: ../libempathy/empathy-utils.c:267
 msgid "Busy"
 msgstr "வேலையில்"
 
-#: ../libempathy/empathy-utils.c:279
+#: ../libempathy/empathy-utils.c:270
 msgid "Away"
 msgstr "வெளியில்"
 
-#: ../libempathy/empathy-utils.c:281
+#: ../libempathy/empathy-utils.c:272
 msgid "Hidden"
 msgstr "மறைந்துள்ள"
 
-#: ../libempathy/empathy-utils.c:283
+#: ../libempathy/empathy-utils.c:274
 msgid "Offline"
 msgstr "இணைப்பு விலகி"
 
@@ -591,7 +577,7 @@ msgstr "(_U) ஐசிக்யூ (ICQ) யுஐஎன்:"
 msgid "_Charset:"
 msgstr "(_C) எழுத்துருதொகுதி:"
 
-#: ../libempathy-gtk/empathy-account-widget-irc.c:241
+#: ../libempathy-gtk/empathy-account-widget-irc.c:240
 msgid "New Network"
 msgstr "புதிய வலையமைப்பு"
 
@@ -793,7 +779,7 @@ msgstr "சிரிப்பானை சொருகு"
 
 #. send button
 #: ../libempathy-gtk/empathy-chat.c:1031
-#: ../libempathy-gtk/empathy-ui-utils.c:1476
+#: ../libempathy-gtk/empathy-ui-utils.c:1475
 msgid "_Send"
 msgstr "அனுப்பு (_S)"
 
@@ -801,30 +787,64 @@ msgstr "அனுப்பு (_S)"
 msgid "_Spelling Suggestions"
 msgstr "_S எழுத்தாக்க பரிந்துரைகள் "
 
-#: ../libempathy-gtk/empathy-chat.c:1179
-#, c-format
-msgid "%s has joined the room"
-msgstr "%s அறையில் சேர்ந்தார்"
+#: ../libempathy-gtk/empathy-chat.c:1180, c-format
+msgid "%s has disconnected"
+msgstr "%s தொடர்பை துண்டித்தார்"
 
-#: ../libempathy-gtk/empathy-chat.c:1182
+#: ../libempathy-gtk/empathy-chat.c:1184
+#, c-format
+msgid "%s was kicked by %s"
+msgstr "%s  %s ஆல் உதைத்து வெளியேற்றப்பட்டார்"
+
+#: ../libempathy-gtk/empathy-chat.c:1187
+#, c-format
+msgid "%s was kicked"
+msgstr "%s உதைத்து வெளியேற்றப்பட்டார்"
+
+#: ../libempathy-gtk/empathy-chat.c:1192
+#, c-format
+msgid "%s was banned by %s"
+msgstr "%s %s ஆல் தடை செய்யப்பட்டார்"
+
+#: ../libempathy-gtk/empathy-chat.c:1195
+#, c-format
+msgid "%s was banned"
+msgstr "%s தடை செய்யப்பட்டார்"
+
+#: ../libempathy-gtk/empathy-chat.c:1199
 #, c-format
 msgid "%s has left the room"
 msgstr "%s அறையில் இருந்து வெளியேறினார்"
 
-#: ../libempathy-gtk/empathy-chat.c:1313 ../src/empathy-call-window.c:1199
+#. Note to translators: this string is appended to
+#. * notifications like "foo has left the room", with the message
+#. * given by the user living the room. If this poses a problem,
+#. * please let us know. :-)
+#.
+#: ../libempathy-gtk/empathy-chat.c:1208
+#, c-format
+msgid " (%s)"
+msgstr " (%s)"
+
+#: ../libempathy-gtk/empathy-chat.c:1231
+#, c-format
+msgid "%s has joined the room"
+msgstr "%s அறையில் சேர்ந்தார்"
+
+#: ../libempathy-gtk/empathy-chat.c:1364 ../src/empathy-call-window.c:1226
 msgid "Disconnected"
 msgstr "துண்டிக்கபட்டது"
 
-#: ../libempathy-gtk/empathy-chat.c:1742
+#: ../libempathy-gtk/empathy-chat.c:1793
 msgid "Connected"
 msgstr "இணைக்கப்பட்டது"
 
-#: ../libempathy-gtk/empathy-chat.c:1792
-#: ../libempathy-gtk/empathy-log-window.c:501
+#: ../libempathy-gtk/empathy-chat.c:1843
+#: ../libempathy-gtk/empathy-log-window.c:502
 msgid "Conversation"
 msgstr "உரையாடல்"
 
-#: ../libempathy-gtk/empathy-chat.ui.h:1 ../src/empathy-chat-window.c:471
+#: ../libempathy-gtk/empathy-chat.ui.h:1 ../src/empathy-chat-window.c:472
 msgid "Topic:"
 msgstr "தலைப்பு:"
 
@@ -851,7 +871,7 @@ msgstr "தொடர்பின்  தகவல் ஐ திருத்த�
 msgid "Personal Information"
 msgstr "தனிப்பட்ட தகவல்"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:392
+#: ../libempathy-gtk/empathy-contact-dialogs.c:384
 msgid "New Contact"
 msgstr "புதிய தொடர்பு"
 
@@ -863,26 +883,26 @@ msgstr "(_L) பிறகு முடிவு எடுக்கலாம்"
 msgid "Subscription Request"
 msgstr "சந்தா வேண்டுதல்"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1378
+#: ../libempathy-gtk/empathy-contact-list-view.c:1375
 #, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr "நீங்கள் நிச்சயம் குழு '%s' ஐ நீக்க விரும்புகிறீர்களா?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1380
+#: ../libempathy-gtk/empathy-contact-list-view.c:1377
 msgid "Removing group"
 msgstr "குழுவை நீக்குதல்"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1427
-#: ../libempathy-gtk/empathy-contact-list-view.c:1505
+#: ../libempathy-gtk/empathy-contact-list-view.c:1424
+#: ../libempathy-gtk/empathy-contact-list-view.c:1502
 msgid "_Remove"
 msgstr "நீக்கவும் (_R)"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1457
+#: ../libempathy-gtk/empathy-contact-list-view.c:1454
 #, c-format
 msgid "Do you really want to remove the contact '%s'?"
 msgstr "நீங்கள் நிச்சயம் தொடர்பு '%s' ஐ நீக்க விரும்புகிறீர்களா?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1459
+#: ../libempathy-gtk/empathy-contact-list-view.c:1456
 msgid "Removing contact"
 msgstr "தொடர்பு ஐ நீக்குதல்"
 
@@ -943,7 +963,7 @@ msgid "Select"
 msgstr "தேர்வு"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:988
-#: ../src/empathy-main-window.c:905
+#: ../src/empathy-main-window.c:903
 msgid "Group"
 msgstr "குழு"
 
@@ -1083,7 +1103,7 @@ msgid "Client:"
 msgstr "சார்ந்தோன்:"
 
 #: ../libempathy-gtk/empathy-contact-widget.ui.h:7
-#: ../src/empathy-main-window.c:888
+#: ../src/empathy-main-window.c:886
 msgid "Contact"
 msgstr "தொடர்பு"
 
@@ -1152,12 +1172,12 @@ msgstr "துறை"
 msgid "SSL"
 msgstr "எஸ்எஸ்எல்"
 
-#: ../libempathy-gtk/empathy-log-window.c:494
-#: ../src/empathy-import-dialog.c:281
+#: ../libempathy-gtk/empathy-log-window.c:495
+#: ../src/empathy-import-dialog.c:285
 msgid "Account"
 msgstr "கணக்கு"
 
-#: ../libempathy-gtk/empathy-log-window.c:511
+#: ../libempathy-gtk/empathy-log-window.c:512
 msgid "Date"
 msgstr "தேதி"
 
@@ -1228,6 +1248,46 @@ msgstr "உங்கள் நடப்பு நிலையையும் இ
 msgid "Custom messages..."
 msgstr "தனிப்பயன் செய்திகள்..."
 
+#: ../libempathy-gtk/empathy-sound.c:51
+msgid "Received an instant message"
+msgstr "ஒரு உடனடி செய்தி கிடைக்கப்பெற்றது"
+
+#: ../libempathy-gtk/empathy-sound.c:53
+msgid "Sent an instant message"
+msgstr "ஒரு உடனடி செய்தி அனுப்பு"
+
+#: ../libempathy-gtk/empathy-sound.c:55
+msgid "Incoming chat request"
+msgstr "உள்வரும் அரட்டை வேண்டுதல்"
+
+#: ../libempathy-gtk/empathy-sound.c:57
+msgid "Contact connected"
+msgstr "தொடர்பு இணைக்கப்பட்டது"
+
+#: ../libempathy-gtk/empathy-sound.c:59
+msgid "Contact disconnected"
+msgstr "தொடர்பு துண்டிக்கப்பட்டது"
+
+#: ../libempathy-gtk/empathy-sound.c:61
+msgid "Connected to server"
+msgstr "சேவையகத்துக்கு இணைக்கப்பட்டது"
+
+#: ../libempathy-gtk/empathy-sound.c:63
+msgid "Disconnected from server"
+msgstr "சேவையகத்துக்கு இணைப்பு துண்டிக்கபட்டது"
+
+#: ../libempathy-gtk/empathy-sound.c:65
+msgid "Incoming voice call"
+msgstr "உள்வரும் குரல் அழைப்பு"
+
+#: ../libempathy-gtk/empathy-sound.c:67
+msgid "Outgoing voice call"
+msgstr "வெளி செல்லும் குரல் அழைப்பு"
+
+#: ../libempathy-gtk/empathy-sound.c:69
+msgid "Voice call ended"
+msgstr "குரல் அழைப்பு முடிந்தது"
+
 #: ../libempathy-gtk/empathy-status-preset-dialog.c:362
 msgid "Enter Custom Message"
 msgstr "தனிப்பயன் செய்தியை உள்ளிடுக"
@@ -1252,77 +1312,33 @@ msgstr "ஜிடிகே-சேர்"
 msgid "gtk-remove"
 msgstr "ஜிடிகே-நீக்கு"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:66
+#: ../libempathy-gtk/empathy-theme-manager.c:67
 msgid "Classic"
 msgstr "தொன்மையான"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:67
+#: ../libempathy-gtk/empathy-theme-manager.c:68
 msgid "Simple"
 msgstr "எளிய"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:68
+#: ../libempathy-gtk/empathy-theme-manager.c:69
 msgid "Clean"
 msgstr "சுத்தமான"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:69
+#: ../libempathy-gtk/empathy-theme-manager.c:70
 msgid "Blue"
 msgstr "நீலம்"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:71
-msgid "Adium"
-msgstr "ஏடியம்"
-
-#: ../libempathy-gtk/empathy-ui-utils.c:1378
+#: ../libempathy-gtk/empathy-ui-utils.c:1377
 msgid "Unable to open URI"
 msgstr "யூஆர்ஐ ஐ திறக்க முடியவில்லை"
 
-#: ../libempathy-gtk/empathy-ui-utils.c:1468
+#: ../libempathy-gtk/empathy-ui-utils.c:1467
 msgid "Select a file"
 msgstr "கோப்பை தேர்வு செய்"
 
-#: ../libempathy-gtk/empathy-ui-utils.c:1526
+#: ../libempathy-gtk/empathy-ui-utils.c:1525
 msgid "Select a destination"
 msgstr "ஒரு இலக்கிடம் தேர்வு செய்க"
-
-#: ../libempathy-gtk/empathy-ui-utils.c:1555
-msgid "Received an instant message"
-msgstr "ஒரு உடனடி செய்தி கிடைக்கப்பெற்றது"
-
-#: ../libempathy-gtk/empathy-ui-utils.c:1557
-msgid "Sent an instant message"
-msgstr "ஒரு உடனடி செய்தி அனுப்பு"
-
-#: ../libempathy-gtk/empathy-ui-utils.c:1559
-msgid "Incoming chat request"
-msgstr "உள்வரும் அரட்டை வேண்டுதல்"
-
-#: ../libempathy-gtk/empathy-ui-utils.c:1561
-msgid "Contact connected"
-msgstr "தொடர்பு இணைக்கப்பட்டது"
-
-#: ../libempathy-gtk/empathy-ui-utils.c:1563
-msgid "Contact disconnected"
-msgstr "தொடர்பு துண்டிக்கப்பட்டது"
-
-#: ../libempathy-gtk/empathy-ui-utils.c:1565
-msgid "Connected to server"
-msgstr "சேவையகத்துக்கு இணைக்கப்பட்டது"
-
-#: ../libempathy-gtk/empathy-ui-utils.c:1567
-msgid "Disconnected from server"
-msgstr "சேவையகத்துக்கு இணைப்பு துண்டிக்கபட்டது"
-
-#: ../libempathy-gtk/empathy-ui-utils.c:1569
-msgid "Incoming voice call"
-msgstr "உள்வரும் குரல் அழைப்பு"
-
-#: ../libempathy-gtk/empathy-ui-utils.c:1571
-msgid "Outgoing voice call"
-msgstr "வெளி செல்லும் குரல் அழைப்பு"
-
-#: ../libempathy-gtk/empathy-ui-utils.c:1573
-msgid "Voice call ended"
-msgstr "குரல் அழைப்பு முடிந்தது"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:158
 msgid "Current Locale"
@@ -1495,8 +1511,7 @@ msgstr "வியட்னாம்"
 #. * vim: sw=2 ts=8 cindent noai bs=2
 #.
 #: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
-msgid ""
-"The contact to display in the applet. Empty means no contact is displayed."
+msgid "The contact to display in the applet. Empty means no contact is displayed."
 msgstr "சிறுநிரலில் காட்ட வேண்டிய தொடர்பு. காலி எனில் காட்ட தொடர்பு  இல்லை"
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:2
@@ -1508,7 +1523,7 @@ msgid "Megaphone"
 msgstr "ஒலி பெருக்கி"
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:2
-#: ../megaphone/src/megaphone-applet.c:527
+#: ../megaphone/src/megaphone-applet.c:519
 msgid "Talk!"
 msgstr "பேசு!"
 
@@ -1543,19 +1558,19 @@ msgstr "இருப்பு"
 msgid "Set your own presence"
 msgstr "உங்கள் இருப்பை அமைக்கவும்"
 
-#: ../src/empathy.c:478
+#: ../src/empathy.c:506
 msgid "Don't connect on startup"
 msgstr "துவங்கும்போது இணைக்க வேண்டாம்"
 
-#: ../src/empathy.c:482
+#: ../src/empathy.c:510
 msgid "Don't show the contact list on startup"
 msgstr "துவங்கும்போது தொடர்பு பட்டியல் ஐ காட்ட வேண்டாம்"
 
-#: ../src/empathy.c:486
+#: ../src/empathy.c:514
 msgid "Show the accounts dialog"
 msgstr "கணக்குகள் உரையாடல் ஐ காட்டு "
 
-#: ../src/empathy.c:498
+#: ../src/empathy.c:526
 msgid "- Empathy Instant Messenger"
 msgstr "- எம்பதி உடனடி செய்தியாளர்"
 
@@ -1599,11 +1614,11 @@ msgstr "க்னோமுக்கு ஒரு உடனடி செய்த
 msgid "translator-credits"
 msgstr "மொழிபெயர்ப்பாளர்-நன்றி அறிதல் "
 
-#: ../src/empathy-accounts-dialog.c:393
+#: ../src/empathy-accounts-dialog.c:392
 msgid "Enabled"
 msgstr "செயலாக்கப்பட்டது"
 
-#: ../src/empathy-accounts-dialog.c:403 ../src/empathy-accounts-dialog.ui.h:1
+#: ../src/empathy-accounts-dialog.c:402 ../src/empathy-accounts-dialog.ui.h:1
 msgid "Accounts"
 msgstr "கணக்குகள்"
 
@@ -1683,53 +1698,53 @@ msgstr "(_C) ஒரு புதிய கணக்கை துவக்கு"
 msgid "_Reuse an existing account"
 msgstr "(_R) இருக்கும் ஒரு கணக்கை மறு உபயோகம் செய்க"
 
-#: ../src/empathy-call-window.c:63
-msgid "Connecting..."
-msgstr "இணைக்கிறது...."
-
-#: ../src/empathy-call-window.c:415
+#: ../src/empathy-call-window.c:420
 msgid "Contrast"
 msgstr "வேறுபாடு"
 
-#: ../src/empathy-call-window.c:418
+#: ../src/empathy-call-window.c:423
 msgid "Brightness"
 msgstr "வெளிச்சம்"
 
-#: ../src/empathy-call-window.c:421
+#: ../src/empathy-call-window.c:426
 msgid "Gamma"
 msgstr "காமா"
 
-#: ../src/empathy-call-window.c:526
+#: ../src/empathy-call-window.c:531
 msgid "Volume"
 msgstr "ஒலி அளவு"
 
-#: ../src/empathy-call-window.c:728
+#: ../src/empathy-call-window.c:662
+msgid "Connecting..."
+msgstr "இணைக்கிறது...."
+
+#: ../src/empathy-call-window.c:746
 msgid "_Sidebar"
 msgstr "பக்கப்பட்டை(_S)"
 
-#: ../src/empathy-call-window.c:747
+#: ../src/empathy-call-window.c:765
 msgid "Dialpad"
 msgstr "டயல் அட்டை"
 
-#: ../src/empathy-call-window.c:753
+#: ../src/empathy-call-window.c:771
 msgid "Audio input"
 msgstr "ஒலி உள்ளீடு"
 
-#: ../src/empathy-call-window.c:757
+#: ../src/empathy-call-window.c:775
 msgid "Video input"
 msgstr "வீடியோ உள்ளீடு"
 
-#: ../src/empathy-call-window.c:820
+#: ../src/empathy-call-window.c:836
 #, c-format
 msgid "Call with %s"
 msgstr "%s ஆல் அழை "
 
-#: ../src/empathy-call-window.c:889
+#: ../src/empathy-call-window.c:905
 msgid "Call"
 msgstr "அழை"
 
 #. Translators: number of minutes:seconds the caller has been connected
-#: ../src/empathy-call-window.c:1312
+#: ../src/empathy-call-window.c:1336
 #, c-format
 msgid "Connected — %d:%02dm"
 msgstr "இணைக்கப்பட்டது — %d:%02dm"
@@ -1762,12 +1777,12 @@ msgstr "(_C) அழை"
 msgid "_View"
 msgstr "பார்வை (_V)"
 
-#: ../src/empathy-chat-window.c:343
+#: ../src/empathy-chat-window.c:344
 #, c-format
 msgid "Conversations (%d)"
 msgstr "உரையாடல்கள் (%d)"
 
-#: ../src/empathy-chat-window.c:475
+#: ../src/empathy-chat-window.c:476
 msgid "Typing a message."
 msgstr "செய்திகள் தட்டச்சிடல்"
 
@@ -1787,75 +1802,75 @@ msgstr "தானியங்கி இணை"
 msgid "Manage Favorite Rooms"
 msgstr "பிடித்தமான அறைகளை மேலாள"
 
-#: ../src/empathy-event-manager.c:395
+#: ../src/empathy-event-manager.c:321
 msgid "Incoming call"
 msgstr "உள்வரும் அழைப்பு"
 
-#: ../src/empathy-event-manager.c:398
+#: ../src/empathy-event-manager.c:324
 #, c-format
 msgid "%s is calling you, do you want to answer?"
 msgstr "%s உங்களை அழைக்கிறார். நீங்கள் பதில் பேச வேண்டுமா?"
 
-#: ../src/empathy-event-manager.c:405
+#: ../src/empathy-event-manager.c:331
 msgid "_Reject"
 msgstr "(_R) ஏற்காதே"
 
-#: ../src/empathy-event-manager.c:411
+#: ../src/empathy-event-manager.c:337
 msgid "_Answer"
 msgstr "(_A) பதிலளி"
 
-#: ../src/empathy-event-manager.c:523
+#: ../src/empathy-event-manager.c:452
 #, c-format
 msgid "Incoming call from %s"
 msgstr "%s இடமிருந்து உள்வரும் அழைப்பு"
 
-#: ../src/empathy-event-manager.c:563
+#: ../src/empathy-event-manager.c:496
 #, c-format
 msgid "%s is offering you an invitation"
 msgstr "%s உங்களுக்கு ஒரு அழைப்பு வேண்டுதல் விடுக்கிறார்"
 
-#: ../src/empathy-event-manager.c:569
+#: ../src/empathy-event-manager.c:502
 msgid "An external application will be started to handle it."
 msgstr "இதை கையாள ஒரு வெளி பயன்பாடு துவக்கப்படும்."
 
-#: ../src/empathy-event-manager.c:574
+#: ../src/empathy-event-manager.c:507
 msgid "You don't have the needed external application to handle it."
 msgstr "இதை கையாள தேவையான ஒரு வெளி பயன்பாடு உங்கள் கணினியில் இல்லை."
 
-#: ../src/empathy-event-manager.c:701
+#: ../src/empathy-event-manager.c:634
 msgid "Room invitation"
 msgstr "அறை அழைப்பு"
 
-#: ../src/empathy-event-manager.c:704
+#: ../src/empathy-event-manager.c:637
 #, c-format
 msgid "%s is inviting you to join %s"
 msgstr "%s உங்களை %s உடன் சேர அழைக்கிறார்."
 
-#: ../src/empathy-event-manager.c:712
+#: ../src/empathy-event-manager.c:645
 msgid "_Decline"
 msgstr "நிராகரி (_D)"
 
-#: ../src/empathy-event-manager.c:717
+#: ../src/empathy-event-manager.c:650
 #: ../src/empathy-new-chatroom-dialog.ui.h:7
 msgid "_Join"
 msgstr "(_J) இணை"
 
-#: ../src/empathy-event-manager.c:756
+#: ../src/empathy-event-manager.c:689
 #, c-format
 msgid "%s invited you to join %s"
 msgstr "%s  %s இல் சேர உங்களை அழைத்துள்ளார்"
 
-#: ../src/empathy-event-manager.c:782
+#: ../src/empathy-event-manager.c:715
 #, c-format
 msgid "Incoming file transfer from %s"
 msgstr "%s இடமிருந்து உள்வரும் கோப்பு பரிமாற்றம்."
 
-#: ../src/empathy-event-manager.c:962
+#: ../src/empathy-event-manager.c:895
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "%s இன் சந்தா வேண்டுதல்"
 
-#: ../src/empathy-event-manager.c:966
+#: ../src/empathy-event-manager.c:899
 #, c-format
 msgid ""
 "\n"
@@ -1865,16 +1880,16 @@ msgstr ""
 "செய்தி: %s"
 
 #. someone is logging off
-#: ../src/empathy-event-manager.c:1009
+#: ../src/empathy-event-manager.c:935
 #, c-format
 msgid "%s is now offline."
-msgstr ""
+msgstr "%s இப்போது இணைப்பு விலகி உள்ளார்"
 
 #. someone is logging in
-#: ../src/empathy-event-manager.c:1025
+#: ../src/empathy-event-manager.c:951
 #, c-format
 msgid "%s is now online."
-msgstr ""
+msgstr "%s இப்போது இணைப்பில் உள்ளார்"
 
 #. Translators: time left, when it is more than one hour
 #: ../src/empathy-ft-manager.c:101
@@ -1990,19 +2005,19 @@ msgstr ""
 "இருந்து  நீக்கு "
 
 #. Translators: this is the header of a treeview column
-#: ../src/empathy-import-dialog.c:259
+#: ../src/empathy-import-dialog.c:263
 msgid "Import"
 msgstr "இறக்குமதி செய்"
 
-#: ../src/empathy-import-dialog.c:268
+#: ../src/empathy-import-dialog.c:272
 msgid "Protocol"
 msgstr "விதிமுறை"
 
-#: ../src/empathy-import-dialog.c:294
+#: ../src/empathy-import-dialog.c:298
 msgid "Source"
 msgstr "மூலம்"
 
-#: ../src/empathy-import-dialog.c:388
+#: ../src/empathy-import-dialog.c:392
 msgid ""
 "No accounts to import could be found. Empathy currently only supports "
 "importing accounts from Pidgin."
@@ -2014,71 +2029,71 @@ msgstr ""
 msgid "Import Accounts"
 msgstr "இறக்குமதி செய் கணக்குகள்"
 
-#: ../src/empathy-main-window.c:395
+#: ../src/empathy-main-window.c:396
 msgid "_Edit account"
 msgstr "(_E) கணக்குகளை திருத்துக"
 
-#: ../src/empathy-main-window.c:498
+#: ../src/empathy-main-window.c:499
 msgid "No error specified"
 msgstr "பிழை ஏதும் குறிப்பிடவில்லை"
 
-#: ../src/empathy-main-window.c:501
+#: ../src/empathy-main-window.c:502
 msgid "Network error"
 msgstr "வலையமைப்பு பிழை"
 
-#: ../src/empathy-main-window.c:504
+#: ../src/empathy-main-window.c:505
 msgid "Authentication failed"
 msgstr "உறுதி செய்தல் தோல்வி"
 
-#: ../src/empathy-main-window.c:507
+#: ../src/empathy-main-window.c:508
 msgid "Encryption error"
 msgstr "மறையாக்க பிழை"
 
-#: ../src/empathy-main-window.c:510
+#: ../src/empathy-main-window.c:511
 msgid "Name in use"
 msgstr "பயனில் உள்ள பெயர் "
 
-#: ../src/empathy-main-window.c:513
+#: ../src/empathy-main-window.c:514
 msgid "Certificate not provided"
 msgstr "சான்றிதழ் தரப்படவில்லை"
 
-#: ../src/empathy-main-window.c:516
+#: ../src/empathy-main-window.c:517
 msgid "Certificate untrusted"
 msgstr "சான்றிதழில் நம்பக தன்மை இல்லை"
 
-#: ../src/empathy-main-window.c:519
+#: ../src/empathy-main-window.c:520
 msgid "Certificate expired"
 msgstr "சான்றிதழ் காலாவதியானது"
 
-#: ../src/empathy-main-window.c:522
+#: ../src/empathy-main-window.c:523
 msgid "Certificate not activated"
 msgstr "சான்றிதழ் செயல்படுத்தப்படவில்லை"
 
-#: ../src/empathy-main-window.c:525
+#: ../src/empathy-main-window.c:526
 msgid "Certificate hostname mismatch"
 msgstr "சான்றிதழ் புரவலன் பெயர் ஒத்திசையவில்லை"
 
-#: ../src/empathy-main-window.c:528
+#: ../src/empathy-main-window.c:529
 msgid "Certificate fingerprint mismatch"
 msgstr "சான்றிதழ் அடையாளம் ஒத்திசையவில்லை"
 
-#: ../src/empathy-main-window.c:531
+#: ../src/empathy-main-window.c:532
 msgid "Certificate self-signed"
 msgstr "சான்றிதழ் தானே கையெழுத்திட்டது"
 
-#: ../src/empathy-main-window.c:534
+#: ../src/empathy-main-window.c:535
 msgid "Certificate error"
 msgstr "சான்றிதழ் பிழை"
 
-#: ../src/empathy-main-window.c:537
+#: ../src/empathy-main-window.c:538
 msgid "Unknown error"
 msgstr "தெரியாத பிழை"
 
-#: ../src/empathy-main-window.c:1220
+#: ../src/empathy-main-window.c:1218
 msgid "Show and edit accounts"
 msgstr "கணக்குகளை காட்டவும் மற்றும் திருத்தவும் "
 
-#: ../src/empathy-main-window.ui.h:1 ../src/empathy-preferences.ui.h:10
+#: ../src/empathy-main-window.ui.h:1 ../src/empathy-preferences.ui.h:9
 msgid "Contact List"
 msgstr "தொடர்பு பட்டியல்"
 
@@ -2146,15 +2161,15 @@ msgstr "(_P) முந்தைய உரையாடல்கள்"
 msgid "_Room"
 msgstr "(_R) அறை"
 
-#: ../src/empathy-new-chatroom-dialog.c:332
+#: ../src/empathy-new-chatroom-dialog.c:331
 msgid "Chat Room"
 msgstr "அரட்டை அறை"
 
-#: ../src/empathy-new-chatroom-dialog.c:348
+#: ../src/empathy-new-chatroom-dialog.c:347
 msgid "Members"
 msgstr "உறுப்பினர்கள்"
 
-#: ../src/empathy-new-chatroom-dialog.c:492
+#: ../src/empathy-new-chatroom-dialog.c:496
 #, c-format
 msgctxt ""
 "Room/Join's roomlist tooltip. Parametersare a channel name, yes/no, yes/no "
@@ -2170,21 +2185,21 @@ msgstr ""
 "கடவுச்சொல் தேவை: %s\n"
 "உறுப்பினர்கள்: %s"
 
-#: ../src/empathy-new-chatroom-dialog.c:494
-#: ../src/empathy-new-chatroom-dialog.c:495
+#: ../src/empathy-new-chatroom-dialog.c:498
+#: ../src/empathy-new-chatroom-dialog.c:499
 msgid "Yes"
 msgstr "ஆம்"
 
-#: ../src/empathy-new-chatroom-dialog.c:494
-#: ../src/empathy-new-chatroom-dialog.c:495
+#: ../src/empathy-new-chatroom-dialog.c:498
+#: ../src/empathy-new-chatroom-dialog.c:499
 msgid "No"
 msgstr "இல்லை"
 
-#: ../src/empathy-new-chatroom-dialog.c:522
+#: ../src/empathy-new-chatroom-dialog.c:526
 msgid "Could not start room listing"
 msgstr "அறை பட்டியலை எடுப்பதை துவக்க முடியவில்லை"
 
-#: ../src/empathy-new-chatroom-dialog.c:532
+#: ../src/empathy-new-chatroom-dialog.c:536
 msgid "Could not stop room listing"
 msgstr "அறை பட்டியலை எடுப்பதை நிறுத்த முடியவில்லை"
 
@@ -2193,8 +2208,7 @@ msgid "Couldn't load room list"
 msgstr "அறை பட்டியலை ஏற்ற முடியவில்லை"
 
 #: ../src/empathy-new-chatroom-dialog.ui.h:3
-msgid ""
-"Enter the room name to join here or click on one or more rooms in the list."
+msgid "Enter the room name to join here or click on one or more rooms in the list."
 msgstr ""
 "சேருவதற்கான அறை பெயரை இங்கு உள்ளிடுக. அல்லது பட்டியலில் உள்ள ஒன்றோ மேற்பட்ட பெயர்களையோ "
 "சொடுக்குக."
@@ -2252,100 +2266,90 @@ msgid "Language"
 msgstr "மொழி"
 
 #: ../src/empathy-preferences.ui.h:1
-msgid "Adium theme to use:"
-msgstr "பயன்படுத்த வேண்டிய ஏடியம்  கருத்து:"
-
-#: ../src/empathy-preferences.ui.h:2
 msgid "Allow _GPS usage"
 msgstr "(_G) ஜிபிஎஸ் பயனை அனுமதி"
 
-#: ../src/empathy-preferences.ui.h:3
+#: ../src/empathy-preferences.ui.h:2
 msgid "Allow _cellphone usage"
 msgstr "(_c)  அலைபேசி பயனை அனுமதி"
 
-#: ../src/empathy-preferences.ui.h:4
+#: ../src/empathy-preferences.ui.h:3
 msgid "Allow _network usage"
 msgstr "(_n)  வலைப்பின்னல் பயனை அனுமதி"
 
-#: ../src/empathy-preferences.ui.h:5
+#: ../src/empathy-preferences.ui.h:4
 msgid "Appearance"
 msgstr "தோற்றம்"
 
-#: ../src/empathy-preferences.ui.h:6
+#: ../src/empathy-preferences.ui.h:5
 msgid "Automatically _connect on startup "
 msgstr "(_c) துவங்கும்போது தானியங்கியாக இணை"
 
-#: ../src/empathy-preferences.ui.h:7
+#: ../src/empathy-preferences.ui.h:6
 msgid "Avatars are user chosen images shown in the contact list"
 msgstr "அவதாரங்கள் என்பது தொடர்பு பட்டியலில் காணப்படும் பயனர் தேர்ந்தெடுத்த பிம்பங்கள்"
 
-#: ../src/empathy-preferences.ui.h:8
+#: ../src/empathy-preferences.ui.h:7
 msgid "Behavior"
 msgstr "நடத்தை"
 
-#: ../src/empathy-preferences.ui.h:9
+#: ../src/empathy-preferences.ui.h:8
 msgid "Chat Th_eme:"
 msgstr "(_e) அரட்டை கருத்து:"
 
-#: ../src/empathy-preferences.ui.h:11
+#: ../src/empathy-preferences.ui.h:10
 msgid "Disable notifications when _away or busy"
 msgstr "(_a) வெளியே  அல்லது வேலையில் உள்ளபோது அறிவிப்புகளை செயல் நீக்கு"
 
-#: ../src/empathy-preferences.ui.h:12
+#: ../src/empathy-preferences.ui.h:11
 msgid "Disable sounds when _away or busy"
 msgstr "(_a) வெளியே  அல்லது வேலையில் உள்ளபோது ஒலிகளை செயல் நீக்கு"
 
-#: ../src/empathy-preferences.ui.h:13
-#, fuzzy
+#: ../src/empathy-preferences.ui.h:12
 msgid "Enable notifications when a contact comes online"
-msgstr "(_c) அரட்டை குவிப்பில் இல்லாத போது அறிவிப்புகளை செயல்படுத்து"
+msgstr "தொடர்பு உள் நுழைகையில் அறிவிப்புகளை செயல்படுத்து"
+
+#: ../src/empathy-preferences.ui.h:13
+msgid "Enable notifications when a contact goes offline"
+msgstr "தொடர்பு இணைப்பு விலகி செல்கையில் அறிவிப்புகளை செயல்படுத்து"
 
 #: ../src/empathy-preferences.ui.h:14
-#, fuzzy
-msgid "Enable notifications when a contact goes offline"
-msgstr "(_c) அரட்டை குவிப்பில் இல்லாத போது அறிவிப்புகளை செயல்படுத்து"
-
-#: ../src/empathy-preferences.ui.h:15
 msgid "Enable notifications when the _chat is not focused"
 msgstr "(_c) அரட்டை குவிப்பில் இல்லாத போது அறிவிப்புகளை செயல்படுத்து"
 
-#: ../src/empathy-preferences.ui.h:16
+#: ../src/empathy-preferences.ui.h:15
 msgid "Enable spell checking for languages:"
 msgstr "மொழிகளுக்கு எழுத்து பிழை திருத்தத்தை செயல்படுத்து:"
 
-#: ../src/empathy-preferences.ui.h:17
+#: ../src/empathy-preferences.ui.h:16
 msgid "General"
 msgstr "பொது"
 
-#: ../src/empathy-preferences.ui.h:18
+#: ../src/empathy-preferences.ui.h:17
 msgid "Geoclue Settings"
 msgstr "ஜியோ க்ளூ அமைப்புகள்"
 
-#: ../src/empathy-preferences.ui.h:19
+#: ../src/empathy-preferences.ui.h:18
 msgid "Location"
 msgstr "இடம்"
 
-#: ../src/empathy-preferences.ui.h:20
-msgid "Not a valid adium theme"
-msgstr "செல்லுபடியாகும் ஏடியம் கருத்து அல்ல"
-
-#: ../src/empathy-preferences.ui.h:21
+#: ../src/empathy-preferences.ui.h:19
 msgid "Notifications"
 msgstr "அறிவிப்புகள்"
 
-#: ../src/empathy-preferences.ui.h:22
+#: ../src/empathy-preferences.ui.h:20
 msgid "Play sound for events"
 msgstr "நிகழ்வுகளுக்கு ஒலியை இயக்கு"
 
-#: ../src/empathy-preferences.ui.h:23
+#: ../src/empathy-preferences.ui.h:21
 msgid "Preferences"
 msgstr "விருப்பங்கள்"
 
-#: ../src/empathy-preferences.ui.h:24
+#: ../src/empathy-preferences.ui.h:22
 msgid "Privacy"
 msgstr "அந்தரங்கம்"
 
-#: ../src/empathy-preferences.ui.h:25
+#: ../src/empathy-preferences.ui.h:23
 msgid ""
 "Reduced location accuracy means that nothing more precise than your city, "
 "state and country will be published.  GPS coordinates will have a random "
@@ -2354,39 +2358,39 @@ msgstr ""
 "குறைத்த இட குறிப்பு எனில் உங்கள் மாநகரம், மாநிலம், நாடு தவிர ஒன்றும் வெளியிடப்படாது. "
 "ஜிபிஎஸ் ஆயத்தொலைவுகளுக்கு தற்போக்கு மதிப்பு சேர்க்கப்படும் (&#xB1;0.25&#xB0;)."
 
-#: ../src/empathy-preferences.ui.h:26
+#: ../src/empathy-preferences.ui.h:24
 msgid "Show _avatars"
 msgstr "(_a) அவதாரங்களை காட்டு"
 
-#: ../src/empathy-preferences.ui.h:27
+#: ../src/empathy-preferences.ui.h:25
 msgid "Show _smileys as images"
 msgstr "(_s) சிரிப்பான்களை பிம்பங்களாக காட்டு"
 
-#: ../src/empathy-preferences.ui.h:28
+#: ../src/empathy-preferences.ui.h:26
 msgid "Show co_mpact contact list"
 msgstr "(_m) அடக்கமான தொடர்பு பட்டியல் ஐ காட்டு "
 
-#: ../src/empathy-preferences.ui.h:29
+#: ../src/empathy-preferences.ui.h:27
 msgid "Show contact _list in rooms"
 msgstr "(_l) அறைகளில் தொடர்பு பட்டியல் ஐ காட்டு "
 
-#: ../src/empathy-preferences.ui.h:30
+#: ../src/empathy-preferences.ui.h:28
 msgid "Sort by _name"
 msgstr "(_n) பெயர் ஆல் வரிசைப்படுத்து"
 
-#: ../src/empathy-preferences.ui.h:31
+#: ../src/empathy-preferences.ui.h:29
 msgid "Sort by s_tate"
 msgstr "(_t) நிலை வாரியாக வரிசைப்படுத்து"
 
-#: ../src/empathy-preferences.ui.h:32
+#: ../src/empathy-preferences.ui.h:30
 msgid "Sounds"
 msgstr "ஒலிகள்"
 
-#: ../src/empathy-preferences.ui.h:33
+#: ../src/empathy-preferences.ui.h:31
 msgid "Spell Checking"
 msgstr "எழுத்து பிழை திருத்தம்"
 
-#: ../src/empathy-preferences.ui.h:34
+#: ../src/empathy-preferences.ui.h:32
 msgid ""
 "The list of languages reflects only the languages for which you have a "
 "dictionary installed."
@@ -2394,27 +2398,27 @@ msgstr ""
 "இந்த பட்டியல் நீங்கள் எந்த மொழிகளுக்கு அகராதி நிறுவி இருக்கிறீர்களோ அவற்றை மட்டுமே "
 "காட்டுகிறது"
 
-#: ../src/empathy-preferences.ui.h:35
+#: ../src/empathy-preferences.ui.h:33
 msgid "Themes"
 msgstr "கருத்துகள்"
 
-#: ../src/empathy-preferences.ui.h:36
+#: ../src/empathy-preferences.ui.h:34
 msgid "_Enable bubble notifications"
 msgstr "(_E) பலூனில் அறிவிப்புகளை செயல்படுத்து"
 
-#: ../src/empathy-preferences.ui.h:37
+#: ../src/empathy-preferences.ui.h:35
 msgid "_Enable sound notifications"
 msgstr "(_E) ஒலி அறிவிப்புகளை செயல்படுத்து"
 
-#: ../src/empathy-preferences.ui.h:38
+#: ../src/empathy-preferences.ui.h:36
 msgid "_Open new chats in separate windows"
 msgstr "(_O) புதிய அரட்டைகளை தனி சாளரங்களில் திற"
 
-#: ../src/empathy-preferences.ui.h:39
+#: ../src/empathy-preferences.ui.h:37
 msgid "_Publish location to my contacts"
 msgstr "(_P) என் தொடர்புகளுக்கு இடத்தை வெளியிடு"
 
-#: ../src/empathy-preferences.ui.h:40
+#: ../src/empathy-preferences.ui.h:38
 msgid "_Reduce location accuracy"
 msgstr "(_R) இடத்தின் குறிப்பை குறை"
 
@@ -2452,65 +2456,74 @@ msgstr "ஜிடிகே முழுத்திரையை  விட்ட
 msgid "Contact Map View"
 msgstr "தொடர்புகள் படக்காட்சி"
 
-#: ../src/empathy-debug-dialog.c:111 ../src/empathy-debug-dialog.c:1075
+#: ../src/empathy-debug-dialog.c:111 ../src/empathy-debug-dialog.c:1083
 msgid "Error"
 msgstr " பிழை"
 
-#: ../src/empathy-debug-dialog.c:114 ../src/empathy-debug-dialog.c:1069
+#: ../src/empathy-debug-dialog.c:114 ../src/empathy-debug-dialog.c:1077
 msgid "Critical"
 msgstr "ஆபத்தானன்"
 
-#: ../src/empathy-debug-dialog.c:117 ../src/empathy-debug-dialog.c:1063
+#: ../src/empathy-debug-dialog.c:117 ../src/empathy-debug-dialog.c:1071
 msgid "Warning"
 msgstr "எச்சரிக்கை"
 
-#: ../src/empathy-debug-dialog.c:120 ../src/empathy-debug-dialog.c:1057
-#: ../src/empathy-debug-dialog.c:1105
+#: ../src/empathy-debug-dialog.c:120 ../src/empathy-debug-dialog.c:1065
+#: ../src/empathy-debug-dialog.c:1113
 msgid "Message"
 msgstr "செய்தி"
 
-#: ../src/empathy-debug-dialog.c:123 ../src/empathy-debug-dialog.c:1051
+#: ../src/empathy-debug-dialog.c:123 ../src/empathy-debug-dialog.c:1059
 msgid "Info"
 msgstr "தகவல்"
 
-#: ../src/empathy-debug-dialog.c:126 ../src/empathy-debug-dialog.c:1045
+#: ../src/empathy-debug-dialog.c:126 ../src/empathy-debug-dialog.c:1053
 msgid "Debug"
 msgstr "வழுநீக்கு"
 
-#: ../src/empathy-debug-dialog.c:837
+#: ../src/empathy-debug-dialog.c:845
 msgid "Save"
 msgstr "சேமி"
 
-#: ../src/empathy-debug-dialog.c:940
+#: ../src/empathy-debug-dialog.c:948
 msgid "Debug Window"
 msgstr "வழு நீக்கு சாளரம்"
 
-#: ../src/empathy-debug-dialog.c:1013
+#: ../src/empathy-debug-dialog.c:1021
 msgid "Pause"
 msgstr "தாமதி"
 
-#: ../src/empathy-debug-dialog.c:1025
+#: ../src/empathy-debug-dialog.c:1033
 msgid "Level "
 msgstr "மட்டம்"
 
-#: ../src/empathy-debug-dialog.c:1094
+#: ../src/empathy-debug-dialog.c:1102
 msgid "Time"
 msgstr "நேரம்"
 
-#: ../src/empathy-debug-dialog.c:1096
+#: ../src/empathy-debug-dialog.c:1104
 msgid "Domain"
 msgstr "களம்"
 
-#: ../src/empathy-debug-dialog.c:1098
+#: ../src/empathy-debug-dialog.c:1106
 msgid "Category"
 msgstr "வகை"
 
-#: ../src/empathy-debug-dialog.c:1100
+#: ../src/empathy-debug-dialog.c:1108
 msgid "Level"
 msgstr "மட்டம்"
 
-#: ../src/empathy-debug-dialog.c:1132
+#: ../src/empathy-debug-dialog.c:1140
 msgid ""
 "The selected connection manager does not support the remote debugging "
 "extension."
 msgstr "தேர்ந்தெடுத்த இணைப்பு மேலாளர் தொலை வழு நீக்கத்தை ஆதரிக்கவில்லை"
+
+#~ msgid "Adium"
+#~ msgstr "ஏடியம்"
+
+#~ msgid "Adium theme to use:"
+#~ msgstr "பயன்படுத்த வேண்டிய ஏடியம்  கருத்து:"
+
+#~ msgid "Not a valid adium theme"
+#~ msgstr "செல்லுபடியாகும் ஏடியம் கருத்து அல்ல"
