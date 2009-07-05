@@ -535,6 +535,7 @@ empathy_contact_manager_can_add (EmpathyContactManager *manager,
 	EmpathyTpContactList      *list;
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT_MANAGER (manager), FALSE);
+	g_return_val_if_fail (connection != NULL, FALSE);
 
 	list = g_hash_table_lookup (priv->lists, connection);
 	if (list == NULL)
