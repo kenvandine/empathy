@@ -536,6 +536,7 @@ empathy_theme_manager_get_themes (void)
 	return themes;
 }
 
+#ifdef HAVE_WEBKIT
 static void
 find_themes (GList **list, const gchar *dirpath)
 {
@@ -566,10 +567,12 @@ find_themes (GList **list, const gchar *dirpath)
 		g_error_free (error);
 	}
 }
+#endif /* HAVE_WEBKIT */
 
 GList *
 empathy_theme_manager_get_adium_themes (void)
 {
+#ifdef HAVE_WEBKIT
 	GList *themes = NULL;
 	gchar *userpath = NULL;
 	const gchar *const *paths = NULL;
@@ -588,4 +591,7 @@ empathy_theme_manager_get_adium_themes (void)
 	}
 
 	return themes;
+#else
+	return NULL;
+#endif /* HAVE_WEBKIT */
 }
