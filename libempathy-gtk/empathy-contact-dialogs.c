@@ -336,6 +336,8 @@ can_add_contact_to_account (EmpathyAccount *account,
 	gboolean               result;
 
 	connection = empathy_account_get_connection (account);
+	if (connection == NULL)
+		return FALSE;
 
 	contact_manager = empathy_contact_manager_dup_singleton ();
 	result = empathy_contact_manager_can_add (contact_manager, connection);
