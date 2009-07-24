@@ -37,16 +37,17 @@
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-status-presets.h>
 
+#include <libempathy-gtk/empathy-conf.h>
 #include <libempathy-gtk/empathy-contact-dialogs.h>
 #include <libempathy-gtk/empathy-contact-list-store.h>
 #include <libempathy-gtk/empathy-contact-list-view.h>
-#include <libempathy-gtk/empathy-presence-chooser.h>
-#include <libempathy-gtk/empathy-ui-utils.h>
 #include <libempathy-gtk/empathy-geometry.h>
-#include <libempathy-gtk/empathy-conf.h>
-#include <libempathy-gtk/empathy-log-window.h>
-#include <libempathy-gtk/empathy-new-message-dialog.h>
 #include <libempathy-gtk/empathy-gtk-enum-types.h>
+#include <libempathy-gtk/empathy-new-message-dialog.h>
+#include <libempathy-gtk/empathy-log-window.h>
+#include <libempathy-gtk/empathy-presence-chooser.h>
+#include <libempathy-gtk/empathy-sound.h>
+#include <libempathy-gtk/empathy-ui-utils.h>
 
 #include <libmissioncontrol/mission-control.h>
 
@@ -313,7 +314,7 @@ static void
 main_window_error_edit_clicked_cb (GtkButton         *button,
 				   EmpathyMainWindow *window)
 {
-	McAccount *account;
+	EmpathyAccount *account;
 	GtkWidget *error_widget;
 
 	account = g_object_get_data (G_OBJECT (button), "account");
@@ -328,7 +329,7 @@ static void
 main_window_error_clear_clicked_cb (GtkButton         *button,
 				    EmpathyMainWindow *window)
 {
-	McAccount *account;
+	EmpathyAccount *account;
 	GtkWidget *error_widget;
 
 	account = g_object_get_data (G_OBJECT (button), "account");
@@ -339,7 +340,7 @@ main_window_error_clear_clicked_cb (GtkButton         *button,
 
 static void
 main_window_error_display (EmpathyMainWindow *window,
-			   McAccount         *account,
+			   EmpathyAccount    *account,
 			   const gchar       *message)
 {
 	GtkWidget *child;
@@ -360,7 +361,7 @@ main_window_error_display (EmpathyMainWindow *window,
 
 		/* Just set the latest error and return */
 		str = g_markup_printf_escaped ("<b>%s</b>\n%s",
-					       mc_account_get_display_name (account),
+					       empathy_account_get_display_name (account),
 					       message);
 		gtk_label_set_markup (GTK_LABEL (label), str);
 		g_free (str);
@@ -441,7 +442,7 @@ main_window_error_display (EmpathyMainWindow *window,
 	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
 
 	str = g_markup_printf_escaped ("<b>%s</b>\n%s",
-				       mc_account_get_display_name (account),
+				       empathy_account_get_display_name (account),
 				       message);
 	gtk_label_set_markup (GTK_LABEL (label), str);
 	g_free (str);
@@ -493,7 +494,7 @@ main_window_update_status (EmpathyMainWindow *window, EmpathyAccountManager *man
 
 static void
 main_window_connection_changed_cb (EmpathyAccountManager *manager,
-				   McAccount *account,
+				   EmpathyAccount *account,
 				   TpConnectionStatusReason reason,
 				   TpConnectionStatus current,
 				   TpConnectionStatus previous,
@@ -580,11 +581,11 @@ main_window_contact_presence_changed_cb (EmpathyContactMonitor *monitor,
 					 TpConnectionPresenceType previous,
 					 EmpathyMainWindow *window)
 {
-	McAccount *account;
+	EmpathyAccount *account;
 	gboolean should_play;
 
 	account = empathy_contact_get_account (contact);
-	should_play = !empathy_account_manager_is_account_just_connected (window->account_manager, account);
+	should_play = !empathy_account_is_just_connected (account);
 
 	if (!should_play) {
 		return;
@@ -744,16 +745,13 @@ main_window_view_show_map_cb (GtkCheckMenuItem  *item,
 static void
 main_window_favorite_chatroom_join (EmpathyChatroom *chatroom)
 {
-	EmpathyAccountManager *manager;
-	McAccount      *account;
+	EmpathyAccount *account;
 	TpConnection   *connection;
 	const gchar    *room;
 
-	manager = empathy_account_manager_dup_singleton ();
 	account = empathy_chatroom_get_account (chatroom);
-	connection = empathy_account_manager_get_connection (manager, account);
+	connection = empathy_account_get_connection (account);
 	room = empathy_chatroom_get_room (chatroom);
-	g_object_unref (manager);
 
 	if (connection != NULL) {
 		DEBUG ("Requesting channel for '%s'", room);
@@ -1024,7 +1022,7 @@ main_window_configure_event_cb (GtkWidget         *widget,
 
 static void
 main_window_account_created_or_deleted_cb (EmpathyAccountManager  *manager,
-					   McAccount              *account,
+					   EmpathyAccount         *account,
 					   EmpathyMainWindow      *window)
 {
 	gtk_action_set_sensitive (window->view_history,

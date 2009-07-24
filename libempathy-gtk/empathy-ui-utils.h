@@ -34,32 +34,15 @@
 
 #include <gtk/gtk.h>
 
-#include <canberra-gtk.h>
-
-#include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-profile.h>
 
 #include <libempathy/empathy-contact.h>
+#include <libempathy/empathy-account.h>
 #include <libempathy/empathy-ft-handler.h>
 
 #include "empathy-chat-view.h"
 
 G_BEGIN_DECLS
-
-/* NOTE: Keep this sync with sound_entries in empathy-ui-utils.c */
-typedef enum {
-	EMPATHY_SOUND_MESSAGE_INCOMING = 0,
-	EMPATHY_SOUND_MESSAGE_OUTGOING,
-	EMPATHY_SOUND_CONVERSATION_NEW,
-	EMPATHY_SOUND_CONTACT_CONNECTED,
-	EMPATHY_SOUND_CONTACT_DISCONNECTED,
-	EMPATHY_SOUND_ACCOUNT_CONNECTED,
-	EMPATHY_SOUND_ACCOUNT_DISCONNECTED,
-	EMPATHY_SOUND_PHONE_INCOMING,
-	EMPATHY_SOUND_PHONE_OUTGOING,
-	EMPATHY_SOUND_PHONE_HANGUP,
-	LAST_EMPATHY_SOUND,
-} EmpathySound;
 
 void            empathy_gtk_init                        (void);
 GRegex *        empathy_uri_regex_dup_singleton         (void);
@@ -76,7 +59,7 @@ GtkWidget     *empathy_builder_unref_and_keep_widget    (GtkBuilder       *gui,
 							 GtkWidget        *root);
 
 /* Pixbufs */
-const gchar * empathy_icon_name_from_account            (McAccount        *account);
+const gchar * empathy_icon_name_from_account            (EmpathyAccount   *account);
 const gchar * empathy_icon_name_for_presence            (TpConnectionPresenceType  presence);
 const gchar * empathy_icon_name_for_contact             (EmpathyContact   *contact);
 GdkPixbuf *   empathy_pixbuf_from_data                  (gchar            *data,
@@ -128,15 +111,6 @@ GtkWidget * empathy_link_button_new                     (const gchar      *url,
 
 void        empathy_send_file_with_file_chooser         (EmpathyContact   *contact);
 void        empathy_receive_file_with_file_chooser      (EmpathyFTHandler *handler);
-
-/* Sounds */
-void        empathy_sound_play                          (GtkWidget        *widget,
-							 EmpathySound      sound_id);
-gboolean    empathy_sound_play_full                     (GtkWidget *widget,
-							 EmpathySound sound_id,
-							 ca_finish_callback_t callback,
-							 gpointer user_data);
-void        empathy_sound_stop                          (EmpathySound sound_id);
 
 G_END_DECLS
 

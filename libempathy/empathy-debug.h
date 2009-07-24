@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /*
  * Copyright (C) 2007 Collabora Ltd.
  * Copyright (C) 2007 Nokia Corporation
@@ -46,6 +46,7 @@ typedef enum
 gboolean empathy_debug_flag_is_set (EmpathyDebugFlags flag);
 void empathy_debug (EmpathyDebugFlags flag, const gchar *format, ...)
     G_GNUC_PRINTF (2, 3);
+void empathy_debug_free (void);
 void empathy_debug_set_flags (const gchar *flags_string);
 G_END_DECLS
 
@@ -88,4 +89,7 @@ G_END_DECLS
 #define DEBUGGING 0
 
 #endif /* !defined (ENABLE_DEBUG) */
+
+#define gabble_debug_free() G_STMT_START { } G_STMT_END
+
 #endif /* defined (DEBUG_FLAG) */

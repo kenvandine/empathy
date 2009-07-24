@@ -3,6 +3,7 @@ include $(top_srcdir)/tools/flymake.mk
 
 AM_CPPFLAGS =						\
 	-I$(top_srcdir)                          	\
+	-DG_LOG_DOMAIN=\"empathy\"			\
 	$(EMPATHY_CFLAGS)				\
 	$(LIBNOTIFY_CFLAGS)				\
 	$(INDICATE_CFLAGS)				\

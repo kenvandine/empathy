@@ -34,9 +34,9 @@
 #include <gtk/gtk.h>
 
 #include <telepathy-glib/util.h>
-#include <libmissioncontrol/mc-account.h>
 
 #include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-account.h>
 
 #include "empathy-chat-text-view.h"
 #include "empathy-chat.h"
@@ -817,6 +817,10 @@ chat_text_view_clear (EmpathyChatView *view)
 	priv = GET_PRIV (view);
 
 	priv->last_timestamp = 0;
+	if (priv->last_contact) {
+		g_object_unref (priv->last_contact);
+		priv->last_contact = NULL;
+	}
 }
 
 static gboolean

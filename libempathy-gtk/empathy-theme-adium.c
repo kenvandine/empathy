@@ -392,7 +392,7 @@ theme_adium_append_message (EmpathyChatView *view,
 	EmpathyThemeAdium     *theme = EMPATHY_THEME_ADIUM (view);
 	EmpathyThemeAdiumPriv *priv = GET_PRIV (theme);
 	EmpathyContact        *sender;
-	McAccount             *account;
+	EmpathyAccount        *account;
 	McProfile             *account_profile;
 	gchar                 *dup_body = NULL;
 	const gchar           *body;
@@ -416,7 +416,7 @@ theme_adium_append_message (EmpathyChatView *view,
 	/* Get information */
 	sender = empathy_message_get_sender (msg);
 	account = empathy_contact_get_account (sender);
-	account_profile = mc_account_get_profile (account);
+	account_profile = empathy_account_get_profile (account);
 	service_name = mc_profile_get_display_name (account_profile);
 	timestamp = empathy_message_get_timestamp (msg);
 	body = empathy_message_get_body (msg);
@@ -564,6 +564,13 @@ theme_adium_clear (EmpathyChatView *view)
 					  priv->data->template_html,
 					  basedir_uri);
 	g_free (basedir_uri);
+
+	/* Clear last contact to avoid trying to add a 'joined'
+	 * message when we don't have an insertion point. */
+	if (priv->last_contact) {
+		g_object_unref (priv->last_contact);
+		priv->last_contact = NULL;
+	}
 }
 
 static gboolean
@@ -813,6 +820,15 @@ empathy_adium_path_is_valid (const gchar *path)
 	gboolean ret;
 	gchar   *file;
 
+	/* The theme is not valid if there is no Info.plist */
+	file = g_build_filename (path, "Contents", "Info.plist",
+				 NULL);
+	ret = g_file_test (file, G_FILE_TEST_EXISTS);
+	g_free (file);
+
+	if (ret == FALSE)
+		return ret;
+
 	/* We ship a default Template.html as fallback if there is any problem
 	 * with the one inside the theme. The only other required file is
 	 * Content.html for incoming messages (outgoing fallback to use
@@ -838,10 +854,15 @@ empathy_adium_info_new (const gchar *path)
 	value = empathy_plist_parse_from_file (file);
 	g_free (file);
 
-	if (value) {
-		info = g_value_dup_boxed (value);
-		tp_g_value_slice_free (value);
-	}
+	if (value == NULL)
+		return NULL;
+
+	info = g_value_dup_boxed (value);
+	tp_g_value_slice_free (value);
+
+	/* Insert the theme's path into the hash table,
+	 * keys have to be dupped */
+	tp_asv_set_string (info, g_strdup ("path"), path);
 
 	return info;
 }

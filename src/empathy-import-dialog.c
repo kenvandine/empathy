@@ -27,7 +27,6 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-#include <libmissioncontrol/mc-account.h>
 #include <telepathy-glib/util.h>
 
 #include "empathy-import-dialog.h"
@@ -36,6 +35,7 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-account-manager.h>
 
 #include <libempathy-gtk/empathy-ui-utils.h>
 
@@ -91,13 +91,16 @@ empathy_import_account_data_free (EmpathyImportAccountData *data)
 static void
 import_dialog_add_account (EmpathyImportAccountData *data)
 {
-  McAccount *account;
+  EmpathyAccountManager *account_manager;
+  EmpathyAccount *account;
   GHashTableIter iter;
   gpointer key, value;
   gchar *display_name;
   GValue *username;
 
-  account = mc_account_create (data->profile);
+  account_manager = empathy_account_manager_dup_singleton ();
+  account = empathy_account_manager_create (account_manager, data->profile);
+  g_object_unref (account_manager);
   if (account == NULL)
     {
       DEBUG ("Failed to create account");
@@ -115,21 +118,21 @@ import_dialog_add_account (EmpathyImportAccountData *data)
           case G_TYPE_STRING:
             DEBUG ("Set param '%s' to '%s' (string)",
                 param, g_value_get_string (gvalue));
-            mc_account_set_param_string (account,
+            empathy_account_set_param_string (account,
                 param, g_value_get_string (gvalue));
             break;
 
           case G_TYPE_BOOLEAN:
             DEBUG ("Set param '%s' to %s (boolean)",
                 param, g_value_get_boolean (gvalue) ? "TRUE" : "FALSE");
-            mc_account_set_param_boolean (account,
+            empathy_account_set_param_boolean (account,
                 param, g_value_get_boolean (gvalue));
             break;
 
           case G_TYPE_INT:
             DEBUG ("Set param '%s' to '%i' (integer)",
                 param, g_value_get_int (gvalue));
-            mc_account_set_param_int (account,
+            empathy_account_set_param_int (account,
                 param, g_value_get_int (gvalue));
             break;
         }
@@ -140,7 +143,7 @@ import_dialog_add_account (EmpathyImportAccountData *data)
   display_name = g_strdup_printf ("%s (%s)",
       mc_profile_get_display_name (data->profile),
       g_value_get_string (username));
-  mc_account_set_display_name (account, display_name);
+  empathy_account_set_display_name (account, display_name);
 
   g_free (display_name);
   g_object_unref (account);
@@ -155,11 +158,12 @@ import_dialog_account_id_in_list (GList *accounts,
   for (l = accounts; l; l = l->next)
     {
       McAccount *account = l->data;
-      gchar *value;
+      gchar *value = NULL;
       gboolean result;
 
-      if (mc_account_get_param_string (account, "account", &value)
-          == MC_ACCOUNT_SETTING_ABSENT)
+      mc_account_get_param_string (account, "account", &value);
+
+      if (value == NULL)
         continue;
 
       result = tp_strdiff (value, account_id);

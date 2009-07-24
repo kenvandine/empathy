@@ -20,12 +20,12 @@
 #define __CHECK_EMPATHY_HELPERS_H__
 
 #include <glib.h>
-#include <libmissioncontrol/mc-account.h>
+#include <libempathy/empathy-account.h>
 
 gchar * get_xml_file (const gchar *filename);
 gchar * get_user_xml_file (const gchar *filename);
 void copy_xml_file (const gchar *orig, const gchar *dest);
-McAccount * get_test_account (void);
-void destroy_test_account (McAccount *account);
+EmpathyAccount * get_test_account (void);
+void destroy_test_account (EmpathyAccount *account);
 
 #endif /* #ifndef __CHECK_EMPATHY_HELPERS_H__ */

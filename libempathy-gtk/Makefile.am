@@ -54,6 +54,7 @@ libempathy_gtk_handwritten_source =            	\
 	empathy-presence-chooser.c		\
 	empathy-profile-chooser.c		\
 	empathy-smiley-manager.c		\
+	empathy-sound.c				\
 	empathy-spell.c				\
 	empathy-status-preset-dialog.c		\
 	empathy-theme-boxes.c			\
@@ -113,6 +114,7 @@ libempathy_gtk_headers =			\
 	empathy-presence-chooser.h		\
 	empathy-profile-chooser.h		\
 	empathy-smiley-manager.h		\
+	empathy-sound.h				\
 	empathy-spell.h				\
 	empathy-status-preset-dialog.h		\
 	empathy-theme-boxes.h			\

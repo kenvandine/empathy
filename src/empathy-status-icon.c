@@ -189,7 +189,9 @@ status_icon_update_notification (EmpathyStatusIcon *icon)
 					  G_CALLBACK (status_icon_notification_closed_cb), icon);
 
  		}
-		notify_notification_set_icon_from_pixbuf (priv->notification,
+		/* if icon doesn't exist libnotify will crash */
+		if (pixbuf != NULL)
+			notify_notification_set_icon_from_pixbuf (priv->notification,
 							  pixbuf);
 		notify_notification_show (priv->notification, NULL);
 
@@ -340,14 +342,20 @@ status_icon_set_visibility (EmpathyStatusIcon *icon,
 		empathy_window_iconify (priv->window, priv->icon);
 	} else {
 		GList *accounts;
+		GList *l;
+		gboolean one_enabled = FALSE;
 
 		empathy_window_present (GTK_WINDOW (priv->window), TRUE);
 
 		/* Show the accounts dialog if there is no enabled accounts */
-		accounts = mc_accounts_list_by_enabled (TRUE);
-		if (accounts) {
-			mc_accounts_list_free (accounts);
-		} else {
+		accounts = empathy_account_manager_dup_accounts (priv->account_manager);
+		for (l = accounts ; l != NULL ; l = g_list_next (l)) {
+			one_enabled = empathy_account_is_enabled (EMPATHY_ACCOUNT (l->data))
+				|| one_enabled;
+			g_object_unref (l->data);
+		}
+		g_list_free (accounts);
+		if (!one_enabled) {
 			DEBUG ("No enabled account, Showing account dialog");
 			empathy_accounts_dialog_show (GTK_WINDOW (priv->window), NULL);
 		}
@@ -572,7 +580,7 @@ status_icon_create_menu (EmpathyStatusIcon *icon)
 
 static void
 status_icon_connection_changed_cb (EmpathyAccountManager *manager,
-				   McAccount *account,
+				   EmpathyAccount *account,
 				   TpConnectionStatusReason reason,
 				   TpConnectionStatus current,
 				   TpConnectionStatus previous,

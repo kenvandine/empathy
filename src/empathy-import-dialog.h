@@ -20,6 +20,7 @@
  */
 
 #include <gtk/gtk.h>
+#include <libmissioncontrol/mc-profile.h>
 
 #ifndef __EMPATHY_IMPORT_DIALOG_H__
 #define __EMPATHY_IMPORT_DIALOG_H__

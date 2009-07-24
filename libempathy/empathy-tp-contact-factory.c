@@ -494,21 +494,47 @@ tp_contact_factory_geocode (EmpathyContact *contact)
 
 	address = geoclue_address_details_new ();
 
+	str = get_dup_string (location, EMPATHY_LOCATION_COUNTRY_CODE);
+	if (str != NULL) {
+		g_hash_table_insert (address,
+			g_strdup (GEOCLUE_ADDRESS_KEY_COUNTRYCODE), str);
+		DEBUG ("\t - countrycode: %s", str);
+	}
+
 	str = get_dup_string (location, EMPATHY_LOCATION_COUNTRY);
-	if (str != NULL)
-		g_hash_table_insert (address, g_strdup ("country"), str);
+	if (str != NULL) {
+		g_hash_table_insert (address,
+			g_strdup (GEOCLUE_ADDRESS_KEY_COUNTRY), str);
+		DEBUG ("\t - country: %s", str);
+	}
 
 	str = get_dup_string (location, EMPATHY_LOCATION_POSTAL_CODE);
-	if (str != NULL)
-		g_hash_table_insert (address, g_strdup ("postalcode"), str);
+	if (str != NULL) {
+		g_hash_table_insert (address,
+			g_strdup (GEOCLUE_ADDRESS_KEY_POSTALCODE), str);
+		DEBUG ("\t - postalcode: %s", str);
+	}
+
+	str = get_dup_string (location, EMPATHY_LOCATION_REGION);
+	if (str != NULL) {
+		g_hash_table_insert (address,
+			g_strdup (GEOCLUE_ADDRESS_KEY_REGION), str);
+		DEBUG ("\t - region: %s", str);
+	}
 
 	str = get_dup_string (location, EMPATHY_LOCATION_LOCALITY);
-	if (str != NULL)
-		g_hash_table_insert (address, g_strdup ("locality"), str);
+	if (str != NULL) {
+		g_hash_table_insert (address,
+			g_strdup (GEOCLUE_ADDRESS_KEY_LOCALITY), str);
+		DEBUG ("\t - locality: %s", str);
+	}
 
 	str = get_dup_string (location, EMPATHY_LOCATION_STREET);
-	if (str != NULL)
-		g_hash_table_insert (address, g_strdup ("street"), str);
+	if (str != NULL) {
+		g_hash_table_insert (address,
+			g_strdup (GEOCLUE_ADDRESS_KEY_STREET), str);
+		DEBUG ("\t - street: %s", str);
+	}
 
 	g_object_ref (contact);
 	geoclue_geocode_address_to_position_async (geocode, address,

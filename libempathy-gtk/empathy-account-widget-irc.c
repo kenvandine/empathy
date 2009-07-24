@@ -27,7 +27,6 @@
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 
-#include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-protocol.h>
 
 #include <libempathy/empathy-utils.h>
@@ -44,7 +43,7 @@
 #define IRC_NETWORKS_FILENAME "irc-networks.xml"
 
 typedef struct {
-  McAccount *account;
+  EmpathyAccount *account;
   EmpathyIrcNetworkManager *network_manager;
 
   GtkWidget *vbox_settings;
@@ -70,9 +69,9 @@ static void
 unset_server_params (EmpathyAccountWidgetIrc *settings)
 {
   DEBUG ("Unset server, port and use-ssl");
-  mc_account_unset_param (settings->account, "server");
-  mc_account_unset_param (settings->account, "port");
-  mc_account_unset_param (settings->account, "use-ssl");
+  empathy_account_unset_param (settings->account, "server");
+  empathy_account_unset_param (settings->account, "port");
+  empathy_account_unset_param (settings->account, "use-ssl");
 }
 
 static void
@@ -98,7 +97,7 @@ update_server_params (EmpathyAccountWidgetIrc *settings)
 
   g_object_get (network, "charset", &charset, NULL);
   DEBUG ("Setting charset to %s", charset);
-  mc_account_set_param_string (settings->account, "charset", charset);
+  empathy_account_set_param_string (settings->account, "charset", charset);
   g_free (charset);
 
   servers = empathy_irc_network_get_servers (network);
@@ -117,11 +116,11 @@ update_server_params (EmpathyAccountWidgetIrc *settings)
           NULL);
 
       DEBUG ("Setting server to %s", address);
-      mc_account_set_param_string (settings->account, "server", address);
+      empathy_account_set_param_string (settings->account, "server", address);
       DEBUG ("Setting port to %u", port);
-      mc_account_set_param_int (settings->account, "port", port);
+      empathy_account_set_param_int (settings->account, "port", port);
       DEBUG ("Setting use-ssl to %s", ssl ? "TRUE": "FALSE" );
-      mc_account_set_param_boolean (settings->account, "use-ssl", ssl);
+      empathy_account_set_param_boolean (settings->account, "use-ssl", ssl);
 
       g_free (address);
     }
@@ -332,17 +331,17 @@ account_widget_irc_setup (EmpathyAccountWidgetIrc *settings)
   gboolean ssl = FALSE;
   EmpathyIrcNetwork *network = NULL;
 
-  mc_account_get_param_string (settings->account, "account", &nick);
-  mc_account_get_param_string (settings->account, "fullname", &fullname);
-  mc_account_get_param_string (settings->account, "server", &server);
-  mc_account_get_param_string (settings->account, "charset", &charset);
-  mc_account_get_param_int (settings->account, "port", &port);
-  mc_account_get_param_boolean (settings->account, "use-ssl", &ssl);
+  nick = empathy_account_get_param_string (settings->account, "account");
+  fullname = empathy_account_get_param_string (settings->account, "fullname");
+  server = empathy_account_get_param_string (settings->account, "server");
+  charset = empathy_account_get_param_string (settings->account, "charset");
+  port = empathy_account_get_param_int (settings->account, "port");
+  ssl = empathy_account_get_param_boolean (settings->account, "use-ssl");
 
   if (!nick)
     {
       nick = g_strdup (g_get_user_name ());
-      mc_account_set_param_string (settings->account, "account", nick);
+      empathy_account_set_param_string (settings->account, "account", nick);
     }
 
   if (!fullname)
@@ -352,7 +351,7 @@ account_widget_irc_setup (EmpathyAccountWidgetIrc *settings)
         {
           fullname = g_strdup (nick);
         }
-      mc_account_set_param_string (settings->account, "fullname", fullname);
+      empathy_account_set_param_string (settings->account, "fullname", fullname);
     }
 
   if (server != NULL)
@@ -414,14 +413,14 @@ account_widget_irc_setup (EmpathyAccountWidgetIrc *settings)
 
 /**
  * empathy_account_widget_irc_new:
- * @account: the #McAccount to configure
+ * @account: the #EmpathyAccount to configure
  *
- * Creates a new IRC account widget to configure a given #McAccount
+ * Creates a new IRC account widget to configure a given #EmpathyAccount
  *
  * Returns: The toplevel container of the configuration widget
  */
 GtkWidget *
-empathy_account_widget_irc_new (McAccount *account)
+empathy_account_widget_irc_new (EmpathyAccount *account)
 {
   EmpathyAccountWidgetIrc *settings;
   gchar *dir, *user_file_with_path, *global_file_with_path;

@@ -7,8 +7,10 @@ AM_CPPFLAGS =                                           \
 	-I$(top_builddir)                               \
 	-DDATADIR=\""$(datadir)"\"              	\
 	-DLOCALEDIR=\""$(datadir)/locale"\"		\
+	-DG_LOG_DOMAIN=\"empathy\"			\
 	$(LIBEMPATHY_CFLAGS)				\
 	$(GEOCLUE_CFLAGS)				\
+	$(NETWORK_MANAGER_CFLAGS) \
 	$(WARN_CFLAGS)					\
 	$(DISABLE_DEPRECATED)
 
@@ -22,6 +24,8 @@ BUILT_SOURCES = 					\
 lib_LTLIBRARIES = libempathy.la
 
 libempathy_la_SOURCES =					\
+	empathy-account.c			\
+	empathy-account-priv.h			\
 	empathy-account-manager.c			\
 	empathy-chatroom.c				\
 	empathy-chatroom-manager.c			\
@@ -33,6 +37,7 @@ libempathy_la_SOURCES =					\
 	empathy-contact-manager.c			\
 	empathy-contact-monitor.c			\
 	empathy-debug.c					\
+	empathy-debugger.c				\
 	empathy-dispatcher.c				\
 	empathy-dispatch-operation.c			\
 	empathy-ft-factory.c				\
@@ -63,13 +68,15 @@ nodist_libempathy_la_SOURCES =\
 libempathy_la_LIBADD =		\
 	$(top_builddir)/extensions/libemp-extensions.la \
 	$(LIBEMPATHY_LIBS) \
-	$(GEOCLUE_LIBS)
+	$(GEOCLUE_LIBS) \
+	$(NETWORK_MANAGER_LIBS)
 
 libempathy_la_LDFLAGS =		\
        -version-info ${LIBEMPATHY_CURRENT}:${LIBEMPATHY_REVISION}:${LIBEMPATHY_AGE} \
        -export-symbols-regex ^empathy_
 
 libempathy_headers =				\
+	empathy-account.h		\
 	empathy-account-manager.h		\
 	empathy-chatroom.h			\
 	empathy-chatroom-manager.h		\
@@ -81,6 +88,7 @@ libempathy_headers =				\
 	empathy-contact-manager.h		\
 	empathy-contact-monitor.h		\
 	empathy-debug.h				\
+	empathy-debugger.h			\
 	empathy-dispatcher.h			\
 	empathy-dispatch-operation.h		\
 	empathy-ft-factory.h			\

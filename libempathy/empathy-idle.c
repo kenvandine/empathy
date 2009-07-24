@@ -25,6 +25,9 @@
 
 #include <glib/gi18n-lib.h>
 #include <dbus/dbus-glib.h>
+#ifdef HAVE_NM
+#include <nm-client.h>
+#endif
 
 #include <telepathy-glib/dbus.h>
 #include <telepathy-glib/util.h>
@@ -43,7 +46,9 @@
 typedef struct {
 	MissionControl *mc;
 	DBusGProxy     *gs_proxy;
-	DBusGProxy     *nm_proxy;
+#ifdef HAVE_NM
+	NMClient       *nm_client;
+#endif
 
 	TpConnectionPresenceType      state;
 	gchar          *status;
@@ -61,12 +66,12 @@ typedef struct {
 } EmpathyIdlePriv;
 
 typedef enum {
-	NM_STATE_UNKNOWN,
-	NM_STATE_ASLEEP,
-	NM_STATE_CONNECTING,
-	NM_STATE_CONNECTED,
-	NM_STATE_DISCONNECTED
-} NMState;
+	SESSION_STATUS_AVAILABLE,
+	SESSION_STATUS_INVISIBLE,
+	SESSION_STATUS_BUSY,
+	SESSION_STATUS_IDLE,
+	SESSION_STATUS_UNKNOWN
+} SessionStatus;
 
 enum {
 	PROP_0,
@@ -151,13 +156,16 @@ idle_ext_away_start (EmpathyIdle *idle)
 }
 
 static void
-idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
-			      gboolean     is_idle,
-			      EmpathyIdle *idle)
+idle_session_status_changed_cb (DBusGProxy    *gs_proxy,
+				SessionStatus  status,
+				EmpathyIdle   *idle)
 {
 	EmpathyIdlePriv *priv;
+	gboolean is_idle;
 
 	priv = GET_PRIV (idle);
+
+	is_idle = (status == SESSION_STATUS_IDLE);
 
 	DEBUG ("Session idle state changed, %s -> %s",
 		priv->is_idle ? "yes" : "no",
@@ -223,22 +231,24 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 	priv->is_idle = is_idle;
 }
 
+#ifdef HAVE_NM
 static void
-idle_nm_state_change_cb (DBusGProxy  *proxy,
-			 guint        state,
-			 EmpathyIdle *idle)
+idle_nm_state_change_cb (NMClient         *client,
+			 const GParamSpec *pspec,
+			 EmpathyIdle      *idle)
 {
 	EmpathyIdlePriv *priv;
 	gboolean         old_nm_connected;
 	gboolean         new_nm_connected;
+	NMState          state;
 
 	priv = GET_PRIV (idle);
 
-	if (!priv->use_nm
-	    || priv->nm_saved_state == TP_CONNECTION_PRESENCE_TYPE_UNSET) {
+	if (!priv->use_nm) {
 		return;
 	}
 
+	state = nm_client_get_state (priv->nm_client);
 	old_nm_connected = priv->nm_connected;
 	new_nm_connected = !(state == NM_STATE_CONNECTING ||
 			     state == NM_STATE_DISCONNECTED);
@@ -255,7 +265,8 @@ idle_nm_state_change_cb (DBusGProxy  *proxy,
 		priv->nm_saved_status = g_strdup (priv->status);
 		empathy_idle_set_state (idle, TP_CONNECTION_PRESENCE_TYPE_OFFLINE);
 	}
-	else if (!old_nm_connected && new_nm_connected) {
+	else if (!old_nm_connected && new_nm_connected
+			&& priv->nm_saved_state != TP_CONNECTION_PRESENCE_TYPE_UNSET) {
 		/* We are now connected */
 		DEBUG ("Reconnected: Restore state %d (%s)",
 				priv->nm_saved_state, priv->nm_saved_status);
@@ -269,6 +280,7 @@ idle_nm_state_change_cb (DBusGProxy  *proxy,
 
 	priv->nm_connected = new_nm_connected;
 }
+#endif
 
 static void
 idle_finalize (GObject *object)
@@ -283,6 +295,12 @@ idle_finalize (GObject *object)
 	if (priv->gs_proxy) {
 		g_object_unref (priv->gs_proxy);
 	}
+
+#ifdef HAVE_NM
+	if (priv->nm_client) {
+		g_object_unref (priv->nm_client);
+	}
+#endif
 
 	idle_ext_away_stop (EMPATHY_IDLE (object));
 }
@@ -422,8 +440,8 @@ empathy_idle_class_init (EmpathyIdleClass *klass)
 					  g_param_spec_boolean ("use-nm",
 								"Use Network Manager",
 								"Set presence according to Network Manager",
-								FALSE,
-								G_PARAM_READWRITE));
+								TRUE,
+								G_PARAM_CONSTRUCT | G_PARAM_READWRITE));
 
 	g_type_class_add_private (object_class, sizeof (EmpathyIdlePriv));
 }
@@ -450,14 +468,13 @@ empathy_idle_get_actual_presence (EmpathyIdle *idle, GError **error)
 	case MC_PRESENCE_DO_NOT_DISTURB:
 		return TP_CONNECTION_PRESENCE_TYPE_BUSY;
 	default:
-		return TP_CONNECTION_PRESENCE_TYPE_UNSET;
+		return TP_CONNECTION_PRESENCE_TYPE_OFFLINE;
 	}
 }
 
 static void
 empathy_idle_init (EmpathyIdle *idle)
 {
-	DBusGConnection *system_bus;
 	GError          *error = NULL;
 	EmpathyIdlePriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (idle,
 		EMPATHY_TYPE_IDLE, EmpathyIdlePriv);
@@ -492,42 +509,29 @@ empathy_idle_init (EmpathyIdle *idle)
 				     idle, NULL);
 
 	priv->gs_proxy = dbus_g_proxy_new_for_name (tp_get_bus (),
-						    "org.gnome.ScreenSaver",
-						    "/org/gnome/ScreenSaver",
-						    "org.gnome.ScreenSaver");
+						    "org.gnome.SessionManager",
+						    "/org/gnome/SessionManager/Presence",
+						    "org.gnome.SessionManager.Presence");
 	if (priv->gs_proxy) {
-		dbus_g_proxy_add_signal (priv->gs_proxy, "SessionIdleChanged",
-					 G_TYPE_BOOLEAN,
-					 G_TYPE_INVALID);
-		dbus_g_proxy_connect_signal (priv->gs_proxy, "SessionIdleChanged",
-					     G_CALLBACK (idle_session_idle_changed_cb),
+		dbus_g_proxy_add_signal (priv->gs_proxy, "StatusChanged",
+					 G_TYPE_UINT, G_TYPE_INVALID);
+		dbus_g_proxy_connect_signal (priv->gs_proxy, "StatusChanged",
+					     G_CALLBACK (idle_session_status_changed_cb),
 					     idle, NULL);
 	} else {
 		DEBUG ("Failed to get gs proxy");
 	}
 
-
-	system_bus = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
-	if (!system_bus) {
-		DEBUG ("Failed to get system bus: %s",
-			error ? error->message : "No error given");
-	} else {
-		priv->nm_proxy = dbus_g_proxy_new_for_name (system_bus,
-							    "org.freedesktop.NetworkManager",
-							    "/org/freedesktop/NetworkManager",
-							    "org.freedesktop.NetworkManager");
-	}
-	if (priv->nm_proxy) {
-		dbus_g_proxy_add_signal (priv->nm_proxy, "StateChange",
-					 G_TYPE_UINT, G_TYPE_INVALID);
-		dbus_g_proxy_connect_signal (priv->nm_proxy, "StateChange",
-					     G_CALLBACK (idle_nm_state_change_cb),
-					     idle, NULL);
+#ifdef HAVE_NM
+	priv->nm_client = nm_client_new ();
+	if (priv->nm_client) {
+		g_signal_connect (priv->nm_client, "notify::" NM_CLIENT_STATE,
+				  G_CALLBACK (idle_nm_state_change_cb),
+				  idle);
 	} else {
 		DEBUG ("Failed to get nm proxy");
 	}
-
-	priv->nm_connected = TRUE;
+#endif
 }
 
 EmpathyIdle *
@@ -712,29 +716,20 @@ empathy_idle_set_use_nm (EmpathyIdle *idle,
 {
 	EmpathyIdlePriv *priv = GET_PRIV (idle);
 
-	if (!priv->nm_proxy || use_nm == priv->use_nm) {
+#ifdef HAVE_NM
+	if (!priv->nm_client || use_nm == priv->use_nm) {
 		return;
 	}
+#endif
 
 	priv->use_nm = use_nm;
 
+#ifdef HAVE_NM
 	if (use_nm) {
-		guint   nm_status;
-		GError *error = NULL;
-
-		dbus_g_proxy_call (priv->nm_proxy, "state",
-				   &error,
-				   G_TYPE_INVALID,
-				   G_TYPE_UINT, &nm_status,
-				   G_TYPE_INVALID);
-
-		if (error) {
-			DEBUG ("Couldn't get NM state: %s", error->message);
-			g_clear_error (&error);
-			nm_status = NM_STATE_ASLEEP;
-		}
-
-		idle_nm_state_change_cb (priv->nm_proxy, nm_status, idle);
+		idle_nm_state_change_cb (priv->nm_client, NULL, idle);
+#else
+	if (0) {
+#endif
 	} else {
 		priv->nm_connected = TRUE;
 		if (priv->nm_saved_state != TP_CONNECTION_PRESENCE_TYPE_UNSET) {

@@ -26,6 +26,7 @@
 #include <string.h>
 
 #include <glib/gi18n-lib.h>
+#include <telepathy-glib/dbus.h>
 #include <gtk/gtk.h>
 
 #include <telepathy-glib/util.h>
@@ -67,9 +68,6 @@ static const gchar *themes[] = {
 	"simple", N_("Simple"),
 	"clean", N_("Clean"),
 	"blue", N_("Blue"),
-#ifdef HAVE_WEBKIT
-	"adium", N_("Adium"),
-#endif
 	NULL
 };
 
@@ -378,6 +376,10 @@ theme_manager_ensure_theme_exists (const gchar *name)
 		return FALSE;
 	}
 
+	if (strcmp ("adium", name) == 0) {
+		return TRUE;
+	}
+
 	for (i = 0; themes[i]; i += 2) {
 		if (strcmp (themes[i], name) == 0) {
 			return TRUE;
@@ -534,3 +536,62 @@ empathy_theme_manager_get_themes (void)
 	return themes;
 }
 
+#ifdef HAVE_WEBKIT
+static void
+find_themes (GList **list, const gchar *dirpath)
+{
+	GDir *dir;
+	GError *error = NULL;
+	const gchar *name = NULL;
+	GHashTable *info = NULL;
+
+	dir = g_dir_open (dirpath, 0, &error);
+	if (dir != NULL) {
+		name = g_dir_read_name (dir);
+		while (name != NULL) {
+			gchar *path;
+
+			path = g_build_path (G_DIR_SEPARATOR_S, dirpath, name, NULL);
+			if (empathy_adium_path_is_valid (path)) {
+				info = empathy_adium_info_new (path);
+				if (info != NULL) {
+					*list = g_list_prepend (*list, info);
+				}
+			}
+			g_free (path);
+			name = g_dir_read_name (dir);
+		}
+		g_dir_close (dir);
+	} else {
+		DEBUG ("Error opening %s: %s\n", dirpath, error->message);
+		g_error_free (error);
+	}
+}
+#endif /* HAVE_WEBKIT */
+
+GList *
+empathy_theme_manager_get_adium_themes (void)
+{
+#ifdef HAVE_WEBKIT
+	GList *themes = NULL;
+	gchar *userpath = NULL;
+	const gchar *const *paths = NULL;
+	gint i = 0;
+
+	userpath = g_build_path (G_DIR_SEPARATOR_S, g_get_user_data_dir (), "adium/message-styles", NULL);
+	find_themes (&themes, userpath);
+	g_free (userpath);
+
+	paths = g_get_system_data_dirs ();
+	for (i = 0; paths[i] != NULL; i++) {
+		userpath = g_build_path (G_DIR_SEPARATOR_S, paths[i],
+			"adium/message-styles", NULL);
+		find_themes (&themes, userpath);
+		g_free (userpath);
+	}
+
+	return themes;
+#else
+	return NULL;
+#endif /* HAVE_WEBKIT */
+}

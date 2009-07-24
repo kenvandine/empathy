@@ -50,6 +50,7 @@
 #include <libempathy-gtk/empathy-log-window.h>
 #include <libempathy-gtk/empathy-geometry.h>
 #include <libempathy-gtk/empathy-smiley-manager.h>
+#include <libempathy-gtk/empathy-sound.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
 
 #include "empathy-chat-window.h"
@@ -416,7 +417,7 @@ chat_window_update_chat_tab (EmpathyChat *chat)
 	EmpathyContact        *remote_contact;
 	const gchar           *name;
 	const gchar           *id;
-	McAccount             *account;
+	EmpathyAccount        *account;
 	const gchar           *subject;
 	const gchar           *status = NULL;
 	GtkWidget             *widget;
@@ -437,7 +438,7 @@ chat_window_update_chat_tab (EmpathyChat *chat)
 	remote_contact = empathy_chat_get_remote_contact (chat);
 
 	DEBUG ("Updating chat tab, name=%s, account=%s, subject=%s, remote_contact=%p",
-		name, mc_account_get_unique_name (account), subject, remote_contact);
+		name, empathy_account_get_unique_name (account), subject, remote_contact);
 
 	/* Update tab image */
 	if (g_list_find (priv->chats_new_msg, chat)) {
@@ -469,7 +470,7 @@ chat_window_update_chat_tab (EmpathyChat *chat)
 	append_markup_printf (tooltip,
 			      "<b>%s</b><small> (%s)</small>",
 			      id,
-			      mc_account_get_display_name (account));
+			      empathy_account_get_display_name (account));
 
 	if (!EMP_STR_EMPTY (status)) {
 		append_markup_printf (tooltip, "\n<i>%s</i>", status);
@@ -564,13 +565,16 @@ chat_window_conv_activate_cb (GtkAction         *action,
 	is_room = empathy_chat_is_room (priv->current_chat);
 	if (is_room) {
 		const gchar *room;
-		McAccount   *account;
-		gboolean     found;
+		EmpathyAccount   *account;
+		gboolean     found = FALSE;
+		EmpathyChatroom *chatroom;
 
 		room = empathy_chat_get_id (priv->current_chat);
 		account = empathy_chat_get_account (priv->current_chat);
-		found = empathy_chatroom_manager_find (priv->chatroom_manager,
-						       account, room) != NULL;
+		chatroom = empathy_chatroom_manager_find (priv->chatroom_manager,
+						       account, room);
+		if (chatroom != NULL)
+			found = empathy_chatroom_is_favorite (chatroom);
 
 		DEBUG ("This room %s favorite", found ? "is" : "is not");
 		gtk_toggle_action_set_active (
@@ -610,7 +614,7 @@ chat_window_favorite_toggled_cb (GtkToggleAction   *toggle_action,
 {
 	EmpathyChatWindowPriv *priv = GET_PRIV (window);
 	gboolean               active;
-	McAccount             *account;
+	EmpathyAccount        *account;
 	const gchar           *room;
 	EmpathyChatroom       *chatroom;
 
@@ -621,19 +625,16 @@ chat_window_favorite_toggled_cb (GtkToggleAction   *toggle_action,
 	chatroom = empathy_chatroom_manager_find (priv->chatroom_manager,
 						  account, room);
 
-	if (active && !chatroom) {
+	if (chatroom == NULL) {
 		const gchar *name;
 
 		name = empathy_chat_get_name (priv->current_chat);
 		chatroom = empathy_chatroom_new_full (account, room, name, FALSE);
 		empathy_chatroom_manager_add (priv->chatroom_manager, chatroom);
 		g_object_unref (chatroom);
-		return;
-	}
+  }
 
-	if (!active && chatroom) {
-		empathy_chatroom_manager_remove (priv->chatroom_manager, chatroom);
-	}
+	empathy_chatroom_set_favorite (chatroom, active);
 }
 
 static void
@@ -1061,11 +1062,15 @@ chat_window_show_or_update_notification (EmpathyChatWindow *window,
 	if (priv->notification != NULL) {
 		notify_notification_update (priv->notification,
 					    header, escaped, NULL);
-		notify_notification_set_icon_from_pixbuf (priv->notification, pixbuf);
+		/* if icon doesn't exist libnotify will crash */
+		if (pixbuf != NULL)
+			notify_notification_set_icon_from_pixbuf (priv->notification, pixbuf);
 	} else {
 		priv->notification = notify_notification_new (header, escaped, NULL, NULL);
 		notify_notification_set_timeout (priv->notification, NOTIFY_EXPIRES_DEFAULT);
-		notify_notification_set_icon_from_pixbuf (priv->notification, pixbuf);
+		/* if icon doesn't exist libnotify will crash */
+		if (pixbuf != NULL)
+			notify_notification_set_icon_from_pixbuf (priv->notification, pixbuf);
 
 		g_signal_connect (priv->notification, "closed",
 				  G_CALLBACK (chat_window_notification_closed_cb), cb_data);
@@ -1330,41 +1335,40 @@ chat_window_drag_data_received (GtkWidget        *widget,
 	if (info == DND_DRAG_TYPE_CONTACT_ID) {
 		EmpathyChat           *chat;
 		EmpathyChatWindow     *old_window;
-		McAccount             *account;
+		EmpathyAccount        *account;
+		EmpathyAccountManager *account_manager;
 		const gchar           *id;
 		gchar                **strv;
 		const gchar           *account_id;
 		const gchar           *contact_id;
 
 		id = (const gchar*) selection->data;
+		account_manager = empathy_account_manager_dup_singleton ();
 
 		DEBUG ("DND contact from roster with id:'%s'", id);
 
 		strv = g_strsplit (id, "/", 2);
 		account_id = strv[0];
 		contact_id = strv[1];
-		account = mc_account_lookup (account_id);
+		account = empathy_account_manager_lookup (account_manager, account_id);
 		chat = empathy_chat_window_find_chat (account, contact_id);
 
 		if (!chat) {
-			EmpathyAccountManager *account_manager;
 			TpConnection *connection;
 
-			account_manager = empathy_account_manager_dup_singleton ();
-			connection = empathy_account_manager_get_connection (
-				account_manager, account);
+			connection = empathy_account_get_connection (account);
 
 			if (connection) {
 				empathy_dispatcher_chat_with_contact_id (
 					connection, contact_id, NULL, NULL);
 			}
 
-			g_object_unref (account_manager);
 			g_object_unref (account);
 			g_strfreev (strv);
 			return;
 		}
 		g_object_unref (account);
+		g_object_unref (account_manager);
 		g_strfreev (strv);
 
 		old_window = chat_window_find_chat (chat);
@@ -1843,12 +1847,11 @@ empathy_chat_window_has_focus (EmpathyChatWindow *window)
 }
 
 EmpathyChat *
-empathy_chat_window_find_chat (McAccount   *account,
+empathy_chat_window_find_chat (EmpathyAccount   *account,
 			       const gchar *id)
 {
 	GList *l;
 
-	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 	g_return_val_if_fail (!EMP_STR_EMPTY (id), NULL);
 
 	for (l = chat_windows; l; l = l->next) {

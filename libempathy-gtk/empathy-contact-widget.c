@@ -32,7 +32,6 @@
 #include <champlain-gtk/champlain-gtk.h>
 #endif
 
-#include <libmissioncontrol/mc-account.h>
 #include <telepathy-glib/util.h>
 
 #include <libempathy/empathy-tp-contact-factory.h>
@@ -41,6 +40,7 @@
 #include <libempathy/empathy-location.h>
 #include <libempathy/empathy-time.h>
 #include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-account.h>
 
 #include "empathy-contact-widget.h"
 #include "empathy-account-chooser.h"
@@ -697,7 +697,7 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
 static void
 contact_widget_contact_update (EmpathyContactWidget *information)
 {
-  McAccount *account = NULL;
+  EmpathyAccount *account = NULL;
   const gchar *id = NULL;
 
   /* Connect and get info from new contact */
@@ -737,7 +737,7 @@ contact_widget_contact_update (EmpathyContactWidget *information)
         {
           const gchar *name;
 
-          name = mc_account_get_display_name (account);
+          name = empathy_account_get_display_name (account);
           gtk_label_set_label (GTK_LABEL (information->widget_account), name);
         }
     }

@@ -230,25 +230,16 @@ empathy_xml_node_find_child_prop_value (xmlNodePtr   node,
 guint
 empathy_account_hash (gconstpointer key)
 {
-	g_return_val_if_fail (MC_IS_ACCOUNT (key), 0);
+	g_return_val_if_fail (EMPATHY_IS_ACCOUNT (key), 0);
 
-	return g_str_hash (mc_account_get_unique_name (MC_ACCOUNT (key)));
+	return g_str_hash (empathy_account_get_unique_name (EMPATHY_ACCOUNT (key)));
 }
 
 gboolean
 empathy_account_equal (gconstpointer a,
 		       gconstpointer b)
 {
-	const gchar *name_a;
-	const gchar *name_b;
-
-	g_return_val_if_fail (MC_IS_ACCOUNT (a), FALSE);
-	g_return_val_if_fail (MC_IS_ACCOUNT (b), FALSE);
-
-	name_a = mc_account_get_unique_name (MC_ACCOUNT (a));
-	name_b = mc_account_get_unique_name (MC_ACCOUNT (b));
-
-	return g_str_equal (name_a, name_b);
+  return a == b;
 }
 
 MissionControl *

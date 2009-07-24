@@ -430,8 +430,6 @@ debug_dialog_get_name_owner_cb (TpDBusDaemon *proxy,
           COL_CM_NAME, data->cm_name,
           COL_CM_UNIQUE_NAME, out,
           -1);
-
-      gtk_combo_box_set_active (GTK_COMBO_BOX (priv->cm_chooser), 0);
     }
 
 OUT:
@@ -568,6 +566,7 @@ debug_dialog_fill_cm_chooser (EmpathyDebugDialog *debug_dialog)
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
   GError *error = NULL;
+  GtkTreeIter iter;
 
   priv->dbus = tp_dbus_daemon_dup (&error);
 
@@ -578,6 +577,15 @@ debug_dialog_fill_cm_chooser (EmpathyDebugDialog *debug_dialog)
       return;
     }
 
+  /* Add empathy */
+  gtk_list_store_append (priv->cms, &iter);
+  gtk_list_store_set (priv->cms, &iter,
+      COL_CM_NAME, "empathy",
+      COL_CM_UNIQUE_NAME, "org.gnome.Empathy",
+      -1);
+  gtk_combo_box_set_active (GTK_COMBO_BOX (priv->cm_chooser), 0);
+
+  /* Add CMs to list */
   tp_list_connection_names (priv->dbus, debug_dialog_list_connection_names_cb,
       debug_dialog, NULL, NULL);
 

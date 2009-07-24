@@ -41,7 +41,7 @@
 #include <libempathy-gtk/empathy-conf.h>
 #include <libempathy-gtk/empathy-images.h>
 #include <libempathy-gtk/empathy-contact-dialogs.h>
-#include <libempathy-gtk/empathy-ui-utils.h>
+#include <libempathy-gtk/empathy-sound.h>
 
 #include "empathy-event-manager.h"
 #include "empathy-main-window.h"
@@ -53,6 +53,9 @@
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyEventManager)
 
 #define NOTIFICATION_TIMEOUT 2 /* seconds */
+
+/* The time interval in milliseconds between 2 incoming rings */
+#define MS_BETWEEN_RING 500
 
 typedef struct {
   EmpathyEventManager *manager;
@@ -78,8 +81,6 @@ typedef struct {
   /* Ongoing approvals */
   GSList *approvals;
 
-  /* voip ringing sound */
-  guint voip_timeout;
   gint ringing;
 } EmpathyEventManagerPriv;
 
@@ -163,81 +164,6 @@ event_free (EventPriv *event)
     }
 
   g_slice_free (EventPriv, event);
-}
-
-static void event_manager_ringing_finished_cb (ca_context *c, guint id,
-  int error_code, gpointer user_data);
-
-static gboolean
-event_manager_ringing_timeout_cb (gpointer data)
-{
-  EmpathyEventManager *manager = EMPATHY_EVENT_MANAGER (data);
-  EmpathyEventManagerPriv *priv = GET_PRIV (manager);
-
-  priv->voip_timeout = 0;
-
-  empathy_sound_play_full (empathy_main_window_get (),
-      EMPATHY_SOUND_PHONE_INCOMING, event_manager_ringing_finished_cb,
-      manager);
-
-  return FALSE;
-}
-
-static gboolean
-event_manager_ringing_idle_cb (gpointer data)
-{
-  EmpathyEventManager *manager = EMPATHY_EVENT_MANAGER (data);
-  EmpathyEventManagerPriv *priv = GET_PRIV (manager);
-
-  if (priv->ringing > 0)
-    priv->voip_timeout = g_timeout_add (500, event_manager_ringing_timeout_cb,
-      data);
-
-  return FALSE;
-}
-
-static void
-event_manager_ringing_finished_cb (ca_context *c, guint id, int error_code,
-  gpointer user_data)
-{
-  if (error_code == CA_ERROR_CANCELED)
-    return;
-
-  g_idle_add (event_manager_ringing_idle_cb, user_data);
-}
-
-static void
-event_manager_start_ringing (EmpathyEventManager *manager)
-{
-  EmpathyEventManagerPriv *priv = GET_PRIV (manager);
-
-  priv->ringing++;
-
-  if (priv->ringing == 1)
-    {
-      empathy_sound_play_full (empathy_main_window_get (),
-        EMPATHY_SOUND_PHONE_INCOMING, event_manager_ringing_finished_cb,
-        manager);
-    }
-}
-
-static void
-event_manager_stop_ringing (EmpathyEventManager *manager)
-{
-  EmpathyEventManagerPriv *priv = GET_PRIV (manager);
-
-  priv->ringing--;
-
-  if (priv->ringing > 0)
-    return;
-
-  empathy_sound_stop (EMPATHY_SOUND_PHONE_INCOMING);
-
-  if (priv->voip_timeout != 0)
-    {
-      g_source_remove (priv->voip_timeout);
-      priv->voip_timeout = 0;
-    }
 }
 
 static void
@@ -473,7 +399,9 @@ event_manager_approval_done (EventManagerApproval *approval)
           approval->operation);
       if (channel_type == TP_IFACE_QUARK_CHANNEL_TYPE_STREAMED_MEDIA)
         {
-          event_manager_stop_ringing (approval->manager);
+          priv->ringing--;
+          if (priv->ringing == 0)
+            empathy_sound_stop (EMPATHY_SOUND_PHONE_INCOMING);
         }
     }
 
@@ -518,6 +446,7 @@ event_manager_operation_invalidated_cb (EmpathyDispatchOperation *operation,
 static void
 event_manager_media_channel_got_contact (EventManagerApproval *approval)
 {
+  EmpathyEventManagerPriv *priv = GET_PRIV (approval->manager);
   gchar *header;
 
   header = g_strdup_printf (_("Incoming call from %s"),
@@ -528,7 +457,11 @@ event_manager_media_channel_got_contact (EventManagerApproval *approval)
     approval, event_channel_process_voip_func, NULL);
 
   g_free (header);
-  event_manager_start_ringing (approval->manager);
+
+  priv->ringing++;
+  if (priv->ringing == 1)
+    empathy_sound_start_playing (empathy_main_window_get (),
+        EMPATHY_SOUND_PHONE_INCOMING, MS_BETWEEN_RING);
 }
 
 static void
@@ -981,19 +914,12 @@ event_manager_presence_changed_cb (EmpathyContactMonitor *monitor,
     TpConnectionPresenceType previous,
     EmpathyEventManager *manager)
 {
-  McAccount *account;
-  gboolean just_connected;
-  EmpathyAccountManager *account_manager;
+  EmpathyAccount *account;
   gchar *header = NULL;
   gboolean preference = FALSE;
 
   account = empathy_contact_get_account (contact);
-  account_manager = empathy_account_manager_dup_singleton ();
-  just_connected = empathy_account_manager_is_account_just_connected (
-                  account_manager, account);
-
-  g_object_unref (account_manager);
-  if (just_connected)
+  if (empathy_account_is_just_connected (account))
     return;
 
   if (tp_connection_presence_type_cmp_availability (previous,
@@ -1057,6 +983,9 @@ static void
 event_manager_finalize (GObject *object)
 {
   EmpathyEventManagerPriv *priv = GET_PRIV (object);
+
+  if (priv->ringing > 0)
+    empathy_sound_stop (EMPATHY_SOUND_PHONE_INCOMING);
 
   g_slist_foreach (priv->events, (GFunc) event_free, NULL);
   g_slist_free (priv->events);
@@ -1178,4 +1107,3 @@ empathy_event_inhibit_updates (EmpathyEvent *event_public)
 
   event->inhibit = TRUE;
 }
-

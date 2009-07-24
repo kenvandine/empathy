@@ -24,6 +24,8 @@
 #include <gconf/gconf.h>
 #include <gconf/gconf-client.h>
 
+#include <libempathy/empathy-account-manager.h>
+
 #include "check-helpers.h"
 #include "check-empathy-helpers.h"
 
@@ -63,25 +65,31 @@ copy_xml_file (const gchar *orig,
   g_free (buffer);
 }
 
-McAccount *
+EmpathyAccount *
 get_test_account (void)
 {
   McProfile *profile;
-  McAccount *account;
+  EmpathyAccountManager *account_manager;
+  EmpathyAccount *account;
   GList *accounts;
 
+  account_manager = empathy_account_manager_dup_singleton ();
   profile = mc_profile_lookup ("test");
   accounts = mc_accounts_list_by_profile (profile);
   if (g_list_length (accounts) == 0)
     {
       /* need to create a test account */
-      account = mc_account_create (profile);
+      account = empathy_account_manager_create (account_manager, profile);
     }
   else
     {
       /* reuse an existing test account */
-      account = accounts->data;
+      McAccount *mc_account;
+      mc_account = accounts->data;
+      account = empathy_account_manager_lookup (account_manager,
+        mc_account_get_unique_name (mc_account));
     }
+  g_object_unref (account_manager);
 
   g_object_unref (profile);
 
@@ -91,16 +99,17 @@ get_test_account (void)
 /* Not used for now as there is no API to remove completely gconf keys.
  * So we reuse existing accounts instead of creating new ones */
 void
-destroy_test_account (McAccount *account)
+destroy_test_account (EmpathyAccount *account)
 {
   GConfClient *client;
   gchar *path;
   GError *error = NULL;
   GSList *entries = NULL, *l;
+  EmpathyAccountManager *manager;
 
   client = gconf_client_get_default ();
   path = g_strdup_printf ("/apps/telepathy/mc/accounts/%s",
-      mc_account_get_unique_name (account));
+      empathy_account_get_unique_name (account));
 
   entries = gconf_client_all_entries (client, path, &error);
   if (error != NULL)
@@ -151,6 +160,8 @@ destroy_test_account (McAccount *account)
   g_object_unref (client);
   g_free (path);
 
-  mc_account_delete (account);
+  manager = empathy_account_manager_dup_singleton ();
+  empathy_account_manager_remove (manager, account);
   g_object_unref (account);
+  g_object_unref (manager);
 }

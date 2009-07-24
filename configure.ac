@@ -41,6 +41,7 @@ LIBCHAMPLAIN_GTK_REQUIRED=0.3.3
 CLUTTER_GTK_REQUIRED=0.8.2
 GEOCLUE_REQUIRED=0.11
 WEBKIT_REQUIRED=1.1.7
+NETWORK_MANAGER_REQUIRED=0.7.0
 
 # Use --enable-maintainer-mode to disabled deprecated symbols
 GNOME_MAINTAINER_MODE_DEFINES
@@ -157,6 +158,32 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE",[Gettext package name])
 AM_GLIB_GNU_GETTEXT
 
 # -----------------------------------------------------------
+# NM integration
+# -----------------------------------------------------------
+AC_ARG_ENABLE(network-manager,
+              AS_HELP_STRING([--enable-network-manager=@<:@no/yes/auto@:>@],
+                             [build with network-manager support]), ,
+                             enable_webkit=auto)
+
+if test "x$enable_network_manager" != "xno"; then
+   PKG_CHECK_MODULES(NETWORK_MANAGER,
+   [
+      libnm_glib >= $NETWORK_MANAGER_REQUIRED
+   ], have_nm="yes", have_nm="no")
+
+   if test "x$have_nm" = "xyes"; then
+      AC_DEFINE(HAVE_NM, 1, [Define if you have libnm-glib])
+   fi
+else
+   have_nm=no
+fi
+
+if test "x$enable_network_manager" = "xyes" -a "x$have_nm" != "xyes"; then
+   AC_MSG_ERROR([Couldn't find libnm-glib dependencies.])
+fi
+AM_CONDITIONAL(HAVE_NM, test "x$have_NM" = "xyes")
+
+# -----------------------------------------------------------
 # Webkit
 # -----------------------------------------------------------
 AC_ARG_ENABLE(webkit,
@@ -180,7 +207,6 @@ fi
 if test "x$enable_webkit" = "xyes" -a "x$have_webkit" != "xyes"; then
    AC_MSG_ERROR([Couldn't find webkit dependencies.])
 fi
-
 AM_CONDITIONAL(HAVE_WEBKIT, test "x$have_webkit" = "xyes")
 
 # -----------------------------------------------------------
@@ -484,6 +510,7 @@ Configure summary:
 	Location awareness (Geoclue)...........:  ${have_geoclue}
 	Adium themes (Webkit)..................:  ${have_webkit}
 	Message indicator support (libindicate):  ${have_libindicate}
+	NetworkManager integration.............:  ${have_nm}
 
     Extras:
 	Documentation..........................:  ${enable_gtk_doc}

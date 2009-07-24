@@ -12,7 +12,7 @@
 static EmpathyChatroom *
 create_chatroom (void)
 {
-  McAccount *account;
+  EmpathyAccount *account;
   EmpathyChatroom *chatroom;
 
   account = get_test_account ();
